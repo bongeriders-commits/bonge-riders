@@ -28,37 +28,44 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #141414;
-  --bg2:      #1C1C1C;
-  --card:     #222222;
-  --card2:    #2A2A2A;
-  --border:   #333333;
-  --text:     #F0EDE8;
-  --muted:    #888888;
-  --dim:      #555555;
-  --amber:    #C4621D;
-  --amber2:   #E07830;
-  --amber-bg: rgba(196,98,29,0.12);
-  --green:    #3D7A4F;
-  --green2:   #4E9964;
-  --green-bg: rgba(61,122,79,0.15);
-  --red:      #C0392B;
-  --radius:   10px;
-  --radius-lg:16px;
+  --bg:       #0F1117;
+  --bg2:      #161A23;
+  --card:     #1C2130;
+  --card2:    #212840;
+  --border:   #2A3350;
+  --text:     #E8ECF4;
+  --muted:    #7A85A0;
+  --dim:      #404860;
+  --amber:    #2563EB;
+  --amber2:   #3B82F6;
+  --amber-bg: rgba(37,99,235,0.12);
+  --green:    #0D7A5F;
+  --green2:   #10B981;
+  --green-bg: rgba(16,185,129,0.10);
+  --red:      #DC2626;
+  --radius:   8px;
+  --radius-lg:12px;
 }
 
 /* Light mode */
 body.light {
-  --bg:       #F5F2EE;
-  --bg2:      #EDEAE5;
+  --bg:       #F0F2F7;
+  --bg2:      #E6E9F0;
   --card:     #FFFFFF;
-  --card2:    #F5F2EE;
-  --border:   #E0DBD4;
-  --text:     #141414;
-  --muted:    #777777;
-  --dim:      #AAAAAA;
-  --amber-bg: rgba(196,98,29,0.08);
-  --green-bg: rgba(61,122,79,0.10);
+  --card2:    #F0F2F7;
+  --border:   #D0D5E8;
+  --text:     #0F1117;
+  --muted:    #5A6380;
+  --dim:      #A0AACC;
+  --amber:    #1D4ED8;
+  --amber2:   #2563EB;
+  --amber-bg: rgba(29,78,216,0.08);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.08);
+  --red:      #B91C1C;
+  --radius:   8px;
+  --radius-lg:12px;
 }
 
 html, body {
@@ -106,7 +113,7 @@ img {
   font-size: 20px; font-weight: 700;
   color: #141414; letter-spacing: -.3px;
 }
-#splashScreen .splash-name span { color: #C4621D; }
+#splashScreen .splash-name span { color: #2563EB; }
 @keyframes splashPop {
   0%   { transform: scale(.75); opacity: 0; }
   60%  { transform: scale(1.05); opacity: 1; }
@@ -131,7 +138,7 @@ img {
   letter-spacing: -.4px;
   color: var(--text);
 }
-.logo em { color: var(--amber); font-style: normal; }
+.logo em { color: var(--amber2); font-style: normal; }
 .logo-sub {
   font-family: 'Inter', sans-serif;
   font-size: 10px; font-weight: 500;
@@ -182,7 +189,7 @@ img {
 }
 .arc-svg { flex-shrink: 0; }
 .arc-bg  { stroke: var(--border); }
-.arc-fill { stroke: var(--amber); stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+.arc-fill { stroke: var(--amber2); stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
 .arc-label {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 22px; font-weight: 700;
@@ -235,10 +242,10 @@ img {
 .adm-dropdown  {
   display: none;
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 999;
-  background: #1a1a1a; border: 1px solid #333;
-  border-radius: 14px; overflow: hidden;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
   min-width: 230px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.65);
+  box-shadow: 0 8px 32px rgba(0,0,0,.45);
   padding: 8px;
   gap: 3px;
 }
@@ -246,10 +253,10 @@ img {
 .adm-item {
   display: flex; align-items: center; gap: 12px;
   width: 100%;
-  background: #2b2b2b;
-  border: 1px solid #3a3a3a;
-  border-radius: 9px;
-  color: #f0ede8;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 11px; font-weight: 700;
   letter-spacing: .9px;
@@ -258,9 +265,9 @@ img {
   transition: background .12s, border-color .12s;
   margin-bottom: 2px;
 }
-.adm-item:active, .adm-item:hover { background: #383838; border-color: #555; }
-.adm-item-danger { background: #2b2b2b; color: #888; border-color: #3a3a3a; }
-.adm-item-danger:hover, .adm-item-danger:active { background: rgba(224,85,64,.15); border-color: rgba(224,85,64,.4); color: #E05540; }
+.adm-item:active, .adm-item:hover { background: var(--card2); border-color: var(--amber); }
+.adm-item-danger { background: var(--card); color: var(--muted); border-color: var(--border); }
+.adm-item-danger:hover, .adm-item-danger:active { background: rgba(220,38,38,.12); border-color: rgba(220,38,38,.35); color: #EF4444; }
 
 /* ── ADMIN MANAGEMENT MODAL ── */
 .adm-mgmt-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
@@ -357,10 +364,10 @@ img {
 
 .adm-group-label {
   font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
-  color: #555; text-transform: uppercase;
+  color: var(--dim); text-transform: uppercase;
   padding: 6px 10px 3px;
 }
-.adm-divider { height: 1px; background: #2f2f2f; margin: 4px 0; }
+.adm-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
 /* ── YEAR NAV ── */
 .ym-nav {
@@ -457,12 +464,14 @@ img {
 .vb-lbl { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-top: 5px; }
 .vb-date { font-size: 12px; color: var(--muted); text-align: center; margin-top: 14px; font-weight: 500; }
 .admin-login-btn {
-  display: block; width: 100%; margin-top: 20px;
-  padding: 14px;
+  display: block; width: 100%; margin-top: 12px;
+  padding: 14px 18px;
   background: var(--amber); color: #fff;
-  border: none; border-radius: var(--radius-lg);
+  border: none; border-radius: var(--radius);
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700; font-size: 15px; cursor: pointer;
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: opacity .15s, transform .1s;
 }
 .admin-login-btn:active { opacity: .85; }
 body.viewer .admin-only  { display: none !important; }
@@ -560,8 +569,8 @@ body.memberview .vb-unlocked { display: block; }
 .income-empty { text-align: center; color: var(--dim); font-size: 13px; padding: 8px 0 6px; }
 
 /* ── SPENDING CATALOG ── */
-.tbtn.red-tbtn { background: rgba(192,57,43,0.15); color: #E05540; border-color: rgba(192,57,43,0.3); }
-.tbtn.red-tbtn:active { background: rgba(192,57,43,0.25); }
+.tbtn.red-tbtn { background: rgba(220,38,38,0.12); color: #EF4444; border-color: rgba(220,38,38,0.25); }
+.tbtn.red-tbtn:active { background: rgba(220,38,38,0.22); }
 .spending-section { padding: 10px 14px 4px; }
 .spending-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .spending-title {
@@ -570,7 +579,7 @@ body.memberview .vb-unlocked { display: block; }
   text-transform: uppercase; letter-spacing: .6px;
   display: flex; align-items: center; gap: 6px;
 }
-.spending-total-pill { background: rgba(192,57,43,0.12); color: #E05540; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(192,57,43,0.25); }
+.spending-total-pill { background: rgba(220,38,38,0.10); color: #EF4444; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(220,38,38,0.22); }
 .spending-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
 .spending-item {
   background: var(--card); border: 1px solid var(--border);
@@ -580,7 +589,7 @@ body.memberview .vb-unlocked { display: block; }
 .spending-item-left { flex: 1; min-width: 0; }
 .spending-item-desc { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .spending-item-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.spending-item-amount { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: #E05540; white-space: nowrap; }
+.spending-item-amount { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: #EF4444; white-space: nowrap; }
 .spending-add-btn {
   width: 100%;
   background: transparent;
@@ -594,7 +603,7 @@ body.memberview .vb-unlocked { display: block; }
   margin-bottom: 12px;
   transition: border-color .15s, color .15s;
 }
-.spending-add-btn:hover { border-color: #E05540; color: #E05540; }
+.spending-add-btn:hover { border-color: #EF4444; color: #EF4444; }
 
 /* ── COLLAPSIBLE SECTION ACCORDION ── */
 .section-toggle-btn {
@@ -900,19 +909,19 @@ body.memberview .vb-unlocked { display: block; }
   display: flex; align-items: center; gap: 6px;
 }
 .welfare-badge-count {
-  background: rgba(192,57,43,.15); color: #E05540;
+  background: rgba(220,38,38,.12); color: #EF4444;
   font-size: 11px; font-weight: 700;
   padding: 2px 8px; border-radius: 20px;
-  border: 1px solid rgba(192,57,43,.25);
+  border: 1px solid rgba(220,38,38,.22);
 }
-.welfare-badge-count.none { background: var(--green-bg); color: var(--green2); border-color: rgba(61,122,79,.25); }
+.welfare-badge-count.none { background: var(--green-bg); color: var(--green2); border-color: rgba(16,185,129,.25); }
 .welfare-app-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 8px;
 }
 .welfare-app-card.pending  { border-left: 3px solid var(--amber2); }
 .welfare-app-card.approved { border-left: 3px solid var(--green2); }
-.welfare-app-card.declined { border-left: 3px solid #E05540; }
+.welfare-app-card.declined { border-left: 3px solid #EF4444; }
 .welfare-app-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
 .welfare-app-member { font-size: 13px; font-weight: 700; color: var(--text); }
 .welfare-app-phone  { font-size: 11px; color: var(--muted); margin-top: 1px; }
@@ -923,16 +932,16 @@ body.memberview .vb-unlocked { display: block; }
 .welfare-status-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
 .welfare-status-badge.pending  { background: var(--amber-bg); color: var(--amber2); }
 .welfare-status-badge.approved { background: var(--green-bg); color: var(--green2); }
-.welfare-status-badge.declined { background: rgba(192,57,43,.1); color: #E05540; }
+.welfare-status-badge.declined { background: rgba(220,38,38,.1); color: #EF4444; }
 .welfare-action-btns { display: flex; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
 .w-approve-btn, .w-decline-btn, .w-pending-btn {
   flex: 1; border: none; border-radius: 8px; padding: 8px;
   font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
   cursor: pointer; transition: opacity .15s; min-width: 70px;
 }
-.w-approve-btn { background: var(--green-bg); color: var(--green2); border: 1px solid rgba(61,122,79,.3); }
-.w-decline-btn { background: rgba(192,57,43,.1); color: #E05540; border: 1px solid rgba(192,57,43,.25); }
-.w-pending-btn { background: var(--amber-bg); color: var(--amber2); border: 1px solid rgba(196,98,29,.3); }
+.w-approve-btn { background: var(--green-bg); color: var(--green2); border: 1px solid rgba(16,185,129,.25); }
+.w-decline-btn { background: rgba(220,38,38,.1); color: #EF4444; border: 1px solid rgba(220,38,38,.22); }
+.w-pending-btn { background: var(--amber-bg); color: var(--amber2); border: 1px solid rgba(37,99,235,.25); }
 .w-approve-btn:active, .w-decline-btn:active, .w-pending-btn:active { opacity: .7; }
 .w-wa-btn { background: rgba(37,211,102,.15); color: #25D366; border: 1px solid rgba(37,211,102,.3); border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
 .welfare-filter-tabs { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -987,11 +996,11 @@ body.memberview .vb-unlocked { display: block; }
     <div class="mini-stats">
       <div class="mini-stat">
         <div class="mini-stat-lbl">Paybill</div>
-        <div class="mini-stat-val amber" style="font-size:15px;letter-spacing:0.3px;">544600</div>
+        <div class="mini-stat-val" style="font-size:15px;letter-spacing:0.3px;color:var(--text);">544600</div>
       </div>
       <div class="mini-stat">
         <div class="mini-stat-lbl">Account</div>
-        <div class="mini-stat-val green" style="font-size:15px;letter-spacing:0.3px;">942540</div>
+        <div class="mini-stat-val" style="font-size:15px;letter-spacing:0.3px;color:var(--text);">942540</div>
       </div>
     </div>
     <!-- hidden for JS compat -->
@@ -1052,23 +1061,23 @@ body.memberview .vb-unlocked { display: block; }
        in this section regardless of state. -->
 <div class="viewer-board" id="viewerBoard">
   <div class="vb-signin">
-    <div class="vb-heading">🔒 Sign in required</div>
-    <p style="color:var(--muted);font-size:13px;text-align:center;margin:8px 0 16px;">
+    <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">🔒 SIGN IN REQUIRED</div>
+    <p style="color:var(--muted);font-size:13px;text-align:center;margin:6px 0 20px;line-height:1.6;">
       This tracker contains private member information.<br>Members can view the totals dashboard with the group PIN.
     </p>
-    <button class="admin-login-btn" style="background:var(--green2);margin-bottom:10px" onclick="openMemberLogin()">🔢 Enter Dashboard PIN</button>
-    <button class="admin-login-btn" onclick="openAdminLogin()">🔐 Admin Login</button>
-    <a href="member.html" style="display:block;margin-top:6px;text-decoration:none;">
-      <button class="admin-login-btn" style="background:var(--card2);border:1px solid var(--border);color:var(--muted);width:100%;">👤 My Profile</button>
+    <button class="admin-login-btn" onclick="openMemberLogin()">🔢 Enter Dashboard PIN</button>
+    <button class="admin-login-btn" style="background:var(--card2);border:1px solid var(--border);color:var(--text);" onclick="openAdminLogin()">🔐 Admin Login</button>
+    <a href="member.html" style="display:block;margin-top:8px;text-decoration:none;">
+      <button class="admin-login-btn" style="background:transparent;border:1px solid var(--border);color:var(--muted);width:100%;">👤 My Profile</button>
     </a>
   </div>
   <div class="vb-unlocked">
 
     <!-- 🏆 Leaderboard ticker — scrolls right to left above Today's summary -->
-    <div style="overflow:hidden;background:rgba(196,98,29,0.08);border:1px solid rgba(196,98,29,0.2);border-radius:20px;padding:5px 0;margin-bottom:10px;position:relative;">
+    <div style="overflow:hidden;background:rgba(37,99,235,0.07);border:1px solid rgba(37,99,235,0.18);border-radius:8px;padding:5px 0;margin-bottom:10px;position:relative;">
       <div style="overflow:hidden;">
         <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
-          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--amber2);">Loading…</span>
+          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
         </div>
       </div>
     </div>
@@ -1090,7 +1099,7 @@ body.memberview .vb-unlocked { display: block; }
       <div class="vb-card"><div class="vb-val green" id="vbPaid">0</div><div class="vb-lbl">Paid Today</div></div>
       <div class="vb-card"><div class="vb-val amber" id="vbUnpaid">0</div><div class="vb-lbl">Unpaid</div></div>
       <div class="vb-card"><div class="vb-val" id="vbKshAll">0</div><div class="vb-lbl">KSh Total</div></div>
-      <div class="vb-card"><div class="vb-val" style="color:#E05540;" id="vbTotalSpent">KSh 0</div><div class="vb-lbl">Total Spent</div></div>
+      <div class="vb-card"><div class="vb-val" style="color:#EF4444;" id="vbTotalSpent">KSh 0</div><div class="vb-lbl">Total Spent</div></div>
       <!-- hidden for JS compat -->
       <span id="vbKshToday" style="display:none">0</span>
       <span id="vbOtherIncome" style="display:none">0</span>
