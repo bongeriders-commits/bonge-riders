@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>My Profile — BONGE RIDERS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #141414;
+  --bg2:      #1C1C1C;
+  --card:     #222222;
+  --card2:    #2A2A2A;
+  --border:   #333333;
+  --text:     #F0EDE8;
+  --muted:    #888888;
+  --dim:      #555555;
+  --amber:    #C4621D;
+  --amber2:   #E07830;
+  --amber-bg: rgba(196,98,29,0.12);
+  --green:    #3D7A4F;
+  --green2:   #4E9964;
+  --green-bg: rgba(61,122,79,0.15);
+  --red:      #C0392B;
+  --radius:   10px;
+  --radius-lg:16px;
+}
+
+body.light {
+  --bg:       #F5F2EE;
+  --bg2:      #EDEAE5;
+  --card:     #FFFFFF;
+  --card2:    #F5F2EE;
+  --border:   #E0DBD4;
+  --text:     #141414;
+  --muted:    #777777;
+  --dim:      #AAAAAA;
+  --amber-bg: rgba(196,98,29,0.08);
+  --green-bg: rgba(61,122,79,0.08);
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s, color .2s;
+  padding-bottom: 56px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px 12px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-left { display: flex; align-items: center; gap: 10px; }
+.back-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; text-decoration: none;
+  flex-shrink: 0;
+}
+.header-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 700; color: var(--text);
+  letter-spacing: -.3px;
+}
+.header-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.sync-pill {
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+  background: rgba(61,122,79,.2); color: #6DC98A;
+}
+.sync-pill.err { background: rgba(196,98,29,.15); color: #E8885A; }
+.icon-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+.header-right { display: flex; align-items: center; gap: 8px; }
+
+/* ── LOGIN GATE ── */
+.gate {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 48px 24px;
+  text-align: center; min-height: calc(100vh - 60px);
+}
+.gate-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px; font-weight: 800; color: var(--text);
+  margin-bottom: 4px;
+}
+.gate-logo em { color: var(--amber2); font-style: normal; }
+.gate-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+.gate-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 20px;
+  width: 100%; max-width: 340px;
+}
+.gate-card h2 { font-family: 'Space Grotesk',sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.gate-card p { font-size: 12px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+.field-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+.field-input {
+  width: 100%; background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 15px;
+  padding: 10px 12px; margin-bottom: 10px;
+  outline: none; transition: border-color .15s;
+}
+.field-input:focus { border-color: var(--amber2); }
+.btn-primary {
+  width: 100%; background: var(--green); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 12px; cursor: pointer; transition: opacity .15s;
+  margin-top: 4px;
+}
+.btn-primary:active { opacity: .8; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.err-msg { font-size: 12px; color: #E05540; font-weight: 600; margin-top: 6px; display: none; }
+.err-msg.show { display: block; }
+
+/* ── PROFILE PAGE ── */
+.page { display: none; padding: 0 0 24px; }
+.page.active { display: block; }
+
+.avatar-section {
+  background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.avatar-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber2) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+.avatar-info h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 800; color: var(--text);
+  line-height: 1.1; margin-bottom: 4px;
+}
+.avatar-info .phone-row {
+  font-size: 13px; color: var(--muted); margin-bottom: 6px;
+}
+.pin-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--green-bg); color: var(--green2);
+  border: 1px solid rgba(61,122,79,.3);
+}
+.pin-badge.no-pin { background: var(--amber-bg); color: var(--amber2); border-color: rgba(196,98,29,.3); }
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell {
+  background: var(--card); padding: 14px 10px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.stat-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 800; line-height: 1;
+  margin-bottom: 3px;
+}
+.stat-val.green { color: var(--green2); }
+.stat-val.amber { color: var(--amber2); }
+.stat-val.red   { color: #E05540; }
+.stat-lbl { font-size: 9px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; text-align: center; }
+
+/* ── SECTION CARDS ── */
+.section { margin: 12px 14px 0; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; font-weight: 700; color: var(--text);
+  letter-spacing: -.2px;
+}
+.section-pill {
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 20px; background: var(--card2); color: var(--muted);
+}
+
+/* ── CONTRIBUTION HISTORY ── */
+.history-list {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.history-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+.history-item:last-child { border-bottom: none; }
+.history-date { font-size: 13px; font-weight: 600; color: var(--text); }
+.history-day  { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.history-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; flex-shrink: 0;
+}
+.history-badge.paid   { background: var(--green-bg); color: var(--green2); }
+.history-badge.unpaid { background: var(--amber-bg); color: var(--amber2); }
+.history-ksh { font-size: 12px; font-weight: 700; color: var(--green2); flex-shrink: 0; }
+
+.history-empty {
+  padding: 28px 14px; text-align: center;
+  font-size: 13px; color: var(--muted);
+}
+.history-show-more {
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; font-size: 12px; font-weight: 600; color: var(--amber2);
+  cursor: pointer; border-top: 1px solid var(--border);
+  background: none; border-left: none; border-right: none; border-bottom: none;
+  width: 100%; font-family: 'Inter', sans-serif;
+}
+
+/* ── WELFARE SECTION ── */
+.welfare-apply-btn {
+  width: 100%; background: var(--green); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 11px; cursor: pointer; margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.welfare-apply-btn:active { opacity: .8; }
+
+.welfare-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px;
+  margin-bottom: 8px;
+}
+.welfare-card-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  margin-bottom: 6px;
+}
+.welfare-reason { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.welfare-status {
+  font-size: 10px; font-weight: 700; padding: 3px 9px;
+  border-radius: 20px; flex-shrink: 0; white-space: nowrap;
+}
+.welfare-status.pending  { background: var(--amber-bg); color: var(--amber2); }
+.welfare-status.approved { background: var(--green-bg); color: var(--green2); }
+.welfare-status.declined { background: rgba(192,57,43,.1); color: #E05540; }
+.welfare-meta { font-size: 11px; color: var(--muted); }
+.welfare-amount { font-size: 12px; font-weight: 700; color: var(--green2); margin-top: 4px; }
+
+.welfare-empty {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 14px;
+  text-align: center; font-size: 13px; color: var(--muted);
+}
+
+/* ── ID CARD ── */
+.id-card-section { margin: 16px 14px 0; }
+.id-card-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 16px 0 4px;
+}
+/* CR80 card: 85.6mm × 54mm — rendered at 2.5x for screen clarity */
+.id-card {
+  width: 321px; height: 203px;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.45);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #0D1B2A 0%, #1B2E45 50%, #0D1B2A 100%);
+  position: relative;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fff;
+  display: flex; flex-direction: column;
+}
+.id-card-top-bar {
+  background: linear-gradient(90deg, #C4621D 0%, #E07830 60%, #C4621D 100%);
+  height: 7px; width: 100%; flex-shrink: 0;
+}
+.id-card-body {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 10px 14px 8px;
+  position: relative;
+}
+.id-card-org {
+  font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #E07830;
+  margin-bottom: 2px;
+}
+.id-card-title {
+  font-size: 7px; font-weight: 600; color: rgba(255,255,255,.5);
+  letter-spacing: .8px; text-transform: uppercase; margin-bottom: 10px;
+}
+.id-card-content {
+  display: flex; gap: 10px; flex: 1; align-items: flex-start;
+}
+.id-card-avatar {
+  width: 52px; height: 52px; border-radius: 8px;
+  background: linear-gradient(135deg, #C4621D 0%, #E07830 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: #fff;
+  flex-shrink: 0; border: 2px solid rgba(255,255,255,.15);
+}
+.id-card-fields { flex: 1; min-width: 0; }
+.id-card-name {
+  font-size: 13px; font-weight: 800; color: #fff;
+  letter-spacing: -.2px; line-height: 1.15; margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.id-card-field { margin-bottom: 5px; }
+.id-card-field-label {
+  font-size: 6.5px; font-weight: 700; color: rgba(255,255,255,.45);
+  text-transform: uppercase; letter-spacing: .8px; margin-bottom: 1px;
+}
+.id-card-field-val {
+  font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,.9);
+  letter-spacing: .2px;
+}
+.id-card-qr {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: #fff; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 3px;
+}
+.id-card-qr canvas, .id-card-qr img { width: 42px; height: 42px; display: block; }
+.id-card-bottom {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: auto; padding-top: 6px;
+}
+.id-card-bottom-bar {
+  background: linear-gradient(90deg, #C4621D 0%, #E07830 60%, #C4621D 100%);
+  height: 4px; width: 100%; flex-shrink: 0;
+}
+.id-card-disclaimer {
+  font-size: 5.5px; color: rgba(255,255,255,.3); letter-spacing: .3px;
+  text-align: center; padding: 4px 14px 6px;
+  line-height: 1.4;
+}
+.id-card-issue {
+  font-size: 6px; color: rgba(255,255,255,.35); letter-spacing: .3px;
+}
+.id-download-btn {
+  width: 100%; background: var(--green); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 12px; cursor: pointer; margin-top: 4px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.id-download-btn:active { opacity: .8; }
+.id-download-btn:disabled { opacity: .5; cursor: not-allowed; }
+.id-not-ready {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 14px;
+  text-align: center; font-size: 13px; color: var(--muted); line-height: 1.6;
+}
+
+/* ── MEMBER DETAILS DROPDOWN ── */
+.details-toggle {
+  width: 100%; background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 12px 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0;
+}
+.details-toggle:active { opacity: .75; }
+.details-toggle .dt-caret {
+  font-size: 11px; color: var(--muted);
+  transition: transform .25s;
+}
+.details-toggle.open .dt-caret { transform: rotate(180deg); }
+.details-body {
+  display: none; background: var(--card);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden; margin-bottom: 0;
+}
+.details-body.open { display: block; }
+.det-section-hdr {
+  font-size: 10px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  padding: 10px 14px 4px; border-top: 1px solid var(--border);
+}
+.det-section-hdr:first-child { border-top: none; }
+.det-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.det-row:last-child { border-bottom: none; }
+.det-icon { font-size: 18px; flex-shrink: 0; }
+.det-label { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 2px; }
+.det-value { font-size: 14px; font-weight: 600; color: var(--text); }
+.det-empty { font-size: 13px; color: var(--dim); font-style: italic; }
+.det-loading { padding: 18px 14px; text-align: center; font-size: 13px; color: var(--muted); }
+
+/* ── CHANGE PIN BTN ── */
+.change-pin-btn {
+  margin: 20px 14px 0;
+  width: calc(100% - 28px);
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--fg); border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.change-pin-btn:active { opacity: .7; }
+
+/* ── LOGOUT BTN ── */
+.logout-btn {
+  margin: 20px 14px 0;
+  width: calc(100% - 28px);
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--muted); border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.logout-btn:active { opacity: .7; }
+
+/* ── MODAL ── */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.6); align-items: flex-end; justify-content: center;
+  padding: 0 0 env(safe-area-inset-bottom);
+}
+.modal-backdrop.open { display: flex; }
+.modal-box {
+  background: var(--card); border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 480px;
+  padding: 20px 16px 32px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; font-weight: 800; color: var(--text);
+  margin-bottom: 16px;
+}
+.modal-close {
+  float: right; background: var(--card2); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 8px; width: 28px; height: 28px;
+  font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  margin-top: -2px;
+}
+textarea.field-input {
+  height: 90px; resize: none; font-size: 14px;
+}
+.modal-row { display: flex; gap: 8px; }
+.modal-row .field-wrap { flex: 1; }
+.field-wrap { margin-bottom: 12px; }
+
+/* ── MODAL CARD (centered modals) ── */
+.modal-card {
+  background: var(--card); border-radius: 16px;
+  padding: 20px 16px 24px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-body { margin-bottom: 4px; }
+.modal-actions {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 14px;
+}
+.modal-actions .btn-primary { width: 100%; }
+.btn-secondary {
+  width: 100%; padding: 11px;
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--muted); border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer;
+}
+.btn-secondary:active { opacity: .7; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 72px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--card2); color: var(--text);
+  border: 1px solid var(--border);
+  padding: 10px 20px; border-radius: 20px;
+  font-size: 13px; font-weight: 600;
+  opacity: 0; transition: opacity .2s, transform .2s;
+  pointer-events: none; z-index: 600; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── COPYRIGHT BAR ── */
+.copyright-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 28px; z-index: 150;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--card2); border-top: 1px solid var(--border);
+  font-size: 10px; font-weight: 600; color: var(--muted);
+  letter-spacing: 0.3px; pointer-events: none; user-select: none;
+}
+
+/* ── LOADING SPINNER ── */
+.spinner {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px; color: var(--muted); font-size: 13px; gap: 8px;
+}
+.spin { display: inline-block; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { background: var(--border); border-radius: 20px; height: 6px; margin-top: 6px; }
+.progress-fill { height: 6px; border-radius: 20px; background: linear-gradient(90deg, var(--green) 0%, var(--green2) 100%); transition: width .4s; }
+
+/* ── WELCOME SPLASH ── */
+#welcomeSplash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #1C1C1C 0%, #141414 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  transition: opacity .45s ease, visibility .45s ease;
+}
+body.light #welcomeSplash {
+  background: linear-gradient(160deg, #EDEAE5 0%, #F5F2EE 100%);
+}
+#welcomeSplash.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+.ws-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #C4621D 0%, #E07830 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px; font-weight: 800; color: #fff;
+  animation: wsPop .5s ease;
+  box-shadow: 0 8px 32px rgba(196,98,29,0.4);
+}
+.ws-greeting {
+  font-size: 14px; font-weight: 600; color: #888;
+  letter-spacing: .5px; text-transform: uppercase;
+  animation: wsFadeUp .5s ease .1s both;
+}
+.ws-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px; font-weight: 800;
+  color: #F0EDE8; text-align: center;
+  line-height: 1.15; padding: 0 24px;
+  animation: wsFadeUp .5s ease .2s both;
+}
+body.light .ws-name { color: #141414; }
+.ws-sub {
+  font-size: 12px; color: #555;
+  animation: wsFadeUp .4s ease .35s both;
+}
+@keyframes wsPop {
+  0%   { transform: scale(.6); opacity: 0; }
+  65%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes wsFadeUp {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ WELCOME SPLASH ═══ -->
+<div id="welcomeSplash" style="display:none;">
+  <div class="ws-avatar" id="wsAvatar">?</div>
+  <div class="ws-greeting">Welcome back</div>
+  <div class="ws-name" id="wsName">—</div>
+  <div class="ws-sub">Bogonko-Ngelani Stage</div>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn" title="Back to main app">←</a>
+    <div>
+      <div class="header-title">My Profile</div>
+      <div class="header-sub">Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
+      <span id="syncStatus" class="sync-pill err">⏳</span>
+      <span id="lastSynced" style="font-size:9px;color:var(--muted);display:none;"></span>
+    </div>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
+  </div>
+</div>
+
+<!-- ═══ LOGIN GATE ═══ -->
+<div class="gate" id="loginGate">
+  <div class="gate-logo">BOGONKO<em>-NGELANI</em></div>
+  <div class="gate-subtitle">Member Self-Service Portal</div>
+  <div class="gate-card">
+    <h2>🔐 Sign In</h2>
+    <p>Enter your phone number and your personal PIN to access your profile and contribution history.</p>
+    <div class="field-wrap">
+      <div class="field-label">Phone Number</div>
+      <input class="field-input" type="tel" inputmode="tel" id="loginPhone" placeholder="e.g. 0712 345 678" autocomplete="off">
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Your Personal PIN</div>
+      <input class="field-input" type="password" inputmode="numeric" id="loginPin" placeholder="4-digit PIN" autocomplete="off" maxlength="6" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <p id="loginErr" class="err-msg">Incorrect phone or PIN.</p>
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">Unlock My Profile</button>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;">Don't have a PIN yet? Ask an admin to set one for you via the member panel.</p>
+    <button onclick="openPinRecoveryModal()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;margin-top:4px;padding:0;">Forgot your PIN? Request a reset</button>
+  </div>
+</div>
+
+<!-- ═══ PROFILE PAGE ═══ -->
+<div class="page" id="profilePage">
+
+  <!-- Avatar + name -->
+  <div class="avatar-section">
+    <div class="avatar-circle" id="avatarCircle">??</div>
+    <div class="avatar-info">
+      <h1 id="memberName" style="font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.1;">—</h1>
+      <div class="phone-row" id="memberPhone" style="font-size:13px;margin-top:3px;margin-bottom:6px;">—</div>
+      <span id="pinBadge" class="pin-badge">🔐 PIN Active</span>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-val green" id="statDaysPaid">0</div>
+      <div class="stat-lbl">Days Paid</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val red" id="statDaysUnpaid">0</div>
+      <div class="stat-lbl">Days Unpaid</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val amber" id="statTotalKsh">0</div>
+      <div class="stat-lbl">KSh Paid</div>
+    </div>
+  </div>
+
+  <!-- Contribution progress -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">📊 Contribution Rate</div>
+      <div class="section-pill" id="rateLabel">—</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:5px;" id="progressSub"></div>
+  </div>
+
+  <!-- Contribution history -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">📅 Contribution History</div>
+      <div class="section-pill" id="historyCount">0 days</div>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="spinner"><span class="spin">⏳</span> Loading…</div>
+    </div>
+  </div>
+
+  <!-- Welfare Applications -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">🏥 Welfare Applications</div>
+      <div class="section-pill" id="welfareCount">0</div>
+    </div>
+    <button class="welfare-apply-btn" onclick="openWelfareModal()">＋ Submit New Application</button>
+    <div id="welfareList">
+      <div class="welfare-empty">No applications yet.</div>
+    </div>
+  </div>
+
+  <!-- Virtual ID Card -->
+  <div class="id-card-section">
+    <div class="section-header">
+      <div class="section-title">🪪 My Virtual ID Card</div>
+    </div>
+    <div id="idCardArea">
+      <div class="spinner"><span class="spin">⏳</span> Loading card…</div>
+    </div>
+  </div>
+
+  <!-- My Details dropdown -->
+  <div class="section" style="margin-top:16px;">
+    <button class="details-toggle" id="detailsToggle" onclick="toggleDetails()">
+      <span>📋 My Details</span>
+      <span class="dt-caret">▾</span>
+    </button>
+    <div class="details-body" id="detailsBody">
+      <div class="det-loading" id="detailsLoading">Loading…</div>
+      <div id="detailsInner" style="display:none;"></div>
+    </div>
+  </div>
+
+  <button class="change-pin-btn" onclick="openChangePinModal()">🔑 Change PIN</button>
+  <button class="logout-btn" onclick="doLogout()">🔒 Sign Out</button>
+</div>
+
+<!-- ═══ WELFARE MODAL ═══ -->
+<div class="modal-backdrop" id="welfareModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      🏥 Welfare Application
+      <button class="modal-close" onclick="closeWelfareModal()">✕</button>
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Reason / Type of Welfare</div>
+      <input class="field-input" type="text" id="wReason" placeholder="e.g. Medical, Bereavement, Emergency…" autocomplete="off">
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Description</div>
+      <textarea class="field-input" id="wDesc" placeholder="Briefly describe your situation…"></textarea>
+    </div>
+    <div class="modal-row">
+      <div class="field-wrap">
+        <div class="field-label">Amount Requested (KSh)</div>
+        <input class="field-input" type="tel" inputmode="numeric" id="wAmount" placeholder="e.g. 5000" autocomplete="off">
+      </div>
+    </div>
+    <p id="wErr" class="err-msg">Please fill all fields.</p>
+    <button class="btn-primary" id="wSubmitBtn" onclick="submitWelfare()">Submit Application</button>
+  </div>
+</div>
+
+<!-- ═══ CHANGE PIN MODAL ═══ -->
+<div class="modal-backdrop" id="changePinModal" style="align-items:center;">
+  <div class="modal-card" style="max-width:340px;width:92%;">
+    <div class="modal-title" id="changePinTitle">🔑 Change Your PIN</div>
+    <div class="modal-body">
+      <div id="changePinForceMsg" style="display:none;background:rgba(255,165,0,.12);border:1px solid rgba(255,165,0,.35);border-radius:8px;padding:10px 12px;font-size:12px;color:#d4860a;margin-bottom:14px;line-height:1.5;">
+        ⚠️ Your PIN was set by an admin. Please create a new personal PIN before continuing.
+      </div>
+      <div class="field-wrap" id="oldPinWrap">
+        <div class="field-label">Current PIN</div>
+        <input class="field-input" type="password" inputmode="numeric" id="cpOldPin" placeholder="Enter current PIN" maxlength="6" autocomplete="off">
+      </div>
+      <div class="field-wrap">
+        <div class="field-label">New PIN</div>
+        <input class="field-input" type="password" inputmode="numeric" id="cpNewPin" placeholder="4–6 digits" maxlength="6" autocomplete="off">
+      </div>
+      <div class="field-wrap">
+        <div class="field-label">Confirm New PIN</div>
+        <input class="field-input" type="password" inputmode="numeric" id="cpConfirmPin" placeholder="Repeat new PIN" maxlength="6" autocomplete="off" onkeydown="if(event.key==='Enter')doChangePin()">
+      </div>
+      <p id="changePinErr" class="err-msg"></p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="changePinSaveBtn" onclick="doChangePin()">Save New PIN</button>
+      <button class="btn-secondary" id="changePinCancelBtn" onclick="closeChangePinModal()">Cancel</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <button onclick="openPinRecoveryModal()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;">Forgot PIN? Request reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PIN RECOVERY MODAL ═══ -->
+<div class="modal-backdrop" id="pinRecoveryModal" style="align-items:center;">
+  <div class="modal-card" style="max-width:340px;width:92%;">
+    <div class="modal-title">🆘 PIN Reset Request</div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">
+        We'll open WhatsApp with a pre-filled message to your group admin. They will reset your PIN and send you a new one.
+      </p>
+      <div class="field-wrap">
+        <div class="field-label">Your Phone Number</div>
+        <input class="field-input" type="tel" inputmode="tel" id="recoveryPhone" placeholder="e.g. 0712 345 678" autocomplete="off">
+      </div>
+      <p id="recoveryErr" class="err-msg"></p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="sendPinRecoveryWA()">📲 Request via WhatsApp</button>
+      <button class="btn-secondary" onclick="closePinRecoveryModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ COPYRIGHT ═══ -->
+<div class="copyright-bar">© Bogonko-Ngelani Stage</div>
+
+<script type="module">
+import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, onSnapshot, setDoc, collection, addDoc, query, where, getDocs, orderBy }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId:     "G-VWL91EJW1H"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+// ── CONSTANTS ──
+const RATE       = 50;
+const START_DATE = new Date(2026, 5, 22);
+const SHOW_FIRST = 20; // initial rows shown in history
+
+// ── STATE ──
+let currentMember = null; // { name, phone }
+let payments      = {};
+let allDates      = [];
+let welfareApps   = [];
+let historyExpanded = false;
+let _paymentsUnsub = null;
+let _welfareUnsub  = null;
+let _memberDetailsUnsub = null;
+
+// ── THEME ──
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('light') ? '🌙' : '☀️';
+}
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('themeToggle').textContent = '🌙';
+} else {
+  document.getElementById('themeToggle').textContent = '☀️';
+}
+
+// ── SYNC STATUS ──
+function setSyncStatus(ok, msg) {
+  const el = document.getElementById('syncStatus');
+  if (el) { el.textContent = msg; el.className = 'sync-pill' + (ok ? '' : ' err'); }
+  const ts = document.getElementById('lastSynced');
+  if (ts) {
+    if (ok) {
+      const now = new Date();
+      const h = now.getHours(), m = now.getMinutes();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const hh = h % 12 || 12;
+      const mm = m < 10 ? '0' + m : m;
+      ts.textContent = 'Last synced: ' + hh + ':' + mm + ' ' + ampm;
+      ts.style.display = 'inline';
+    } else {
+      ts.style.display = 'none';
+    }
+  }
+}
+
+// ── TOAST ──
+let _toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+// ── HELPERS ──
+function pad(n) { return String(n).padStart(2,'0'); }
+function todayKey() {
+  const t = new Date();
+  return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+}
+function fmtDate(dk) {
+  const d = new Date(dk + 'T00:00:00');
+  return d.toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+}
+function fmtDay(dk) {
+  const d = new Date(dk + 'T00:00:00');
+  return d.toLocaleDateString('en-KE', { weekday:'short' });
+}
+function initials(name) {
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+}
+function normalisePhone(p) {
+  return p.replace(/[\s\-().]/g,'')  // strip spaces, dashes, brackets, dots
+           .replace(/^\+/, '')        // strip leading +
+           .replace(/^0/, '254');     // 07xx → 25407xx
+}
+function isPaid(phone, dk) {
+  return !!(payments[dk] && payments[dk][phone]);
+}
+
+// Build all dates from START_DATE up to today
+function buildAllDates() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const arr = [];
+  const sd = new Date(START_DATE);
+  let d = new Date(sd);
+  while (d <= today) {
+    const dk = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    arr.push(dk);
+    d.setDate(d.getDate()+1);
+  }
+  return arr;
+}
+
+// ── LOGIN ──
+async function doLogin() {
+  const rawPhone = document.getElementById('loginPhone').value.trim();
+  const pin      = document.getElementById('loginPin').value.trim();
+  const errEl    = document.getElementById('loginErr');
+  const btn      = document.getElementById('loginBtn');
+
+  if (!rawPhone || !pin) {
+    errEl.textContent = 'Enter your phone number and PIN.';
+    errEl.classList.add('show'); return;
+  }
+
+  btn.textContent = 'Checking…'; btn.disabled = true;
+  errEl.classList.remove('show');
+
+  try {
+    if (!auth.currentUser) await signInAnonymously(auth);
+
+    // Normalise the phone for lookup
+    const normInput = normalisePhone(rawPhone);
+
+    // Read memberPins — anonymous sessions ARE allowed to read this
+    const pinsSnap = await getDoc(doc(db, "tracker", "memberPins"));
+    const pinsData = pinsSnap.exists() ? (pinsSnap.data() || {}) : {};
+
+    // Find a matching phone key (normalise stored keys too — handles 07XX and 254XX formats)
+    let matchedPhone = Object.keys(pinsData).find(k => normalisePhone(k) === normInput);
+
+    // If not found, also try matching the raw input directly (catches format mismatches in Firestore)
+    if (!matchedPhone) {
+      const rawTrimmed = rawPhone.replace(/[\s\-().]/g,'');
+      matchedPhone = Object.keys(pinsData).find(k =>
+        k === rawTrimmed ||
+        k === rawTrimmed.replace(/^0/,'254') ||
+        k === '0' + rawTrimmed.replace(/^254/,'')
+      );
+    }
+
+    if (!matchedPhone) {
+      errEl.textContent = 'Phone number not found. Check the number or ask an admin.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    const storedPin = String(pinsData[matchedPhone] || '');
+    if (!storedPin) {
+      errEl.textContent = 'No PIN set for your account yet. Ask an admin.';
+      errEl.classList.add('show');
+      return;
+    }
+    if (pin !== storedPin) {
+      errEl.textContent = 'Incorrect PIN.';
+      errEl.classList.add('show');
+      document.getElementById('loginPin').value = '';
+      document.getElementById('loginPin').focus();
+      return;
+    }
+
+    // 1. Try _meta_ entry written by admin when setting PIN
+    const memberMeta = pinsData['_meta_' + matchedPhone];
+    let memberName = (memberMeta && memberMeta.name) ? memberMeta.name : '';
+
+    // 2. If no meta name, look up from tracker/members list
+    if (!memberName) {
+      try {
+        const membersSnap = await getDoc(doc(db, 'tracker', 'members'));
+        if (membersSnap.exists()) {
+          const list = membersSnap.data().list || [];
+          const found = list.find(m => normalisePhone(m.phone) === normalisePhone(matchedPhone));
+          if (found && found.name) memberName = found.name;
+        }
+      } catch(e) {}
+    }
+
+    // 3. Final fallback to phone number
+    if (!memberName) memberName = matchedPhone;
+
+    // Success
+    currentMember = { name: memberName, phone: matchedPhone };
+    sessionStorage.setItem('memberPhone', matchedPhone);
+    sessionStorage.setItem('memberName',  memberName);
+    await loadProfile();
+
+    // If PIN was set by admin (adminSet flag), force member to change it now
+    const meta = pinsData['_meta_' + matchedPhone];
+    if (meta && meta.adminSet === true) {
+      setTimeout(() => openChangePinModal(true), 800);
+    }
+
+  } catch(e) {
+    if (!errEl.classList.contains('show')) {
+      errEl.textContent = 'Could not connect. Check your network.';
+      errEl.classList.add('show');
+    }
+  } finally {
+    btn.textContent = 'Unlock My Profile'; btn.disabled = false;
+  }
+}
+
+// ── LOAD PROFILE ──
+async function loadProfile() {
+  // Show 1-second welcome splash
+  const m = currentMember;
+  const inits = initials(m.name);
+  const splash = document.getElementById('welcomeSplash');
+  const wsAvatar = document.getElementById('wsAvatar');
+  const wsName   = document.getElementById('wsName');
+  if (splash && wsAvatar && wsName) {
+    wsAvatar.textContent = inits;
+    wsName.textContent   = m.name;
+    splash.style.display = 'flex';
+    // Hide login gate while splash is showing
+    document.getElementById('loginGate').style.display = 'none';
+    await new Promise(r => setTimeout(r, 1100));
+    splash.classList.add('fade-out');
+    await new Promise(r => setTimeout(r, 460));
+    splash.style.display = 'none';
+    splash.classList.remove('fade-out');
+  } else {
+    document.getElementById('loginGate').style.display = 'none';
+  }
+
+  document.getElementById('profilePage').classList.add('active');
+  allDates = buildAllDates();
+
+  // Render static profile info
+  renderProfileMeta();
+
+  // Render ID card
+  await renderIdCard();
+
+  // Start live listeners
+  startPaymentsListener();
+  startWelfareListener();
+  startMemberDetailsListener();
+}
+
+function startMemberDetailsListener() {
+  if (_memberDetailsUnsub) { _memberDetailsUnsub(); _memberDetailsUnsub = null; }
+  const phone = currentMember.phone;
+  _memberDetailsUnsub = onSnapshot(doc(db, 'tracker', 'memberDetails'), (snap) => {
+    const all = snap.exists() ? (snap.data() || {}) : {};
+    const fresh = all[phone] || {};
+    // Only re-render if data actually changed
+    const prev = JSON.stringify(_memberDetailsCache || {});
+    const next = JSON.stringify(fresh);
+    if (prev !== next) {
+      _memberDetailsCache = fresh;
+      _detailsLoaded = false; // force details panel to reload too
+      renderIdCard();
+    }
+  });
+}
+
+function renderProfileMeta() {
+  const m = currentMember;
+  const inits = initials(m.name);
+  document.getElementById('avatarCircle').textContent = inits;
+  document.getElementById('memberName').textContent   = m.name;
+  document.getElementById('memberPhone').textContent  = m.phone;
+
+  // Check PIN badge — we already know PIN exists since login succeeded
+  document.getElementById('pinBadge').textContent = '🔐 PIN Active';
+  document.getElementById('pinBadge').className   = 'pin-badge';
+}
+
+function startPaymentsListener() {
+  if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
+  // Grace period: don't flash Offline immediately — wait 6s before showing it.
+  // This prevents false Offline state on slow connections or cold starts.
+  let _offlineTimer = null;
+  const _armOffline = () => {
+    if (_offlineTimer) return;
+    _offlineTimer = setTimeout(() => {
+      setSyncStatus(false, '⚠️ Offline');
+      renderHistory();
+      renderStats();
+    }, 6000);
+  };
+  _armOffline(); // start the countdown
+  _paymentsUnsub = onSnapshot(doc(db, "tracker", "payments"), (snap) => {
+    clearTimeout(_offlineTimer); _offlineTimer = null;
+    payments = snap.exists() ? snap.data() : {};
+    setSyncStatus(true, '🟢 Live');
+    renderHistory();
+    renderStats();
+  }, () => {
+    clearTimeout(_offlineTimer); _offlineTimer = null;
+    setSyncStatus(false, '⚠️ Offline');
+    renderHistory();
+    renderStats();
+  });
+}
+
+function startWelfareListener() {
+  if (_welfareUnsub) { _welfareUnsub(); _welfareUnsub = null; }
+  // Listen to welfare collection, filter by member phone
+  _welfareUnsub = onSnapshot(
+    doc(db, "tracker", "welfare_" + currentMember.phone.replace(/\D/g,'')),
+    (snap) => {
+      welfareApps = snap.exists() ? (snap.data().applications || []) : [];
+      renderWelfare();
+    },
+    () => {}
+  );
+}
+
+// ── STATS ──
+function renderStats() {
+  const phone = currentMember.phone;
+  const daysPaid   = allDates.filter(dk => isPaid(phone, dk)).length;
+  const daysUnpaid = allDates.length - daysPaid;
+  const totalKsh   = daysPaid * RATE;
+  const pct = allDates.length > 0 ? Math.round(daysPaid / allDates.length * 100) : 0;
+
+  document.getElementById('statDaysPaid').textContent   = daysPaid;
+  document.getElementById('statDaysUnpaid').textContent = daysUnpaid;
+  document.getElementById('statTotalKsh').textContent   = totalKsh.toLocaleString();
+
+  document.getElementById('rateLabel').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressSub').textContent =
+    `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total`;
+}
+
+// ── HISTORY ──
+function renderHistory() {
+  const phone    = currentMember.phone;
+  const todayDk  = todayKey();
+
+  // All dates in reverse (newest first), each with paid status
+  const rows = [...allDates].reverse().map(dk => ({
+    dk,
+    paid: isPaid(phone, dk)
+  }));
+
+  document.getElementById('historyCount').textContent = allDates.length + ' days';
+
+  const list = document.getElementById('historyList');
+
+  if (rows.length === 0) {
+    const offlineMsg = document.getElementById('syncStatus')?.classList.contains('err')
+      ? '<div class="history-empty">⚠️ Could not load history — you appear to be offline.<br><span style="font-size:11px;color:var(--dim);">Connect to the internet and refresh.</span></div>'
+      : '<div class="history-empty">No contribution records yet.</div>';
+    list.innerHTML = offlineMsg;
+    return;
+  }
+
+  const visible = historyExpanded ? rows : rows.slice(0, SHOW_FIRST);
+  const showMoreBtn = (!historyExpanded && rows.length > SHOW_FIRST)
+    ? `<button class="history-show-more" id="showMoreBtn">Show all ${rows.length} days ▾</button>`
+    : (historyExpanded && rows.length > SHOW_FIRST)
+    ? `<button class="history-show-more" id="showMoreBtn">Show less ▴</button>`
+    : '';
+
+  list.innerHTML = visible.map(({dk, paid}) => `
+    <div class="history-item">
+      <div>
+        <div class="history-date">${fmtDate(dk)}</div>
+        <div class="history-day">${fmtDay(dk)}${dk === todayDk ? ' · Today' : ''}</div>
+      </div>
+      <span class="history-badge ${paid ? 'paid' : 'unpaid'}">${paid ? '✓ Paid' : 'Unpaid'}</span>
+      <div class="history-ksh">${paid ? 'KSh ' + RATE : '—'}</div>
+    </div>
+  `).join('') + showMoreBtn;
+
+  const btn = document.getElementById('showMoreBtn');
+  if (btn) btn.onclick = () => { historyExpanded = !historyExpanded; renderHistory(); };
+}
+
+// ── WELFARE ──
+function renderWelfare() {
+  document.getElementById('welfareCount').textContent = welfareApps.length;
+  const list = document.getElementById('welfareList');
+
+  if (!welfareApps.length) {
+    list.innerHTML = '<div class="welfare-empty">No welfare applications yet.<br>Use the button above to submit one.</div>';
+    return;
+  }
+
+  const sorted = [...welfareApps].sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+  list.innerHTML = sorted.map(app => `
+    <div class="welfare-card">
+      <div class="welfare-card-top">
+        <div class="welfare-reason">${escHtml(app.reason)}</div>
+        <span class="welfare-status ${app.status||'pending'}">${capitalise(app.status||'Pending')}</span>
+      </div>
+      <div class="welfare-meta">${app.desc ? escHtml(app.desc) : ''}</div>
+      ${app.amount ? `<div class="welfare-amount">KSh ${Number(app.amount).toLocaleString()} requested</div>` : ''}
+      <div class="welfare-meta" style="margin-top:4px;">Submitted: ${app.timestamp ? new Date(app.timestamp).toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'}) : '—'}</div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// ── WELFARE MODAL ──
+function openWelfareModal() {
+  document.getElementById('wReason').value  = '';
+  document.getElementById('wDesc').value    = '';
+  document.getElementById('wAmount').value  = '';
+  document.getElementById('wErr').classList.remove('show');
+  document.getElementById('welfareModal').classList.add('open');
+  setTimeout(() => document.getElementById('wReason').focus(), 250);
+}
+function closeWelfareModal() {
+  document.getElementById('welfareModal').classList.remove('open');
+}
+async function submitWelfare() {
+  const reason = document.getElementById('wReason').value.trim();
+  const desc   = document.getElementById('wDesc').value.trim();
+  const amount = document.getElementById('wAmount').value.trim();
+  const errEl  = document.getElementById('wErr');
+  const btn    = document.getElementById('wSubmitBtn');
+
+  if (!reason) { errEl.textContent = 'Please enter a reason.'; errEl.classList.add('show'); return; }
+  errEl.classList.remove('show');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  try {
+    const docRef = doc(db, "tracker", "welfare_" + currentMember.phone.replace(/\D/g,''));
+    const existing = await getDoc(docRef);
+    const apps = existing.exists() ? (existing.data().applications || []) : [];
+    apps.push({
+      reason, desc, amount,
+      status: 'pending',
+      memberName:  currentMember.name,
+      memberPhone: currentMember.phone,
+      timestamp: Date.now()
+    });
+    await setDoc(docRef, { applications: apps, memberName: currentMember.name, memberPhone: currentMember.phone });
+    closeWelfareModal();
+    showToast('✓ Application submitted');
+    welfareApps = apps;
+    renderWelfare();
+  } catch(e) {
+    errEl.textContent = '⚠️ Failed to submit. Try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Submit Application'; btn.disabled = false;
+  }
+}
+
+// ── MY DETAILS ──
+let _detailsLoaded = false;
+let _memberDetailsCache = null; // cache for reuse by ID card
+
+async function fetchMemberDetails(phone) {
+  if (_memberDetailsCache !== null) return _memberDetailsCache;
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'memberDetails'));
+    const all  = snap.exists() ? (snap.data() || {}) : {};
+    _memberDetailsCache = all[phone] || {};
+  } catch(e) {
+    // Don't cache on error — leave null so the next call retries
+    return {};
+  }
+  return _memberDetailsCache;
+}
+
+// ── ID CARD ──
+async function renderIdCard() {
+  const area = document.getElementById('idCardArea');
+  const phone = currentMember.phone;
+  const d = await fetchMemberDetails(phone);
+
+  // Load sacco settings
+  let saccoName = 'BOGONKO-NGELANI STAGE';
+  let saccoAuthority = 'Boda Boda Welfare Group';
+  let saccoCounty = d.county || '';
+  try {
+    const ss = await getDoc(doc(db, 'tracker', 'saccoSettings'));
+    if (ss.exists()) {
+      saccoName      = ss.data().saccoName      || saccoName;
+      saccoAuthority = ss.data().saccoAuthority || saccoAuthority;
+      saccoCounty    = d.county || ss.data().saccoCounty || saccoCounty;
+    }
+  } catch(e) {}
+
+  if (!d.memberNo) {
+    area.innerHTML = `<div class="id-not-ready">🪪 Your ID card is not ready yet.<br><span style="font-size:12px;">Ask an admin to assign your membership number.</span></div>`;
+    return;
+  }
+
+  const issueDate = d.updatedAt
+    ? new Date(d.updatedAt).toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' })
+    : new Date().toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+
+  const initsText = initials(currentMember.name);
+  const qrData = `MEM:${d.memberNo}|NAME:${currentMember.name}|SACCO:${saccoName}`;
+
+  area.innerHTML = `
+    <div class="id-card-wrap">
+      <div class="id-card" id="theIdCard">
+        <div class="id-card-top-bar"></div>
+        <div class="id-card-body">
+          <div class="id-card-org">${saccoName}</div>
+          <div class="id-card-title">${saccoAuthority} · Member ID Card</div>
+          <div class="id-card-content">
+            <div class="id-card-avatar">${initsText}</div>
+            <div class="id-card-fields">
+              <div class="id-card-name">${currentMember.name}</div>
+              <div class="id-card-field">
+                <div class="id-card-field-label">Membership No.</div>
+                <div class="id-card-field-val">${d.memberNo}</div>
+              </div>
+              <div class="id-card-field">
+                <div class="id-card-field-label">National ID No.</div>
+                <div class="id-card-field-val">${d.natId || '—'}</div>
+              </div>
+              <div class="id-card-field">
+                <div class="id-card-field-label">County of Operation</div>
+                <div class="id-card-field-val">${saccoCounty || '—'}</div>
+              </div>
+              <div class="id-card-issue">Issued: ${issueDate}</div>
+            </div>
+            <div class="id-card-qr" id="qrHolder"></div>
+          </div>
+        </div>
+        <div class="id-card-bottom-bar"></div>
+        <div class="id-card-disclaimer">This is a virtual card and cannot be used for any legal transactions.</div>
+      </div>
+      <button class="id-download-btn" id="downloadIdBtn" onclick="downloadIdCard()">⬇ Download ID Card (PDF)</button>
+    </div>`;
+
+  // Generate QR code
+  try {
+    new QRCode(document.getElementById('qrHolder'), {
+      text: qrData,
+      width: 42, height: 42,
+      colorDark: '#0D1B2A', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    document.getElementById('qrHolder').innerHTML = '<div style="font-size:8px;color:#0D1B2A;text-align:center;line-height:1.3;padding:2px;">' + d.memberNo + '</div>';
+  }
+}
+
+async function downloadIdCard() {
+  const btn = document.getElementById('downloadIdBtn');
+  btn.textContent = '⏳ Generating…'; btn.disabled = true;
+  try {
+    const card = document.getElementById('theIdCard');
+    const canvas = await html2canvas(card, {
+      scale: 3,
+      useCORS: true,
+      backgroundColor: null,
+      logging: false
+    });
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const { jsPDF } = window.jspdf;
+    // CR80: 85.6mm × 54mm
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 54] });
+    pdf.addImage(imgData, 'JPEG', 0, 0, 85.6, 54);
+    const safeName = (currentMember.name || 'member').replace(/\s+/g, '_').toLowerCase();
+    pdf.save(`${safeName}_id_card.pdf`);
+    showToast('✓ ID Card downloaded');
+  } catch(e) {
+    showToast('⚠️ Download failed. Try again.');
+  } finally {
+    btn.textContent = '⬇ Download ID Card (PDF)'; btn.disabled = false;
+  }
+}
+
+
+function toggleDetails() {
+  const toggle = document.getElementById('detailsToggle');
+  const body   = document.getElementById('detailsBody');
+  const isOpen = body.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  if (isOpen && !_detailsLoaded) loadMemberDetails();
+}
+async function loadMemberDetails() {
+  const phone = currentMember.phone;
+  try {
+    const d = await fetchMemberDetails(phone);
+    const row = (icon, label, val) => `
+      <div class="det-row">
+        <span class="det-icon">${icon}</span>
+        <div>
+          <div class="det-label">${label}</div>
+          ${val ? `<div class="det-value">${escHtml(String(val))}</div>`
+                : `<div class="det-empty">Not set</div>`}
+        </div>
+      </div>`;
+    document.getElementById('detailsLoading').style.display = 'none';
+    const inner = document.getElementById('detailsInner');
+    inner.style.display = '';
+    inner.innerHTML = `
+      <div class="det-section-hdr">🧑‍🤝‍🧑 Next of Kin</div>
+      ${row('👤', 'Name', d.nokName)}
+      ${row('📞', 'Phone', d.nokPhone)}
+      <div class="det-section-hdr">🏍️ Motorcycle</div>
+      ${row('🔖', 'Reg. No.', d.motoReg)}
+      ${row('📅', 'Year of Manufacture', d.motoYear)}
+      ${row('🏷️', 'Model', d.motoModel)}
+    `;
+    _detailsLoaded = true;
+  } catch(e) {
+    document.getElementById('detailsLoading').textContent = '⚠️ Could not load details.';
+  }
+}
+
+// ── LOGOUT ──
+function doLogout() {
+  sessionStorage.removeItem('memberPhone');
+  sessionStorage.removeItem('memberName');
+  if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
+  if (_welfareUnsub)  { _welfareUnsub();  _welfareUnsub  = null; }
+  if (_memberDetailsUnsub) { _memberDetailsUnsub(); _memberDetailsUnsub = null; }
+  currentMember = null;
+  payments = {};
+  welfareApps = [];
+  _detailsLoaded = false;
+  _memberDetailsCache = null;
+  // Reset ID card area
+  const idArea = document.getElementById('idCardArea');
+  if (idArea) idArea.innerHTML = '<div class="spinner"><span class="spin">⏳</span> Loading card…</div>';
+  // Reset details dropdown
+  const detBody = document.getElementById('detailsBody');
+  const detToggle = document.getElementById('detailsToggle');
+  const detLoading = document.getElementById('detailsLoading');
+  const detInner = document.getElementById('detailsInner');
+  if (detBody) { detBody.classList.remove('open'); }
+  if (detToggle) { detToggle.classList.remove('open'); }
+  if (detLoading) { detLoading.style.display=''; detLoading.textContent='Loading…'; }
+  if (detInner) { detInner.style.display='none'; detInner.innerHTML=''; }
+  // Hide profile
+  document.getElementById('profilePage').classList.remove('active');
+  // Make sure welcome splash is hidden
+  const splash = document.getElementById('welcomeSplash');
+  if (splash) { splash.style.display = 'none'; splash.classList.remove('fade-out'); }
+  // Show login gate explicitly
+  const gate = document.getElementById('loginGate');
+  gate.style.display = 'flex';
+  // Clear form
+  document.getElementById('loginPhone').value = '';
+  document.getElementById('loginPin').value   = '';
+  document.getElementById('loginErr').classList.remove('show');
+  showToast('Signed out');
+}
+
+// ── SESSION RESTORE ──
+async function tryRestoreSession() {
+  const phone = sessionStorage.getItem('memberPhone');
+  let   name  = sessionStorage.getItem('memberName');
+  if (!phone) return;
+  try {
+    if (!auth.currentUser) await signInAnonymously(auth);
+    const snap = await getDoc(doc(db, "tracker", "memberPins"));
+    const pins = snap.exists() ? (snap.data() || {}) : {};
+    // Accept both 07XX and 254XX stored formats
+    const phoneAlt = phone.startsWith('254') ? '0' + phone.slice(3) : '254' + phone.slice(1);
+    if (!pins[phone] && !pins[phoneAlt]) { sessionStorage.clear(); return; }
+
+    // If stored name looks like a phone number, re-fetch the real name
+    const looksLikePhone = !name || /^[0-9+\s]{7,}$/.test(name.trim());
+    if (looksLikePhone) {
+      // Try _meta_ first
+      const meta = pins['_meta_' + phone];
+      if (meta && meta.name) {
+        name = meta.name;
+      } else {
+        // Fall back to members list
+        try {
+          const mSnap = await getDoc(doc(db, 'tracker', 'members'));
+          if (mSnap.exists()) {
+            const found = (mSnap.data().list || []).find(m => normalisePhone(m.phone) === normalisePhone(phone));
+            if (found && found.name) name = found.name;
+          }
+        } catch(e) {}
+      }
+      if (name) sessionStorage.setItem('memberName', name);
+    }
+
+    currentMember = { name: name || phone, phone };
+    await loadProfile();
+  } catch(e) {}
+}
+
+// ── EXPOSE GLOBALS ──
+window.doLogin               = doLogin;
+window.doLogout              = doLogout;
+window.toggleTheme           = toggleTheme;
+window.openWelfareModal      = openWelfareModal;
+window.closeWelfareModal     = closeWelfareModal;
+window.submitWelfare         = submitWelfare;
+window.toggleDetails         = toggleDetails;
+window.downloadIdCard        = downloadIdCard;
+window.openChangePinModal    = openChangePinModal;
+window.closeChangePinModal   = closeChangePinModal;
+window.doChangePin           = doChangePin;
+window.openPinRecoveryModal  = openPinRecoveryModal;
+window.closePinRecoveryModal = closePinRecoveryModal;
+window.sendPinRecoveryWA     = sendPinRecoveryWA;
+
+// ── BOOT ──
+setSyncStatus(false, '⏳');
+tryRestoreSession();
+// Belt-and-suspenders: attach logout via addEventListener so it works
+// even if the onclick attribute fires before the module finishes loading.
+// ── CHANGE PIN ──
+let _changePinForced = false;
+
+function openChangePinModal(forced = false) {
+  _changePinForced = forced;
+  const title     = document.getElementById('changePinTitle');
+  const forceMsg  = document.getElementById('changePinForceMsg');
+  const oldWrap   = document.getElementById('oldPinWrap');
+  const cancelBtn = document.getElementById('changePinCancelBtn');
+  if (forced) {
+    title.textContent       = '🔑 Set Your Personal PIN';
+    forceMsg.style.display  = 'block';
+    oldWrap.style.display   = 'none';
+    cancelBtn.style.display = 'none';
+  } else {
+    title.textContent       = '🔑 Change Your PIN';
+    forceMsg.style.display  = 'none';
+    oldWrap.style.display   = 'block';
+    cancelBtn.style.display = 'inline-block';
+  }
+  document.getElementById('cpOldPin').value     = '';
+  document.getElementById('cpNewPin').value     = '';
+  document.getElementById('cpConfirmPin').value = '';
+  document.getElementById('changePinErr').classList.remove('show');
+  document.getElementById('changePinModal').classList.add('open');
+  setTimeout(() => {
+    const first = _changePinForced
+      ? document.getElementById('cpNewPin')
+      : document.getElementById('cpOldPin');
+    first.focus();
+  }, 200);
+}
+
+function closeChangePinModal() {
+  if (_changePinForced) return;
+  document.getElementById('changePinModal').classList.remove('open');
+}
+
+async function doChangePin() {
+  const errEl   = document.getElementById('changePinErr');
+  const saveBtn = document.getElementById('changePinSaveBtn');
+  const newPin  = document.getElementById('cpNewPin').value.trim();
+  const confirm = document.getElementById('cpConfirmPin').value.trim();
+  errEl.classList.remove('show');
+
+  if (!_changePinForced) {
+    const oldPin = document.getElementById('cpOldPin').value.trim();
+    try {
+      const snap   = await getDoc(doc(db, 'tracker', 'memberPins'));
+      const pins   = snap.exists() ? (snap.data() || {}) : {};
+      const stored = String(pins[currentMember.phone] || '');
+      if (oldPin !== stored) {
+        errEl.textContent = 'Current PIN is incorrect.';
+        errEl.classList.add('show');
+        document.getElementById('cpOldPin').value = '';
+        document.getElementById('cpOldPin').focus();
+        return;
+      }
+    } catch(e) {
+      errEl.textContent = 'Could not verify. Check connection.';
+      errEl.classList.add('show');
+      return;
+    }
+  }
+
+  if (!newPin || newPin.length < 4) {
+    errEl.textContent = 'New PIN must be at least 4 digits.';
+    errEl.classList.add('show');
+    return;
+  }
+  if (!/^[0-9]+$/.test(newPin)) {
+    errEl.textContent = 'PIN must be numbers only.';
+    errEl.classList.add('show');
+    return;
+  }
+  if (newPin !== confirm) {
+    errEl.textContent = 'PINs do not match.';
+    errEl.classList.add('show');
+    document.getElementById('cpConfirmPin').value = '';
+    document.getElementById('cpConfirmPin').focus();
+    return;
+  }
+
+  saveBtn.textContent = 'Saving…'; saveBtn.disabled = true;
+  try {
+    const ref  = doc(db, 'tracker', 'memberPins');
+    const snap = await getDoc(ref);
+    const pins = snap.exists() ? (snap.data() || {}) : {};
+    pins[currentMember.phone] = newPin;
+    if (pins['_meta_' + currentMember.phone]) {
+      pins['_meta_' + currentMember.phone].adminSet = false;
+    }
+    await setDoc(ref, pins);
+    document.getElementById('changePinModal').classList.remove('open');
+    _changePinForced = false;
+    showToast('✅ PIN changed successfully!');
+  } catch(e) {
+    if (e && e.code === 'permission-denied') {
+      errEl.textContent = 'Permission denied. Ask your admin to update Firestore rules to allow member PIN changes.';
+    } else {
+      errEl.textContent = 'Could not save. Check connection and try again.';
+    }
+    errEl.classList.add('show');
+  } finally {
+    saveBtn.textContent = 'Save New PIN'; saveBtn.disabled = false;
+  }
+}
+
+// ── PIN RECOVERY ──
+function openPinRecoveryModal() {
+  document.getElementById('pinRecoveryModal').classList.add('open');
+  const phone = (currentMember && currentMember.phone) ? currentMember.phone : '';
+  const displayPhone = phone.startsWith('254') ? '0' + phone.slice(3) : phone;
+  document.getElementById('recoveryPhone').value = displayPhone;
+  document.getElementById('recoveryErr').classList.remove('show');
+  document.getElementById('changePinModal').classList.remove('open');
+}
+
+function closePinRecoveryModal() {
+  document.getElementById('pinRecoveryModal').classList.remove('open');
+}
+
+async function sendPinRecoveryWA() {
+  const phone = document.getElementById('recoveryPhone').value.trim();
+  const errEl = document.getElementById('recoveryErr');
+  if (!phone || phone.replace(/\D/g,'').length < 9) {
+    errEl.textContent = 'Enter your phone number.';
+    errEl.classList.add('show');
+    return;
+  }
+  // Ensure we have an auth session before hitting Firestore
+  try {
+    if (!auth.currentUser) await signInAnonymously(auth);
+  } catch(e) {}
+  let adminPhone = '';
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'saccoSettings'));
+    if (snap.exists()) adminPhone = snap.data().adminPhone || snap.data().contactPhone || '';
+  } catch(e) {}
+
+  const msg = `Hello Admin 👋\n\nI need a PIN reset for the BOGONKO-NGELANI Member Portal.\n\nMy phone number: *${phone}*\n\nPlease reset my PIN and send me the new one. Thank you 🙏`;
+  let waNumber = adminPhone.replace(/\D/g,'');
+  if (waNumber.startsWith('0')) waNumber = '254' + waNumber.slice(1);
+
+  if (waNumber) {
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+  } else {
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+  closePinRecoveryModal();
+  showToast('📲 WhatsApp opened — send the message to your admin');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutBtn = document.querySelector('.logout-btn');
+  if (logoutBtn) logoutBtn.addEventListener('click', doLogout);
+});
+</script>
+</body>
+</html>

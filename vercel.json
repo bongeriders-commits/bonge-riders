@@ -1,0 +1,29 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/index.html", "destination": "/index.html" },
+    { "source": "/sw.js", "destination": "/sw.js" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
+    { "source": "/icon-512.png", "destination": "/icon-512.png" },
+    { "source": "/icon-192.png", "destination": "/icon-192.png" },
+    { "source": "/icon-180.png", "destination": "/icon-180.png" },
+    { "source": "/icon-32.png", "destination": "/icon-32.png" },
+    { "source": "/icon-16.png", "destination": "/icon-16.png" }
+  ],
+  "headers": [
+    {
+      "source": "/manifest.json",
+      "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript" },
+        { "key": "Service-Worker-Allowed", "value": "/" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    }
+  ]
+}

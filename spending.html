@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Spending — Bogonko Stage</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0F0F0F;--card:#1A1A1A;--card2:#222;--border:#2A2A2A;--text:#F0EDE6;--muted:#888;--dim:#555;--amber:#F5A623;--green2:#4E9964;--red:#E05540;--red-dark:#C0392B;--radius:12px;--radius-lg:16px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+  .topbar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
+  .back-btn{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+  .page-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;}
+  .pdf-btn{background:none;border:1px solid rgba(192,57,43,0.4);color:var(--red);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+  #loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;}
+  .login-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;width:100%;max-width:360px;}
+  .login-icon{font-size:36px;text-align:center;margin-bottom:12px;}
+  .login-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;text-align:center;margin-bottom:4px;}
+  .login-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .field input{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+  .field input:focus{border-color:var(--amber);}
+  .err-msg{color:var(--red);font-size:12px;font-weight:600;margin-bottom:10px;display:none;}
+  .err-msg.show{display:block;}
+  .login-btn{width:100%;padding:12px;background:var(--amber);color:#000;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+  #mainContent{display:none;padding:16px;max-width:600px;margin:0 auto;}
+  .summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+  .sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;}
+  .sum-val{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;}
+  .sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:3px;}
+  .add-btn{width:100%;padding:13px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:16px;}
+  .spend-list{display:flex;flex-direction:column;gap:8px;}
+  .spend-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;}
+  .spend-top{display:flex;align-items:flex-start;gap:10px;}
+  .spend-num{font-size:11px;color:var(--dim);width:18px;flex-shrink:0;padding-top:3px;}
+  .spend-info{flex:1;min-width:0;}
+  .spend-desc{font-size:14px;font-weight:600;}
+  .spend-meta{font-size:11px;color:var(--muted);margin-top:3px;}
+  .spend-amount{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--red);white-space:nowrap;}
+  .spend-actions{display:flex;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+  .act-btn{flex:1;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 0;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+  .act-btn.edit:hover,.act-btn.edit:active{border-color:var(--amber);color:var(--amber);}
+  .act-btn.del:hover,.act-btn.del:active{border-color:var(--red);color:var(--red);}
+  .empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:40px 0;line-height:1.8;}
+  .loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:40px 0;}
+
+  .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:flex-end;justify-content:center;}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:92vh;overflow-y:auto;}
+  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+  .modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;}
+  .mfield{margin-bottom:14px;}
+  .mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .mfield input,.mfield select{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+  .mfield input:focus,.mfield select:focus{border-color:var(--amber);}
+  .mfield select option{background:var(--card2);}
+  .modal-btns{display:flex;gap:10px;margin-top:18px;}
+  .mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+  .mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+  .mbtn.save{background:var(--red-dark);color:#fff;}
+  .merr{color:var(--red);font-size:12px;font-weight:600;display:none;margin-bottom:10px;}
+  .merr.show{display:block;}
+
+  #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:var(--text);border:1px solid var(--border);border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="page-title">💸 Spending</div>
+  </div>
+  <button class="pdf-btn" id="pdfBtn">🖨️ PDF</button>
+</div>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Admin Login</div>
+    <div class="login-sub">Sign in to manage spending</div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password">
+    </div>
+    <p class="err-msg" id="loginErr">Incorrect email or password.</p>
+    <button class="login-btn" id="loginBtn">Sign In</button>
+  </div>
+</div>
+
+<div id="mainContent">
+  <div class="summary-row">
+    <div class="sum-card">
+      <div class="sum-val" style="color:var(--green2);" id="incomeVal">KSh 0</div>
+      <div class="sum-lbl">Total Income</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-val" style="color:var(--red);" id="spentVal">KSh 0</div>
+      <div class="sum-lbl">Amount Spent</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-val" id="balVal">KSh 0</div>
+      <div class="sum-lbl">Balance</div>
+    </div>
+  </div>
+  <button class="add-btn" id="addBtn">＋ Add Spending Entry</button>
+  <div class="loading-msg" id="loadingMsg">Loading…</div>
+  <div class="spend-list" id="spendList"></div>
+</div>
+
+<div class="modal-backdrop" id="entryModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">💸 Add Spending Entry</div>
+    <div class="mfield">
+      <label>Description / Purpose</label>
+      <input type="text" id="fDesc" placeholder="e.g. Funeral transport, Medical support">
+    </div>
+    <div class="mfield">
+      <label>Category</label>
+      <select id="fCategory">
+        <option>Welfare</option><option>Medical</option><option>Funeral</option>
+        <option>Operations</option><option>Emergency</option><option>Other</option>
+      </select>
+    </div>
+    <div class="mfield">
+      <label>Recipient / Paid To</label>
+      <input type="text" id="fRecipient" placeholder="e.g. John Kamau">
+    </div>
+    <div class="mfield">
+      <label>Amount (KSh)</label>
+      <input type="number" id="fAmount" placeholder="e.g. 5000" min="1" inputmode="numeric">
+    </div>
+    <div class="mfield">
+      <label>Date</label>
+      <input type="date" id="fDate">
+    </div>
+    <p class="merr" id="modalErr">Please fill in all required fields.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" id="cancelBtn">Cancel</button>
+      <button class="mbtn save" id="saveBtn">Add Entry</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const RATE = 50; // KSh per member per day — must match main app
+
+firebase.initializeApp({
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+});
+
+const db   = firebase.firestore();
+const auth = firebase.auth();
+
+let spending    = [];
+let editingId   = null;
+let payTotal    = 0;
+let otherTotal  = 0;
+let membersCount = 0;
+let listenersStarted = false;
+
+// ── AUTH ──
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    if (!listenersStarted) { listenersStarted = true; startListeners(); }
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'none';
+  }
+});
+
+document.getElementById('loginBtn').onclick = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  errEl.classList.remove('show');
+  this.textContent = 'Signing in…';
+  try {
+    await auth.signInWithEmailAndPassword(email, pw);
+  } catch(e) {
+    errEl.classList.add('show');
+    this.textContent = 'Sign In';
+  }
+};
+document.getElementById('loginPw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+// ── LISTENERS ──
+function startListeners() {
+  // 1. Spending entries
+  db.doc('tracker/spending').onSnapshot(snap => {
+    spending = (snap.exists && snap.data().list) ? snap.data().list : [];
+    document.getElementById('loadingMsg').style.display = 'none';
+    render();
+  }, err => {
+    console.error('spending error:', err);
+    document.getElementById('loadingMsg').textContent = '⚠️ Could not load data. Check connection.';
+  });
+
+  // 2. Members list (to count members for payment calculation)
+  db.doc('tracker/members').onSnapshot(snap => {
+    if (snap.exists && snap.data().list) {
+      membersCount = snap.data().list.length;
+    }
+    recalcIncome();
+  });
+
+  // 3. Payments — structure: { "2026-06-25": { "07123...": true, "__locked": {...} } }
+  db.doc('tracker/payments').onSnapshot(snap => {
+    payTotal = 0;
+    if (snap.exists) {
+      const data = snap.data();
+      Object.keys(data).forEach(dateKey => {
+        const dayObj = data[dateKey];
+        if (dayObj && typeof dayObj === 'object') {
+          // Count true values (paid members), exclude __locked key
+          let count = 0;
+          Object.keys(dayObj).forEach(k => {
+            if (k !== '__locked' && dayObj[k] === true) count++;
+          });
+          payTotal += count * RATE;
+        }
+      });
+    }
+    recalcIncome();
+  });
+
+  // 4. Other income
+  db.doc('tracker/income').onSnapshot(snap => {
+    otherTotal = 0;
+    if (snap.exists && snap.data().list) {
+      snap.data().list.forEach(e => { otherTotal += Number(e.amount) || 0; });
+    }
+    recalcIncome();
+  });
+}
+
+function recalcIncome() {
+  render();
+}
+
+// ── RENDER ──
+function render() {
+  const totalIncome = payTotal + otherTotal;
+  const totalSpent  = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+  const balance     = totalIncome - totalSpent;
+
+  document.getElementById('incomeVal').textContent = 'KSh ' + totalIncome.toLocaleString();
+  document.getElementById('spentVal').textContent  = 'KSh ' + totalSpent.toLocaleString();
+  const balEl = document.getElementById('balVal');
+  balEl.textContent = 'KSh ' + Math.abs(balance).toLocaleString() + (balance < 0 ? ' ⚠️' : '');
+  balEl.style.color = balance < 0 ? 'var(--red)' : 'var(--green2)';
+
+  const list = document.getElementById('spendList');
+  if (spending.length === 0) {
+    list.innerHTML = '<div class="empty-msg">No spending entries yet.<br>Tap ＋ Add to get started.</div>';
+    return;
+  }
+
+  list.innerHTML = [...spending].reverse().map((e, i) => `
+    <div class="spend-card">
+      <div class="spend-top">
+        <div class="spend-num">${spending.length - i}</div>
+        <div class="spend-info">
+          <div class="spend-desc">${escHtml(e.desc)}</div>
+          <div class="spend-meta">${escHtml(e.category)}${e.recipient ? ' · ' + escHtml(e.recipient) : ''} · ${e.date}</div>
+        </div>
+        <div class="spend-amount">−KSh ${Number(e.amount).toLocaleString()}</div>
+      </div>
+      <div class="spend-actions">
+        <button class="act-btn edit" data-id="${e.id}">✏️ Edit</button>
+        <button class="act-btn del"  data-id="${e.id}">🗑 Delete</button>
+      </div>
+    </div>`).join('');
+
+  list.querySelectorAll('.act-btn.edit').forEach(btn => {
+    btn.addEventListener('click', () => openEdit(btn.dataset.id));
+  });
+  list.querySelectorAll('.act-btn.del').forEach(btn => {
+    btn.addEventListener('click', () => deleteEntry(btn.dataset.id));
+  });
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── MODAL ──
+document.getElementById('addBtn').addEventListener('click', openAdd);
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('saveBtn').addEventListener('click', saveEntry);
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = '💸 Add Spending Entry';
+  document.getElementById('saveBtn').textContent    = 'Add Entry';
+  document.getElementById('fDesc').value      = '';
+  document.getElementById('fAmount').value    = '';
+  document.getElementById('fRecipient').value = '';
+  document.getElementById('fDate').value      = todayKey();
+  document.getElementById('fCategory').value  = 'Welfare';
+  document.getElementById('modalErr').classList.remove('show');
+  document.getElementById('entryModal').classList.add('open');
+  setTimeout(() => document.getElementById('fDesc').focus(), 300);
+}
+
+function openEdit(id) {
+  const e = spending.find(x => x.id === id);
+  if (!e) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = '✏️ Edit Spending Entry';
+  document.getElementById('saveBtn').textContent    = 'Save Changes';
+  document.getElementById('fDesc').value      = e.desc;
+  document.getElementById('fAmount').value    = e.amount;
+  document.getElementById('fRecipient').value = e.recipient || '';
+  document.getElementById('fDate').value      = e.date;
+  document.getElementById('fCategory').value  = e.category;
+  document.getElementById('modalErr').classList.remove('show');
+  document.getElementById('entryModal').classList.add('open');
+  setTimeout(() => document.getElementById('fDesc').focus(), 300);
+}
+
+function closeModal() {
+  document.getElementById('entryModal').classList.remove('open');
+}
+
+async function saveEntry() {
+  const desc      = document.getElementById('fDesc').value.trim();
+  const amount    = parseFloat(document.getElementById('fAmount').value);
+  const date      = document.getElementById('fDate').value;
+  const category  = document.getElementById('fCategory').value;
+  const recipient = document.getElementById('fRecipient').value.trim();
+  const errEl     = document.getElementById('modalErr');
+  const saveBtn   = document.getElementById('saveBtn');
+
+  if (!desc || !amount || amount <= 0 || !date) {
+    errEl.classList.add('show'); return;
+  }
+  errEl.classList.remove('show');
+  saveBtn.textContent = 'Saving…';
+  saveBtn.disabled = true;
+
+  const newList = editingId
+    ? spending.map(e => e.id === editingId ? {...e, desc, amount, date, category, recipient} : e)
+    : [...spending, {id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), desc, amount, date, category, recipient}];
+
+  try {
+    await db.doc('tracker/spending').set({ list: newList });
+    // spending will update via the onSnapshot listener
+    closeModal();
+    toast(editingId ? '✓ Entry updated' : '✓ Entry added');
+  } catch(err) {
+    console.error('Save error:', err.code, err.message);
+    toast('⚠️ Save failed: ' + (err.code || err.message));
+  }
+  saveBtn.textContent = editingId ? 'Save Changes' : 'Add Entry';
+  saveBtn.disabled = false;
+}
+
+async function deleteEntry(id) {
+  if (!confirm('Delete this spending entry?')) return;
+  const newList = spending.filter(e => e.id !== id);
+  try {
+    await db.doc('tracker/spending').set({ list: newList });
+    toast('Entry deleted');
+  } catch(err) {
+    toast('⚠️ Delete failed');
+  }
+}
+
+// ── PDF ──
+document.getElementById('pdfBtn').addEventListener('click', function() {
+  const totalIncome = payTotal + otherTotal;
+  const total   = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+  const balance = totalIncome - total;
+  const dateStr = new Date().toLocaleDateString('en-KE', {day:'numeric', month:'long', year:'numeric'});
+  const rows = [...spending].sort((a,b) => a.date.localeCompare(b.date)).map((e,i) => `
+    <tr><td>${i+1}</td><td>${e.date}</td><td>${e.desc}</td><td>${e.category}</td>
+    <td>${e.recipient||'—'}</td><td style="text-align:right;font-weight:700;color:#C0392B;">KSh ${Number(e.amount).toLocaleString()}</td></tr>`).join('');
+  const w = window.open('','_blank');
+  if (!w) { toast('⚠️ Allow popups to print PDF'); return; }
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Spending Report</title>
+  <style>body{font-family:Arial,sans-serif;font-size:12px;padding:28px 32px;color:#1A1A1A;}
+  .hdr{border-bottom:3px solid #141414;padding-bottom:14px;margin-bottom:18px;}
+  .org{font-size:20px;font-weight:800;}.sub{font-size:12px;color:#6B7280;margin-top:3px;}
+  .ttl{font-size:15px;font-weight:700;color:#C0392B;margin-top:8px;text-transform:uppercase;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+  .sc{background:#F7F5F0;border-radius:8px;padding:10px 14px;text-align:center;}
+  .sv{font-size:17px;font-weight:800;}.sl{font-size:9px;color:#6B7280;text-transform:uppercase;margin-top:3px;}
+  table{width:100%;border-collapse:collapse;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;}
+  td{padding:8px 10px;border-bottom:1px solid #E5E2DC;font-size:11.5px;}tr:nth-child(even) td{background:#FAFAF8;}</style></head><body>
+  <div class="hdr"><div class="org">Bogonko Stage</div><div class="sub">Welfare Tracker</div>
+  <div class="ttl">Spending Report</div><div class="sub" style="margin-top:6px;">Generated: ${dateStr}</div></div>
+  <div class="grid">
+    <div class="sc"><div class="sv" style="color:#3D7A4F;">KSh ${totalIncome.toLocaleString()}</div><div class="sl">Total Income</div></div>
+    <div class="sc"><div class="sv" style="color:#C0392B;">KSh ${total.toLocaleString()}</div><div class="sl">Amount Spent</div></div>
+    <div class="sc"><div class="sv" style="color:${balance<0?'#C0392B':'#1E40AF'};">${balance<0?'−':''}KSh ${Math.abs(balance).toLocaleString()}</div><div class="sl">Balance</div></div>
+  </div>
+  <table><thead><tr><th>#</th><th>Date</th><th>Description</th><th>Category</th><th>Recipient</th><th style="text-align:right;">Amount</th></tr></thead>
+  <tbody>${rows}</tbody>
+  <tfoot><tr><td colspan="5" style="text-align:right;font-weight:700;padding-top:10px;">TOTAL</td>
+  <td style="text-align:right;font-weight:800;color:#C0392B;padding-top:10px;">KSh ${total.toLocaleString()}</td></tr></tfoot>
+  </table></body></html>`);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
+});
+
+function todayKey() { return new Date().toISOString().slice(0,10); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

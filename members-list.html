@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Members — BONGE RIDERS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#141414; --bg2:#1C1C1C; --card:#222222; --card2:#2A2A2A;
+  --border:#333333; --text:#F0EDE8; --muted:#888888; --dim:#555555;
+  --amber:#C4621D; --amber2:#E07830; --amber-bg:rgba(196,98,29,0.12);
+  --green:#3D7A4F; --green2:#4E9964; --green-bg:rgba(61,122,79,0.15);
+  --red:#C0392B; --red2:#E05540; --radius:10px; --radius-lg:16px;
+}
+body.light {
+  --bg:#F5F2EE; --bg2:#EDEAE5; --card:#FFFFFF; --card2:#F5F2EE;
+  --border:#E0DBD4; --text:#141414; --muted:#777777; --dim:#AAAAAA;
+  --amber-bg:rgba(196,98,29,0.08); --green-bg:rgba(61,122,79,0.08);
+}
+html,body { min-height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; -webkit-tap-highlight-color:transparent; transition:background .2s,color .2s; padding-bottom:40px; }
+
+/* HEADER */
+.header { background:var(--bg2); border-bottom:1px solid var(--border); padding:12px 16px; position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; }
+.header-left { display:flex; align-items:center; gap:10px; }
+.back-btn { background:var(--card2); border:1px solid var(--border); color:var(--text); border-radius:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; text-decoration:none; flex-shrink:0; }
+.header-title { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:var(--text); letter-spacing:-.3px; }
+.header-sub { font-size:10px; color:var(--muted); margin-top:1px; }
+.header-right { display:flex; gap:6px; align-items:center; }
+.icon-btn { background:var(--card2); border:1px solid var(--border); color:var(--text); border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; }
+
+/* GATE */
+#loginGate { max-width:360px; margin:40px auto; padding:0 20px; }
+.gate-logo { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:800; text-align:center; letter-spacing:.5px; margin-bottom:4px; }
+.gate-logo em { color:var(--amber2); font-style:normal; }
+.gate-subtitle { text-align:center; font-size:12px; color:var(--muted); margin-bottom:24px; }
+.gate-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; }
+.field-wrap { margin-bottom:12px; }
+.field-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+.field-input { width:100%; background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text); outline:none; }
+.field-input:focus { border-color:var(--amber); }
+.err-msg { font-size:12px; color:var(--red2); font-weight:600; margin-bottom:8px; display:none; }
+.btn-primary { width:100%; background:var(--amber); color:#fff; border:none; border-radius:8px; padding:12px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; cursor:pointer; margin-top:4px; }
+.btn-primary:active { opacity:.85; }
+
+/* SEARCH + COUNT */
+.search-wrap { padding:12px 16px 8px; max-width:600px; margin:0 auto; }
+.search-box { display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:0 12px; height:40px; }
+.search-icon { font-size:14px; color:var(--muted); }
+.search-input { flex:1; background:none; border:none; outline:none; font-family:'Inter',sans-serif; font-size:14px; color:var(--text); }
+.search-input::placeholder { color:var(--muted); }
+.count-bar { padding:0 16px 8px; max-width:600px; margin:0 auto; display:flex; gap:8px; }
+.count-pill { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(196,98,29,.2); }
+
+/* MEMBER LIST */
+.member-list { padding:0 16px 20px; display:flex; flex-direction:column; gap:8px; max-width:600px; margin:0 auto; }
+.member-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.member-card-top { display:flex; align-items:center; gap:10px; padding:11px 12px; }
+.member-stage { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:800; color:var(--amber2); min-width:28px; text-align:center; background:var(--amber-bg); border-radius:6px; padding:3px 5px; flex-shrink:0; }
+.member-avatar { width:38px; height:38px; border-radius:50%; background:var(--card2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; color:var(--text); flex-shrink:0; }
+.member-info { flex:1; min-width:0; }
+.member-name { font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; color:var(--text); }
+.member-phone { font-size:11px; color:var(--muted); margin-top:2px; }
+.member-actions { display:flex; gap:5px; padding:0 10px 10px; flex-wrap:wrap; }
+.act-btn { flex:1; min-width:60px; padding:6px 8px; border-radius:7px; font-size:11px; font-weight:700; border:none; cursor:pointer; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; gap:4px; transition:opacity .15s; }
+.act-btn:active { opacity:.75; }
+.act-btn.details { background:rgba(91,110,174,.2); color:#7B8FD4; border:1px solid rgba(91,110,174,.3); }
+.act-btn.edit    { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(196,98,29,.25); }
+.act-btn.delete  { background:rgba(192,57,43,.12); color:var(--red2); border:1px solid rgba(192,57,43,.25); }
+
+/* SPINNER / EMPTY */
+.spinner { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
+.spin { display:inline-block; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.empty-state { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
+
+/* MODALS */
+.modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:200; align-items:flex-end; justify-content:center; padding-bottom:env(safe-area-inset-bottom); }
+.modal-backdrop.open { display:flex; }
+.modal { background:var(--bg2); border-radius:var(--radius-lg) var(--radius-lg) 0 0; width:100%; max-width:500px; padding:16px 16px 24px; border-top:1px solid var(--border); max-height:90vh; overflow-y:auto; }
+.modal-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 14px; }
+.modal-title { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; margin-bottom:14px; }
+.modal-field { margin-bottom:10px; }
+.modal-field label { display:block; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.modal-field input { width:100%; background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text); outline:none; }
+.modal-field input:focus { border-color:var(--amber); }
+.modal-btns { display:flex; gap:8px; margin-top:12px; }
+.mbtn { flex:1; padding:11px; border-radius:8px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; border:none; cursor:pointer; }
+.mbtn.cancel { background:var(--card2); color:var(--muted); border:1px solid var(--border); }
+.mbtn.primary { background:var(--amber); color:#fff; }
+.mbtn.danger { background:var(--red2); color:#fff; }
+.sec-hdr { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin:14px 0 6px; padding-top:10px; border-top:1px solid var(--border); }
+.det-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+.det-icon { font-size:16px; flex-shrink:0; }
+.det-lbl { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-bottom:2px; }
+.det-val { font-size:14px; font-weight:600; }
+.det-nil { font-size:13px; color:var(--dim); font-style:italic; }
+.confirm-body { font-size:13px; color:var(--muted); margin-bottom:4px; line-height:1.5; }
+.err-inline { font-size:11px; color:var(--red2); font-weight:600; margin-top:3px; display:none; }
+
+/* TOAST */
+#toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card2); color:var(--text); border:1px solid var(--border); border-radius:20px; padding:8px 18px; font-size:13px; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; pointer-events:none; z-index:999; white-space:nowrap; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn" title="Back">←</a>
+    <div>
+      <div class="header-title">👥 Members</div>
+      <div class="header-sub" id="headerSub">Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
+  </div>
+</div>
+
+<!-- Login gate -->
+<div id="loginGate">
+  <div class="gate-logo">BOGONKO<em>-NGELANI</em></div>
+  <div class="gate-subtitle">Admin access required to view members</div>
+  <div class="gate-card">
+    <div class="field-wrap">
+      <div class="field-label">Admin Email</div>
+      <input class="field-input" type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Password</div>
+      <input class="field-input" type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <p id="loginErr" class="err-msg">Incorrect email or password.</p>
+    <button class="btn-primary" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- Main content (hidden until logged in) -->
+<div id="mainContent" style="display:none;">
+  <div style="padding:14px 16px 4px;max-width:600px;margin:0 auto;">
+    <button onclick="openAddModal()" style="width:100%;background:var(--green2);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;letter-spacing:.4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span style="font-size:20px;">＋</span> ADD MEMBER
+    </button>
+  </div>
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search member name or phone…"
+        autocomplete="off" autocorrect="off" spellcheck="false" oninput="renderList()">
+    </div>
+  </div>
+  <div class="count-bar">
+    <span class="count-pill" id="countPill">Loading…</span>
+  </div>
+  <div class="member-list" id="memberList">
+    <div class="spinner"><span class="spin">⏳</span> Loading members…</div>
+  </div>
+</div>
+
+<!-- ═══ ADD MEMBER MODAL ═══ -->
+<div class="modal-backdrop" id="addModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">➕ Add New Member</div>
+    <div class="modal-field">
+      <label>Full Name</label>
+      <input type="text" id="addName" placeholder="e.g. JOHN MWANGI" autocomplete="off" autocapitalize="characters">
+    </div>
+    <div class="modal-field">
+      <label>Phone Number</label>
+      <input type="tel" id="addPhone" placeholder="e.g. 0712345678" autocomplete="off">
+    </div>
+    <p id="addErr" class="err-inline" style="margin-bottom:4px;"></p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeModal('addModal')">Cancel</button>
+      <button class="mbtn primary" onclick="doAddMember()">Add Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DETAILS MODAL ═══ -->
+<div class="modal-backdrop" id="detailsModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📋 Member Details</div>
+    <div id="detailsContent"><div class="spinner"><span class="spin">⏳</span></div></div>
+    <div class="modal-btns"><button class="mbtn cancel" onclick="closeModal('detailsModal')">Close</button></div>
+  </div>
+</div>
+
+<!-- ═══ EDIT MODAL ═══ -->
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">✏️ Edit Member</div>
+    <div class="modal-field"><label>Full Name</label><input type="text" id="editName" autocapitalize="characters"></div>
+    <div class="modal-field"><label>Phone Number</label><input type="tel" id="editPhone"></div>
+    <div class="sec-hdr">🪪 ID Card Details</div>
+    <div class="modal-field">
+      <label>Membership Number <span style="color:var(--amber2);font-size:10px;">(unique)</span></label>
+      <input type="text" id="editMemberNo" placeholder="e.g. BNG-001" autocapitalize="characters">
+      <div id="memberNoErr" class="err-inline">⚠️ This membership number is already assigned to another member.</div>
+    </div>
+    <div class="modal-field"><label>National ID Number</label><input type="tel" inputmode="numeric" id="editNatId" placeholder="e.g. 12345678"></div>
+    <div class="modal-field"><label>County of Operation</label><input type="text" id="editCounty" placeholder="e.g. Nairobi" autocapitalize="words"></div>
+    <div class="sec-hdr">🧑‍🤝‍🧑 Next of Kin</div>
+    <div class="modal-field"><label>Next of Kin Name</label><input type="text" id="editNokName" placeholder="Full name" autocapitalize="words"></div>
+    <div class="modal-field"><label>Next of Kin Phone</label><input type="tel" id="editNokPhone" placeholder="e.g. 0712345678"></div>
+    <div class="sec-hdr">🏍️ Motorcycle Details</div>
+    <div class="modal-field"><label>Registration No.</label><input type="text" id="editMotoReg" placeholder="e.g. KDZ 123A" autocapitalize="characters"></div>
+    <div class="modal-field"><label>Year of Manufacture</label><input type="tel" inputmode="numeric" id="editMotoYear" placeholder="e.g. 2022" maxlength="4"></div>
+    <div class="modal-field"><label>Model</label><input type="text" id="editMotoModel" placeholder="e.g. Honda CB150" autocapitalize="words"></div>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeModal('editModal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DELETE MODAL ═══ -->
+<div class="modal-backdrop" id="deleteModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🗑️ Remove Member</div>
+    <p class="confirm-body" id="deleteBody">Are you sure?</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeModal('deleteModal')">Cancel</button>
+      <button class="mbtn danger" onclick="confirmDelete()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId:     "G-VWL91EJW1H"
+};
+const app  = initializeApp(firebaseConfig);
+const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+let MEMBERS = [];
+let editingPhone  = null;
+let deletingPhone = null;
+let deletingName  = null;
+
+// ── helpers ──────────────────────────────────────
+function initials(name) {
+  return (name||'?').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id==='editModal') editingPhone=null;
+  if (id==='deleteModal') { deletingPhone=null; deletingName=null; }
+}
+window.closeModal = closeModal;
+
+// ── auth ─────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById('loginGate').style.display    = 'none';
+    document.getElementById('mainContent').style.display  = 'block';
+    document.getElementById('headerSub').textContent      = user.email || 'Admin';
+    loadMembers();
+  } else {
+    document.getElementById('loginGate').style.display    = 'block';
+    document.getElementById('mainContent').style.display  = 'none';
+  }
+});
+
+window.doLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  const err   = document.getElementById('loginErr');
+  err.style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+  } catch(e) {
+    err.style.display = 'block';
+    err.textContent   = e.code === 'auth/too-many-requests'
+      ? 'Too many attempts. Try again later.'
+      : 'Incorrect email or password.';
+  }
+};
+
+// ── load members ─────────────────────────────────
+function loadMembers() {
+  onSnapshot(doc(db,"tracker","members"), snap => {
+    if (snap.exists() && snap.data().list && snap.data().list.length > 0) {
+      MEMBERS = snap.data().list;
+    }
+    renderList();
+  }, () => {
+    document.getElementById('memberList').innerHTML =
+      `<div class="empty-state">⚠️ Could not load members. Check your connection.</div>`;
+    document.getElementById('countPill').textContent = 'Offline';
+  });
+}
+
+async function saveMembers() {
+  await setDoc(doc(db,"tracker","members"), { list: MEMBERS });
+}
+
+// ── render ────────────────────────────────────────
+window.renderList = function() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const filtered = q
+    ? MEMBERS.filter(m => (m.name||'').toLowerCase().includes(q) || (m.phone||'').includes(q))
+    : MEMBERS;
+
+  document.getElementById('countPill').textContent = q
+    ? `${filtered.length} of ${MEMBERS.length} members`
+    : `${MEMBERS.length} members`;
+
+  const listEl = document.getElementById('memberList');
+  if (!filtered.length) {
+    listEl.innerHTML = `<div class="empty-state">No members found.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(m => {
+    const stageNo = MEMBERS.indexOf(m) + 1;
+    const phone   = m.phone;
+    return `
+      <div class="member-card">
+        <div class="member-card-top">
+          <div class="member-stage">#${stageNo}</div>
+          <div class="member-avatar">${initials(m.name)}</div>
+          <div class="member-info">
+            <div class="member-name">${m.name || '—'}</div>
+            <div class="member-phone">${phone}</div>
+          </div>
+        </div>
+        <div class="member-actions">
+          <button class="act-btn details" onclick="openDetails('${phone}')">📋 Details</button>
+          <button class="act-btn edit"    onclick="openEdit('${phone}')">✏️ Edit</button>
+          <button class="act-btn delete"  onclick="openDelete('${phone}','${(m.name||'').replace(/'/g,"\\'")}')">🗑️ Delete</button>
+        </div>
+      </div>`;
+  }).join('');
+};
+
+// ── DETAILS ──────────────────────────────────────
+window.openDetails = async function(phone) {
+  const m = MEMBERS.find(x => x.phone === phone);
+  const stageNo = MEMBERS.indexOf(m) + 1;
+  const content = document.getElementById('detailsContent');
+  content.innerHTML = `<div class="spinner"><span class="spin">⏳</span></div>`;
+  document.getElementById('detailsModal').classList.add('open');
+  try {
+    const snap = await getDoc(doc(db,'tracker','memberDetails'));
+    const d = snap.exists() ? ((snap.data()||{})[phone] || {}) : {};
+    const row = (icon, label, val) => `
+      <div class="det-row">
+        <span class="det-icon" style="${val?'':'opacity:.3'}">${icon}</span>
+        <div>
+          <div class="det-lbl">${label}</div>
+          ${val ? `<div class="det-val">${val}</div>` : `<div class="det-nil">Not set</div>`}
+        </div>
+      </div>`;
+    content.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px;background:var(--card2);border-radius:10px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;">${initials(m?m.name:phone)}</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;">${m?m.name:phone}</div>
+          <div style="font-size:12px;color:var(--muted);">${phone} &nbsp;·&nbsp; Stage No. <strong style="color:var(--amber2);">#${stageNo}</strong></div>
+        </div>
+      </div>
+      <div class="sec-hdr">🪪 ID Card</div>
+      ${row('🔢','Membership No.', d.memberNo)}
+      ${row('🪪','National ID No.', d.natId)}
+      ${row('📍','County', d.county)}
+      <div class="sec-hdr">🧑‍🤝‍🧑 Next of Kin</div>
+      ${row('👤','Name', d.nokName)}
+      ${row('📞','Phone', d.nokPhone)}
+      <div class="sec-hdr">🏍️ Motorcycle</div>
+      ${row('🔖','Reg No.', d.motoReg)}
+      ${row('📅','Year', d.motoYear)}
+      ${row('🏷️','Model', d.motoModel)}`;
+  } catch(e) {
+    content.innerHTML = `<div class="empty-state">Could not load details.</div>`;
+  }
+};
+
+// ── EDIT ─────────────────────────────────────────
+window.openEdit = async function(phone) {
+  const m = MEMBERS.find(x => x.phone === phone);
+  if (!m) return;
+  editingPhone = phone;
+  document.getElementById('editName').value  = m.name;
+  document.getElementById('editPhone').value = m.phone;
+  document.getElementById('memberNoErr').style.display = 'none';
+  ['editMemberNo','editNatId','editCounty','editNokName','editNokPhone','editMotoReg','editMotoYear','editMotoModel']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  try {
+    const snap = await getDoc(doc(db,'tracker','memberDetails'));
+    if (snap.exists()) {
+      const d = (snap.data()||{})[phone] || {};
+      document.getElementById('editMemberNo').value  = d.memberNo  || '';
+      document.getElementById('editNatId').value     = d.natId     || '';
+      document.getElementById('editCounty').value    = d.county    || '';
+      document.getElementById('editNokName').value   = d.nokName   || '';
+      document.getElementById('editNokPhone').value  = d.nokPhone  || '';
+      document.getElementById('editMotoReg').value   = d.motoReg   || '';
+      document.getElementById('editMotoYear').value  = d.motoYear  || '';
+      document.getElementById('editMotoModel').value = d.motoModel || '';
+    }
+  } catch(e) {}
+  document.getElementById('editModal').classList.add('open');
+};
+
+window.saveEdit = async function() {
+  if (!editingPhone) return;
+  const name   = document.getElementById('editName').value.trim().toUpperCase();
+  const phone  = document.getElementById('editPhone').value.trim().replace(/\s/g,'');
+  if (!name || !phone) { showToast('⚠️ Fill all fields'); return; }
+  const m = MEMBERS.find(x => x.phone === editingPhone);
+  if (!m) return;
+
+  const memberNo  = document.getElementById('editMemberNo').value.trim().toUpperCase();
+  const natId     = document.getElementById('editNatId').value.trim();
+  const county    = document.getElementById('editCounty').value.trim();
+  const nokName   = document.getElementById('editNokName').value.trim();
+  const nokPhone  = document.getElementById('editNokPhone').value.trim();
+  const motoReg   = document.getElementById('editMotoReg').value.trim().toUpperCase();
+  const motoYear  = document.getElementById('editMotoYear').value.trim();
+  const motoModel = document.getElementById('editMotoModel').value.trim();
+  const errEl     = document.getElementById('memberNoErr');
+  errEl.style.display = 'none';
+
+  if (memberNo) {
+    try {
+      const snap = await getDoc(doc(db,'tracker','memberDetails'));
+      if (snap.exists()) {
+        const all = snap.data() || {};
+        const conflict = Object.entries(all).find(([p,d]) => p !== editingPhone && (d.memberNo||'').toUpperCase() === memberNo);
+        if (conflict) {
+          errEl.style.display = 'block';
+          const cm = MEMBERS.find(x => x.phone === conflict[0]);
+          errEl.textContent = `⚠️ "${memberNo}" is already assigned to ${cm ? cm.name : conflict[0]}.`;
+          return;
+        }
+      }
+    } catch(e) {}
+  }
+
+  m.name  = name;
+  m.phone = phone;
+  try {
+    const ref  = doc(db,'tracker','memberDetails');
+    const snap = await getDoc(ref);
+    const all  = snap.exists() ? (snap.data()||{}) : {};
+    if (phone !== editingPhone && all[editingPhone]) { all[phone]=all[editingPhone]; delete all[editingPhone]; }
+    all[phone] = { memberNo, natId, county, nokName, nokPhone, motoReg, motoYear, motoModel, updatedAt: Date.now() };
+    await setDoc(ref, all);
+  } catch(e) { showToast('⚠️ Details save failed'); }
+  await saveMembers();
+  closeModal('editModal');
+  showToast('✓ Member updated');
+  renderList();
+};
+
+// ── DELETE ───────────────────────────────────────
+window.openDelete = function(phone, name) {
+  deletingPhone = phone;
+  deletingName  = name;
+  document.getElementById('deleteBody').textContent =
+    `Remove "${name}" (${phone})? Their contribution history will be preserved in the group totals.`;
+  document.getElementById('deleteModal').classList.add('open');
+};
+
+window.confirmDelete = async function() {
+  if (!deletingPhone) return;
+  MEMBERS = MEMBERS.filter(m => m.phone !== deletingPhone);
+  await saveMembers();
+  showToast(`🗑️ ${deletingName.split(' ')[0]} removed`);
+  closeModal('deleteModal');
+  renderList();
+};
+
+// ── ADD MEMBER ────────────────────────────────────
+window.openAddModal = function() {
+  document.getElementById('addName').value  = '';
+  document.getElementById('addPhone').value = '';
+  document.getElementById('addErr').style.display = 'none';
+  document.getElementById('addModal').classList.add('open');
+  setTimeout(() => document.getElementById('addName').focus(), 200);
+};
+
+window.doAddMember = async function() {
+  const name  = document.getElementById('addName').value.trim().toUpperCase();
+  const rawP  = document.getElementById('addPhone').value.trim();
+  const phone = rawP.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
+  const errEl = document.getElementById('addErr');
+  errEl.style.display = 'none';
+
+  if (!name)                  { errEl.textContent='⚠️ Enter a name';           errEl.style.display='block'; return; }
+  if (!phone||phone.length<9) { errEl.textContent='⚠️ Enter a valid phone';    errEl.style.display='block'; return; }
+  if (MEMBERS.find(m=>m.phone===phone)) { errEl.textContent='⚠️ Phone already exists'; errEl.style.display='block'; return; }
+
+  MEMBERS.push({ name, phone });
+  await saveMembers();
+
+  const defaultPin = phone.replace(/\D/g,'').slice(-4);
+  try {
+    const ref  = doc(db,'tracker','memberPins');
+    const snap = await getDoc(ref);
+    const pins = snap.exists() ? (snap.data()||{}) : {};
+    if (!pins[phone]) {
+      pins[phone]          = defaultPin;
+      pins['_meta_'+phone] = { name, adminSet: true };
+      await setDoc(ref, pins);
+    }
+  } catch(e) { /* best-effort */ }
+
+  closeModal('addModal');
+  showToast(`✓ ${name.split(' ')[0]} added — PIN: ${defaultPin}`);
+  renderList();
+};
+
+// ── THEME ────────────────────────────────────────
+const THEME_KEY = 'bonge-theme';
+window.toggleTheme = function() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isLight ? '🌞' : '🌙';
+};
+if (localStorage.getItem(THEME_KEY) === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('themeToggle').textContent = '🌞';
+}
+</script>
+</body>
+</html>

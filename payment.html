@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Payment — BONGE RIDERS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#141414; --bg2:#1C1C1C; --card:#222222; --card2:#2A2A2A;
+  --border:#333333; --text:#F0EDE8; --muted:#888888; --dim:#555555;
+  --amber:#C4621D; --amber2:#E07830; --amber-bg:rgba(196,98,29,0.12);
+  --green:#3D7A4F; --green2:#4E9964; --green-bg:rgba(61,122,79,0.15);
+  --red:#C0392B; --red2:#E05540; --radius:10px; --radius-lg:16px;
+}
+body.light {
+  --bg:#F5F2EE; --bg2:#EDEAE5; --card:#FFFFFF; --card2:#F5F2EE;
+  --border:#E0DBD4; --text:#141414; --muted:#777777; --dim:#AAAAAA;
+  --amber-bg:rgba(196,98,29,0.08); --green-bg:rgba(61,122,79,0.08);
+}
+html, body { min-height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; -webkit-tap-highlight-color:transparent; transition:background .2s,color .2s; padding-bottom:40px; }
+
+/* HEADER */
+.header { background:var(--bg2); border-bottom:1px solid var(--border); padding:12px 16px; position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; }
+.header-left { display:flex; align-items:center; gap:10px; }
+.back-btn { background:var(--card2); border:1px solid var(--border); color:var(--text); border-radius:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; text-decoration:none; flex-shrink:0; }
+.header-title { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:var(--text); letter-spacing:-.3px; }
+.header-sub { font-size:10px; color:var(--muted); margin-top:1px; }
+.icon-btn { background:var(--card2); border:1px solid var(--border); color:var(--text); border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; }
+
+/* LOGIN GATE */
+#loginGate { max-width:360px; margin:40px auto; padding:0 20px; }
+.gate-logo { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:800; text-align:center; letter-spacing:.5px; margin-bottom:4px; }
+.gate-logo em { color:var(--amber2); font-style:normal; }
+.gate-subtitle { text-align:center; font-size:12px; color:var(--muted); margin-bottom:24px; }
+.gate-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; }
+.field-wrap { margin-bottom:12px; }
+.field-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+.field-input { width:100%; background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text); outline:none; }
+.field-input:focus { border-color:var(--amber); }
+.err-msg { font-size:12px; color:var(--red2); font-weight:600; margin-bottom:8px; display:none; }
+.btn-primary { width:100%; background:var(--amber); color:#fff; border:none; border-radius:8px; padding:12px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; cursor:pointer; margin-top:4px; }
+
+/* DATE SELECTOR */
+.date-bar { padding:12px 16px 8px; max-width:600px; margin:0 auto; display:flex; align-items:center; gap:10px; }
+.date-label { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; flex:1; }
+.date-input { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:7px 10px; font-family:'Inter',sans-serif; font-size:13px; color:var(--text); outline:none; cursor:pointer; }
+.date-input:focus { border-color:var(--amber); }
+
+/* SUMMARY STRIP */
+.summary-strip { padding:0 16px 10px; max-width:600px; margin:0 auto; display:flex; gap:8px; }
+.sum-pill { flex:1; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px 6px; }
+.sum-val { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:800; line-height:1; }
+.sum-val.green { color:var(--green2); }
+.sum-val.amber { color:var(--amber2); }
+.sum-lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-top:3px; font-weight:600; }
+
+/* MARK ALL */
+.mark-all-bar { padding:0 16px 10px; max-width:600px; margin:0 auto; display:flex; gap:8px; }
+.mark-btn { flex:1; padding:9px; border-radius:8px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; border:none; cursor:pointer; }
+.mark-btn.all-paid   { background:var(--green-bg); color:var(--green2); border:1px solid rgba(61,122,79,.3); }
+.mark-btn.all-unpaid { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(196,98,29,.3); }
+
+/* MEMBER LIST */
+.member-list { padding:0 16px 20px; display:flex; flex-direction:column; gap:6px; max-width:600px; margin:0 auto; }
+.member-row { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); display:flex; align-items:center; gap:10px; padding:10px 12px; transition:border-color .2s; }
+.member-row.is-paid { border-color:rgba(61,122,79,.4); background:rgba(61,122,79,.07); }
+.stage-no { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:800; color:var(--amber2); background:var(--amber-bg); border-radius:6px; padding:3px 6px; min-width:30px; text-align:center; flex-shrink:0; }
+.member-name { flex:1; font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
+.pay-btn { padding:7px 14px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; border:none; cursor:pointer; flex-shrink:0; transition:all .15s; }
+.pay-btn.paid   { background:var(--green2); color:#fff; }
+.pay-btn.unpaid { background:var(--card2); color:var(--muted); border:1px solid var(--border); }
+.pay-btn:active { opacity:.75; transform:scale(.96); }
+
+/* SPINNER / EMPTY */
+.spinner { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
+.spin { display:inline-block; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* TOAST */
+#toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card2); color:var(--text); border:1px solid var(--border); border-radius:20px; padding:8px 18px; font-size:13px; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; pointer-events:none; z-index:999; white-space:nowrap; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+      <div class="header-title">💳 Payment</div>
+      <div class="header-sub" id="headerSub">Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <button class="icon-btn" onclick="toggleTheme()" id="themeToggle">🌙</button>
+</div>
+
+<!-- Login gate (disabled) -->
+<div id="loginGate" style="display:none;">
+  <div class="gate-logo">BOGONKO<em>-NGELANI</em></div>
+  <div class="gate-subtitle">Admin access required</div>
+  <div class="gate-card">
+    <div class="field-wrap">
+      <div class="field-label">Admin Email</div>
+      <input class="field-input" type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Password</div>
+      <input class="field-input" type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <p id="loginErr" class="err-msg">Incorrect email or password.</p>
+    <button class="btn-primary" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- Main content -->
+<div id="mainContent" style="display:none;">
+
+  <!-- Date picker -->
+  <div class="date-bar">
+    <div class="date-label" id="dateLabel">Today</div>
+    <input type="date" class="date-input" id="datePicker" onchange="onDateChange()">
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-strip">
+    <div class="sum-pill"><div class="sum-val green" id="sumPaid">0</div><div class="sum-lbl">Paid</div></div>
+    <div class="sum-pill"><div class="sum-val amber" id="sumUnpaid">0</div><div class="sum-lbl">Unpaid</div></div>
+    <div class="sum-pill"><div class="sum-val" id="sumTotal">0</div><div class="sum-lbl">Total</div></div>
+  </div>
+
+  <!-- Mark all -->
+  <div class="mark-all-bar">
+    <button class="mark-btn all-paid"   onclick="markAll(true)">✅ Mark All Paid</button>
+    <button class="mark-btn all-unpaid" onclick="markAll(false)">✗ Mark All Unpaid</button>
+  </div>
+
+  <!-- Member rows -->
+  <div class="member-list" id="memberList">
+    <div class="spinner"><span class="spin">⏳</span> Loading…</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, setDoc, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId:     "G-VWL91EJW1H"
+};
+const app  = initializeApp(firebaseConfig);
+const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+let MEMBERS  = [];
+let payments = {};
+let selectedDate = todayKey();
+
+// ── helpers ──────────────────────────────────────
+function pad(n) { return String(n).padStart(2,'0'); }
+function todayKey() {
+  const t = new Date();
+  return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+}
+function fmtDate(key) {
+  const [y,m,d] = key.split('-');
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const isToday = key === todayKey();
+  return isToday ? `Today — ${d} ${names[+m-1]} ${y}` : `${d} ${names[+m-1]} ${y}`;
+}
+function isPaid(phone) { return !!(payments[selectedDate]&&payments[selectedDate][phone]); }
+function isPastDate()  { return selectedDate < todayKey(); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+async function savePayments() {
+  try { await setDoc(doc(db,'tracker','payments'), payments); }
+  catch(e) { showToast('⚠️ Save failed'); }
+}
+
+// ── auth (sign-in requirement removed) ───────────
+document.getElementById('loginGate').style.display   = 'none';
+document.getElementById('mainContent').style.display = 'block';
+loadData();
+// init date picker to today
+const dp = document.getElementById('datePicker');
+dp.value = todayKey();
+document.getElementById('dateLabel').textContent = fmtDate(selectedDate);
+
+// ── load data ────────────────────────────────────
+function loadData() {
+  onSnapshot(doc(db,'tracker','members'), snap => {
+    if (snap.exists() && snap.data().list) MEMBERS = snap.data().list;
+    render();
+  });
+  onSnapshot(doc(db,'tracker','payments'), snap => {
+    if (snap.exists()) payments = snap.data();
+    render();
+  });
+}
+
+// ── date picker ──────────────────────────────────
+window.onDateChange = function() {
+  selectedDate = document.getElementById('datePicker').value || todayKey();
+  document.getElementById('dateLabel').textContent = fmtDate(selectedDate);
+  render();
+};
+
+// ── mark all ─────────────────────────────────────
+window.markAll = function(state) {
+  if (isPastDate()) {
+    // past: only mark unpaid → paid, never reverse
+    if (!state) { showToast('⚠️ Cannot unmark past-date payments'); return; }
+    MEMBERS.forEach(m => {
+      if (!payments[selectedDate]) payments[selectedDate] = {};
+      if (!payments[selectedDate][m.phone]) {
+        payments[selectedDate][m.phone] = true;
+        if (!payments[selectedDate].__locked) payments[selectedDate].__locked = {};
+        payments[selectedDate].__locked[m.phone] = true;
+      }
+    });
+  } else {
+    if (!payments[selectedDate]) payments[selectedDate] = {};
+    MEMBERS.forEach(m => { payments[selectedDate][m.phone] = state; });
+  }
+  savePayments();
+  render();
+  showToast(state ? '✅ All marked paid' : '✗ All marked unpaid');
+};
+
+// ── toggle single ─────────────────────────────────
+window.toggleMember = function(phone) {
+  const wasPaid = isPaid(phone);
+  if (isPastDate()) {
+    if (wasPaid) { showToast('⚠️ Past payment locked'); return; }
+    if (payments[selectedDate]?.__locked?.[phone]) { showToast('⚠️ Already locked'); return; }
+    if (!payments[selectedDate]) payments[selectedDate] = {};
+    payments[selectedDate][phone] = true;
+    if (!payments[selectedDate].__locked) payments[selectedDate].__locked = {};
+    payments[selectedDate].__locked[phone] = true;
+  } else {
+    if (!payments[selectedDate]) payments[selectedDate] = {};
+    payments[selectedDate][phone] = !wasPaid;
+  }
+  savePayments();
+  render();
+};
+
+// ── render ────────────────────────────────────────
+function render() {
+  if (!MEMBERS.length) return;
+  const paidCount   = MEMBERS.filter(m => isPaid(m.phone)).length;
+  const unpaidCount = MEMBERS.length - paidCount;
+
+  document.getElementById('sumPaid').textContent   = paidCount;
+  document.getElementById('sumUnpaid').textContent = unpaidCount;
+  document.getElementById('sumTotal').textContent  = MEMBERS.length;
+
+  document.getElementById('memberList').innerHTML = MEMBERS.map((m, i) => {
+    const paid     = isPaid(m.phone);
+    const stageNo  = i + 1;
+    return `
+      <div class="member-row ${paid ? 'is-paid' : ''}">
+        <div class="stage-no">#${stageNo}</div>
+        <div class="member-name">${m.name}</div>
+        <button class="pay-btn ${paid ? 'paid' : 'unpaid'}" onclick="toggleMember('${m.phone}')">
+          ${paid ? '✅ Paid' : 'Unpaid'}
+        </button>
+      </div>`;
+  }).join('');
+}
+
+// ── theme ─────────────────────────────────────────
+const THEME_KEY = 'bonge-theme';
+window.toggleTheme = function() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isLight ? '🌞' : '🌙';
+};
+if (localStorage.getItem(THEME_KEY) === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('themeToggle').textContent = '🌞';
+}
+</script>
+</body>
+</html>
