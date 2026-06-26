@@ -63,9 +63,9 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 .sum-val.amber { color:var(--amber2); }
 .sum-lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-top:3px; font-weight:600; }
 
-/* MARK ALL */
-.mark-all-bar { padding:0 16px 10px; max-width:600px; margin:0 auto; display:flex; gap:8px; }
-.mark-btn { flex:1; padding:9px; border-radius:8px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; border:none; cursor:pointer; }
+/* MARK ALL — lives inside pay-btn area */
+.mark-all-row { display:flex; gap:6px; }
+.mark-btn { flex:1; padding:7px 10px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; border:none; cursor:pointer; }
 .mark-btn.all-paid   { background:var(--green-bg); color:var(--green2); border:1px solid rgba(61,122,79,.3); }
 .mark-btn.all-unpaid { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(196,98,29,.3); }
 
@@ -135,12 +135,6 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
     <div class="sum-pill"><div class="sum-val green" id="sumPaid">0</div><div class="sum-lbl">Paid</div></div>
     <div class="sum-pill"><div class="sum-val amber" id="sumUnpaid">0</div><div class="sum-lbl">Unpaid</div></div>
     <div class="sum-pill"><div class="sum-val" id="sumTotal">0</div><div class="sum-lbl">Total</div></div>
-  </div>
-
-  <!-- Mark all -->
-  <div class="mark-all-bar">
-    <button class="mark-btn all-paid"   onclick="markAll(true)">✅ Mark All Paid</button>
-    <button class="mark-btn all-unpaid" onclick="markAll(false)">✗ Mark All Unpaid</button>
   </div>
 
   <!-- Member rows -->
@@ -280,7 +274,16 @@ function render() {
   document.getElementById('sumUnpaid').textContent = unpaidCount;
   document.getElementById('sumTotal').textContent  = MEMBERS.length;
 
-  document.getElementById('memberList').innerHTML = MEMBERS.map((m, i) => {
+  const markAllRow = `
+    <div class="member-row" style="background:transparent;border-color:transparent;padding:4px 12px 6px;">
+      <div style="flex:1;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Members</div>
+      <div class="mark-all-row">
+        <button class="mark-btn all-paid"   onclick="markAll(true)">✅ All Paid</button>
+        <button class="mark-btn all-unpaid" onclick="markAll(false)">✗ All Unpaid</button>
+      </div>
+    </div>`;
+
+  document.getElementById('memberList').innerHTML = markAllRow + MEMBERS.map((m, i) => {
     const paid     = isPaid(m.phone);
     const stageNo  = i + 1;
     return `
