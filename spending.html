@@ -5,11 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Spending — Bogonko Stage</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-<link rel="prefetch" href="index.html" as="document">
 <style>
   :root {
   --bg:       #0F1117;
@@ -92,20 +87,6 @@
 
   #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:var(--text);border:1px solid var(--border);border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;}
   #toast.show{transform:translateX(-50%) translateY(0);}
-
-/* ── Page transition ── */
-body { animation: pgFadeIn .18s ease-out both; }
-@keyframes pgFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.page-loading::after {
-  content: '';
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg, #0F1117);
-  opacity: 0;
-  animation: pgOut .15s ease-in forwards;
-  pointer-events: none;
-}
-@keyframes pgOut { from { opacity: .6; } to { opacity: 0; } }
-
 </style>
 </head>
 <body>
@@ -193,16 +174,13 @@ body { animation: pgFadeIn .18s ease-out both; }
 
 <div id="toast"></div>
 
-<script type="module">
-import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { initializeFirestore, persistentLocalCache, doc, onSnapshot, setDoc }
-                                 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
-                                 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
 const RATE = 50; // KSh per member per day — must match main app
 
-const fbApp = initializeApp({
+firebase.initializeApp({
   apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
   authDomain:        "bonge-96f37.firebaseapp.com",
   projectId:         "bonge-96f37",
@@ -211,8 +189,8 @@ const fbApp = initializeApp({
   appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
 });
 
-const db   = initializeFirestore(fbApp, { localCache: persistentLocalCache() });
-const auth = getAuth(fbApp);
+const db   = firebase.firestore();
+const auth = firebase.auth();
 
 let spending    = [];
 let editingId   = null;
@@ -222,7 +200,7 @@ let membersCount = 0;
 let listenersStarted = false;
 
 // ── AUTH ──
-onAuthStateChanged(auth, user => {
+auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
@@ -240,7 +218,7 @@ document.getElementById('loginBtn').onclick = async function() {
   errEl.classList.remove('show');
   this.textContent = 'Signing in…';
   try {
-    await signInWithEmailAndPassword(auth, email, pw);
+    await auth.signInWithEmailAndPassword(email, pw);
   } catch(e) {
     errEl.classList.add('show');
     this.textContent = 'Sign In';
@@ -253,8 +231,8 @@ document.getElementById('loginPw').addEventListener('keydown', e => {
 // ── LISTENERS ──
 function startListeners() {
   // 1. Spending entries
-  onSnapshot(doc(db,'tracker','spending'), snap => {
-    spending = (snap.exists() && snap.data().list) ? snap.data().list : [];
+  db.doc('tracker/spending').onSnapshot(snap => {
+    spending = (snap.exists && snap.data().list) ? snap.data().list : [];
     document.getElementById('loadingMsg').style.display = 'none';
     render();
   }, err => {
@@ -263,17 +241,17 @@ function startListeners() {
   });
 
   // 2. Members list (to count members for payment calculation)
-  onSnapshot(doc(db,'tracker','members'), snap => {
-    if (snap.exists() && snap.data().list) {
+  db.doc('tracker/members').onSnapshot(snap => {
+    if (snap.exists && snap.data().list) {
       membersCount = snap.data().list.length;
     }
     recalcIncome();
   });
 
   // 3. Payments — structure: { "2026-06-25": { "07123...": true, "__locked": {...} } }
-  onSnapshot(doc(db,'tracker','payments'), snap => {
+  db.doc('tracker/payments').onSnapshot(snap => {
     payTotal = 0;
-    if (snap.exists()) {
+    if (snap.exists) {
       const data = snap.data();
       Object.keys(data).forEach(dateKey => {
         const dayObj = data[dateKey];
@@ -291,9 +269,9 @@ function startListeners() {
   });
 
   // 4. Other income
-  onSnapshot(doc(db,'tracker','income'), snap => {
+  db.doc('tracker/income').onSnapshot(snap => {
     otherTotal = 0;
-    if (snap.exists() && snap.data().list) {
+    if (snap.exists && snap.data().list) {
       snap.data().list.forEach(e => { otherTotal += Number(e.amount) || 0; });
     }
     recalcIncome();
@@ -410,7 +388,7 @@ async function saveEntry() {
     : [...spending, {id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), desc, amount, date, category, recipient}];
 
   try {
-    await setDoc(doc(db,'tracker','spending'), { list: newList });
+    await db.doc('tracker/spending').set({ list: newList });
     // spending will update via the onSnapshot listener
     closeModal();
     toast(editingId ? '✓ Entry updated' : '✓ Entry added');
@@ -426,7 +404,7 @@ async function deleteEntry(id) {
   if (!confirm('Delete this spending entry?')) return;
   const newList = spending.filter(e => e.id !== id);
   try {
-    await setDoc(doc(db,'tracker','spending'), { list: newList });
+    await db.doc('tracker/spending').set({ list: newList });
     toast('Entry deleted');
   } catch(err) {
     toast('⚠️ Delete failed');
@@ -465,22 +443,7 @@ document.getElementById('pdfBtn').addEventListener('click', function() {
   <tbody>${rows}</tbody>
   <tfoot><tr><td colspan="5" style="text-align:right;font-weight:700;padding-top:10px;">TOTAL</td>
   <td style="text-align:right;font-weight:800;color:#C0392B;padding-top:10px;">KSh ${total.toLocaleString()}</td></tr></tfoot>
-  </table><script>
-// ── Instant page-transition feedback ──
-(function(){
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    const href = a.getAttribute('href');
-    // Only same-origin, non-hash, non-external links
-    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
-    document.body.classList.add('page-loading');
-  });
-  // Also handle window.location navigations via button clicks
-  const _orig = window.location;
-})();
-</script>
-</body></html>`);
+  </table></body></html>`);
   w.document.close();
   setTimeout(() => w.print(), 500);
 });

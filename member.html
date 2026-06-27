@@ -12,26 +12,9 @@
 <meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-<link rel="prefetch" href="index.html" as="document">
-<!-- QR/PDF libs loaded on demand when user taps Download -->
-<script>
-async function ensurePdfLibs() {
-  if (window._pdfLibsLoaded) return;
-  window._pdfLibsLoaded = true;
-  const load = src => new Promise((res, rej) => {
-    const s = document.createElement('script');
-    s.src = src; s.onload = res; s.onerror = rej;
-    document.head.appendChild(s);
-  });
-  await load('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js');
-  await load('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-  await load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -611,20 +594,6 @@ body.light .ws-name { color: #141414; }
   from { transform: translateY(14px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
-
-/* ── Page transition ── */
-body { animation: pgFadeIn .18s ease-out both; }
-@keyframes pgFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.page-loading::after {
-  content: '';
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg, #0F1117);
-  opacity: 0;
-  animation: pgOut .15s ease-in forwards;
-  pointer-events: none;
-}
-@keyframes pgOut { from { opacity: .6; } to { opacity: 0; } }
-
 </style>
 </head>
 <body>
@@ -1538,7 +1507,6 @@ async function downloadIdCard() {
   btn.textContent = '⏳ Generating…'; btn.disabled = true;
   try {
     const card = document.getElementById('theIdCard');
-    await ensurePdfLibs();
     const canvas = await html2canvas(card, {
       scale: 3,
       useCORS: true,
@@ -1857,21 +1825,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutBtn = document.querySelector('.logout-btn');
   if (logoutBtn) logoutBtn.addEventListener('click', doLogout);
 });
-</script>
-<script>
-// ── Instant page-transition feedback ──
-(function(){
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    const href = a.getAttribute('href');
-    // Only same-origin, non-hash, non-external links
-    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
-    document.body.classList.add('page-loading');
-  });
-  // Also handle window.location navigations via button clicks
-  const _orig = window.location;
-})();
 </script>
 </body>
 </html>
