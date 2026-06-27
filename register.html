@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Join Bonge Riders — Self Registration</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #141414;
+  --bg2:      #1C1C1C;
+  --card:     #222222;
+  --card2:    #2A2A2A;
+  --border:   #333333;
+  --text:     #F0EDE8;
+  --muted:    #888888;
+  --dim:      #555555;
+  --amber:    #C4621D;
+  --amber2:   #E07830;
+  --amber-bg: rgba(196,98,29,0.12);
+  --green:    #3D7A4F;
+  --green2:   #4E9964;
+  --green-bg: rgba(61,122,79,0.15);
+  --red:      #C0392B;
+  --radius:   10px;
+  --radius-lg:16px;
+}
+
+body.light {
+  --bg:       #F5F2EE;
+  --bg2:      #EDEAE5;
+  --card:     #FFFFFF;
+  --card2:    #F5F2EE;
+  --border:   #E0DBD4;
+  --text:     #141414;
+  --muted:    #777777;
+  --dim:      #AAAAAA;
+  --amber-bg: rgba(196,98,29,0.08);
+  --green-bg: rgba(61,122,79,0.08);
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s, color .2s;
+  padding-bottom: 56px;
+}
+
+/* HEADER */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-left { display: flex; align-items: center; gap: 10px; }
+.back-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; text-decoration: none;
+  flex-shrink: 0;
+}
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 17px;
+  letter-spacing: -.3px; color: var(--text);
+}
+.logo em { color: var(--amber2); font-style: normal; }
+.logo-sub {
+  font-size: 10px; font-weight: 500;
+  color: var(--muted); letter-spacing: .6px;
+  text-transform: uppercase; margin-top: 1px;
+}
+.icon-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+
+/* HERO BANNER */
+.hero {
+  background: linear-gradient(135deg, var(--amber) 0%, #8B3A0E 100%);
+  padding: 20px 16px 18px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 40px);
+}
+.hero-logo {
+  width: 64px; height: 64px;
+  border-radius: 50%; object-fit: cover;
+  border: 3px solid rgba(255,255,255,.3);
+  margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700;
+  color: #fff; letter-spacing: -.3px;
+  position: relative; z-index: 1;
+}
+.hero p {
+  font-size: 12px; color: rgba(255,255,255,.75);
+  margin-top: 4px; position: relative; z-index: 1;
+  letter-spacing: .3px;
+}
+
+/* STEPS */
+.steps-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; padding: 16px 16px 0;
+}
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--card2); border: 2px solid var(--border);
+  color: var(--muted); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s;
+}
+.step-dot.active { background: var(--amber); border-color: var(--amber); color: #fff; }
+.step-dot.done   { background: var(--green); border-color: var(--green); color: #fff; }
+.step-line {
+  flex: 1; height: 2px;
+  background: var(--border); max-width: 40px;
+  transition: background .2s;
+}
+.step-line.done { background: var(--green); }
+.steps-labels {
+  display: flex; justify-content: space-between;
+  padding: 6px 8px 0; font-size: 10px;
+  color: var(--muted); letter-spacing: .3px;
+}
+.steps-labels span { width: 28px; text-align: center; flex-shrink: 0; }
+.steps-labels span.active { color: var(--amber2); font-weight: 600; }
+.steps-labels span.done { color: var(--green2); font-weight: 600; }
+
+/* FORM */
+.form-wrap {
+  padding: 16px;
+}
+.step-page { display: none; }
+.step-page.active { display: block; }
+
+.section-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--amber2); letter-spacing: .8px;
+  text-transform: uppercase; margin-bottom: 12px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--muted); margin-bottom: 5px; letter-spacing: .3px;
+}
+.field label span.req { color: var(--amber2); }
+.field input, .field select {
+  width: 100%;
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); border-radius: var(--radius);
+  padding: 11px 13px; font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  outline: none; transition: border-color .15s;
+  appearance: none; -webkit-appearance: none;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--amber2);
+}
+.field input::placeholder { color: var(--dim); }
+.field .hint {
+  font-size: 11px; color: var(--muted);
+  margin-top: 4px; line-height: 1.4;
+}
+.field.error input, .field.error select { border-color: var(--red); }
+.field .err-msg {
+  font-size: 11px; color: var(--red);
+  margin-top: 4px; display: none;
+}
+.field.error .err-msg { display: block; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* BUTTONS */
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: var(--amber); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: .3px;
+  transition: opacity .15s, transform .1s;
+  margin-top: 8px;
+}
+.btn-primary:active { opacity: .85; transform: scale(.98); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-secondary {
+  width: 100%; padding: 12px;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; margin-top: 8px;
+  transition: background .15s;
+}
+.btn-secondary:active { background: var(--card2); }
+
+/* SUCCESS STATE */
+.success-screen {
+  display: none; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 32px 16px;
+}
+.success-screen.show { display: flex; }
+.success-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--green-bg); border: 2px solid var(--green2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin-bottom: 16px;
+  animation: popIn .4s ease;
+}
+@keyframes popIn {
+  0%   { transform: scale(.5); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-screen h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px;
+}
+.success-screen p {
+  font-size: 14px; color: var(--muted);
+  line-height: 1.6; max-width: 280px;
+}
+.success-screen .ref-box {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 20px;
+  margin: 16px 0; font-size: 13px; color: var(--muted);
+}
+.success-screen .ref-box strong {
+  display: block; font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; color: var(--amber2); margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); border-radius: 24px;
+  padding: 10px 20px; font-size: 13px; font-weight: 500;
+  white-space: nowrap; opacity: 0;
+  transition: opacity .25s, transform .25s;
+  z-index: 9999; pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* SUMMARY CARD */
+.summary-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px;
+  margin-bottom: 14px;
+}
+.summary-row {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 5px 0;
+  border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .lbl { color: var(--muted); }
+.summary-row .val { font-weight: 600; color: var(--text); text-align: right; max-width: 60%; }
+
+.info-box {
+  background: var(--amber-bg); border: 1px solid rgba(196,98,29,.2);
+  border-radius: var(--radius); padding: 10px 13px;
+  font-size: 12px; color: var(--amber2);
+  line-height: 1.5; margin-bottom: 14px;
+}
+
+/* SPINNER */
+.spinner {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin .6s linear infinite; vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+      <div class="logo">BONGE <em>RIDERS</em></div>
+      <div class="logo-sub">Member Registration</div>
+    </div>
+  </div>
+  <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="icon-192.png" alt="Bonge Riders" class="hero-logo">
+  <h1>Join Bogonko-Ngelani Stage</h1>
+  <p>Fill in your details below — the Chairperson will review and approve your membership.</p>
+</div>
+
+<!-- STEPS INDICATOR -->
+<div class="steps-bar">
+  <div class="step-dot active" id="dot1">1</div>
+  <div class="step-line" id="line1"></div>
+  <div class="step-dot" id="dot2">2</div>
+  <div class="step-line" id="line2"></div>
+  <div class="step-dot" id="dot3">3</div>
+</div>
+<div class="steps-labels">
+  <span class="active" id="lbl1">Personal</span>
+  <span style="flex:1"></span>
+  <span id="lbl2">Moto</span>
+  <span style="flex:1"></span>
+  <span id="lbl3">Review</span>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+
+  <!-- STEP 1: Personal Info -->
+  <div class="step-page active" id="step1">
+    <div class="section-label">Personal Details</div>
+
+    <div class="field" id="f-name">
+      <label>Full Name <span class="req">*</span></label>
+      <input type="text" id="inp-name" placeholder="e.g. JOHN KAMAU MWANGI" autocomplete="name">
+      <div class="err-msg">Please enter your full name</div>
+    </div>
+
+    <div class="field" id="f-phone">
+      <label>Phone Number <span class="req">*</span></label>
+      <input type="tel" id="inp-phone" placeholder="07XX XXX XXX" autocomplete="tel">
+      <div class="hint">Use the number you'll be identified by in the system</div>
+      <div class="err-msg">Enter a valid Kenyan phone number</div>
+    </div>
+
+    <div class="field" id="f-natid">
+      <label>National ID Number <span class="req">*</span></label>
+      <input type="text" id="inp-natid" placeholder="e.g. 12345678" inputmode="numeric">
+      <div class="err-msg">Please enter your National ID number</div>
+    </div>
+
+    <div class="field">
+      <label>County</label>
+      <select id="inp-county">
+        <option value="Nairobi">Nairobi</option>
+        <option value="Machakos">Machakos</option>
+        <option value="Kajiado">Kajiado</option>
+        <option value="Kiambu">Kiambu</option>
+        <option value="Muranga">Muranga</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="section-label" style="margin-top:20px;">Next of Kin</div>
+
+    <div class="field" id="f-nokname">
+      <label>Next of Kin Name <span class="req">*</span></label>
+      <input type="text" id="inp-nokname" placeholder="e.g. JANE KAMAU" autocomplete="off">
+      <div class="err-msg">Please enter next of kin name</div>
+    </div>
+
+    <div class="field" id="f-nokphone">
+      <label>Next of Kin Phone <span class="req">*</span></label>
+      <input type="tel" id="inp-nokphone" placeholder="07XX XXX XXX">
+      <div class="err-msg">Enter a valid phone number</div>
+    </div>
+
+    <button class="btn-primary" onclick="goStep2()">Next — Motorcycle Details →</button>
+  </div>
+
+  <!-- STEP 2: Motorcycle Info -->
+  <div class="step-page" id="step2">
+    <div class="section-label">Motorcycle Details</div>
+
+    <div class="field" id="f-motoreg">
+      <label>Registration Plate <span class="req">*</span></label>
+      <input type="text" id="inp-motoreg" placeholder="e.g. KMDU 123A" autocomplete="off" style="text-transform:uppercase">
+      <div class="err-msg">Please enter your motorcycle registration</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field" id="f-motomodel">
+        <label>Make / Model <span class="req">*</span></label>
+        <input type="text" id="inp-motomodel" placeholder="e.g. Honda CG125">
+        <div class="err-msg">Required</div>
+      </div>
+      <div class="field">
+        <label>Year</label>
+        <input type="text" id="inp-motoyear" placeholder="e.g. 2020" inputmode="numeric" maxlength="4">
+      </div>
+    </div>
+
+    <div class="info-box">
+      🏍️ Your motorcycle details help us verify your membership at the stage. Make sure the registration plate matches your logbook.
+    </div>
+
+    <button class="btn-primary" onclick="goStep3()">Next — Review & Submit →</button>
+    <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+  </div>
+
+  <!-- STEP 3: Review & Submit -->
+  <div class="step-page" id="step3">
+    <div class="section-label">Review Your Details</div>
+
+    <div class="summary-card" id="summaryCard">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="info-box">
+      📱 After submitting, the Chairperson will review your application and you'll receive an SMS confirmation on your phone number.
+    </div>
+
+    <button class="btn-primary" id="submitBtn" onclick="submitRegistration()">
+      Submit Application
+    </button>
+    <button class="btn-secondary" onclick="goStep(2)">← Back & Edit</button>
+  </div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2>Application Submitted!</h2>
+  <p>Your registration has been received. The Chairperson will review and you'll get an SMS once approved.</p>
+  <div class="ref-box">
+    Reference Number
+    <strong id="refNumber">—</strong>
+  </div>
+  <button class="btn-primary" style="max-width:280px;" onclick="window.location.href='index.html'">
+    Back to Home
+  </button>
+  <button class="btn-secondary" style="max-width:280px;margin-top:0;" onclick="resetForm()">
+    Register Another
+  </button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SERVER = 'https://bonge-riders-server.onrender.com';
+
+// ── THEME ──
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if (savedTheme === 'light') document.body.classList.add('light');
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+// ── TOAST ──
+function showToast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ── STEPS ──
+let currentStep = 1;
+function goStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step' + currentStep).classList.add('active');
+  updateStepUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateStepUI() {
+  [1, 2, 3].forEach(i => {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.className = 'step-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+    lbl.className = i < currentStep ? 'done' : i === currentStep ? 'active' : '';
+  });
+  [1, 2].forEach(i => {
+    const line = document.getElementById('line' + i);
+    line.className = 'step-line' + (i < currentStep ? ' done' : '');
+  });
+}
+
+// ── VALIDATION ──
+function validatePhone(p) {
+  const clean = p.replace(/\s/g, '');
+  return /^(07|01|\+2547|\+2541|2547|2541)\d{8}$/.test(clean);
+}
+
+function setError(fieldId, hasError) {
+  document.getElementById(fieldId).classList.toggle('error', hasError);
+  return hasError;
+}
+
+function goStep2() {
+  const name    = document.getElementById('inp-name').value.trim();
+  const phone   = document.getElementById('inp-phone').value.trim();
+  const natid   = document.getElementById('inp-natid').value.trim();
+  const nokname = document.getElementById('inp-nokname').value.trim();
+  const nokphone= document.getElementById('inp-nokphone').value.trim();
+
+  let err = false;
+  if (!name)              err = setError('f-name', true) || err;    else setError('f-name', false);
+  if (!validatePhone(phone)) err = setError('f-phone', true) || err; else setError('f-phone', false);
+  if (!natid)             err = setError('f-natid', true) || err;   else setError('f-natid', false);
+  if (!nokname)           err = setError('f-nokname', true) || err; else setError('f-nokname', false);
+  if (!validatePhone(nokphone)) err = setError('f-nokphone', true) || err; else setError('f-nokphone', false);
+
+  if (err) { showToast('⚠️ Please fill in all required fields'); return; }
+  goStep(2);
+}
+
+function goStep3() {
+  const motoreg   = document.getElementById('inp-motoreg').value.trim().toUpperCase();
+  const motomodel = document.getElementById('inp-motomodel').value.trim();
+
+  let err = false;
+  if (!motoreg)   err = setError('f-motoreg', true) || err;   else setError('f-motoreg', false);
+  if (!motomodel) err = setError('f-motomodel', true) || err; else setError('f-motomodel', false);
+
+  if (err) { showToast('⚠️ Please fill in motorcycle details'); return; }
+
+  // Build summary
+  const rows = [
+    { lbl: 'Full Name',     val: document.getElementById('inp-name').value.trim().toUpperCase() },
+    { lbl: 'Phone',         val: document.getElementById('inp-phone').value.trim() },
+    { lbl: 'National ID',   val: document.getElementById('inp-natid').value.trim() },
+    { lbl: 'County',        val: document.getElementById('inp-county').value },
+    { lbl: 'Next of Kin',   val: document.getElementById('inp-nokname').value.trim().toUpperCase() },
+    { lbl: 'NoK Phone',     val: document.getElementById('inp-nokphone').value.trim() },
+    { lbl: 'Moto Plate',    val: motoreg },
+    { lbl: 'Make / Model',  val: motomodel },
+    { lbl: 'Year',          val: document.getElementById('inp-motoyear').value.trim() || '—' },
+  ];
+
+  document.getElementById('summaryCard').innerHTML = rows.map(r =>
+    `<div class="summary-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`
+  ).join('');
+
+  goStep(3);
+}
+
+// ── SUBMIT ──
+async function submitRegistration() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Submitting…';
+
+  const payload = {
+    name:       document.getElementById('inp-name').value.trim(),
+    phone:      document.getElementById('inp-phone').value.trim(),
+    natId:      document.getElementById('inp-natid').value.trim(),
+    county:     document.getElementById('inp-county').value,
+    nokName:    document.getElementById('inp-nokname').value.trim(),
+    nokPhone:   document.getElementById('inp-nokphone').value.trim(),
+    motoReg:    document.getElementById('inp-motoreg').value.trim().toUpperCase(),
+    motoModel:  document.getElementById('inp-motomodel').value.trim(),
+    motoYear:   document.getElementById('inp-motoyear').value.trim(),
+  };
+
+  try {
+    const res  = await fetch(SERVER + '/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      // Show success
+      document.querySelector('.form-wrap').style.display = 'none';
+      document.querySelector('.steps-bar').style.display = 'none';
+      document.querySelector('.steps-labels').style.display = 'none';
+      document.querySelector('.hero').style.display = 'none';
+      document.getElementById('refNumber').textContent = 'REG-' + Date.now().toString().slice(-6);
+      document.getElementById('successScreen').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showToast('⚠️ ' + (data.error || 'Submission failed. Try again.'), 4000);
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Application';
+    }
+  } catch(e) {
+    showToast('❌ Could not reach server. Check your internet.', 4000);
+    btn.disabled = false;
+    btn.innerHTML = 'Submit Application';
+  }
+}
+
+function resetForm() {
+  document.querySelectorAll('input').forEach(i => i.value = '');
+  document.getElementById('successScreen').classList.remove('show');
+  document.querySelector('.form-wrap').style.display = '';
+  document.querySelector('.steps-bar').style.display = '';
+  document.querySelector('.steps-labels').style.display = '';
+  document.querySelector('.hero').style.display = '';
+  currentStep = 1;
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+  updateStepUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Auto-uppercase name fields
+['inp-name','inp-nokname','inp-motoreg'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => { el.value = el.value.toUpperCase(); });
+});
+</script>
+</body>
+</html>
