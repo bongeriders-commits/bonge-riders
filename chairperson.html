@@ -247,6 +247,12 @@ html, body {
   background: var(--card2); color: var(--amber2); font-size: 13px; cursor: pointer; transition: background .15s;
 }
 .btn-pdf:active { background: var(--border); }
+.locked-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 10px 12px; border-radius: var(--radius);
+  background: var(--green-bg); color: var(--green2);
+  font-size: 12px; font-weight: 700;
+}
 
 /* ── MEMBER CARDS ── */
 .member-row {
@@ -895,7 +901,8 @@ function renderApps() {
       <div class="app-date">Submitted: ${fmtDate(app.submittedAt)} · Ref: ${app.id}</div>
       <div class="action-row">
         ${status !== 'approved' ? `<button class="btn-approve" onclick="confirmRegAction('${app.id}','approve','${esc(app.name)}')">✓ Approve</button>` : ''}
-        ${status !== 'declined' ? `<button class="btn-decline" onclick="confirmRegAction('${app.id}','decline','${esc(app.name)}')">✕ Decline</button>` : ''}
+        ${(status !== 'declined' && status !== 'approved') ? `<button class="btn-decline" onclick="confirmRegAction('${app.id}','decline','${esc(app.name)}')">✕ Decline</button>` : ''}
+        ${status === 'approved' ? `<span class="locked-badge" title="Approved registrations cannot be declined">🔒 Approved — Locked</span>` : ''}
         ${status === 'approved' ? `<button class="btn-pdf" onclick='generateMemberPdf(${JSON.stringify(app).replace(/'/g,"&#39;")})' title="Generate Application PDF">📄 PDF</button>` : ''}
         <button class="btn-wa" onclick="whatsappApplicant('${phone}','${esc(app.name)}','${status}')" title="WhatsApp">📲</button>
       </div>
@@ -923,6 +930,17 @@ window.closeModal = function() {
 window.doConfirm = async function() {
   if (!pendingAction) return;
   const { id, action } = pendingAction;
+
+  // Hard client-side lock: once approved, this application can never be declined again —
+  // even if a stale UI somehow still has a Decline button wired to this id.
+  const existing = allApps.find(a => a.id === id);
+  if (existing && existing.status === 'approved' && action === 'decline') {
+    closeModal();
+    showToast('🔒 This member is already approved and can no longer be declined.', 4000);
+    renderApps();
+    return;
+  }
+
   closeModal();
   const card = document.getElementById('card-' + id);
   if (card) card.style.opacity = '.5';
@@ -937,6 +955,9 @@ window.doConfirm = async function() {
       showToast(action === 'approve' ? '✅ Member approved! SMS sent.' : '✕ Application declined. SMS sent.');
       const idx = allApps.findIndex(a => a.id === id);
       if (idx >= 0) allApps[idx].status = action === 'approve' ? 'approved' : 'declined';
+      if (action === 'approve' && idx >= 0) {
+        await recordStageFeeIncome(allApps[idx]);
+      }
       renderApps();
     } else {
       showToast('⚠️ ' + (data.error || 'Action failed'), 4000);
@@ -947,6 +968,33 @@ window.doConfirm = async function() {
     if (card) card.style.opacity = '1';
   }
 };
+
+// ── AUTO-RECORD STAGE CONTRIBUTION FEE AS INCOME ──
+// Fires immediately once a self-registration is approved. Guarded so a duplicate
+// approval click (or a retried request) can never create a second income entry
+// for the same registration.
+async function recordStageFeeIncome(app) {
+  try {
+    const regId = app.id;
+    const alreadyRecorded = incomeList.some(e => e.regId === regId);
+    if (alreadyRecorded) return;
+
+    const entry = {
+      id: Date.now().toString(),
+      regId,
+      desc: `Stage contribution fee — ${app.name || app.phone} (new member)`,
+      amount: 10000,
+      date: new Date().toISOString().slice(0, 10)
+    };
+    incomeList.push(entry);
+    await setDoc(doc(db, 'tracker', 'income'), { list: incomeList });
+  } catch (e) {
+    // Income recording should never block the approval itself — the member is
+    // already approved at this point. Surface a toast so the chairperson knows
+    // to add it manually if the write failed.
+    showToast('⚠️ Approved, but could not auto-record the KSh 10,000 fee in Other Income. Add it manually.', 5000);
+  }
+}
 
 // ── WHATSAPP (registrations) ──
 window.whatsappApplicant = function(phone, name, status) {
