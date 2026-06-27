@@ -12,6 +12,12 @@
 <meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+<link rel="prefetch" href="index.html" as="document">
+<link rel="prefetch" href="member.html" as="document">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -139,6 +145,20 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 /* TOAST */
 #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card2); color:var(--text); border:1px solid var(--border); border-radius:20px; padding:8px 18px; font-size:13px; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; pointer-events:none; z-index:999; white-space:nowrap; }
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── Page transition ── */
+body { animation: pgFadeIn .18s ease-out both; }
+@keyframes pgFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.page-loading::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg, #0F1117);
+  opacity: 0;
+  animation: pgOut .15s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes pgOut { from { opacity: .6; } to { opacity: 0; } }
+
 </style>
 </head>
 <body>
@@ -589,6 +609,21 @@ if (localStorage.getItem(THEME_KEY) === 'light') {
   document.body.classList.add('light');
   document.getElementById('themeToggle').textContent = '🌞';
 }
+</script>
+<script>
+// ── Instant page-transition feedback ──
+(function(){
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    // Only same-origin, non-hash, non-external links
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    document.body.classList.add('page-loading');
+  });
+  // Also handle window.location navigations via button clicks
+  const _orig = window.location;
+})();
 </script>
 </body>
 </html>

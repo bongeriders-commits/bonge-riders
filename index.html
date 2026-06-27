@@ -23,6 +23,14 @@
 <meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+<link rel="prefetch" href="member.html" as="document">
+<link rel="prefetch" href="spending.html" as="document">
+<link rel="prefetch" href="members-list.html" as="document">
+<link rel="prefetch" href="register.html" as="document">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -958,6 +966,20 @@ body.memberview .vb-unlocked { display: block; }
 }
 .paycode-box span { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; display: block; margin-bottom: 2px; font-family: 'Inter', sans-serif; }
 .welfare-status-badge.invalid { background: rgba(220,38,38,.1); color: #EF4444; }
+
+
+/* ── Page transition ── */
+body { animation: pgFadeIn .18s ease-out both; }
+@keyframes pgFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.page-loading::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg, #0F1117);
+  opacity: 0;
+  animation: pgOut .15s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes pgOut { from { opacity: .6; } to { opacity: 0; } }
 
 </style>
 </head>
@@ -2923,7 +2945,22 @@ function exportPDF(){
   }).join('');
   const openingBalanceBlock=isSun?`<div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:11px;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:.5px;">Opening Balance (brought forward)</div><div style="font-size:10px;color:#6B7280;margin-top:2px;">Total collected before ${dateLabel}</div></div><div style="font-size:22px;font-weight:800;color:#1E40AF;">KSh ${openingBalance.toLocaleString()}</div></div>`:'';
   const tableTitle=isSun?`<div style="font-size:13px;font-weight:700;color:#3D7A4F;margin:4px 0 6px;">Contributing Members — ${paid.length} of ${MEMBERS.length}</div>`:'';
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${dateLabel}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;}.stat-val.green{color:#3D7A4F;}.stat-val.amber{color:#C4621D;}table{width:100%;border-collapse:collapse;margin-top:4px;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">${isSun?'Weekly Sunday Report':'Daily Report'} — ${dateLabel} &nbsp;|&nbsp; Rate: KSh ${RATE}/day &nbsp;|&nbsp; ${MEMBERS.length} Members</div>${openingBalanceBlock}<div class="stats"><div class="stat"><div class="stat-val green">${paid.length}</div><div class="stat-lbl">Paid</div></div><div class="stat"><div class="stat-val amber">${unpaid.length}</div><div class="stat-lbl">Unpaid</div></div><div class="stat"><div class="stat-val">${(paid.length*RATE).toLocaleString()}</div><div class="stat-lbl">KSh Today</div></div><div class="stat"><div class="stat-val">${allKsh.toLocaleString()}</div><div class="stat-lbl">KSh All Days</div></div></div>${tableTitle}<table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Status</th><th style="text-align:right;">Total Paid</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${dateLabel}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;}.stat-val.green{color:#3D7A4F;}.stat-val.amber{color:#C4621D;}table{width:100%;border-collapse:collapse;margin-top:4px;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">${isSun?'Weekly Sunday Report':'Daily Report'} — ${dateLabel} &nbsp;|&nbsp; Rate: KSh ${RATE}/day &nbsp;|&nbsp; ${MEMBERS.length} Members</div>${openingBalanceBlock}<div class="stats"><div class="stat"><div class="stat-val green">${paid.length}</div><div class="stat-lbl">Paid</div></div><div class="stat"><div class="stat-val amber">${unpaid.length}</div><div class="stat-lbl">Unpaid</div></div><div class="stat"><div class="stat-val">${(paid.length*RATE).toLocaleString()}</div><div class="stat-lbl">KSh Today</div></div><div class="stat"><div class="stat-val">${allKsh.toLocaleString()}</div><div class="stat-lbl">KSh All Days</div></div></div>${tableTitle}<table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Status</th><th style="text-align:right;">Total Paid</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script><script>
+// ── Instant page-transition feedback ──
+(function(){
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    // Only same-origin, non-hash, non-external links
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    document.body.classList.add('page-loading');
+  });
+  // Also handle window.location navigations via button clicks
+  const _orig = window.location;
+})();
+</script>
+</body></html>`;
   const win=window.open('','_blank');
   if(win){ win.document.write(html); win.document.close(); } else showToast('⚠️ Allow pop-ups for PDF export');
 }
