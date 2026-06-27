@@ -15,16 +15,46 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:#141414; --bg2:#1C1C1C; --card:#222222; --card2:#2A2A2A;
-  --border:#333333; --text:#F0EDE8; --muted:#888888; --dim:#555555;
-  --amber:#C4621D; --amber2:#E07830; --amber-bg:rgba(196,98,29,0.12);
-  --green:#3D7A4F; --green2:#4E9964; --green-bg:rgba(61,122,79,0.15);
-  --red:#C0392B; --red2:#E05540; --radius:10px; --radius-lg:16px;
+  --bg:       #0F1117;
+  --bg2:      #161A23;
+  --card:     #1C2130;
+  --card2:    #212840;
+  --border:   #2A3350;
+  --text:     #E8ECF4;
+  --muted:    #7A85A0;
+  --dim:      #404860;
+  --amber:    #2563EB;
+  --amber2:   #3B82F6;
+  --amber-bg: rgba(37,99,235,0.12);
+  --green:    #0D7A5F;
+  --green2:   #10B981;
+  --green-bg: rgba(16,185,129,0.10);
+  --red:      #DC2626;
+  --red2:     #EF4444;
+  --red-bg:   rgba(220,38,38,0.12);
+  --radius:   8px;
+  --radius-lg:12px;
 }
 body.light {
-  --bg:#F5F2EE; --bg2:#EDEAE5; --card:#FFFFFF; --card2:#F5F2EE;
-  --border:#E0DBD4; --text:#141414; --muted:#777777; --dim:#AAAAAA;
-  --amber-bg:rgba(196,98,29,0.08); --green-bg:rgba(61,122,79,0.08);
+  --bg:       #F0F2F7;
+  --bg2:      #E6E9F0;
+  --card:     #FFFFFF;
+  --card2:    #F0F2F7;
+  --border:   #D0D5E8;
+  --text:     #0F1117;
+  --muted:    #5A6380;
+  --dim:      #A0AACC;
+  --amber:    #1D4ED8;
+  --amber2:   #2563EB;
+  --amber-bg: rgba(29,78,216,0.08);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.08);
+  --red:      #B91C1C;
+  --red2:     #EF4444;
+  --red-bg:   rgba(185,28,28,0.08);
+  --radius:   8px;
+  --radius-lg:12px;
 }
 html, body { min-height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; -webkit-tap-highlight-color:transparent; transition:background .2s,color .2s; padding-bottom:40px; }
 
@@ -67,7 +97,7 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 .mark-all-row { display:flex; gap:6px; }
 .mark-btn { flex:1; padding:7px 10px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; border:none; cursor:pointer; }
 .mark-btn.all-paid   { background:var(--green-bg); color:var(--green2); border:1px solid rgba(61,122,79,.3); }
-.mark-btn.all-unpaid { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(196,98,29,.3); }
+.mark-btn.all-unpaid { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(37,99,235,.3); }
 
 /* MEMBER LIST */
 .member-list { padding:0 16px 20px; display:flex; flex-direction:column; gap:6px; max-width:600px; margin:0 auto; }

@@ -17,36 +17,47 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #141414;
-  --bg2:      #1C1C1C;
-  --card:     #222222;
-  --card2:    #2A2A2A;
-  --border:   #333333;
-  --text:     #F0EDE8;
-  --muted:    #888888;
-  --dim:      #555555;
-  --amber:    #C4621D;
-  --amber2:   #E07830;
-  --amber-bg: rgba(196,98,29,0.12);
-  --green:    #3D7A4F;
-  --green2:   #4E9964;
-  --green-bg: rgba(61,122,79,0.15);
-  --red:      #C0392B;
-  --radius:   10px;
-  --radius-lg:16px;
+  --bg:       #0F1117;
+  --bg2:      #161A23;
+  --card:     #1C2130;
+  --card2:    #212840;
+  --border:   #2A3350;
+  --text:     #E8ECF4;
+  --muted:    #7A85A0;
+  --dim:      #404860;
+  --amber:    #2563EB;
+  --amber2:   #3B82F6;
+  --amber-bg: rgba(37,99,235,0.12);
+  --green:    #0D7A5F;
+  --green2:   #10B981;
+  --green-bg: rgba(16,185,129,0.10);
+  --red:      #DC2626;
+  --red2:     #EF4444;
+  --red-bg:   rgba(220,38,38,0.12);
+  --radius:   8px;
+  --radius-lg:12px;
 }
 
 body.light {
-  --bg:       #F5F2EE;
-  --bg2:      #EDEAE5;
+  --bg:       #F0F2F7;
+  --bg2:      #E6E9F0;
   --card:     #FFFFFF;
-  --card2:    #F5F2EE;
-  --border:   #E0DBD4;
-  --text:     #141414;
-  --muted:    #777777;
-  --dim:      #AAAAAA;
-  --amber-bg: rgba(196,98,29,0.08);
-  --green-bg: rgba(61,122,79,0.08);
+  --card2:    #F0F2F7;
+  --border:   #D0D5E8;
+  --text:     #0F1117;
+  --muted:    #5A6380;
+  --dim:      #A0AACC;
+  --amber:    #1D4ED8;
+  --amber2:   #2563EB;
+  --amber-bg: rgba(29,78,216,0.08);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.08);
+  --red:      #B91C1C;
+  --red2:     #EF4444;
+  --red-bg:   rgba(185,28,28,0.08);
+  --radius:   8px;
+  --radius-lg:12px;
 }
 
 html, body {
@@ -297,11 +308,73 @@ html, body {
 .summary-row .val { font-weight: 600; color: var(--text); text-align: right; max-width: 60%; }
 
 .info-box {
-  background: var(--amber-bg); border: 1px solid rgba(196,98,29,.2);
+  background: var(--amber-bg); border: 1px solid rgba(37,99,235,.2);
   border-radius: var(--radius); padding: 10px 13px;
   font-size: 12px; color: var(--amber2);
   line-height: 1.5; margin-bottom: 14px;
 }
+
+/* FEE TOGGLE */
+.fee-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+.fee-btn {
+  padding: 14px 10px;
+  background: var(--card2); border: 2px solid var(--border);
+  color: var(--text); border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .15s;
+}
+.fee-btn:active { transform: scale(.98); }
+.fee-btn.selected {
+  border-color: var(--green2);
+  background: var(--green-bg);
+  color: var(--green2);
+}
+.fee-btn#feeNoBtn.selected {
+  border-color: var(--red2);
+  background: var(--red-bg);
+  color: var(--red2);
+}
+
+/* PAY FEE MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.6); z-index: 1000;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 20px;
+  max-width: 340px; width: 100%; text-align: center;
+}
+.modal-box .modal-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--red-bg); border: 2px solid var(--red2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 14px;
+}
+.modal-box h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px;
+}
+.modal-box p {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.5; margin-bottom: 16px;
+}
+.modal-box .pay-details {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+  margin-bottom: 18px; text-align: left;
+}
+.modal-box .pay-row {
+  display: flex; justify-content: space-between;
+  font-size: 13px; padding: 4px 0;
+}
+.modal-box .pay-row span:first-child { color: var(--muted); }
+.modal-box .pay-row strong { color: var(--amber2); font-family: 'Space Grotesk', sans-serif; }
 
 /* SPINNER */
 .spinner {
@@ -342,20 +415,50 @@ html, body {
   <div class="step-dot" id="dot2">2</div>
   <div class="step-line" id="line2"></div>
   <div class="step-dot" id="dot3">3</div>
+  <div class="step-line" id="line3"></div>
+  <div class="step-dot" id="dot4">4</div>
 </div>
 <div class="steps-labels">
-  <span class="active" id="lbl1">Personal</span>
+  <span class="active" id="lbl1">Fee</span>
   <span style="flex:1"></span>
-  <span id="lbl2">Moto</span>
+  <span id="lbl2">Personal</span>
   <span style="flex:1"></span>
-  <span id="lbl3">Review</span>
+  <span id="lbl3">Moto</span>
+  <span style="flex:1"></span>
+  <span id="lbl4">Review</span>
 </div>
 
 <!-- FORM -->
 <div class="form-wrap">
 
-  <!-- STEP 1: Personal Info -->
+  <!-- STEP 1: Mandatory Stage Contribution Fee -->
   <div class="step-page active" id="step1">
+    <div class="section-label">Stage Contribution Fee</div>
+
+    <div class="info-box">
+      💰 Membership requires a one-time mandatory stage contribution of <strong>KSh 10,000</strong>, paid via M-Pesa Paybill <strong>544600</strong>, Account <strong>942540</strong>.
+    </div>
+
+    <div class="field">
+      <label>Have you already paid the KSh 10,000 stage contribution? <span class="req">*</span></label>
+      <div class="fee-toggle">
+        <button type="button" class="fee-btn" id="feeYesBtn" onclick="selectFeePaid(true)">✅ Yes, I've Paid</button>
+        <button type="button" class="fee-btn" id="feeNoBtn" onclick="selectFeePaid(false)">✗ Not Yet</button>
+      </div>
+    </div>
+
+    <div class="field" id="f-mpesacode" style="display:none;">
+      <label>M-Pesa Confirmation Code <span class="req">*</span></label>
+      <input type="text" id="inp-mpesacode" placeholder="e.g. QFT7H8K2LM" autocomplete="off" style="text-transform:uppercase">
+      <div class="hint">Enter the confirmation code from the M-Pesa SMS you received</div>
+      <div class="err-msg">Enter a valid M-Pesa confirmation code</div>
+    </div>
+
+    <button class="btn-primary" id="feeNextBtn" onclick="goStep2()" disabled>Next — Personal Details →</button>
+  </div>
+
+  <!-- STEP 2: Personal Info -->
+  <div class="step-page" id="step2">
     <div class="section-label">Personal Details</div>
 
     <div class="field" id="f-name">
@@ -403,11 +506,11 @@ html, body {
       <div class="err-msg">Enter a valid phone number</div>
     </div>
 
-    <button class="btn-primary" onclick="goStep2()">Next — Motorcycle Details →</button>
+    <button class="btn-primary" onclick="goStep3()">Next — Motorcycle Details →</button>
   </div>
 
-  <!-- STEP 2: Motorcycle Info -->
-  <div class="step-page" id="step2">
+  <!-- STEP 3: Motorcycle Info -->
+  <div class="step-page" id="step3">
     <div class="section-label">Motorcycle Details</div>
 
     <div class="field" id="f-motoreg">
@@ -432,12 +535,12 @@ html, body {
       🏍️ Your motorcycle details help us verify your membership at the stage. Make sure the registration plate matches your logbook.
     </div>
 
-    <button class="btn-primary" onclick="goStep3()">Next — Review & Submit →</button>
-    <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+    <button class="btn-primary" onclick="goStep4()">Next — Review & Submit →</button>
+    <button class="btn-secondary" onclick="goStep(2)">← Back</button>
   </div>
 
-  <!-- STEP 3: Review & Submit -->
-  <div class="step-page" id="step3">
+  <!-- STEP 4: Review & Submit -->
+  <div class="step-page" id="step4">
     <div class="section-label">Review Your Details</div>
 
     <div class="summary-card" id="summaryCard">
@@ -451,9 +554,24 @@ html, body {
     <button class="btn-primary" id="submitBtn" onclick="submitRegistration()">
       Submit Application
     </button>
-    <button class="btn-secondary" onclick="goStep(2)">← Back & Edit</button>
+    <button class="btn-secondary" onclick="goStep(3)">← Back & Edit</button>
   </div>
 
+</div>
+
+<!-- MANDATORY FEE MODAL -->
+<div class="modal-overlay" id="payFeeModal">
+  <div class="modal-box">
+    <div class="modal-icon">🚫</div>
+    <h3>Stage Contribution Required</h3>
+    <p>You must pay the mandatory KSh 10,000 stage contribution before you can register. Please pay using the details below, then come back and enter your M-Pesa code.</p>
+    <div class="pay-details">
+      <div class="pay-row"><span>M-Pesa Paybill</span><strong>544600</strong></div>
+      <div class="pay-row"><span>Account Number</span><strong>942540</strong></div>
+      <div class="pay-row"><span>Amount</span><strong>KSh 10,000</strong></div>
+    </div>
+    <button class="btn-primary" style="margin-top:0;" onclick="closePayFeeModal()">OK, I Understand</button>
+  </div>
 </div>
 
 <!-- SUCCESS SCREEN -->
@@ -506,13 +624,13 @@ function goStep(n) {
 }
 
 function updateStepUI() {
-  [1, 2, 3].forEach(i => {
+  [1, 2, 3, 4].forEach(i => {
     const dot = document.getElementById('dot' + i);
     const lbl = document.getElementById('lbl' + i);
     dot.className = 'step-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
     lbl.className = i < currentStep ? 'done' : i === currentStep ? 'active' : '';
   });
-  [1, 2].forEach(i => {
+  [1, 2, 3].forEach(i => {
     const line = document.getElementById('line' + i);
     line.className = 'step-line' + (i < currentStep ? ' done' : '');
   });
@@ -524,12 +642,64 @@ function validatePhone(p) {
   return /^(07|01|\+2547|\+2541|2547|2541)\d{8}$/.test(clean);
 }
 
+function validateMpesaCode(c) {
+  const clean = c.replace(/\s/g, '').toUpperCase();
+  return /^[A-Z0-9]{10}$/.test(clean);
+}
+
 function setError(fieldId, hasError) {
   document.getElementById(fieldId).classList.toggle('error', hasError);
   return hasError;
 }
 
+// ── STEP 1: MANDATORY STAGE CONTRIBUTION FEE ──
+let feePaid = null;
+
+function selectFeePaid(paid) {
+  feePaid = paid;
+  document.getElementById('feeYesBtn').classList.toggle('selected', paid === true);
+  document.getElementById('feeNoBtn').classList.toggle('selected', paid === false);
+  const codeField = document.getElementById('f-mpesacode');
+  const nextBtn   = document.getElementById('feeNextBtn');
+
+  if (paid) {
+    codeField.style.display = '';
+    nextBtn.disabled = false;
+  } else {
+    codeField.style.display = 'none';
+    setError('f-mpesacode', false);
+    document.getElementById('inp-mpesacode').value = '';
+    nextBtn.disabled = false;
+  }
+}
+
 function goStep2() {
+  if (feePaid === null) {
+    showToast('⚠️ Please tell us if you have paid the stage contribution');
+    return;
+  }
+
+  if (feePaid === false) {
+    document.getElementById('payFeeModal').classList.add('show');
+    return;
+  }
+
+  // feePaid === true → validate M-Pesa code
+  const code = document.getElementById('inp-mpesacode').value.trim();
+  if (!validateMpesaCode(code)) {
+    setError('f-mpesacode', true);
+    showToast('⚠️ Enter a valid M-Pesa confirmation code');
+    return;
+  }
+  setError('f-mpesacode', false);
+  goStep(2);
+}
+
+function closePayFeeModal() {
+  document.getElementById('payFeeModal').classList.remove('show');
+}
+
+function goStep3() {
   const name    = document.getElementById('inp-name').value.trim();
   const phone   = document.getElementById('inp-phone').value.trim();
   const natid   = document.getElementById('inp-natid').value.trim();
@@ -544,10 +714,10 @@ function goStep2() {
   if (!validatePhone(nokphone)) err = setError('f-nokphone', true) || err; else setError('f-nokphone', false);
 
   if (err) { showToast('⚠️ Please fill in all required fields'); return; }
-  goStep(2);
+  goStep(3);
 }
 
-function goStep3() {
+function goStep4() {
   const motoreg   = document.getElementById('inp-motoreg').value.trim().toUpperCase();
   const motomodel = document.getElementById('inp-motomodel').value.trim();
 
@@ -559,6 +729,8 @@ function goStep3() {
 
   // Build summary
   const rows = [
+    { lbl: 'Stage Contribution', val: 'KSh 10,000 — Paid ✅' },
+    { lbl: 'M-Pesa Code',   val: document.getElementById('inp-mpesacode').value.trim().toUpperCase() },
     { lbl: 'Full Name',     val: document.getElementById('inp-name').value.trim().toUpperCase() },
     { lbl: 'Phone',         val: document.getElementById('inp-phone').value.trim() },
     { lbl: 'National ID',   val: document.getElementById('inp-natid').value.trim() },
@@ -574,7 +746,7 @@ function goStep3() {
     `<div class="summary-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`
   ).join('');
 
-  goStep(3);
+  goStep(4);
 }
 
 // ── SUBMIT ──
@@ -584,6 +756,8 @@ async function submitRegistration() {
   btn.innerHTML = '<span class="spinner"></span>Submitting…';
 
   const payload = {
+    stageFeePaid: true,
+    mpesaCode:  document.getElementById('inp-mpesacode').value.trim().toUpperCase(),
     name:       document.getElementById('inp-name').value.trim(),
     phone:      document.getElementById('inp-phone').value.trim(),
     natId:      document.getElementById('inp-natid').value.trim(),
@@ -632,6 +806,12 @@ function resetForm() {
   document.querySelector('.steps-labels').style.display = '';
   document.querySelector('.hero').style.display = '';
   currentStep = 1;
+  feePaid = null;
+  document.getElementById('feeYesBtn').classList.remove('selected');
+  document.getElementById('feeNoBtn').classList.remove('selected');
+  document.getElementById('f-mpesacode').style.display = 'none';
+  document.getElementById('feeNextBtn').disabled = true;
+  closePayFeeModal();
   document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
   document.getElementById('step1').classList.add('active');
   updateStepUI();
@@ -639,7 +819,7 @@ function resetForm() {
 }
 
 // Auto-uppercase name fields
-['inp-name','inp-nokname','inp-motoreg'].forEach(id => {
+['inp-name','inp-nokname','inp-motoreg','inp-mpesacode'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', () => { el.value = el.value.toUpperCase(); });
 });
