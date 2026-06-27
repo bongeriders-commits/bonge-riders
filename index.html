@@ -949,6 +949,16 @@ body.memberview .vb-unlocked { display: block; }
 .welfare-filter-tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 .welfare-empty-state { text-align: center; padding: 24px 14px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); }
 
+/* ── PAYMENT CONFIRMATION REQUESTS (reuses welfare-* classes for cards/buttons) ── */
+.paycode-box {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; margin: 6px 0;
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--amber2); letter-spacing: .5px;
+}
+.paycode-box span { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; display: block; margin-bottom: 2px; font-family: 'Inter', sans-serif; }
+.welfare-status-badge.invalid { background: rgba(220,38,38,.1); color: #EF4444; }
+
 </style>
 </head>
 <body>
@@ -1041,6 +1051,7 @@ body.memberview .vb-unlocked { display: block; }
         <div class="adm-divider"></div>
         <button class="adm-item" id="spendingBtn" onclick="window.location.href='spending.html';closeAdmMenu()">💸 SPENDING</button>
         <button class="adm-item" id="welfareBtn" onclick="openWelfareAdminPanel();closeAdmMenu()">🏥 WELFARE APPLICATIONS</button>
+        <button class="adm-item" id="payConfirmBtn" onclick="openPayConfirmPanel();closeAdmMenu()">📨 PAYMENT CONFIRMATIONS <span class="welfare-badge-count" id="payConfirmMenuBadge" style="display:none;margin-left:4px;"></span></button>
         <button class="adm-item" id="waBlastBtn" onclick="openWABlast();closeAdmMenu()">📲 WA BLAST</button>
         <div class="adm-divider"></div>
         <div class="adm-group-label">Settings</div>
@@ -1231,6 +1242,22 @@ body.memberview .vb-unlocked { display: block; }
       </div>
     </div>
     <div id="welfareSummaryPreview" style="padding:10px 14px;">
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAYMENT CONFIRMATION REQUESTS PANEL ═══ -->
+<div class="welfare-admin-section admin-only" id="payConfirmSection">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
+      <div class="welfare-admin-title">📨 Payment Confirmation Requests</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="welfare-badge-count none" id="payConfirmPendingBadge">0 pending</span>
+        <button onclick="openPayConfirmPanel()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">View All</button>
+      </div>
+    </div>
+    <div id="payConfirmSummaryPreview" style="padding:10px 14px;">
       <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">Loading…</div>
     </div>
   </div>
@@ -1639,6 +1666,24 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 </div>
 
+<!-- ═══ PAYMENT CONFIRMATION REQUESTS PANEL ═══ -->
+<div class="modal-backdrop" id="payConfirmModal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📨 Payment Confirmation Requests</div>
+    <div class="welfare-filter-tabs">
+      <div class="welfare-filter-tab active" data-pfilter="pending" onclick="setPayConfirmFilter('pending',this)">Pending</div>
+      <div class="welfare-filter-tab" data-pfilter="all" onclick="setPayConfirmFilter('all',this)">All</div>
+      <div class="welfare-filter-tab" data-pfilter="approved" onclick="setPayConfirmFilter('approved',this)">Approved</div>
+      <div class="welfare-filter-tab" data-pfilter="invalid" onclick="setPayConfirmFilter('invalid',this)">Invalid</div>
+    </div>
+    <div id="payConfirmAdminList" style="max-height:60vh;overflow-y:auto;"></div>
+    <div class="modal-btns" style="margin-top:10px;">
+      <button class="mbtn cancel" onclick="closePayConfirmPanel()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ MARK ALL CONFIRM ═══ -->
 <div class="modal-backdrop" id="markAllModal">
   <div class="modal" style="max-width:380px">
@@ -1801,6 +1846,7 @@ onAuthStateChanged(auth, (user) => {
     loadSpending();
     loadAdminRoles().then(() => applyRoleRestrictions());
     loadAllWelfareApps();
+    loadPayConfirmRequests();
   } else if (user && user.isAnonymous && isMemberMode) {
     // Anonymous session that already passed PIN verification this
     // session — keep dashboard listener alive across reloads of auth
@@ -1819,6 +1865,9 @@ onAuthStateChanged(auth, (user) => {
     if (_spendingUnsub) { _spendingUnsub(); _spendingUnsub = null; }
     _welfareUnsubs.forEach(u => u()); _welfareUnsubs = []; _allWelfareApps = [];
     renderWelfareSummaryPreview();
+    if (_payConfirmUnsub) { _payConfirmUnsub(); _payConfirmUnsub = null; }
+    _allPayConfirmRequests = [];
+    renderPayConfirmSummaryPreview();
     MEMBERS = [];
     payments = {};
     otherIncome = [];
@@ -1987,6 +2036,7 @@ function loadMembers() {
     renderAll();
     if(isAdmin) {
       loadAllWelfareApps();
+      loadPayConfirmRequests();
       syncMemberNamesToMemberPins();
     }
   }, ()=>setSyncStatus(false,'⚠️ Offline'));
@@ -3258,7 +3308,7 @@ document.querySelectorAll('.filter-tab').forEach(tab=>{
     tab.classList.add('active'); renderMemberList();
   });
 });
-['membersModal','editModal','detailsModal','saccoSettingsModal','deleteModal','waModal','pwModal','thanksModal','reportModal','markAllModal','adminLoginModal','memberLoginModal','incomeModal','manageAdminsModal','welfareAdminModal'].forEach(id=>{
+['membersModal','editModal','detailsModal','saccoSettingsModal','deleteModal','waModal','pwModal','thanksModal','reportModal','markAllModal','adminLoginModal','memberLoginModal','incomeModal','manageAdminsModal','welfareAdminModal','payConfirmModal'].forEach(id=>{
   document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
 });
 
@@ -3480,6 +3530,10 @@ function applyRoleRestrictions() {
   // ── WELFARE ──
   const welfareBtn = document.getElementById('welfareBtn');
   if (welfareBtn) welfareBtn.style.display = (isSuperAdmin || hasRole('reviewWelfare')) ? '' : 'none';
+
+  // ── PAYMENT CONFIRMATIONS (same access as marking payments) ──
+  const payConfirmBtn = document.getElementById('payConfirmBtn');
+  if (payConfirmBtn) payConfirmBtn.style.display = (isSuperAdmin || hasRole('markPayments')) ? '' : 'none';
 
   // ── WA BLAST ──
   const waBlastBtn = document.getElementById('waBlastBtn');
@@ -3759,6 +3813,164 @@ function closeWelfareAdminPanel() {
   document.getElementById('welfareAdminModal').classList.remove('open');
 }
 
+// ════════════════════════════════════════════════
+// PAYMENT CONFIRMATION REQUESTS (member-submitted M-Pesa codes)
+// Shared doc: tracker/payment_confirmations → { requests: [{ id, memberPhone, memberName, dateKey, mpesaCode, status, timestamp, reviewedAt }] }
+// ════════════════════════════════════════════════
+let _allPayConfirmRequests = [];
+let _payConfirmFilter      = 'pending';
+let _payConfirmUnsub       = null;
+
+function loadPayConfirmRequests() {
+  if (_payConfirmUnsub) { _payConfirmUnsub(); _payConfirmUnsub = null; }
+  _payConfirmUnsub = onSnapshot(doc(db, 'tracker', 'payment_confirmations'), (snap) => {
+    _allPayConfirmRequests = snap.exists() ? (snap.data().requests || []) : [];
+    _allPayConfirmRequests.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+    renderPayConfirmSummaryPreview();
+    renderPayConfirmAdminList();
+  }, () => {});
+}
+
+function payConfirmPendingCount() {
+  return _allPayConfirmRequests.filter(r => (r.status||'pending') === 'pending').length;
+}
+
+function renderPayConfirmSummaryPreview() {
+  const badge    = document.getElementById('payConfirmPendingBadge');
+  const menuBadge= document.getElementById('payConfirmMenuBadge');
+  const preview  = document.getElementById('payConfirmSummaryPreview');
+  if (!badge || !preview) return;
+
+  const pending = _allPayConfirmRequests.filter(r => (r.status||'pending') === 'pending');
+  const total   = _allPayConfirmRequests.length;
+
+  badge.textContent = pending.length + ' pending';
+  badge.className   = 'welfare-badge-count' + (pending.length > 0 ? '' : ' none');
+
+  if (menuBadge) {
+    if (pending.length > 0) { menuBadge.textContent = pending.length; menuBadge.style.display = ''; }
+    else menuBadge.style.display = 'none';
+  }
+
+  if (total === 0) {
+    preview.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">No payment confirmation requests yet.</div>';
+    return;
+  }
+
+  const toShow = pending.slice(0, 2);
+  if (toShow.length === 0) {
+    preview.innerHTML = `<div style="text-align:center;color:var(--green2);font-size:13px;padding:8px 0;font-weight:600;">✓ All ${total} request(s) reviewed</div>`;
+    return;
+  }
+
+  preview.innerHTML = toShow.map(r => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);gap:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;">${escHtml(r.memberName || r.memberPhone)}</div>
+        <div style="font-size:11px;color:var(--muted);">${fmtDateShort(new Date(r.dateKey+'T00:00:00'))} · KSh ${RATE}</div>
+      </div>
+      <span class="welfare-status-badge pending">Pending</span>
+    </div>
+  `).join('') + (pending.length > 2 ? `<div style="font-size:11px;color:var(--amber2);font-weight:700;padding:6px 0;">+${pending.length - 2} more pending…</div>` : '');
+}
+
+function renderPayConfirmAdminList() {
+  const list = document.getElementById('payConfirmAdminList');
+  if (!list) return;
+
+  let reqs = _allPayConfirmRequests;
+  if (_payConfirmFilter !== 'all') {
+    reqs = reqs.filter(r => (r.status || 'pending') === _payConfirmFilter);
+  }
+
+  if (reqs.length === 0) {
+    list.innerHTML = '<div class="welfare-empty-state">No requests' + (_payConfirmFilter !== 'all' ? ' with status "' + _payConfirmFilter + '"' : '') + '.</div>';
+    return;
+  }
+
+  list.innerHTML = reqs.map(r => {
+    const status   = r.status || 'pending';
+    const dateStr  = fmtDateShort(new Date(r.dateKey + 'T00:00:00'));
+    const subStr   = r.timestamp ? new Date(r.timestamp).toLocaleString('en-KE', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}) : '—';
+    return `
+      <div class="welfare-app-card ${status === 'approved' ? 'approved' : status === 'invalid' ? 'declined' : 'pending'}">
+        <div class="welfare-app-top">
+          <div>
+            <div class="welfare-app-member">${escHtml(r.memberName || r.memberPhone)}</div>
+            <div class="welfare-app-phone">${escHtml(r.memberPhone)}</div>
+          </div>
+          <span class="welfare-status-badge ${status === 'approved' ? 'approved' : status === 'invalid' ? 'invalid' : 'pending'}">${status === 'invalid' ? 'Invalid' : capitalise(status)}</span>
+        </div>
+        <div class="welfare-app-reason">💳 Daily Contribution — ${dateStr}</div>
+        <div class="paycode-box"><span>M-Pesa Confirmation Code</span>${escHtml(r.mpesaCode || '—')}</div>
+        <div class="welfare-app-date">Submitted: ${subStr}</div>
+        <div class="welfare-action-btns">
+          ${status !== 'approved' ? `<button class="w-approve-btn" onclick="approvePayConfirm('${r.id}')">✓ Approve</button>` : ''}
+          ${status !== 'invalid'  ? `<button class="w-decline-btn" onclick="invalidatePayConfirm('${r.id}')">✕ Invalid Code</button>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function approvePayConfirm(reqId) {
+  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to mark payments'); return; }
+  const req = _allPayConfirmRequests.find(r => r.id === reqId);
+  if (!req) { showToast('⚠️ Request not found'); return; }
+
+  try {
+    // Mark the day paid for this member directly (verified via M-Pesa code)
+    if (!payments[req.dateKey]) payments[req.dateKey] = {};
+    payments[req.dateKey][req.memberPhone] = true;
+    await savePayments();
+
+    // Update request status
+    const docRef = doc(db, 'tracker', 'payment_confirmations');
+    const idx = _allPayConfirmRequests.findIndex(r => r.id === reqId);
+    if (idx >= 0) {
+      _allPayConfirmRequests[idx] = { ..._allPayConfirmRequests[idx], status: 'approved', reviewedAt: Date.now() };
+    }
+    await setDoc(docRef, { requests: _allPayConfirmRequests });
+    showToast('✓ Payment approved for ' + (req.memberName || req.memberPhone));
+    renderAll();
+  } catch(e) {
+    showToast('⚠️ Could not approve. Check connection.');
+  }
+}
+
+async function invalidatePayConfirm(reqId) {
+  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to mark payments'); return; }
+  const req = _allPayConfirmRequests.find(r => r.id === reqId);
+  if (!req) { showToast('⚠️ Request not found'); return; }
+
+  try {
+    const docRef = doc(db, 'tracker', 'payment_confirmations');
+    const idx = _allPayConfirmRequests.findIndex(r => r.id === reqId);
+    if (idx >= 0) {
+      _allPayConfirmRequests[idx] = { ..._allPayConfirmRequests[idx], status: 'invalid', reviewedAt: Date.now() };
+    }
+    await setDoc(docRef, { requests: _allPayConfirmRequests });
+    showToast('✕ Marked invalid — member will be notified');
+  } catch(e) {
+    showToast('⚠️ Could not update. Check connection.');
+  }
+}
+
+function setPayConfirmFilter(filter, el) {
+  _payConfirmFilter = filter;
+  document.querySelectorAll('#payConfirmModal .welfare-filter-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderPayConfirmAdminList();
+}
+
+function openPayConfirmPanel() {
+  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to review payment confirmations'); return; }
+  renderPayConfirmAdminList();
+  document.getElementById('payConfirmModal').classList.add('open');
+}
+function closePayConfirmPanel() {
+  document.getElementById('payConfirmModal').classList.remove('open');
+}
+
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -3788,6 +4000,7 @@ Object.assign(window,{
   exportSpendingPDF,
   toggleSection,
   openWelfareAdminPanel, closeWelfareAdminPanel, updateWelfareStatus, notifyMemberWelfareWA, setWelfareFilter,
+  openPayConfirmPanel, closePayConfirmPanel, setPayConfirmFilter, approvePayConfirm, invalidatePayConfirm,
 });
 </script>
 <div class="copyright-bar">© Bogonko-Ngelani Stage</div>

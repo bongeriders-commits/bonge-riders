@@ -242,7 +242,15 @@ html, body {
 }
 .history-badge.paid   { background: var(--green-bg); color: var(--green2); }
 .history-badge.unpaid { background: var(--amber-bg); color: var(--amber2); }
+.history-badge.review { background: rgba(37,99,235,.12); color: #3B82F6; }
+.history-badge.invalid { background: rgba(220,38,38,.12); color: #EF4444; }
 .history-ksh { font-size: 12px; font-weight: 700; color: var(--green2); flex-shrink: 0; }
+.history-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.confirm-pay-link {
+  font-size: 10px; font-weight: 700; color: var(--amber2);
+  background: none; border: none; padding: 0; cursor: pointer;
+  text-decoration: underline; font-family: 'Inter', sans-serif;
+}
 
 .history-empty {
   padding: 28px 14px; text-align: center;
@@ -754,6 +762,25 @@ body.light .ws-name { color: #141414; }
   </div>
 </div>
 
+<!-- ═══ CONFIRM PAYMENT MODAL ═══ -->
+<div class="modal-backdrop" id="confirmPayModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      💳 Confirm Daily Contribution
+      <button class="modal-close" onclick="closeConfirmPayModal()">✕</button>
+    </div>
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5;">
+      Paid your KSh <strong id="cpRateLabel" style="color:var(--text);">50</strong> contribution for <strong id="cpDateLabel" style="color:var(--text);">—</strong>? Paste your M-Pesa confirmation code below and a payment officer will verify and approve it.
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">M-Pesa Confirmation Code</div>
+      <input class="field-input" type="text" id="cpCode" placeholder="e.g. QFT7H8K2LM" autocomplete="off" style="text-transform:uppercase;">
+    </div>
+    <p id="cpErr" class="err-msg">Please enter a valid M-Pesa confirmation code.</p>
+    <button class="btn-primary" id="cpSubmitBtn" onclick="submitPaymentConfirmation()">Submit for Verification</button>
+  </div>
+</div>
+
 <!-- ═══ CHANGE PIN MODAL ═══ -->
 <div class="modal-backdrop" id="changePinModal" style="align-items:center;">
   <div class="modal-card" style="max-width:340px;width:92%;">
@@ -844,10 +871,13 @@ let currentMember = null; // { name, phone }
 let payments      = {};
 let allDates      = [];
 let welfareApps   = [];
+let paymentRequests = []; // this member's payment confirmation requests
 let historyExpanded = false;
 let _paymentsUnsub = null;
 let _welfareUnsub  = null;
 let _memberDetailsUnsub = null;
+let _payReqUnsub = null;
+let pendingConfirmDate = null; // date key currently being confirmed in the modal
 
 // ── THEME ──
 function toggleTheme() {
@@ -1066,6 +1096,7 @@ async function loadProfile() {
   startPaymentsListener();
   startWelfareListener();
   startMemberDetailsListener();
+  startPaymentRequestsListener();
 }
 
 function startMemberDetailsListener() {
@@ -1083,6 +1114,25 @@ function startMemberDetailsListener() {
       renderIdCard();
     }
   });
+}
+
+// ── PAYMENT CONFIRMATION REQUESTS ──
+// Shared doc: tracker/payment_confirmations → { requests: [{ id, memberPhone, memberName, dateKey, mpesaCode, status, timestamp, reviewedAt }] }
+function startPaymentRequestsListener() {
+  if (_payReqUnsub) { _payReqUnsub(); _payReqUnsub = null; }
+  const phone = currentMember.phone;
+  _payReqUnsub = onSnapshot(doc(db, 'tracker', 'payment_confirmations'), (snap) => {
+    const all = snap.exists() ? (snap.data().requests || []) : [];
+    paymentRequests = all.filter(r => r.memberPhone === phone);
+    renderHistory();
+  }, () => {});
+}
+
+// Find this member's most relevant (latest) request for a given date
+function getPaymentRequestForDate(dk) {
+  const matches = paymentRequests.filter(r => r.dateKey === dk);
+  if (!matches.length) return null;
+  return matches.sort((a,b) => (b.timestamp||0) - (a.timestamp||0))[0];
 }
 
 function renderProfileMeta() {
@@ -1161,10 +1211,11 @@ function renderHistory() {
   const phone    = currentMember.phone;
   const todayDk  = todayKey();
 
-  // All dates in reverse (newest first), each with paid status
+  // All dates in reverse (newest first), each with paid status + any confirmation request
   const rows = [...allDates].reverse().map(dk => ({
     dk,
-    paid: isPaid(phone, dk)
+    paid: isPaid(phone, dk),
+    request: getPaymentRequestForDate(dk)
   }));
 
   document.getElementById('historyCount').textContent = allDates.length + ' days';
@@ -1186,16 +1237,32 @@ function renderHistory() {
     ? `<button class="history-show-more" id="showMoreBtn">Show less ▴</button>`
     : '';
 
-  list.innerHTML = visible.map(({dk, paid}) => `
+  list.innerHTML = visible.map(({dk, paid, request}) => {
+    let badge, rightExtra = '';
+    if (paid) {
+      badge = `<span class="history-badge paid">✓ Paid</span>`;
+    } else if (request && request.status === 'pending') {
+      badge = `<span class="history-badge review">⏳ Under Review</span>`;
+    } else if (request && request.status === 'invalid') {
+      badge = `<span class="history-badge invalid">✕ Code Invalid</span>`;
+      rightExtra = `<button class="confirm-pay-link" onclick="openConfirmPayModal('${dk}')">Try again</button>`;
+    } else {
+      badge = `<span class="history-badge unpaid">Unpaid</span>`;
+      rightExtra = `<button class="confirm-pay-link" onclick="openConfirmPayModal('${dk}')">Confirm Payment</button>`;
+    }
+    return `
     <div class="history-item">
       <div>
         <div class="history-date">${fmtDate(dk)}</div>
         <div class="history-day">${fmtDay(dk)}${dk === todayDk ? ' · Today' : ''}</div>
       </div>
-      <span class="history-badge ${paid ? 'paid' : 'unpaid'}">${paid ? '✓ Paid' : 'Unpaid'}</span>
+      <div class="history-right">
+        ${badge}
+        ${rightExtra}
+      </div>
       <div class="history-ksh">${paid ? 'KSh ' + RATE : '—'}</div>
-    </div>
-  `).join('') + showMoreBtn;
+    </div>`;
+  }).join('') + showMoreBtn;
 
   const btn = document.getElementById('showMoreBtn');
   if (btn) btn.onclick = () => { historyExpanded = !historyExpanded; renderHistory(); };
@@ -1274,6 +1341,69 @@ async function submitWelfare() {
     errEl.classList.add('show');
   } finally {
     btn.textContent = 'Submit Application'; btn.disabled = false;
+  }
+}
+
+// ── CONFIRM PAYMENT MODAL ──
+function validateMpesaCode(c) {
+  const clean = c.replace(/\s/g, '').toUpperCase();
+  return /^[A-Z0-9]{10}$/.test(clean);
+}
+
+function openConfirmPayModal(dk) {
+  pendingConfirmDate = dk;
+  document.getElementById('cpDateLabel').textContent = fmtDate(dk) + (dk === todayKey() ? ' (Today)' : '');
+  document.getElementById('cpRateLabel').textContent  = RATE;
+  document.getElementById('cpCode').value = '';
+  document.getElementById('cpErr').classList.remove('show');
+  document.getElementById('confirmPayModal').classList.add('open');
+  setTimeout(() => document.getElementById('cpCode').focus(), 250);
+}
+function closeConfirmPayModal() {
+  document.getElementById('confirmPayModal').classList.remove('open');
+  pendingConfirmDate = null;
+}
+
+async function submitPaymentConfirmation() {
+  const dk     = pendingConfirmDate;
+  const code   = document.getElementById('cpCode').value.trim().toUpperCase();
+  const errEl  = document.getElementById('cpErr');
+  const btn    = document.getElementById('cpSubmitBtn');
+
+  if (!dk) { closeConfirmPayModal(); return; }
+  if (!validateMpesaCode(code)) {
+    errEl.textContent = 'Enter a valid M-Pesa confirmation code.';
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  try {
+    const docRef = doc(db, 'tracker', 'payment_confirmations');
+    const existing = await getDoc(docRef);
+    const requests = existing.exists() ? (existing.data().requests || []) : [];
+
+    // Replace any prior request for this member+date (e.g. resubmitting after invalid code)
+    const filtered = requests.filter(r => !(r.memberPhone === currentMember.phone && r.dateKey === dk));
+    filtered.push({
+      id: 'PCR-' + Date.now().toString(36).toUpperCase(),
+      memberPhone: currentMember.phone,
+      memberName:  currentMember.name,
+      dateKey: dk,
+      mpesaCode: code,
+      status: 'pending',
+      timestamp: Date.now()
+    });
+
+    await setDoc(docRef, { requests: filtered });
+    closeConfirmPayModal();
+    showToast('✓ Sent for verification');
+  } catch(e) {
+    errEl.textContent = '⚠️ Failed to submit. Try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Submit for Verification'; btn.disabled = false;
   }
 }
 
@@ -1521,6 +1651,9 @@ window.toggleTheme           = toggleTheme;
 window.openWelfareModal      = openWelfareModal;
 window.closeWelfareModal     = closeWelfareModal;
 window.submitWelfare         = submitWelfare;
+window.openConfirmPayModal      = openConfirmPayModal;
+window.closeConfirmPayModal     = closeConfirmPayModal;
+window.submitPaymentConfirmation = submitPaymentConfirmation;
 window.toggleDetails         = toggleDetails;
 window.downloadIdCard        = downloadIdCard;
 window.openChangePinModal    = openChangePinModal;
