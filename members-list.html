@@ -168,6 +168,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
   text-transform: uppercase;
   transition: color .15s, background .15s;
   -webkit-tap-highlight-color: transparent;
+  border-radius: 0;
   padding: 6px 4px 4px;
 }
 .bottom-nav a:active { background: var(--card2); }
@@ -629,6 +630,7 @@ if (localStorage.getItem(THEME_KEY) === 'light') {
   document.getElementById('themeToggle').textContent = '🌞';
 }
 </script>
+
 <nav class="bottom-nav" id="bottomNav">
   <a href="index.html" data-page="home">
     <span class="nav-icon">🏠</span>
@@ -663,9 +665,12 @@ if (localStorage.getItem(THEME_KEY) === 'light') {
       (page === 'payment' && path === 'payment.html') ||
       (page === 'spending' && path === 'spending.html') ||
       (page === 'faq' && path === 'faq.html')
-    ) { a.classList.add('active'); }
+    ) {
+      a.classList.add('active');
+    }
   });
 })();
 </script>
+
 </body>
 </html>
