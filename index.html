@@ -1225,6 +1225,10 @@ body.memberview .vb-unlocked { display: block; }
 .bottom-nav a.active { color: var(--amber2); }
 .bottom-nav a .nav-icon { font-size: 20px; line-height: 1; }
 .bottom-nav a .nav-label { line-height: 1; }
+/* Hide admin-only nav tabs in public/viewer mode */
+body.viewer .bottom-nav a[data-page="payment"],
+body.viewer .bottom-nav a[data-page="spending"] { display: none; }
+body.viewer .bottom-nav a[data-page="member"] { display: none; }
 
 </style>
 </head>
