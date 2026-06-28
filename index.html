@@ -507,7 +507,7 @@ img {
   transform: scale(1.06);
   position: absolute;
 }
-.pub-slide-icon { font-size: 26px; margin-bottom: 6px; }
+
 .pub-slide-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px; font-weight: 700;
@@ -550,17 +550,7 @@ img {
   min-height: 40px;
 }
 .slide-row { display: flex; align-items: flex-start; }
-/* Edit notice btn (super admin only) */
-.pub-edit-btn {
-  position: absolute; top: 10px; right: 10px;
-  font-size: 11px; font-weight: 700;
-  background: rgba(37,99,235,0.18); color: var(--amber2);
-  border: 1px solid rgba(37,99,235,0.3);
-  border-radius: 5px; padding: 3px 8px;
-  cursor: pointer; display: none;
-  z-index: 10;
-}
-.pub-slideshow:hover .pub-edit-btn { display: block; }
+/* Edit notice btn removed - now in admin menu */
 body.viewer .admin-only  { display: none !important; }
 body.viewer #memberList  { display: none !important; }
 body.viewer .search-wrap { display: none !important; }
@@ -1174,6 +1164,7 @@ body.memberview .vb-unlocked { display: block; }
         <div class="adm-group-label">Settings</div>
         <button class="adm-item" id="manageAdminsBtn" onclick="openManageAdmins();closeAdmMenu()">🛡️ MANAGE ADMINS</button>
         <button class="adm-item" id="saccoSettingsBtn" onclick="openSaccoSettings();closeAdmMenu()">⚙️ ID CARD SETTINGS</button>
+        <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">🌐 PUBLIC VIEW EDITOR</button>
         <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">💳 PAYMENT</button>
         <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">👑 CHAIRPERSON VIEW</button>
         <div class="adm-divider"></div>
@@ -1211,19 +1202,15 @@ body.memberview .vb-unlocked { display: block; }
 
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
-      <!-- Super admin edit button -->
-      <button class="pub-edit-btn" id="pubEditBtn" onclick="openPubInfoEditor()" title="Edit public info">✏️ Edit</button>
 
       <!-- Slide 1: About the Group -->
       <div class="pub-slide active" id="pubSlide0">
-        <div class="pub-slide-icon">🏍️</div>
         <div class="pub-slide-title">About This Group</div>
         <div class="pub-slide-body" id="pubAboutText">Bogonko-Ngelani Stage — Official Boda Boda Welfare Group, Katani, Pridelands. Est. &amp; registered with county authorities.</div>
       </div>
 
       <!-- Slide 2: How to Pay -->
       <div class="pub-slide" id="pubSlide1">
-        <div class="pub-slide-icon">💳</div>
         <div class="pub-slide-title">How to Pay via M-Pesa</div>
         <div class="pub-slide-body">
           1. M-Pesa → Lipa na M-Pesa → Pay Bill<br>
@@ -1235,7 +1222,6 @@ body.memberview .vb-unlocked { display: block; }
 
       <!-- Slide 3: Quick Stats -->
       <div class="pub-slide" id="pubSlide2">
-        <div class="pub-slide-icon">📊</div>
         <div class="pub-slide-title">Group Stats</div>
         <div class="pub-slide-body">
           Members: <b id="pubMemberCount">—</b><br>
@@ -1246,21 +1232,18 @@ body.memberview .vb-unlocked { display: block; }
 
       <!-- Slide 4: Contribution Reminder -->
       <div class="pub-slide" id="pubSlide3">
-        <div class="pub-slide-icon">📅</div>
         <div class="pub-slide-title">Contribution Reminder</div>
         <div class="pub-slide-body" id="pubReminderText">Loading…</div>
       </div>
 
       <!-- Slide 5: Welfare Benefit -->
       <div class="pub-slide" id="pubSlide4">
-        <div class="pub-slide-icon">🆘</div>
         <div class="pub-slide-title">Welfare Benefit</div>
         <div class="pub-slide-body" id="pubWelfareText">Active members are entitled to welfare support in times of need. Stay up to date with contributions to remain eligible.</div>
       </div>
 
       <!-- Slide 6: Notice Board -->
       <div class="pub-slide" id="pubSlide5">
-        <div class="pub-slide-icon">📣</div>
         <div class="pub-slide-title">Notice Board</div>
         <div class="slide-row">
           <div class="slide-notice-bar"></div>
@@ -4519,8 +4502,8 @@ async function savePubInfo() {
 })();
 
 function refreshPubEditBtn() {
-  const btn = document.getElementById('pubEditBtn');
-  if (btn) btn.style.display = isSuperAdminUser() ? 'block' : 'none';
+  const btn = document.getElementById('pubInfoMenuBtn');
+  if (btn) btn.style.display = isSuperAdminUser() ? '' : 'none';
 }
 </script>
 <div class="copyright-bar">© Bogonko-Ngelani Stage</div>
