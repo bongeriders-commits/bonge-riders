@@ -912,6 +912,16 @@ body.memberview .vb-unlocked { display: block; }
   font-weight: 700; font-size: 18px;
   color: var(--text); margin-bottom: 16px;
 }
+.modal-box { background: var(--bg2); border-radius: 20px 20px 0 0; border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 540px; padding: 18px 18px 26px; transform: translateY(40px); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
+.modal-backdrop.open .modal-box { transform: translateY(0); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.modal-header .modal-title { margin-bottom: 0; }
+.modal-close { background: var(--card); border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 50%; font-size: 14px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-close:active { transform: scale(.93); }
+.modal-input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }
+.modal-input:focus { border-color: var(--amber); }
+.modal-btn { width: 100%; border: none; border-radius: 10px; padding: 12px; background: var(--amber); color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .15s; }
+.modal-btn:active { transform: scale(.97); }
 .modal-field { margin-bottom: 12px; }
 .modal-field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .5px; }
 .modal-field input, .modal-field textarea {
@@ -1359,8 +1369,8 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 </div>
   <!-- ── PUB INFO EDITOR MODAL (super admin only) ── -->
-  <div class="modal-wrap admin-only" id="pubInfoModal">
-    <div class="modal" style="max-width:360px;">
+  <div class="modal-backdrop admin-only" id="pubInfoModal">
+    <div class="modal-box" style="max-width:420px;">
       <div class="modal-header">
         <span class="modal-title">✏️ Edit Public Info</span>
         <button class="modal-close" onclick="closePubInfoEditor()">✕</button>
