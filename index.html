@@ -100,20 +100,46 @@ img {
 /* ── SPLASH ── */
 #splashScreen {
   position: fixed; inset: 0;
-  background: #fff;
+  background: #000;
   z-index: 9999;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 16px;
   transition: opacity .5s ease, visibility .5s ease;
+  overflow: hidden;
 }
 #splashScreen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* Video background */
+#splashVideoBg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Dark overlay so content stays readable */
+#splashScreen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 0;
+}
+
+/* Lift content above overlay */
+#splashScreen img,
+#splashScreen .splash-name,
+#splashScreen #splashTagline {
+  position: relative; z-index: 1;
+}
+
 #splashScreen img { width: min(52vw, 200px); height: auto; animation: splashPop .6s ease; }
 #splashScreen .splash-name {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px; font-weight: 700;
-  color: #141414; letter-spacing: -.3px;
+  color: #fff; letter-spacing: -.3px;
+  text-shadow: 0 1px 6px rgba(0,0,0,.5);
 }
-#splashScreen .splash-name span { color: #2563EB; }
+#splashScreen .splash-name span { color: #60a5fa; }
 @keyframes splashPop {
   0%   { transform: scale(.75); opacity: 0; }
   60%  { transform: scale(1.05); opacity: 1; }
@@ -1127,9 +1153,10 @@ body.memberview .vb-unlocked { display: block; }
 
 <!-- Splash -->
 <div id="splashScreen">
+  <video id="splashVideoBg" src="splash-bg.mp4" autoplay muted playsinline loop preload="auto"></video>
   <img src="icon-512.png" alt="BONGE RIDERS">
   <div class="splash-name">Bogonko <span>Stage</span></div>
-  <div id="splashTagline" style="font-size:12px;color:#666;font-weight:600;margin-top:4px;"></div>
+  <div id="splashTagline" style="font-size:12px;color:#ddd;font-weight:600;margin-top:4px;position:relative;z-index:1;"></div>
 </div>
 
 <!-- Header -->
@@ -3797,9 +3824,20 @@ setTimeout(()=>{
   pills.forEach(p=>{ if(p.textContent==activeYear) p.scrollIntoView({inline:'center',behavior:'smooth'}); });
 },200);
 
+// Ensure splash video plays from second 0
+(function(){
+  const vid = document.getElementById('splashVideoBg');
+  if(vid){ vid.currentTime = 0; vid.play().catch(()=>{}); }
+})();
+
 setTimeout(()=>{
   const splash=document.getElementById('splashScreen');
-  if(splash){ splash.classList.add('fade-out'); setTimeout(()=>splash.remove(),550); }
+  if(splash){
+    const vid=splash.querySelector('video');
+    if(vid){ vid.pause(); }
+    splash.classList.add('fade-out');
+    setTimeout(()=>splash.remove(),550);
+  }
 },2000);
 
 // SERVICE WORKER
