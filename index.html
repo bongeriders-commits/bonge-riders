@@ -4388,132 +4388,6 @@ Object.assign(window,{
   toggleTheme, openMembersPanel, closeMembersPanel, addMember, renderPanelList,
   openEditModal, closeEditModal, saveEdit,
   openDetailsModal, closeDetailsModal,
-// ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
-(function() {
-  const TOTAL = 6;
-  let current = 0;
-  let timer = null;
-  const container = document.getElementById('pubSlideshow');
-  if (!container) return;
-
-  function getSlides() { return container.querySelectorAll('.pub-slide'); }
-  function getDots()   { return container.querySelectorAll('.pub-dot'); }
-
-  function goTo(idx) {
-    const slides = getSlides();
-    const dots   = getDots();
-    if (!slides.length) return;
-    // outgoing
-    slides[current].classList.remove('active');
-    slides[current].classList.add('zoom-out');
-    const outIdx = current;
-    setTimeout(() => { if(slides[outIdx]) slides[outIdx].classList.remove('zoom-out'); }, 600);
-    current = ((idx % TOTAL) + TOTAL) % TOTAL;
-    slides[current].classList.add('active');
-    dots.forEach((d,i) => d.classList.toggle('active', i === current));
-  }
-
-  function startAuto() {
-    clearInterval(timer);
-    timer = setInterval(() => goTo(current + 1), 3000);
-  }
-
-  // Dot clicks
-  getDots().forEach((dot) => {
-    dot.addEventListener('click', () => {
-      const i = parseInt(dot.getAttribute('data-idx') || '0', 10);
-      goTo(i); clearInterval(timer); startAuto();
-    });
-  });
-
-  // Swipe
-  let sx = 0;
-  container.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-  container.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 40) { goTo(dx < 0 ? current+1 : current-1); clearInterval(timer); startAuto(); }
-  }, { passive: true });
-
-  startAuto();
-
-  // Days left in month
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  const daysLeft = lastDay - now.getDate();
-  const dlEl = document.getElementById('pubDaysLeft');
-  if (dlEl) dlEl.textContent = daysLeft;
-
-  // Dynamic reminder
-  const reminderEl = document.getElementById('pubReminderText');
-  if (reminderEl) {
-    if (daysLeft === 0) {
-      reminderEl.innerHTML = '⚠️ <b>Last day of the month!</b> Don\'t miss today\'s contribution of <b>KSh 50</b>.';
-    } else if (daysLeft <= 3) {
-      reminderEl.innerHTML = `Only <b>${daysLeft} day${daysLeft>1?'s':''} left</b> this month. Keep your contributions up to date — <b>KSh 50/day</b>.`;
-    } else {
-      reminderEl.innerHTML = `Today is <b>Day ${now.getDate()}</b>. Stay consistent — contribute <b>KSh 50</b> daily to remain an active member.`;
-    }
-  }
-})();
-
-// Copy account number
-function copyAccNo() {
-  navigator.clipboard.writeText('942540').then(() => showToast('✓ Account number copied'));
-}
-
-// ── PUBLIC INFO EDITOR (super admin) ────────────────────────────────────
-async function openPubInfoEditor() {
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin only'); return; }
-  const piError = document.getElementById('piError');
-  piError.style.display = 'none';
-  try {
-    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
-    const d = snap.exists() ? snap.data() : {};
-    document.getElementById('piAbout').value   = d.about   || '';
-    document.getElementById('piWelfare').value = d.welfare || '';
-    document.getElementById('piNotice').value  = d.notice  || '';
-  } catch(e) {}
-  document.getElementById('pubInfoModal').classList.add('open');
-}
-function closePubInfoEditor() { document.getElementById('pubInfoModal').classList.remove('open'); }
-async function savePubInfo() {
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin only'); return; }
-  const about   = document.getElementById('piAbout').value.trim();
-  const welfare = document.getElementById('piWelfare').value.trim();
-  const notice  = document.getElementById('piNotice').value.trim();
-  const piError = document.getElementById('piError');
-  try {
-    await setDoc(doc(db, 'tracker', 'publicInfo'), { about, welfare, notice, updatedAt: Date.now() });
-    closePubInfoEditor();
-    showToast('✓ Public info updated');
-    // Update live text
-    if (about)   document.getElementById('pubAboutText').textContent   = about;
-    if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
-    document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
-  } catch(e) {
-    piError.textContent = '⚠️ Failed to save. Try again.';
-    piError.style.display = 'block';
-  }
-}
-
-// Load public info from Firestore on page load
-(async function loadPublicInfo() {
-  try {
-    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
-    if (!snap.exists()) return;
-    const d = snap.data();
-    if (d.about)   document.getElementById('pubAboutText').textContent   = d.about;
-    if (d.welfare) document.getElementById('pubWelfareText').textContent = d.welfare;
-    if (d.notice)  document.getElementById('pubNoticeText').textContent  = d.notice;
-  } catch(e) {}
-})();
-
-// Show edit button only to super admin after login
-function refreshPubEditBtn() {
-  const btn = document.getElementById('pubEditBtn');
-  if (btn) btn.style.display = isSuperAdminUser() ? 'block' : 'none';
-}
-
   openSaccoSettings, closeSaccoSettings, saveSaccoSettings,
   openPubInfoEditor, closePubInfoEditor, savePubInfo, copyAccNo,
   openDeleteModal, closeDeleteModal, confirmDelete,
@@ -4531,6 +4405,123 @@ function refreshPubEditBtn() {
   openWelfareAdminPanel, closeWelfareAdminPanel, updateWelfareStatus, notifyMemberWelfareWA, setWelfareFilter,
   openPayConfirmPanel, closePayConfirmPanel, setPayConfirmFilter, approvePayConfirm, invalidatePayConfirm,
 });
+
+// ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
+(function() {
+  const TOTAL = 6;
+  let current = 0;
+  let timer = null;
+  const container = document.getElementById('pubSlideshow');
+  if (!container) return;
+
+  function getSlides() { return container.querySelectorAll('.pub-slide'); }
+  function getDots()   { return container.querySelectorAll('.pub-dot'); }
+
+  function goTo(idx) {
+    const slides = getSlides();
+    const dots   = getDots();
+    if (!slides.length) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('zoom-out');
+    const outIdx = current;
+    setTimeout(() => { if(slides[outIdx]) slides[outIdx].classList.remove('zoom-out'); }, 600);
+    current = ((idx % TOTAL) + TOTAL) % TOTAL;
+    slides[current].classList.add('active');
+    dots.forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 3000);
+  }
+
+  getDots().forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const i = parseInt(dot.getAttribute('data-idx') || '0', 10);
+      goTo(i); clearInterval(timer); startAuto();
+    });
+  });
+
+  let sx = 0;
+  container.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  container.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) { goTo(dx < 0 ? current+1 : current-1); clearInterval(timer); startAuto(); }
+  }, { passive: true });
+
+  startAuto();
+
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const daysLeft = lastDay - now.getDate();
+  const dlEl = document.getElementById('pubDaysLeft');
+  if (dlEl) dlEl.textContent = daysLeft;
+
+  const reminderEl = document.getElementById('pubReminderText');
+  if (reminderEl) {
+    if (daysLeft === 0) {
+      reminderEl.innerHTML = '\u26a0\ufe0f <b>Last day of the month!</b> Don\'t miss today\'s KSh 50 contribution.';
+    } else if (daysLeft <= 3) {
+      reminderEl.innerHTML = 'Only <b>' + daysLeft + ' day' + (daysLeft>1?'s':'') + ' left</b> this month. Stay up to date — <b>KSh 50/day</b>.';
+    } else {
+      reminderEl.innerHTML = 'Today is <b>Day ' + now.getDate() + '</b>. Contribute <b>KSh 50</b> daily to remain an active member.';
+    }
+  }
+})();
+
+function copyAccNo() {
+  navigator.clipboard.writeText('942540').then(() => showToast('\u2713 Account number copied'));
+}
+
+async function openPubInfoEditor() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  document.getElementById('piError').style.display = 'none';
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
+    const d = snap.exists() ? snap.data() : {};
+    document.getElementById('piAbout').value   = d.about   || '';
+    document.getElementById('piWelfare').value = d.welfare || '';
+    document.getElementById('piNotice').value  = d.notice  || '';
+  } catch(e) {}
+  document.getElementById('pubInfoModal').classList.add('open');
+}
+
+function closePubInfoEditor() { document.getElementById('pubInfoModal').classList.remove('open'); }
+
+async function savePubInfo() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  const about   = document.getElementById('piAbout').value.trim();
+  const welfare = document.getElementById('piWelfare').value.trim();
+  const notice  = document.getElementById('piNotice').value.trim();
+  const piError = document.getElementById('piError');
+  try {
+    await setDoc(doc(db, 'tracker', 'publicInfo'), { about, welfare, notice, updatedAt: Date.now() });
+    closePubInfoEditor();
+    showToast('\u2713 Public info updated');
+    if (about)   document.getElementById('pubAboutText').textContent   = about;
+    if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
+    document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
+  } catch(e) {
+    piError.textContent = '\u26a0\ufe0f Failed to save. Try again.';
+    piError.style.display = 'block';
+  }
+}
+
+(async function loadPublicInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
+    if (!snap.exists()) return;
+    const d = snap.data();
+    if (d.about)   document.getElementById('pubAboutText').textContent   = d.about;
+    if (d.welfare) document.getElementById('pubWelfareText').textContent = d.welfare;
+    if (d.notice)  document.getElementById('pubNoticeText').textContent  = d.notice;
+  } catch(e) {}
+})();
+
+function refreshPubEditBtn() {
+  const btn = document.getElementById('pubEditBtn');
+  if (btn) btn.style.display = isSuperAdminUser() ? 'block' : 'none';
+}
 </script>
 <div class="copyright-bar">© Bogonko-Ngelani Stage</div>
 
