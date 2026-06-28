@@ -29,7 +29,7 @@
   --radius-lg:12px;
 }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding-bottom:72px;}
   .topbar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
   .back-btn{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
   .page-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;}
@@ -88,6 +88,43 @@
 
   #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:var(--text);border:1px solid var(--border);border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;}
   #toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 500;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  height: 60px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 9px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  transition: color .15s, background .15s;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 0;
+  padding: 6px 4px 4px;
+}
+.bottom-nav a:active { background: var(--card2); }
+.bottom-nav a.active { color: var(--amber2); }
+.bottom-nav a .nav-icon { font-size: 20px; line-height: 1; }
+.bottom-nav a .nav-label { line-height: 1; }
+
 </style>
 </head>
 <body>
@@ -444,7 +481,49 @@ document.getElementById('pdfBtn').addEventListener('click', function() {
   <tbody>${rows}</tbody>
   <tfoot><tr><td colspan="5" style="text-align:right;font-weight:700;padding-top:10px;">TOTAL</td>
   <td style="text-align:right;font-weight:800;color:#C0392B;padding-top:10px;">KSh ${total.toLocaleString()}</td></tr></tfoot>
-  </table></body></html>`);
+  </table>
+<nav class="bottom-nav" id="bottomNav">
+  <a href="index.html" data-page="home">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </a>
+  <a href="member.html" data-page="member">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">My Profile</span>
+  </a>
+  <a href="payment.html" data-page="payment">
+    <span class="nav-icon">💳</span>
+    <span class="nav-label">Payments</span>
+  </a>
+  <a href="spending.html" data-page="spending">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Spending</span>
+  </a>
+  <a href="faq.html" data-page="faq">
+    <span class="nav-icon">❓</span>
+    <span class="nav-label">FAQ</span>
+  </a>
+</nav>
+<script>
+(function() {
+  var path = window.location.pathname.split('/').pop() || 'index.html';
+  var links = document.querySelectorAll('#bottomNav a');
+  links.forEach(function(a) {
+    var page = a.getAttribute('data-page');
+    if (
+      (page === 'home' && (path === 'index.html' || path === '' || path === '/')) ||
+      (page === 'member' && path === 'member.html') ||
+      (page === 'payment' && path === 'payment.html') ||
+      (page === 'spending' && path === 'spending.html') ||
+      (page === 'faq' && path === 'faq.html')
+    ) {
+      a.classList.add('active');
+    }
+  });
+})();
+</script>
+
+</body></html>`);
   w.document.close();
   setTimeout(() => w.print(), 500);
 });
