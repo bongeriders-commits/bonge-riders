@@ -2371,7 +2371,6 @@ function renderMemberList(){
       }
       const nowPaid=isPaid(phone,selectedDate);
       showToast(nowPaid?`✓ ${name.split(' ')[0]} marked paid`:`${name.split(' ')[0]} unmarked`);
-      if(nowPaid){ launchConfetti(); flashCheckOnCard(card); }
       renderAll();
       if(nowPaid) openThanksModal(phone,name);
     });
@@ -2504,34 +2503,17 @@ function renderMemberDashboard(){
   const vbBS = document.getElementById('vbBalSpent');
   if(vbBS) vbBS.textContent = 'KSh ' + (dashboardAgg.totalSpent||0).toLocaleString();
 
-  // Leaderboard ticker — with motivational messages
+  // Leaderboard ticker
   const ticker = document.getElementById('vbTicker');
   if(ticker && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length){
     const medals = ['🥇','🥈','🥉'];
     const names = dashboardAgg.leaderboard.map((e,i) =>
       `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">${medals[i]} ${e.fullName||e.name} · ${e.days} days</span>`
     ).join('');
-    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Most Consistent Members:</span>`;
-    const paidN = dashboardAgg.paidToday||0;
-    const totalN = dashboardAgg.memberCount||65;
-    const unpaidN = totalN - paidN;
-    const motives = [
-      `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">💪 ${paidN} member${paidN!==1?'s':''} paid today — keep it up!</span>`,
-      unpaidN>0
-        ? `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">📢 ${unpaidN} still to pay — every shilling counts!</span>`
-        : `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🎉 100% collection — amazing team!</span>`,
-      `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🏍️ Bogonko-Ngelani Stage — No Rider Left Behind</span>`,
-    ].join('');
-    const block = title + names + motives;
+    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:</span>`;
+    const block = title + names;
     ticker.innerHTML = block + block;
   }
-
-  // Podium card
-  renderPodium();
-  // 7-day sparkline
-  renderSparkline();
-  // Nudge banner
-  renderNudgeBanner();
 
   const vbDateEl=document.getElementById('vbDate');
   if(vbDateEl) vbDateEl.textContent=dashboardAgg.dateLabel===todayKey()?'Today':dashboardAgg.dateLabel||'';
@@ -2577,9 +2559,6 @@ function renderAll(){
   renderYearNav();
   renderDateStrip();
   renderMemberList();
-  renderPodium();
-  renderSparkline();
-  renderNudgeBanner();
   // When not admin, the header gauge feeds from aggregate not live data
   if (!isAdmin) updateHeaderFromAggregate();
 }
@@ -4352,24 +4331,109 @@ function buildReminderWAMessage(firstName, rate) {
 // HOOK UPGRADES INTO EXISTING FUNCTIONS
 // ════════════════════════════════════════════════
 
+// Hook confetti + check flash into the card click (patch renderMemberList)
+const _origRenderMemberList = window.renderMemberList;
+
+// Patch renderMemberDashboard to also render podium + sparkline + nudge
+const _origRenderMemberDashboard = renderMemberDashboard;
+function renderMemberDashboard() {
+  _origRenderMemberDashboard();
+  renderPodium();
+  renderSparkline();
+  renderNudgeBanner();
+
+  // Enhanced ticker with motivational messages
+  const ticker = document.getElementById('vbTicker');
+  if (ticker && dashboardAgg && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length) {
+    const medals = ['🥇','🥈','🥉'];
+    const names = dashboardAgg.leaderboard.map((e,i) =>
+      `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">${medals[i]} ${e.fullName||e.name} · ${e.days} days</span>`
+    ).join('');
+    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Top Members:</span>`;
+    const motives = buildTickerMotivation().map(m =>
+      `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">${m}</span>`
+    ).join('');
+    const block = title + names + motives;
+    ticker.innerHTML = block + block;
+  }
+}
+
+// Patch renderAll to also render podium + sparkline + nudge when admin
+const _origRenderAll = window.renderAll;
+if (typeof renderAll === 'function') {
+  window.renderAll = function() {
+    _origRenderAll && _origRenderAll();
+    renderPodium();
+    renderSparkline();
+    renderNudgeBanner();
+  };
+}
+
 // Patch defaultWAMessage to use the enhanced template
 window.defaultWAMessage = function() {
   return buildReminderWAMessage('there', typeof RATE !== 'undefined' ? RATE : 50);
 };
 
 // Patch sendWADirect to use enhanced template
+const _origSendWADirect = window.sendWADirect;
 window.sendWADirect = function(phone, firstName) {
   const msg = buildReminderWAMessage(firstName, typeof RATE !== 'undefined' ? RATE : 50);
   if (typeof openWAForPhone === 'function') openWAForPhone(phone, msg);
 };
 
-// Render nudge + sparkline on DOMContentLoaded for admin view
+// Confetti + check flash on markPaid (patch card click in renderMemberList)
+// We intercept the existing togglePaid wrapper by listening to DOM mutations
+// and watching for .paid class additions on member cards.
+(function patchMemberListForConfetti() {
+  // Override renderMemberList to inject streak badge + confetti on click
+  if (typeof renderMemberList !== 'function') return;
+  const _orig = renderMemberList;
+  window.renderMemberList = function() {
+    _orig();
+    // After render, attach enhanced click listeners to each card
+    document.querySelectorAll('.member-list .member-card').forEach(card => {
+      const clone = card.cloneNode(true);
+      // re-attach with enhancement — but renderMemberList already sets listeners
+      // Instead, wrap existing by observing class changes
+    });
+  };
+})();
+
+// Simpler: override the click flow via MutationObserver on member list
+(function watchPaidCards() {
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      if (m.type === 'childList') continue;
+      if (m.attributeName === 'class') {
+        const el = m.target;
+        if (el.classList.contains('member-card') && el.classList.contains('paid') &&
+            !m.oldValue.includes('paid')) {
+          // Card just became paid → confetti + check flash
+          launchConfetti && launchConfetti();
+          flashCheckOnCard(el);
+        }
+      }
+    }
+  });
+  // Start observing once DOM has a member list
+  function startObs() {
+    const list = document.getElementById('memberList');
+    if (list) {
+      observer.observe(list, { subtree: true, attributes: true, attributeOldValue: true, attributeFilter: ['class'] });
+    } else {
+      setTimeout(startObs, 500);
+    }
+  }
+  startObs();
+})();
+
+// Call on admin load too
 document.addEventListener('DOMContentLoaded', () => {
   renderNudgeBanner();
-  setTimeout(renderSparkline, 500); // slight delay so canvas has layout width
+  renderSparkline();
 });
 
-Object.assign(window, { renderPodium, renderSparkline, renderNudgeBanner, launchConfetti, flashCheckOnCard });
+Object.assign(window, { renderMemberDashboard, renderPodium, renderSparkline, renderNudgeBanner, launchConfetti, flashCheckOnCard });
 
 
   openAdminLogin, closeAdminLogin, confirmAdminLogin, logoutAdmin,
