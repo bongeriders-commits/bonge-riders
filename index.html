@@ -483,8 +483,7 @@ img {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  /* Fill remaining space: viewport minus copyright bar (28px) */
-  min-height: calc(100vh - 560px);
+  max-height: 55mm;
   display: flex;
   flex-direction: column;
   padding-bottom: 34px; /* room for dots */
@@ -500,6 +499,7 @@ img {
   transform: scale(0.92);
   transition: opacity 0.55s ease, transform 0.55s ease;
   pointer-events: none;
+  overflow-y: auto;
 }
 .pub-slide.active {
   opacity: 1;
