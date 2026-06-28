@@ -578,16 +578,50 @@ html, body {
 <div class="success-screen" id="successScreen">
   <div class="success-icon">🎉</div>
   <h2>Application Submitted!</h2>
-  <p>Your registration has been received. The Chairperson will review and you'll get an SMS once approved.</p>
-  <div class="ref-box">
+  <p>Your registration has been received. Keep your reference number safe — you may need it if you contact the Chairperson.</p>
+
+  <div class="ref-box" id="refBox">
     Reference Number
     <strong id="refNumber">—</strong>
+    <button onclick="copyRef()" id="copyRefBtn" style="display:block;margin:10px auto 0;background:var(--amber-bg);border:1px solid rgba(37,99,235,.3);color:var(--amber2);border-radius:7px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">
+      📋 Copy Reference
+    </button>
   </div>
+
+  <!-- Next steps -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;width:100%;max-width:340px;text-align:left;margin-bottom:16px;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">What happens next?</div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">The <strong style="color:var(--text);">Chairperson reviews</strong> your M-Pesa confirmation code and details.</div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--amber-bg);border:1px solid var(--amber);color:var(--amber2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">Once approved, you'll receive an <strong style="color:var(--text);">SMS notification</strong> on your registered number.</div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green2);color:var(--green2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">You'll get a <strong style="color:var(--text);">4-digit PIN</strong> to access your member profile at <em>My Profile</em> on the home screen.</div>
+    </div>
+  </div>
+
+  <!-- Daily contribution reminder -->
+  <div style="background:var(--amber-bg);border:1px solid rgba(37,99,235,.25);border-radius:var(--radius);padding:12px 16px;width:100%;max-width:340px;text-align:left;margin-bottom:20px;">
+    <div style="font-size:12px;font-weight:700;color:var(--amber2);margin-bottom:4px;">📅 Daily Contribution</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.5;">
+      Once approved, contribute <strong style="color:var(--text);">KSh 50/day</strong> via M-Pesa:<br>
+      Paybill <strong style="color:var(--text);">544600</strong> · Account <strong style="color:var(--text);">942540</strong>
+    </div>
+  </div>
+
   <button class="btn-primary" style="max-width:280px;" onclick="window.location.href='index.html'">
-    Back to Home
+    ← Back to Home
   </button>
   <button class="btn-secondary" style="max-width:280px;margin-top:0;" onclick="resetForm()">
-    Register Another
+    Register Another Member
   </button>
 </div>
 
@@ -797,6 +831,16 @@ async function submitRegistration() {
     btn.disabled = false;
     btn.innerHTML = 'Submit Application';
   }
+}
+
+function copyRef() {
+  const ref = document.getElementById('refNumber').textContent;
+  if (!ref || ref === '—') return;
+  navigator.clipboard.writeText(ref).then(() => {
+    const btn = document.getElementById('copyRefBtn');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy Reference'; }, 2000); }
+    showToast('✓ Reference number copied');
+  }).catch(() => showToast('Could not copy — write it down manually'));
 }
 
 function resetForm() {

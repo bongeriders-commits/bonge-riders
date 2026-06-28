@@ -3571,12 +3571,23 @@ async function saveSpendingEntry() {
   const errEl = document.getElementById('spendError');
   if (!desc || !amount || amount <= 0 || !date) { errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
-  const entry = { id: Date.now().toString(36), desc, amount, date, category, recipient };
-  spending.push(entry);
-  await saveSpending();
-  closeAddSpendingModal();
-  renderSpending();
-  showToast('✓ Spending entry added');
+  if (_editingSpendId) {
+    // Edit mode — update existing entry
+    const idx = spending.findIndex(e => e.id === _editingSpendId);
+    if (idx >= 0) spending[idx] = { ...spending[idx], desc, amount, date, category, recipient };
+    await saveSpending();
+    closeAddSpendingModal();
+    renderSpending();
+    showToast('✓ Spending entry updated');
+  } else {
+    // Add mode — create new entry
+    const entry = { id: Date.now().toString(36), desc, amount, date, category, recipient };
+    spending.push(entry);
+    await saveSpending();
+    closeAddSpendingModal();
+    renderSpending();
+    showToast('✓ Spending entry added');
+  }
 }
 async function deleteSpendingEntry(id) {
   spending = spending.filter(e => e.id !== id);
@@ -3601,19 +3612,64 @@ function openSpendingModal() {
       smList.innerHTML = '<div class="income-empty" style="padding:20px 0;">No spending recorded yet.</div>';
     } else {
       smList.innerHTML = [...spending].reverse().map((e,i) => `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 4px;border-bottom:1px solid var(--border);gap:8px;">
-          <div style="font-size:12px;color:var(--muted);width:22px;flex-shrink:0;">${spending.length - i}</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:600;">${e.desc}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${e.category}${e.recipient ? ' · ' + e.recipient : ''} · ${e.date}</div>
+        <div style="border-bottom:1px solid var(--border);padding:10px 4px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:12px;color:var(--muted);width:22px;flex-shrink:0;">${spending.length - i}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;">${e.desc}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">${e.category}${e.recipient ? ' · ' + e.recipient : ''} · ${e.date}</div>
+            </div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#E05540;white-space:nowrap;">−KSh ${Number(e.amount).toLocaleString()}</div>
           </div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#E05540;white-space:nowrap;">−KSh ${Number(e.amount).toLocaleString()}</div>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button onclick="openEditSpending('${e.id}')" style="flex:1;background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">✏️ Edit</button>
+            <button onclick="deleteSpendingEntryFromModal('${e.id}')" style="flex:1;background:none;border:1px solid rgba(220,38,38,.25);color:#EF4444;border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">🗑 Delete</button>
+          </div>
         </div>`).join('');
     }
   }
   document.getElementById('spendingModal').classList.add('open');
 }
 function closeSpendingModal() { document.getElementById('spendingModal').classList.remove('open'); }
+
+// Edit a spending entry directly from the spending modal
+let _editingSpendId = null;
+function openEditSpending(id) {
+  const e = spending.find(x => x.id === id);
+  if (!e) return;
+  _editingSpendId = id;
+  closeSpendingModal();
+  // Prefill the existing add/edit modal
+  document.getElementById('spendDesc').value      = e.desc;
+  document.getElementById('spendAmount').value    = e.amount;
+  document.getElementById('spendRecipient').value = e.recipient || '';
+  document.getElementById('spendDate').value      = e.date;
+  document.getElementById('spendCategory').value  = e.category || 'Welfare';
+  document.getElementById('spendError').classList.remove('show');
+  // Relabel the modal for editing
+  const modal = document.getElementById('addSpendingModal');
+  const title = modal.querySelector('.modal-title');
+  if (title) title.textContent = '✏️ Edit Spending Entry';
+  const saveBtn = modal.querySelector('.mbtn.danger');
+  if (saveBtn) saveBtn.textContent = 'Save Changes';
+  modal.classList.add('open');
+}
+function closeAddSpendingModal() {
+  _editingSpendId = null;
+  const modal = document.getElementById('addSpendingModal');
+  const title = modal.querySelector('.modal-title');
+  if (title) title.textContent = '💸 Add Spending Entry';
+  const saveBtn = modal.querySelector('.mbtn.danger');
+  if (saveBtn) saveBtn.textContent = 'Add Entry';
+  modal.classList.remove('open');
+}
+async function deleteSpendingEntryFromModal(id) {
+  if (!confirm('Delete this spending entry? This cannot be undone.')) return;
+  spending = spending.filter(e => e.id !== id);
+  await saveSpending();
+  showToast('Entry deleted');
+  openSpendingModal(); // refresh the modal list
+}
 
 function exportSpendingPDF() {
   const total = totalSpending();
@@ -4571,6 +4627,7 @@ Object.assign(window,{
   markAllToday, openMarkAllModal, closeMarkAllModal, confirmMarkAll,
   openIncomeModal, closeIncomeModal, saveIncomeEntry, deleteIncomeEntry,
   openSpendingModal, closeSpendingModal,
+  openEditSpending, deleteSpendingEntryFromModal,
   openAddSpendingModal, closeAddSpendingModal, saveSpendingEntry, deleteSpendingEntry,
   exportSpendingPDF,
   toggleSection,

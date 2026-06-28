@@ -1150,6 +1150,7 @@ function startPaymentRequestsListener() {
     const all = snap.exists() ? (snap.data().requests || []) : [];
     paymentRequests = all.filter(r => r.memberPhone === phone);
     renderHistory();
+    renderInvalidAlert();
   }, () => {});
 }
 
@@ -1158,6 +1159,57 @@ function getPaymentRequestForDate(dk) {
   const matches = paymentRequests.filter(r => r.dateKey === dk);
   if (!matches.length) return null;
   return matches.sort((a,b) => (b.timestamp||0) - (a.timestamp||0))[0];
+}
+
+// Show a prominent alert banner if any of this member's payment codes were marked invalid
+function renderInvalidAlert() {
+  const existing = document.getElementById('invalidCodeAlert');
+  const invalidReqs = paymentRequests.filter(r => r.status === 'invalid');
+  if (!invalidReqs.length) {
+    if (existing) existing.remove();
+    return;
+  }
+  if (existing) return; // already showing
+  const banner = document.createElement('div');
+  banner.id = 'invalidCodeAlert';
+  banner.style.cssText = `
+    margin: 12px 16px 0;
+    background: rgba(220,38,38,0.10);
+    border: 1px solid rgba(220,38,38,0.35);
+    border-left: 4px solid #EF4444;
+    border-radius: 10px;
+    padding: 13px 14px;
+  `;
+  const dates = invalidReqs.map(r => {
+    const d = new Date(r.dateKey + 'T00:00:00');
+    return d.toLocaleDateString('en-KE', {day:'numeric', month:'short'});
+  }).join(', ');
+  banner.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <span style="font-size:20px;flex-shrink:0;line-height:1;">⚠️</span>
+      <div style="flex:1;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#EF4444;margin-bottom:3px;">
+          M-Pesa Code${invalidReqs.length > 1 ? 's' : ''} Rejected
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px;">
+          Your confirmation code${invalidReqs.length > 1 ? 's' : ''} for <strong style="color:var(--text);">${dates}</strong>
+          could not be verified. Please resubmit or contact the Chairperson.
+        </div>
+        <button onclick="
+          document.getElementById('invalidCodeAlert').remove();
+          document.getElementById('historyList').scrollIntoView({behavior:'smooth'});
+        " style="background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.35);color:#EF4444;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">
+          View in History ↓
+        </button>
+      </div>
+    </div>`;
+  // Insert after the stats row (before the contribution rate section)
+  const statsRow = document.querySelector('.stats-row');
+  if (statsRow && statsRow.nextSibling) {
+    statsRow.parentNode.insertBefore(banner, statsRow.nextSibling);
+  } else {
+    document.getElementById('profilePage').prepend(banner);
+  }
 }
 
 function renderProfileMeta() {
