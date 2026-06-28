@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FAQ — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0F1117;
+  --bg2:      #161A23;
+  --card:     #1C2130;
+  --card2:    #212840;
+  --border:   #2A3350;
+  --text:     #E8ECF4;
+  --muted:    #7A85A0;
+  --dim:      #404860;
+  --amber:    #2563EB;
+  --amber2:   #3B82F6;
+  --amber-bg: rgba(37,99,235,0.12);
+  --green2:   #10B981;
+  --radius:   8px;
+  --radius-lg:12px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F0F4FF;
+    --bg2:    #E6EAF7;
+    --card:   #FFFFFF;
+    --card2:  #F0F4FF;
+    --border: #C8D0E8;
+    --text:   #111827;
+    --muted:  #6B7280;
+    --dim:    #9CA3AF;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.topbar-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.topbar-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.topbar-sub {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── FAQ LIST ── */
+.faq-wrap {
+  padding: 16px 14px 32px;
+}
+
+.faq-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.faq-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 16px;
+  text-align: left;
+  color: var(--text);
+}
+
+.faq-btn:active {
+  background: var(--card2);
+}
+
+.faq-question {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.faq-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--amber-bg);
+  border: 1px solid rgba(37,99,235,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--amber2);
+  transition: transform .25s, background .2s;
+}
+
+.faq-icon.open {
+  transform: rotate(180deg);
+  background: rgba(37,99,235,.22);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 16px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.faq-answer.open {
+  display: block;
+}
+
+.faq-answer b {
+  color: var(--amber2);
+  font-weight: 600;
+}
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 20px 0 8px;
+}
+
+.section-label:first-child {
+  margin-top: 0;
+}
+
+/* ── FOOTER ── */
+.faq-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--dim);
+  padding: 8px 0 24px;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="index.html" class="back-btn">‹</a>
+  <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
+  <div>
+    <div class="topbar-title">Frequently Asked Questions</div>
+    <div class="topbar-sub">Tap a question to expand the answer</div>
+  </div>
+</div>
+
+<!-- FAQ LIST -->
+<div class="faq-wrap">
+
+  <div class="section-label">Joining &amp; Account</div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">How do I join the group?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Tap <b>Register</b> on the home screen. Fill in your personal details, motorcycle information, and M-Pesa confirmation code for the KSh 10,000 stage contribution fee (Paybill <b>544600</b>, Account <b>942540</b>). The Chairperson will review and approve your application.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">I forgot my PIN — what do I do?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Contact the Chairperson. They can reset your PIN from the Members List page by editing your member record and setting a new one. Your default PIN is the <b>last 4 digits</b> of your registered phone number.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">Is my personal information safe?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Yes. All data is stored in <b>Google Firestore</b> with security rules that enforce access control. Members can only see their own information. Full financial records and member details are accessible only to the admin account.
+    </div>
+  </div>
+
+  <div class="section-label">Payments &amp; Contributions</div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">How much do I contribute per day?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Each active member contributes <b>KSh 50</b> per working day. This is recorded by the Chairperson or collector at the stage. Payments accumulate in the group welfare fund.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">How do I view my payment history?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Tap <b>Member Portal</b> on the home screen. Enter your registered phone number and your 4-digit PIN to access your personal dashboard, which shows all your past payments and current standing.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">I paid but the app shows me as Unpaid. Why?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      The Payment page is updated manually by the Chairperson or collector at the stage. Remind them to mark you as paid — they can also <b>back-date</b> it to the correct day if it was missed.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">Can I pay for multiple missed days at once?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Yes. The Chairperson can open any past date on the Payment page and mark you as paid. Each day is recorded individually in the system.
+    </div>
+  </div>
+
+  <div class="section-label">Welfare &amp; Benefits</div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">What welfare support does the group offer?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Active members in good standing are eligible for welfare support in the event of a <b>bereavement or medical emergency</b>. The amount is decided by the group and disbursed by the Chairperson. You must be up to date with contributions to qualify.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">What happens to my records if I leave the group?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Your name is removed from the active members list so you no longer appear on the daily payment screen. Your past payment history is kept so the group's income totals remain accurate — the contributions you made were real money received.
+    </div>
+  </div>
+
+  <div class="section-label">App &amp; Notifications</div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">How do I get push notifications?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Install the app on your phone: on <b>Android</b> tap the three-dot menu in Chrome → <b>Add to Home Screen</b>; on <b>iPhone</b> tap the Share button in Safari → <b>Add to Home Screen</b>. When prompted, tap <b>Allow</b>. You will then receive alerts whenever payments are recorded.
+    </div>
+  </div>
+
+  <div class="faq-card">
+    <button class="faq-btn" onclick="toggleFaq(this)">
+      <span class="faq-question">The app is not loading — what should I do?</span>
+      <span class="faq-icon">▾</span>
+    </button>
+    <div class="faq-answer">
+      Check your internet connection. If you installed the app as a PWA, some pages may load from cache when offline. Open your browser and navigate to the site directly to force a fresh load.
+    </div>
+  </div>
+
+  <div class="faq-footer">© Bogonko-Ngelani Stage · Bonge Riders v1.0</div>
+
+</div>
+
+<script>
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const icon   = btn.querySelector('.faq-icon');
+  const isOpen = answer.classList.toggle('open');
+  icon.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
