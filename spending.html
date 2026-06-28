@@ -117,7 +117,6 @@
   text-transform: uppercase;
   transition: color .15s, background .15s;
   -webkit-tap-highlight-color: transparent;
-  border-radius: 0;
   padding: 6px 4px 4px;
 }
 .bottom-nav a:active { background: var(--card2); }
@@ -481,7 +480,21 @@ document.getElementById('pdfBtn').addEventListener('click', function() {
   <tbody>${rows}</tbody>
   <tfoot><tr><td colspan="5" style="text-align:right;font-weight:700;padding-top:10px;">TOTAL</td>
   <td style="text-align:right;font-weight:800;color:#C0392B;padding-top:10px;">KSh ${total.toLocaleString()}</td></tr></tfoot>
-  </table>
+  </table></body></html>`);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
+});
+
+function todayKey() { return new Date().toISOString().slice(0,10); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
 <nav class="bottom-nav" id="bottomNav">
   <a href="index.html" data-page="home">
     <span class="nav-icon">🏠</span>
@@ -516,27 +529,9 @@ document.getElementById('pdfBtn').addEventListener('click', function() {
       (page === 'payment' && path === 'payment.html') ||
       (page === 'spending' && path === 'spending.html') ||
       (page === 'faq' && path === 'faq.html')
-    ) {
-      a.classList.add('active');
-    }
+    ) { a.classList.add('active'); }
   });
 })();
-</script>
-
-</body></html>`);
-  w.document.close();
-  setTimeout(() => w.print(), 500);
-});
-
-function todayKey() { return new Date().toISOString().slice(0,10); }
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
-}
 </script>
 </body>
 </html>

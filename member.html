@@ -623,7 +623,6 @@ body.light .ws-name { color: #141414; }
   text-transform: uppercase;
   transition: color .15s, background .15s;
   -webkit-tap-highlight-color: transparent;
-  border-radius: 0;
   padding: 6px 4px 4px;
 }
 .bottom-nav a:active { background: var(--card2); }
@@ -1949,7 +1948,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) logoutBtn.addEventListener('click', doLogout);
 });
 </script>
-
 <nav class="bottom-nav" id="bottomNav">
   <a href="index.html" data-page="home">
     <span class="nav-icon">🏠</span>
@@ -1984,12 +1982,9 @@ document.addEventListener('DOMContentLoaded', () => {
       (page === 'payment' && path === 'payment.html') ||
       (page === 'spending' && path === 'spending.html') ||
       (page === 'faq' && path === 'faq.html')
-    ) {
-      a.classList.add('active');
-    }
+    ) { a.classList.add('active'); }
   });
 })();
 </script>
-
 </body>
 </html>
