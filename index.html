@@ -474,6 +474,87 @@ img {
   transition: opacity .15s, transform .1s;
 }
 .admin-login-btn:active { opacity: .85; }
+
+/* ── PUBLIC SLIDESHOW ─────────────────────────────────────────── */
+.pub-slideshow {
+  margin-top: 20px;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 130px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.pub-slide {
+  position: absolute; inset: 0;
+  padding: 16px;
+  display: flex; flex-direction: column; justify-content: center;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  pointer-events: none;
+}
+.pub-slide.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.pub-slide.zoom-out {
+  opacity: 0;
+  transform: scale(1.06);
+}
+.pub-slide-icon { font-size: 26px; margin-bottom: 6px; }
+.pub-slide-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  color: var(--muted); margin-bottom: 4px;
+}
+.pub-slide-body {
+  font-size: 13px; font-weight: 600;
+  color: var(--text); line-height: 1.5;
+}
+.pub-slide-body span { color: var(--amber2); }
+.pub-slide-body .green-val { color: var(--green2); }
+/* Slide dots */
+.pub-dots {
+  display: flex; justify-content: center; gap: 5px;
+  padding: 8px 0 10px;
+}
+.pub-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border); transition: background .3s, transform .3s;
+}
+.pub-dot.active { background: var(--amber2); transform: scale(1.35); }
+/* Pay copy button */
+.pay-copy-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700;
+  background: rgba(37,99,235,0.15); color: var(--amber2);
+  border: 1px solid rgba(37,99,235,0.3);
+  border-radius: 5px; padding: 3px 8px;
+  cursor: pointer; margin-top: 6px;
+  transition: opacity .15s;
+}
+.pay-copy-btn:active { opacity: .7; }
+/* Notice slide accent */
+.slide-notice-bar {
+  width: 3px; border-radius: 3px; background: var(--amber2);
+  align-self: stretch; margin-right: 10px; flex-shrink: 0;
+  min-height: 40px;
+}
+.slide-row { display: flex; align-items: flex-start; }
+/* Edit notice btn (super admin only) */
+.pub-edit-btn {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 11px; font-weight: 700;
+  background: rgba(37,99,235,0.18); color: var(--amber2);
+  border: 1px solid rgba(37,99,235,0.3);
+  border-radius: 5px; padding: 3px 8px;
+  cursor: pointer; display: none;
+  z-index: 10;
+}
+.pub-slideshow:hover .pub-edit-btn { display: block; }
 body.viewer .admin-only  { display: none !important; }
 body.viewer #memberList  { display: none !important; }
 body.viewer .search-wrap { display: none !important; }
@@ -1121,6 +1202,109 @@ body.memberview .vb-unlocked { display: block; }
     <a href="member.html" style="display:block;margin-top:8px;text-decoration:none;">
       <button class="admin-login-btn" style="background:transparent;border:1px solid var(--border);color:var(--muted);width:100%;">👤 My Profile</button>
     </a>
+
+    <!-- ── PUBLIC INFO SLIDESHOW ── -->
+    <div class="pub-slideshow" id="pubSlideshow">
+      <!-- Super admin edit button — visible on hover when logged in as super admin -->
+      <button class="pub-edit-btn" id="pubEditBtn" onclick="openPubInfoEditor()" title="Edit public info">✏️ Edit</button>
+
+      <!-- Slide 1: About the Group -->
+      <div class="pub-slide active" id="pubSlide0">
+        <div class="pub-slide-icon">🏍️</div>
+        <div class="pub-slide-title">About This Group</div>
+        <div class="pub-slide-body" id="pubAboutText">
+          <span>Bogonko-Ngelani Stage</span> — Official Boda Boda Welfare Group, Katani, Pridelands. Est. & registered with county authorities.
+        </div>
+      </div>
+
+      <!-- Slide 2: How to Pay -->
+      <div class="pub-slide" id="pubSlide1">
+        <div class="pub-slide-icon">💳</div>
+        <div class="pub-slide-title">How to Pay via M-Pesa</div>
+        <div class="pub-slide-body">
+          1. Go to <span>M-Pesa → Lipa na M-Pesa → Pay Bill</span><br>
+          2. Business No: <span>544600</span><br>
+          3. Account No: <span>942540</span>
+          <br><button class="pay-copy-btn" onclick="copyAccNo()">📋 Copy Acc No.</button>
+        </div>
+      </div>
+
+      <!-- Slide 3: Quick Stats -->
+      <div class="pub-slide" id="pubSlide2">
+        <div class="pub-slide-icon">📊</div>
+        <div class="pub-slide-title">Group Stats</div>
+        <div class="pub-slide-body">
+          Members: <span class="green-val" id="pubMemberCount">—</span><br>
+          Daily Rate: <span>KSh 50</span><br>
+          Days left this month: <span class="green-val" id="pubDaysLeft">—</span>
+        </div>
+      </div>
+
+      <!-- Slide 4: Contribution Reminder -->
+      <div class="pub-slide" id="pubSlide3">
+        <div class="pub-slide-icon">📅</div>
+        <div class="pub-slide-title">Contribution Reminder</div>
+        <div class="pub-slide-body" id="pubReminderText">
+          Loading…
+        </div>
+      </div>
+
+      <!-- Slide 5: Welfare Benefit -->
+      <div class="pub-slide" id="pubSlide4">
+        <div class="pub-slide-icon">🆘</div>
+        <div class="pub-slide-title">Welfare Benefit</div>
+        <div class="pub-slide-body" id="pubWelfareText">
+          Active members are entitled to <span>welfare support</span> in times of need. Stay up to date with contributions to remain eligible.
+        </div>
+      </div>
+
+      <!-- Slide 6: Notice Board -->
+      <div class="pub-slide" id="pubSlide5">
+        <div class="pub-slide-icon">📣</div>
+        <div class="pub-slide-title">Notice Board</div>
+        <div class="slide-row">
+          <div class="slide-notice-bar"></div>
+          <div class="pub-slide-body" id="pubNoticeText" style="padding-top:2px;">
+            No current notices. Check back soon.
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Dots -->
+    <div class="pub-dots" id="pubDots">
+      <div class="pub-dot active"></div>
+      <div class="pub-dot"></div>
+      <div class="pub-dot"></div>
+      <div class="pub-dot"></div>
+      <div class="pub-dot"></div>
+      <div class="pub-dot"></div>
+    </div>
+  </div>
+
+  <!-- ── PUB INFO EDITOR MODAL (super admin) ── -->
+  <div class="modal-wrap" id="pubInfoModal">
+    <div class="modal" style="max-width:360px;">
+      <div class="modal-header">
+        <span class="modal-title">✏️ Edit Public Info</span>
+        <button class="modal-close" onclick="closePubInfoEditor()">✕</button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+        <div class="modal-field">
+          <label>🏍️ About Group (shown on slide 1)</label>
+          <textarea id="piAbout" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div class="modal-field">
+          <label>🆘 Welfare Benefit Description</label>
+          <textarea id="piWelfare" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div class="modal-field">
+          <label>📣 Public Notice (leave blank to hide)</label>
+          <textarea id="piNotice" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div id="piError" class="pw-error"></div>
+        <button class="modal-btn" onclick="savePubInfo()">💾 Save Changes</button>
+      </div>
+    </div>
   </div>
   <div class="vb-unlocked">
 
@@ -2083,6 +2267,8 @@ function loadMembers() {
     if(snap.exists()&&snap.data().list&&snap.data().list.length>0) MEMBERS=snap.data().list;
     setSyncStatus(true,'☁️ Live');
     renderAll();
+    const mcEl = document.getElementById('pubMemberCount');
+    if (mcEl) mcEl.textContent = MEMBERS.length || '—';
     if(isAdmin) {
       loadAllWelfareApps();
       loadPayConfirmRequests();
@@ -3610,6 +3796,7 @@ function applyRoleRestrictions() {
   if (manageAdminsBtn) manageAdminsBtn.style.display = isSuperAdmin ? '' : 'none';
   const saccoSettingsBtn = document.getElementById('saccoSettingsBtn');
   if (saccoSettingsBtn) saccoSettingsBtn.style.display = isSuperAdmin ? '' : 'none';
+  if (typeof refreshPubEditBtn === 'function') refreshPubEditBtn();
 
   // ── PAYMENT (super-admin grants viewPayment role) ──
   const canSeePayment = isSuperAdmin || hasRole('viewPayment');
@@ -4202,7 +4389,131 @@ Object.assign(window,{
   toggleTheme, openMembersPanel, closeMembersPanel, addMember, renderPanelList,
   openEditModal, closeEditModal, saveEdit,
   openDetailsModal, closeDetailsModal,
+// ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
+(function() {
+  const TOTAL = 6;
+  let current = 0;
+  let timer = null;
+
+  function goTo(idx) {
+    const slides = document.querySelectorAll('.pub-slide');
+    const dots   = document.querySelectorAll('.pub-dot');
+    // Zoom-out outgoing
+    slides[current].classList.remove('active');
+    slides[current].classList.add('zoom-out');
+    setTimeout(() => slides[current].classList.remove('zoom-out'), 560);
+    current = (idx + TOTAL) % TOTAL;
+    slides[current].classList.add('active');
+    dots.forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, 3000);
+  }
+
+  // Tap dots to jump
+  document.querySelectorAll('.pub-dot').forEach((dot, i) => {
+    dot.addEventListener('click', () => { goTo(i); clearInterval(timer); startAuto(); });
+  });
+
+  // Swipe support
+  let sx = 0;
+  const sw = document.getElementById('pubSlideshow');
+  if (sw) {
+    sw.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    sw.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 40) { goTo(dx < 0 ? current+1 : current-1); clearInterval(timer); startAuto(); }
+    }, { passive: true });
+  }
+
+  startAuto();
+
+  // Stats: days left in month
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const daysLeft = lastDay - now.getDate();
+  const dlEl = document.getElementById('pubDaysLeft');
+  if (dlEl) dlEl.textContent = daysLeft;
+
+  // Reminder text
+  const reminderEl = document.getElementById('pubReminderText');
+  if (reminderEl) {
+    const day = now.getDate();
+    const isEndOfMonth = daysLeft <= 3;
+    if (daysLeft === 0) {
+      reminderEl.innerHTML = '⚠️ <span>Last day of the month!</span> Don\'t miss today\'s contribution of <span>KSh 50</span>.';
+    } else if (isEndOfMonth) {
+      reminderEl.innerHTML = `Only <span>${daysLeft} day${daysLeft>1?'s':''} left</span> this month. Keep your contributions up to date — <span>KSh 50/day</span>.`;
+    } else {
+      reminderEl.innerHTML = `Today is <span>Day ${day}</span>. Stay consistent — contribute <span>KSh 50</span> daily to remain an active member.`;
+    }
+  }
+})();
+
+// Copy account number
+function copyAccNo() {
+  navigator.clipboard.writeText('942540').then(() => showToast('✓ Account number copied'));
+}
+
+// ── PUBLIC INFO EDITOR (super admin) ────────────────────────────────────
+async function openPubInfoEditor() {
+  if (!isSuperAdminUser()) { showToast('⛔ Super-admin only'); return; }
+  const piError = document.getElementById('piError');
+  piError.style.display = 'none';
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
+    const d = snap.exists() ? snap.data() : {};
+    document.getElementById('piAbout').value   = d.about   || '';
+    document.getElementById('piWelfare').value = d.welfare || '';
+    document.getElementById('piNotice').value  = d.notice  || '';
+  } catch(e) {}
+  document.getElementById('pubInfoModal').classList.add('open');
+}
+function closePubInfoEditor() { document.getElementById('pubInfoModal').classList.remove('open'); }
+async function savePubInfo() {
+  if (!isSuperAdminUser()) { showToast('⛔ Super-admin only'); return; }
+  const about   = document.getElementById('piAbout').value.trim();
+  const welfare = document.getElementById('piWelfare').value.trim();
+  const notice  = document.getElementById('piNotice').value.trim();
+  const piError = document.getElementById('piError');
+  try {
+    await setDoc(doc(db, 'tracker', 'publicInfo'), { about, welfare, notice, updatedAt: Date.now() });
+    closePubInfoEditor();
+    showToast('✓ Public info updated');
+    // Update live text
+    if (about)   document.getElementById('pubAboutText').textContent   = about;
+    if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
+    document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
+  } catch(e) {
+    piError.textContent = '⚠️ Failed to save. Try again.';
+    piError.style.display = 'block';
+  }
+}
+
+// Load public info from Firestore on page load
+(async function loadPublicInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
+    if (!snap.exists()) return;
+    const d = snap.data();
+    if (d.about)   document.getElementById('pubAboutText').textContent   = d.about;
+    if (d.welfare) document.getElementById('pubWelfareText').textContent = d.welfare;
+    if (d.notice)  document.getElementById('pubNoticeText').textContent  = d.notice;
+  } catch(e) {}
+})();
+
+// Show edit button only to super admin after login
+function refreshPubEditBtn() {
+  const btn = document.getElementById('pubEditBtn');
+  if (btn) btn.style.display = isSuperAdminUser() ? 'block' : 'none';
+}
+
   openSaccoSettings, closeSaccoSettings, saveSaccoSettings,
+  openPubInfoEditor, closePubInfoEditor, savePubInfo, copyAccNo,
   openDeleteModal, closeDeleteModal, confirmDelete,
   openWABlast, closeWAModal, waSelectAll, sendWAReminders, sendWADirect,
   exportPDF, exportSundayPDF, openReportModal, closeReportModal, renderMonthlyReport, printReport,
