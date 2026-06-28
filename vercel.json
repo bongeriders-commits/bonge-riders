@@ -15,7 +15,12 @@
     { "source": "/icon-192.png", "destination": "/icon-192.png" },
     { "source": "/icon-180.png", "destination": "/icon-180.png" },
     { "source": "/icon-32.png", "destination": "/icon-32.png" },
-    { "source": "/icon-16.png", "destination": "/icon-16.png" }
+    { "source": "/icon-16.png", "destination": "/icon-16.png" },
+    { "source": "/privacy-policy.pdf", "destination": "/privacy-policy.pdf" },
+    { "source": "/register.html", "destination": "/register.html" },
+    { "source": "/faq.html", "destination": "/faq.html" },
+    { "source": "/terms.html", "destination": "/terms.html" },
+    { "source": "/manual.pdf", "destination": "/manual.pdf" }
   ],
   "headers": [
     {

@@ -913,15 +913,22 @@ body.memberview .vb-unlocked { display: block; }
 .copyright-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: 28px; z-index: 150;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
   background: var(--card2);
   border-top: 1px solid var(--border);
   font-size: 10px; font-weight: 600;
   color: var(--sub);
   letter-spacing: 0.3px;
-  pointer-events: none;
+  pointer-events: auto;
   user-select: none;
 }
+.copyright-bar a {
+  color: var(--sub);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+.copyright-bar a:hover { opacity: 1; }
 
 /* ── FABs ── */
 .fab-wrap { position: fixed; bottom: 44px; right: 16px; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
@@ -4845,7 +4852,11 @@ function refreshPubEditBtn() {
   if (btn) btn.style.display = isSuperAdminUser() ? '' : 'none';
 }
 </script>
-<div class="copyright-bar">© Bogonko-Ngelani Stage</div>
+<div class="copyright-bar">
+  <span>© Bogonko-Ngelani Stage</span>
+  <span>·</span>
+  <a href="/privacy-policy.pdf" target="_blank" rel="noopener">Privacy Policy</a>
+</div>
 
 </body>
 </html>
