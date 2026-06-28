@@ -3473,6 +3473,7 @@ async function deleteIncomeEntry(id){
 // ════════════════════════════════════════════════
 let spending = [];
 let _spendingUnsub = null;
+let _editingSpendId = null;
 let _spendingLoaded = false;
 
 async function saveSpending() {
@@ -3553,7 +3554,6 @@ function openAddSpendingModal() {
   document.getElementById('addSpendingModal').classList.add('open');
   setTimeout(()=>document.getElementById('spendDesc').focus(), 250);
 }
-function closeAddSpendingModal() { document.getElementById('addSpendingModal').classList.remove('open'); }
 function toggleSpendDetails() {
   const dropdown = document.getElementById('spendDetailsDropdown');
   const caret = document.getElementById('spendDetailsCaretIcon');
@@ -3633,7 +3633,6 @@ function openSpendingModal() {
 function closeSpendingModal() { document.getElementById('spendingModal').classList.remove('open'); }
 
 // Edit a spending entry directly from the spending modal
-let _editingSpendId = null;
 function openEditSpending(id) {
   const e = spending.find(x => x.id === id);
   if (!e) return;
