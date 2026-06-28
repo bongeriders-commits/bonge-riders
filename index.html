@@ -600,6 +600,7 @@ body.viewer .fab-wrap    { display: none !important; }
 body.viewer .admin-toolbar { display: none !important; }
 body.viewer .viewer-board  { display: block; }
 body.viewer .income-section { display: none !important; }
+body:not(.viewer) .public-only { display: none !important; }
 
 /* Within the viewer board: signed-out visitors see the sign-in
    prompt; visitors who unlocked with the PIN see the dashboard.
@@ -1144,6 +1145,7 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 
   <!-- JOIN BANNER -->
+  <div class="public-only">
   <a href="register.html" style="display:flex;align-items:center;gap:12px;margin:10px 14px 0;padding:12px 14px;background:var(--amber-bg);border:1px solid rgba(196,98,29,.3);border-radius:10px;text-decoration:none;color:var(--text);">
     <div style="font-size:24px;flex-shrink:0;">🏍️</div>
     <div style="flex:1;">
@@ -1152,6 +1154,7 @@ body.memberview .vb-unlocked { display: block; }
     </div>
     <div style="font-size:16px;color:var(--amber2);">→</div>
   </a>
+  </div>
 
   <!-- Arc + mini stats -->
   <div class="stats-row">
@@ -1318,7 +1321,7 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 
   <!-- ── USER MANUAL ──────────────────────────────────────────────────── -->
-  <div style="padding:0 14px 6px;">
+  <div class="public-only" style="padding:0 14px 6px;">
     <a href="manual.pdf" download="BongeRiders_UserManual.pdf" style="text-decoration:none;display:block;">
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;">
         <div style="display:flex;align-items:center;gap:10px;">
@@ -1334,7 +1337,7 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 
   <!-- ── FAQ SECTION ──────────────────────────────────────────────────── -->
-  <div style="padding:8px 14px 14px;">
+  <div class="public-only" style="padding:8px 14px 14px;">
     <a href="faq.html" style="text-decoration:none;display:block;">
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;">
         <div style="display:flex;align-items:center;gap:10px;">
