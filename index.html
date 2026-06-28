@@ -483,14 +483,19 @@ img {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  padding-bottom: 28px; /* room for dots */
+  /* Fill remaining space: viewport minus copyright bar (28px) */
+  min-height: calc(100vh - 560px);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 34px; /* room for dots */
 }
 .pub-slide {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  padding: 16px 16px 0;
-  display: flex; flex-direction: column; justify-content: center;
-  min-height: 120px;
+  top: 0; left: 0; right: 0; bottom: 34px;
+  padding: 24px 20px 0;
+  display: flex; flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   opacity: 0;
   transform: scale(0.92);
   transition: opacity 0.55s ease, transform 0.55s ease;
@@ -500,46 +505,64 @@ img {
   opacity: 1;
   transform: scale(1);
   pointer-events: auto;
-  position: relative; /* only active takes up space */
+  position: relative;
+  bottom: auto;
+  flex: 1;
 }
 .pub-slide.zoom-out {
   opacity: 0;
   transform: scale(1.06);
   position: absolute;
 }
-
+/* Logo in each slide */
+.pub-slide-logo {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 14px;
+  border: 2px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
 .pub-slide-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 12px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .8px;
-  color: var(--muted); margin-bottom: 4px;
+  font-size: 16px; font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-bottom: 16px;
+  width: 100%;
 }
 .pub-slide-body {
-  font-size: 13px; font-weight: 600;
-  color: var(--text); line-height: 1.5;
+  font-size: 14px; font-weight: 500;
+  color: var(--text); line-height: 1.7;
+  text-align: center; width: 100%;
 }
-.pub-slide-body span { color: var(--amber2); }
-.pub-slide-body .green-val { color: var(--green2); }
+.pub-slide-body b { color: var(--amber2); }
+.pub-slide-body .green-val { color: var(--green2); font-weight: 700; }
 /* Slide dots */
 .pub-dots {
   position: absolute;
-  bottom: 6px; left: 0; right: 0;
-  display: flex; justify-content: center; gap: 5px;
+  bottom: 8px; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 6px;
   padding: 4px 0;
 }
 .pub-dot {
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 7px; height: 7px; border-radius: 50%;
   background: var(--border); transition: background .3s, transform .3s;
+  cursor: pointer;
 }
-.pub-dot.active { background: var(--amber2); transform: scale(1.35); }
+.pub-dot.active { background: var(--amber2); transform: scale(1.4); }
 /* Pay copy button */
 .pay-copy-btn {
   display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   background: rgba(37,99,235,0.15); color: var(--amber2);
   border: 1px solid rgba(37,99,235,0.3);
-  border-radius: 5px; padding: 3px 8px;
-  cursor: pointer; margin-top: 6px;
+  border-radius: 5px; padding: 5px 12px;
+  cursor: pointer; margin-top: 10px;
   transition: opacity .15s;
 }
 .pay-copy-btn:active { opacity: .7; }
@@ -549,7 +572,7 @@ img {
   align-self: stretch; margin-right: 10px; flex-shrink: 0;
   min-height: 40px;
 }
-.slide-row { display: flex; align-items: flex-start; }
+.slide-row { display: flex; align-items: flex-start; justify-content: center; width: 100%; }
 /* Edit notice btn removed - now in admin menu */
 body.viewer .admin-only  { display: none !important; }
 body.viewer #memberList  { display: none !important; }
@@ -1205,53 +1228,56 @@ body.memberview .vb-unlocked { display: block; }
 
       <!-- Slide 1: About the Group -->
       <div class="pub-slide active" id="pubSlide0">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">About This Group</div>
         <div class="pub-slide-body" id="pubAboutText">Bogonko-Ngelani Stage — Official Boda Boda Welfare Group, Katani, Pridelands. Est. &amp; registered with county authorities.</div>
       </div>
 
       <!-- Slide 2: How to Pay -->
       <div class="pub-slide" id="pubSlide1">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">How to Pay via M-Pesa</div>
         <div class="pub-slide-body">
-          1. M-Pesa → Lipa na M-Pesa → Pay Bill<br>
+          1. M-Pesa &rarr; Lipa na M-Pesa &rarr; Pay Bill<br>
           2. Business No: <b>544600</b><br>
           3. Account No: <b>942540</b><br>
-          <button class="pay-copy-btn" onclick="copyAccNo()">📋 Copy Acc No.</button>
+          <button class="pay-copy-btn" onclick="copyAccNo()">&#128203; Copy Acc No.</button>
         </div>
       </div>
 
       <!-- Slide 3: Quick Stats -->
       <div class="pub-slide" id="pubSlide2">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Group Stats</div>
         <div class="pub-slide-body">
-          Members: <b id="pubMemberCount">—</b><br>
+          Members: <b id="pubMemberCount">&#8212;</b><br>
           Daily Rate: <b>KSh 50</b><br>
-          Days left this month: <b id="pubDaysLeft">—</b>
+          Days left this month: <b id="pubDaysLeft">&#8212;</b>
         </div>
       </div>
 
       <!-- Slide 4: Contribution Reminder -->
       <div class="pub-slide" id="pubSlide3">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Contribution Reminder</div>
-        <div class="pub-slide-body" id="pubReminderText">Loading…</div>
+        <div class="pub-slide-body" id="pubReminderText">Loading&#8230;</div>
       </div>
 
       <!-- Slide 5: Welfare Benefit -->
       <div class="pub-slide" id="pubSlide4">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Welfare Benefit</div>
         <div class="pub-slide-body" id="pubWelfareText">Active members are entitled to welfare support in times of need. Stay up to date with contributions to remain eligible.</div>
       </div>
 
       <!-- Slide 6: Notice Board -->
       <div class="pub-slide" id="pubSlide5">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Notice Board</div>
-        <div class="slide-row">
-          <div class="slide-notice-bar"></div>
-          <div class="pub-slide-body" id="pubNoticeText" style="padding-top:2px;">No current notices. Check back soon.</div>
-        </div>
+        <div class="pub-slide-body" id="pubNoticeText">No current notices. Check back soon.</div>
       </div>
 
-      <!-- Dots INSIDE slideshow wrapper -->
+      <!-- Dots -->
       <div class="pub-dots" id="pubDots">
         <div class="pub-dot active" data-idx="0"></div>
         <div class="pub-dot" data-idx="1"></div>
@@ -4416,7 +4442,7 @@ Object.assign(window,{
 
   function startAuto() {
     clearInterval(timer);
-    timer = setInterval(() => goTo(current + 1), 3000);
+    timer = setInterval(() => goTo(current + 1), 7000);
   }
 
   getDots().forEach((dot) => {
