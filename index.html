@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Bonge Riders — Bogonko-Ngelani Stage Welfare Tracker</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#141414">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="description" content="Bonge Riders — official welfare tracker for Bogonko Bodaboda &amp; Matatu Stage, Katani, Pridelands. Located at Kwa Bogonko Stage, Katani. Contact: 0725672771. M-Pesa Paybill 544600, Account 942540.">
 <meta name="keywords" content="Bonge Riders Katani, Bogonko Stage Katani, Kwa Bogonko Stage, Bogonko bodaboda stage Katani, Ngelani Stage, matatu welfare Katani, PSV welfare Kenya, bodaboda stage Katani Pridelands, Bogonko Ngelani matatu">
 <meta name="geo.placename" content="Kwa Bogonko Stage, Katani, Pridelands, Kenya">
@@ -28,44 +28,44 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0F1117;
-  --bg2:      #161A23;
-  --card:     #1C2130;
-  --card2:    #212840;
-  --border:   #2A3350;
-  --text:     #E8ECF4;
-  --muted:    #7A85A0;
-  --dim:      #404860;
-  --amber:    #2563EB;
-  --amber2:   #3B82F6;
-  --amber-bg: rgba(37,99,235,0.12);
-  --green:    #0D7A5F;
-  --green2:   #10B981;
-  --green-bg: rgba(16,185,129,0.10);
-  --red:      #DC2626;
-  --radius:   8px;
-  --radius-lg:12px;
+  --bg:       #F7F8FA;
+  --bg2:      #FFFFFF;
+  --card:     #FFFFFF;
+  --card2:    #F2F3F6;
+  --border:   #E2E5EC;
+  --text:     #111827;
+  --muted:    #6B7280;
+  --dim:      #9CA3AF;
+  --amber:    #CC1818;
+  --amber2:   #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --red:      #CC1818;
+  --radius:   10px;
+  --radius-lg:14px;
 }
 
 /* Light mode */
 body.light {
-  --bg:       #F0F2F7;
-  --bg2:      #E6E9F0;
+  --bg:       #F7F8FA;
+  --bg2:      #FFFFFF;
   --card:     #FFFFFF;
-  --card2:    #F0F2F7;
-  --border:   #D0D5E8;
-  --text:     #0F1117;
-  --muted:    #5A6380;
-  --dim:      #A0AACC;
-  --amber:    #1D4ED8;
-  --amber2:   #2563EB;
-  --amber-bg: rgba(29,78,216,0.08);
+  --card2:    #F2F3F6;
+  --border:   #E2E5EC;
+  --text:     #111827;
+  --muted:    #6B7280;
+  --dim:      #9CA3AF;
+  --amber:    #CC1818;
+  --amber2:   #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
   --green:    #065F46;
   --green2:   #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #B91C1C;
-  --radius:   8px;
-  --radius-lg:12px;
+  --red:      #CC1818;
+  --radius:   10px;
+  --radius-lg:14px;
 }
 
 html, body {
@@ -144,7 +144,7 @@ img {
   text-align: center;
   color: #fff;
   text-shadow:
-    0 0 40px rgba(255,180,0,0.6),
+    0 0 40px rgba(204,24,24,0.6),
     0 4px 24px rgba(0,0,0,0.8),
     3px 3px 0 rgba(0,0,0,0.4);
   animation: splashDrop .7s cubic-bezier(.22,1.2,.36,1) both;
@@ -157,7 +157,7 @@ img {
   width: 60%;
   height: 4px;
   margin: 10px auto 0;
-  background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+  background: linear-gradient(90deg, transparent, #CC1818, transparent);
   border-radius: 2px;
 }
 
@@ -628,8 +628,8 @@ img {
 .pay-copy-btn {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 12px; font-weight: 700;
-  background: rgba(37,99,235,0.15); color: var(--amber2);
-  border: 1px solid rgba(37,99,235,0.3);
+  background: rgba(204,24,24,0.15); color: var(--amber2);
+  border: 1px solid rgba(204,24,24,0.3);
   border-radius: 5px; padding: 5px 12px;
   cursor: pointer; margin-top: 10px;
   transition: opacity .15s;
@@ -1179,7 +1179,7 @@ body.memberview .vb-unlocked { display: block; }
 }
 .w-approve-btn { background: var(--green-bg); color: var(--green2); border: 1px solid rgba(16,185,129,.25); }
 .w-decline-btn { background: rgba(220,38,38,.1); color: #EF4444; border: 1px solid rgba(220,38,38,.22); }
-.w-pending-btn { background: var(--amber-bg); color: var(--amber2); border: 1px solid rgba(37,99,235,.25); }
+.w-pending-btn { background: var(--amber-bg); color: var(--amber2); border: 1px solid rgba(204,24,24,.25); }
 .w-approve-btn:active, .w-decline-btn:active, .w-pending-btn:active { opacity: .7; }
 .w-wa-btn { background: rgba(37,211,102,.15); color: #25D366; border: 1px solid rgba(37,211,102,.3); border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
 .welfare-filter-tabs { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -1418,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', function(){
             <div style="font-size:10px;color:var(--muted);margin-top:1px;">How to use the Bonge Riders app</div>
           </div>
         </div>
-        <span style="font-size:11px;font-weight:700;color:var(--amber2);background:var(--amber-bg);border:1px solid rgba(37,99,235,.25);border-radius:6px;padding:5px 10px;">⬇️ Download</span>
+        <span style="font-size:11px;font-weight:700;color:var(--amber2);background:var(--amber-bg);border:1px solid rgba(204,24,24,.25);border-radius:6px;padding:5px 10px;">⬇️ Download</span>
       </div>
     </a>
   </div>
@@ -1442,7 +1442,7 @@ document.addEventListener('DOMContentLoaded', function(){
   <div class="vb-unlocked">
 
     <!-- 🏆 Leaderboard ticker — scrolls right to left above Today's summary -->
-    <div style="overflow:hidden;background:rgba(37,99,235,0.07);border:1px solid rgba(37,99,235,0.18);border-radius:8px;padding:5px 0;margin-bottom:10px;position:relative;">
+    <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-bottom:10px;position:relative;">
       <div style="overflow:hidden;">
         <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
           <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
@@ -3153,8 +3153,8 @@ async function confirmPassword(){
 // THEME
 // ════════════════════════════════════════════════
 function loadTheme(){
-  let theme='dark';
-  try { theme=localStorage.getItem(THEME_KEY)||'dark'; } catch(e){}
+  let theme='light';
+  try { theme=localStorage.getItem(THEME_KEY)||'light'; } catch(e){}
   applyTheme(theme);
 }
 function applyTheme(theme){
@@ -4584,7 +4584,7 @@ function launchConfetti(sourceCard) {
   if(!canvas) return;
   canvas.width=window.innerWidth; canvas.height=window.innerHeight;
   const ctx=canvas.getContext('2d');
-  const COLORS=['#2563EB','#10B981','#FFA000','#EF4444','#A855F7','#F59E0B'];
+  const COLORS=['#CC1818','#10B981','#FFA000','#EF4444','#A855F7','#F59E0B'];
   const particles=Array.from({length:70},()=>({
     x:Math.random()*canvas.width, y:-10,
     r:4+Math.random()*5, speed:2+Math.random()*3,
@@ -4662,7 +4662,7 @@ function renderSparkline() {
   // Line
   ctx.beginPath();
   pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-  ctx.strokeStyle='#3B82F6'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+  ctx.strokeStyle='#CC1818'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
   // Fill
   ctx.beginPath();
   pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
@@ -4671,7 +4671,7 @@ function renderSparkline() {
   // Dots
   pts.forEach((p,i)=>{
     ctx.beginPath(); ctx.arc(p.x,p.y,3,0,2*Math.PI);
-    ctx.fillStyle=counts[i]>0?'#3B82F6':'#2A3350'; ctx.fill();
+    ctx.fillStyle=counts[i]>0?'#CC1818':'#E2E5EC'; ctx.fill();
   });
   if(labelsEl) labelsEl.innerHTML=dates.map(({label})=>
     `<span style="font-size:9px;color:var(--muted);font-weight:600;">${label}</span>`).join('');
