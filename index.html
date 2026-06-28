@@ -1993,6 +1993,9 @@ async function setupPushNotifications() {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return;
 
+    // Firestore rules require an authenticated user (even anonymous) to write.
+    if (!auth.currentUser) await signInAnonymously(auth);
+
     const reg = await navigator.serviceWorker.register('/sw.js');
     const messaging = getMessaging(app);
     const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });

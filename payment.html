@@ -134,7 +134,7 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 </div>
 
 <!-- Login gate (disabled) -->
-<div id="loginGate" style="display:none;">
+<div id="loginGate" style="display:block;">
   <div class="gate-logo">BOGONKO<em>-NGELANI</em></div>
   <div class="gate-subtitle">Admin access required</div>
   <div class="gate-card">
@@ -244,14 +244,33 @@ function notifyBulkPaid(count, dateStr) {
   }).catch(() => {});
 }
 
-// ── auth (sign-in requirement removed) ───────────
-document.getElementById('loginGate').style.display   = 'none';
-document.getElementById('mainContent').style.display = 'block';
-loadData();
-// init date picker to today
-const dp = document.getElementById('datePicker');
-dp.value = todayKey();
-document.getElementById('dateLabel').textContent = fmtDate(selectedDate);
+// ── auth ─────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById('loginGate').style.display   = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    // init date picker to today
+    const dp = document.getElementById('datePicker');
+    dp.value = todayKey();
+    document.getElementById('dateLabel').textContent = fmtDate(selectedDate);
+    loadData();
+  } else {
+    document.getElementById('loginGate').style.display   = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+  }
+});
+
+window.doLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  errEl.style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+  } catch(e) {
+    errEl.style.display = 'block';
+  }
+};
 
 // ── load data ────────────────────────────────────
 function loadData() {
@@ -290,7 +309,15 @@ window.markAll = function(state) {
   } else {
     if (!payments[selectedDate]) payments[selectedDate] = {};
     newlyPaid = state ? MEMBERS.filter(m => !payments[selectedDate][m.phone]).length : 0;
-    MEMBERS.forEach(m => { payments[selectedDate][m.phone] = state; });
+    if (state) {
+      MEMBERS.forEach(m => { payments[selectedDate][m.phone] = true; });
+    } else {
+      // Delete keys rather than storing false, to keep the document clean
+      MEMBERS.forEach(m => { delete payments[selectedDate][m.phone]; });
+      // If the day object is now empty (just __locked or nothing), clean it up
+      const remaining = Object.keys(payments[selectedDate]).filter(k => k !== '__locked');
+      if (remaining.length === 0) delete payments[selectedDate];
+    }
   }
   savePayments();
   render();
@@ -316,7 +343,11 @@ window.toggleMember = function(phone) {
   }
   if (!payments[selectedDate]) payments[selectedDate] = {};
   const nowPaid = !wasPaid;
-  payments[selectedDate][phone] = nowPaid;
+  if (nowPaid) {
+    payments[selectedDate][phone] = true;
+  } else {
+    delete payments[selectedDate][phone];
+  }
   savePayments();
   render();
   if (nowPaid) {

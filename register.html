@@ -729,8 +729,8 @@ function goStep4() {
 
   // Build summary
   const rows = [
-    { lbl: 'Stage Contribution', val: 'KSh 10,000 — Paid ✅' },
-    { lbl: 'M-Pesa Code',   val: document.getElementById('inp-mpesacode').value.trim().toUpperCase() },
+    { lbl: 'Stage Contribution', val: feePaid ? 'KSh 10,000 — Paid ✅' : 'Not Yet Paid ⚠️' },
+    { lbl: 'M-Pesa Code',   val: feePaid ? document.getElementById('inp-mpesacode').value.trim().toUpperCase() : '—' },
     { lbl: 'Full Name',     val: document.getElementById('inp-name').value.trim().toUpperCase() },
     { lbl: 'Phone',         val: document.getElementById('inp-phone').value.trim() },
     { lbl: 'National ID',   val: document.getElementById('inp-natid').value.trim() },
@@ -778,12 +778,13 @@ async function submitRegistration() {
     const data = await res.json();
 
     if (data.ok) {
-      // Show success
+      // Show success — use server-provided ref if available
+      const ref = data.ref || data.referenceNumber || ('REG-' + crypto.randomUUID().slice(0,8).toUpperCase());
       document.querySelector('.form-wrap').style.display = 'none';
       document.querySelector('.steps-bar').style.display = 'none';
       document.querySelector('.steps-labels').style.display = 'none';
       document.querySelector('.hero').style.display = 'none';
-      document.getElementById('refNumber').textContent = 'REG-' + Date.now().toString().slice(-6);
+      document.getElementById('refNumber').textContent = ref;
       document.getElementById('successScreen').classList.add('show');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {

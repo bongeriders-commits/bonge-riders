@@ -1,0 +1,78 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password';
+    }
+    function isAnyAuth() {
+      return request.auth != null;
+    }
+
+    match /tracker/members {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/payments {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/income {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/spending {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/dashboard {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/settings {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/admins {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/memberPins {
+      // Members can read their own PIN (checked client-side by phone key).
+      // Only admins can write PINs — prevents members from changing each other's PINs.
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/memberDetails {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/saccoSettings {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/payment_confirmations {
+      // Any authenticated user can submit a confirmation,
+      // but only admins can read or delete them.
+      allow read:   if isAdmin();
+      allow create: if isAnyAuth();
+      allow update, delete: if isAdmin();
+    }
+    match /tracker/{docId} {
+      allow read, write: if isAnyAuth() && docId.matches('welfare_[0-9]+');
+    }
+
+    // Push notification device tokens.
+    // Any signed-in device (including anonymous) can register its OWN
+    // token. Nobody can read the list from the client — only the server
+    // (Firebase Admin SDK, via the service account) reads these to send
+    // notifications, which bypasses these rules entirely.
+    match /pushTokens/{token} {
+      allow read: if false;
+      allow write: if isAnyAuth() && token == request.resource.data.token;
+      allow delete: if isAnyAuth();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

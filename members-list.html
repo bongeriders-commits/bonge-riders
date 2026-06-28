@@ -472,7 +472,8 @@ window.openEdit = async function(phone) {
 window.saveEdit = async function() {
   if (!editingPhone) return;
   const name   = document.getElementById('editName').value.trim().toUpperCase();
-  const phone  = document.getElementById('editPhone').value.trim().replace(/\s/g,'');
+  const rawPhone = document.getElementById('editPhone').value.trim();
+  const phone  = rawPhone.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
   if (!name || !phone) { showToast('⚠️ Fill all fields'); return; }
   const m = MEMBERS.find(x => x.phone === editingPhone);
   if (!m) return;
@@ -533,6 +534,8 @@ window.confirmDelete = async function() {
   if (!deletingPhone) return;
   MEMBERS = MEMBERS.filter(m => m.phone !== deletingPhone);
   await saveMembers();
+  // Payment history is intentionally preserved — past contributions were
+  // real income the group received and must remain in the financial totals.
   showToast(`🗑️ ${deletingName.split(' ')[0]} removed`);
   closeModal('deleteModal');
   renderList();
