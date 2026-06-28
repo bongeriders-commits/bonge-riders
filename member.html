@@ -667,14 +667,14 @@ body.light .ws-name { color: #141414; }
     </div>
     <div class="stat-cell">
       <div class="stat-val red" id="statDaysUnpaid">0</div>
-      <div class="stat-lbl">Days Unpaid</div>
+      <div class="stat-lbl">Unpaid</div>
     </div>
     <div class="stat-cell">
       <div class="stat-val amber" id="statTotalKsh">0</div>
       <div class="stat-lbl">KSh Paid</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-val" id="statStreak" style="color:#FFA000;">0</div>
+      <div class="stat-val" id="statStreak" style="color:#FFA000;">—</div>
       <div class="stat-lbl">🔥 Streak</div>
     </div>
   </div>
@@ -1202,18 +1202,15 @@ function renderStats() {
 
   // 🔥 Streak: consecutive paid days going backwards from yesterday
   const today = todayKey();
-  const sortedPast = [...allDates].filter(dk => dk < today).sort().reverse();
+  const past = [...allDates].filter(dk => dk < today).sort().reverse();
   let streak = 0;
-  for (const dk of sortedPast) {
-    if (isPaid(phone, dk)) streak++;
-    else break;
-  }
+  for (const dk of past) { if (isPaid(phone, dk)) streak++; else break; }
 
   document.getElementById('statDaysPaid').textContent   = daysPaid;
   document.getElementById('statDaysUnpaid').textContent = daysUnpaid;
   document.getElementById('statTotalKsh').textContent   = totalKsh.toLocaleString();
-  const streakEl = document.getElementById('statStreak');
-  if (streakEl) streakEl.textContent = streak >= 2 ? streak + ' 🔥' : streak;
+  const sEl = document.getElementById('statStreak');
+  if(sEl) sEl.textContent = streak >= 1 ? (streak >= 3 ? streak+'🔥' : streak) : '—';
 
   document.getElementById('rateLabel').textContent = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';

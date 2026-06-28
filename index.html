@@ -872,82 +872,33 @@ body.memberview .vb-unlocked { display: block; }
 @keyframes tickerScroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
 /* ── CONFETTI CANVAS ── */
-#confettiCanvas {
-  position: fixed; inset: 0; pointer-events: none;
-  z-index: 9997; width: 100%; height: 100%;
-}
+#confettiCanvas { position:fixed;inset:0;pointer-events:none;z-index:9997;width:100%;height:100%; }
 
-/* ── STREAK BADGE on member card ── */
-.streak-badge {
-  display: inline-flex; align-items: center; gap: 3px;
-  font-size: 10px; font-weight: 700;
-  background: rgba(255,160,0,.15); color: #FFA000;
-  border: 1px solid rgba(255,160,0,.3);
-  border-radius: 20px; padding: 2px 7px; margin-top: 3px;
-}
+/* ── STREAK BADGE ── */
+.streak-badge { display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;background:rgba(255,160,0,.15);color:#FFA000;border:1px solid rgba(255,160,0,.3);border-radius:20px;padding:2px 7px;margin-top:3px; }
 
 /* ── PODIUM CARD ── */
-#podiumCard {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 12px 14px;
-  margin-top: 10px;
-}
-.podium-title {
-  font-size: 10px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
-}
-.podium-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 6px 0; border-bottom: 1px solid var(--border);
-}
-.podium-row:last-child { border-bottom: none; }
-.podium-medal { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
-.podium-name { flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; }
-.podium-days { font-size: 11px; color: var(--muted); font-weight: 600; }
+#podiumCard { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 14px;margin-top:10px; }
+.podium-title { font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px; }
+.podium-row { display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border); }
+.podium-row:last-child { border-bottom:none; }
+.podium-medal { font-size:18px;flex-shrink:0;width:24px;text-align:center; }
+.podium-name { flex:1;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700; }
+.podium-days { font-size:11px;color:var(--muted);font-weight:600; }
 
 /* ── SPARKLINE ── */
-#sparklineWrap {
-  margin-top: 10px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 12px 14px;
-}
-.sparkline-title {
-  font-size: 10px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
-}
-#sparklineCanvas { width: 100%; height: 48px; display: block; }
+#sparklineWrap { margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 14px; }
+.sparkline-title { font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px; }
+#sparklineCanvas { width:100%;height:48px;display:block; }
+#sparklineLabels { display:flex;justify-content:space-between;margin-top:4px; }
 
-/* ── COUNTDOWN NUDGE BANNER ── */
-#nudgeBanner {
-  display: none;
-  margin: 6px 14px 0;
-  background: rgba(255,160,0,.12);
-  border: 1px solid rgba(255,160,0,.3);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 12px; font-weight: 700; color: #FFA000;
-  animation: nudgePulse 2s ease-in-out infinite;
-}
+/* ── NUDGE BANNER ── */
+#nudgeBanner { display:none;margin:6px 14px 0;background:rgba(255,160,0,.12);border:1px solid rgba(255,160,0,.3);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;color:#FFA000;animation:nudgePulse 2s ease-in-out infinite; }
 @keyframes nudgePulse { 0%,100%{opacity:1;} 50%{opacity:.6;} }
 
-/* ── CHECK FLASH on member card ── */
-@keyframes checkFlash {
-  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
-  50%  { transform: scale(1.3) rotate(4deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg);  opacity: 1; }
-}
-.check-flash {
-  position: absolute; top: 8px; right: 8px;
-  font-size: 22px; animation: checkFlash .4s ease forwards;
-  pointer-events: none;
-}
-
-/* ── ANNIVERSARY GLOW ── */
-.anniversary-glow { border-color: rgba(255,180,0,.5) !important; box-shadow: 0 0 0 2px rgba(255,180,0,.15); }
+/* ── CHECK FLASH ── */
+@keyframes checkFlash { 0%{transform:scale(0) rotate(-20deg);opacity:0;} 50%{transform:scale(1.3) rotate(4deg);opacity:1;} 100%{transform:scale(1) rotate(0deg);opacity:1;} }
+.check-flash { position:absolute;top:8px;right:8px;font-size:22px;animation:checkFlash .4s ease forwards;pointer-events:none;z-index:10; }
 .thanks-title { text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
 .thanks-sub { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
 .thanks-sub b { color: var(--green2); }
@@ -1045,7 +996,7 @@ body.memberview .vb-unlocked { display: block; }
 <div id="splashScreen">
   <img src="icon-512.png" alt="BONGE RIDERS">
   <div class="splash-name">Bogonko <span>Stage</span></div>
-  <div id="splashTagline" style="font-size:12px;color:#555;font-weight:600;letter-spacing:.3px;margin-top:4px;"></div>
+  <div id="splashTagline" style="font-size:12px;color:#666;font-weight:600;margin-top:4px;"></div>
 </div>
 
 <!-- Header -->
@@ -1221,28 +1172,28 @@ body.memberview .vb-unlocked { display: block; }
     </div>
 
 
-    <!-- 🏆 Podium — top 3 most consistent -->
+    <a href="member.html" style="display:block;margin-top:10px;text-decoration:none;">
+      <button class="admin-login-btn" style="background:var(--green);color:#fff;width:100%;">👤 My Profile &amp; History</button>
+    </a>
+
+    <!-- 🏆 Podium -->
     <div id="podiumCard">
       <div class="podium-title">🏆 Most Consistent Members</div>
-      <div id="podiumRows"><div class="podium-row" style="color:var(--muted);font-size:12px;">Loading…</div></div>
+      <div id="podiumRows"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
     </div>
 
     <!-- 📊 7-day sparkline -->
     <div id="sparklineWrap">
-      <div class="sparkline-title">📊 Last 7 Days — Members Paid</div>
+      <div class="sparkline-title">📊 Payments — Last 7 Days</div>
       <canvas id="sparklineCanvas"></canvas>
-      <div id="sparklineLabels" style="display:flex;justify-content:space-between;margin-top:4px;"></div>
+      <div id="sparklineLabels"></div>
     </div>
-
-    <a href="member.html" style="display:block;margin-top:10px;text-decoration:none;">
-      <button class="admin-login-btn" style="background:var(--green);color:#fff;width:100%;">👤 My Profile &amp; History</button>
-    </a>
     <button class="admin-login-btn" style="background:var(--muted);margin-top:8px" onclick="logoutMember()">🔒 Lock Dashboard</button>
   </div>
 </div>
 
 <!-- Confetti canvas -->
-<canvas id="confettiCanvas" style="display:none;"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
 <!-- Countdown nudge banner -->
 <div id="nudgeBanner">⏰ <span id="nudgeDaysLeft"></span> — Don't miss your contribution!</div>
@@ -2347,7 +2298,7 @@ function renderMemberList(){
       <div class="member-info">
         <div class="member-name">${name}</div>
         <div class="member-phone">${phone}</div>
-        ${(()=>{ const s=getStreak(phone); return s>=2?`<div class="streak-badge">🔥 ${s}-day streak</div>`:''; })()}
+        <div class="streak-badge-wrap">${getStreak(phone)>=2?`<div class="streak-badge">🔥 ${getStreak(phone)}-day streak</div>`:''}</div>
         <div class="member-actions" onclick="event.stopPropagation()">
           <button class="wa-btn" title="WhatsApp" onclick="sendWADirect('${phone}','${name.split(' ')[0]}')">
             <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 4C9.4 4 4 9.4 4 16.04c0 2.42.7 4.68 1.92 6.6L4 28l5.52-1.84a11.9 11.9 0 0 0 6.52 1.92h.01c6.63 0 12.03-5.4 12.03-12.04C28.08 9.4 22.68 4 16.04 4zm0 21.94h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.75 1.25 1.26-3.66-.24-.38a9.9 9.9 0 0 1-1.52-5.32C6.38 10.5 10.6 6.27 16.04 6.27c2.62 0 5.08 1.02 6.93 2.88a9.74 9.74 0 0 1 2.87 6.9c0 5.44-4.42 9.9-9.8 9.9zm5.38-7.4c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.66.15-.2.3-.76.96-.93 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.04-.17-.3-.02-.46.13-.61.15-.15.34-.39.5-.58.17-.2.22-.34.34-.56.1-.22.05-.42-.05-.57-.1-.15-.6-1.44-.82-1.97-.22-.52-.44-.45-.6-.46h-.51c-.17 0-.45.06-.69.32-.24.27-.92.9-.92 2.2 0 1.3.95 2.55 1.08 2.72.13.18 1.84 2.8 4.47 3.83 2.62 1.03 2.62.69 3.1.65.47-.04 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.25-.16-.55-.31z"/></svg>
@@ -2371,6 +2322,7 @@ function renderMemberList(){
       }
       const nowPaid=isPaid(phone,selectedDate);
       showToast(nowPaid?`✓ ${name.split(' ')[0]} marked paid`:`${name.split(' ')[0]} unmarked`);
+      if(nowPaid){ launchConfetti(card); }
       renderAll();
       if(nowPaid) openThanksModal(phone,name);
     });
@@ -2503,17 +2455,29 @@ function renderMemberDashboard(){
   const vbBS = document.getElementById('vbBalSpent');
   if(vbBS) vbBS.textContent = 'KSh ' + (dashboardAgg.totalSpent||0).toLocaleString();
 
-  // Leaderboard ticker
+  // Leaderboard ticker — with motivational messages
   const ticker = document.getElementById('vbTicker');
   if(ticker && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length){
     const medals = ['🥇','🥈','🥉'];
+    const paidN = dashboardAgg.paidToday||0;
+    const totalN = dashboardAgg.memberCount||65;
+    const unpaidN = totalN - paidN;
     const names = dashboardAgg.leaderboard.map((e,i) =>
       `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">${medals[i]} ${e.fullName||e.name} · ${e.days} days</span>`
     ).join('');
-    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:</span>`;
-    const block = title + names;
+    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Most Consistent:</span>`;
+    const motive1 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">💪 ${paidN} member${paidN!==1?'s':''} contributed today!</span>`;
+    const motive2 = unpaidN>0
+      ? `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">📢 ${unpaidN} still to pay — every shilling counts!</span>`
+      : `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🎉 Full house today — amazing team!</span>`;
+    const motive3 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🏍️ No Rider Left Behind · Paybill 544600 Acc 942540</span>`;
+    const block = title + names + motive1 + motive2 + motive3;
     ticker.innerHTML = block + block;
   }
+
+  renderPodium();
+  renderSparkline();
+  renderNudgeBanner();
 
   const vbDateEl=document.getElementById('vbDate');
   if(vbDateEl) vbDateEl.textContent=dashboardAgg.dateLabel===todayKey()?'Today':dashboardAgg.dateLabel||'';
@@ -2559,6 +2523,9 @@ function renderAll(){
   renderYearNav();
   renderDateStrip();
   renderMemberList();
+  renderPodium();
+  renderSparkline();
+  renderNudgeBanner();
   // When not admin, the header gauge feeds from aggregate not live data
   if (!isAdmin) updateHeaderFromAggregate();
 }
@@ -4078,364 +4045,155 @@ function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 // GLOBAL EXPOSE
 
 // ════════════════════════════════════════════════
-// 🎉 UPGRADE 1: CONFETTI BURST
+// ENTERTAINMENT UPGRADES
 // ════════════════════════════════════════════════
-(function(){
-  const COLORS = ['#2563EB','#10B981','#FFA000','#EF4444','#A855F7','#F59E0B'];
-  let particles = [], raf = null;
 
-  function launch() {
-    const canvas = document.getElementById('confettiCanvas');
-    if (!canvas) return;
-    canvas.style.display = 'block';
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext('2d');
-    particles = Array.from({length: 80}, () => ({
-      x: Math.random() * canvas.width,
-      y: -10,
-      r: 5 + Math.random() * 5,
-      d: Math.random() * 4 + 2,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      tilt: Math.random() * 10 - 10,
-      tiltSpeed: 0.1 + Math.random() * 0.2,
-      angle: 0,
-    }));
-    if (raf) cancelAnimationFrame(raf);
-    let tick = 0;
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.ellipse(p.x, p.y, p.r, p.r * 0.4, p.angle, 0, 2 * Math.PI);
-        ctx.fillStyle = p.color; ctx.fill();
-        p.y += p.d; p.x += Math.sin(p.angle) * 1.5;
-        p.angle += p.tiltSpeed; p.tilt += p.tiltSpeed;
-      });
-      particles = particles.filter(p => p.y < canvas.height + 20);
-      tick++;
-      if (particles.length > 0) raf = requestAnimationFrame(draw);
-      else { canvas.style.display = 'none'; }
-    }
-    draw();
-  }
-  window.launchConfetti = launch;
+// 🎬 Splash tagline rotation
+(function(){
+  const tags=['Stronger Together 💪','Your Stage, Your Family 🏍️','No Rider Left Behind 🤝','Umoja ni nguvu 🇰🇪','Contributing today, covered tomorrow 🙏'];
+  const el=document.getElementById('splashTagline');
+  if(el) el.textContent=tags[Math.floor(Math.random()*tags.length)];
 })();
 
-// ════════════════════════════════════════════════
-// 🔢 UPGRADE 2: STREAK COUNTER
-// ════════════════════════════════════════════════
-function getStreak(phone) {
-  // Count consecutive payment days going backwards from yesterday
-  const allDates = Object.keys(payments).sort().reverse();
-  const today = todayKey();
-  let streak = 0;
-  for (const dk of allDates) {
-    if (dk >= today) continue; // only count past days
-    if (isPaid(phone, dk)) streak++;
-    else break;
+// 🎉 Confetti + ✅ check flash
+function launchConfetti(sourceCard) {
+  // Check flash on card
+  if(sourceCard){
+    sourceCard.style.position='relative';
+    const chk=document.createElement('span');
+    chk.className='check-flash'; chk.textContent='✅';
+    sourceCard.appendChild(chk);
+    setTimeout(()=>chk.remove(), 800);
   }
-  return streak;
+  // Confetti
+  const canvas=document.getElementById('confettiCanvas');
+  if(!canvas) return;
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  const COLORS=['#2563EB','#10B981','#FFA000','#EF4444','#A855F7','#F59E0B'];
+  const particles=Array.from({length:70},()=>({
+    x:Math.random()*canvas.width, y:-10,
+    r:4+Math.random()*5, speed:2+Math.random()*3,
+    color:COLORS[Math.floor(Math.random()*COLORS.length)],
+    angle:Math.random()*Math.PI*2, spin:0.05+Math.random()*0.1
+  }));
+  let alive=true;
+  setTimeout(()=>{ alive=false; ctx.clearRect(0,0,canvas.width,canvas.height); }, 2500);
+  function draw(){
+    if(!alive) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let any=false;
+    particles.forEach(p=>{
+      if(p.y>canvas.height+20) return;
+      any=true;
+      p.y+=p.speed; p.x+=Math.sin(p.angle)*2; p.angle+=p.spin;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.angle);
+      ctx.fillStyle=p.color; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.4);
+      ctx.restore();
+    });
+    if(any) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
 }
 
-// ════════════════════════════════════════════════
-// 📣 UPGRADE 3: MOTIVATIONAL TICKER MESSAGES
-// ════════════════════════════════════════════════
-function buildTickerMotivation() {
-  const paid = countPaidOnDate(selectedDate);
-  const total = MEMBERS.length || 65;
-  const unpaid = total - paid;
-  const msgs = [
-    `💪 ${paid} member${paid!==1?'s':''} paid ${selectedDate===todayKey()?'today':'this day'} — keep it up!`,
-    `🤝 Together we are stronger — ${paid}/${total} members contributed`,
-    unpaid > 0 ? `📢 ${unpaid} member${unpaid!==1?'s':''} still to pay — every shilling counts!` : `🎉 100% collection — amazing team!`,
-    `🏍️ Bogonko-Ngelani Stage — No Rider Left Behind`,
-    `💰 M-Pesa Paybill 544600 · Account 942540`,
-  ];
-  return msgs;
+// 🔥 Streak counter
+function getStreak(phone) {
+  const today=todayKey();
+  const past=Object.keys(payments).filter(dk=>dk<today).sort().reverse();
+  let s=0;
+  for(const dk of past){ if(isPaid(phone,dk)) s++; else break; }
+  return s;
 }
 
-// ════════════════════════════════════════════════
-// 🏆 UPGRADE 4: PODIUM CARD RENDER
-// ════════════════════════════════════════════════
+// 🏆 Podium card
 function renderPodium() {
-  const podiumRows = document.getElementById('podiumRows');
-  if (!podiumRows) return;
-  const medals = ['🥇','🥈','🥉'];
-  // Use dashboardAgg leaderboard if available (for viewers), else compute from payments
+  const el=document.getElementById('podiumRows'); if(!el) return;
+  const medals=['🥇','🥈','🥉'];
   let top3;
-  if (dashboardAgg && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length) {
-    top3 = dashboardAgg.leaderboard.slice(0,3);
-  } else if (MEMBERS && MEMBERS.length) {
-    top3 = MEMBERS.map(m => {
-      const days = Object.keys(payments).filter(dk => isPaid(m.phone, dk)).length;
-      return { name: m.name.split(' ')[0], fullName: m.name, days };
-    }).sort((a,b) => b.days - a.days).slice(0,3);
-  } else { return; }
-
-  podiumRows.innerHTML = top3.map((e,i) =>
-    `<div class="podium-row">
-      <div class="podium-medal">${medals[i]}</div>
-      <div class="podium-name">${e.fullName||e.name}</div>
-      <div class="podium-days">${e.days} day${e.days!==1?'s':''}</div>
-    </div>`
+  if(dashboardAgg&&dashboardAgg.leaderboard&&dashboardAgg.leaderboard.length){
+    top3=dashboardAgg.leaderboard.slice(0,3);
+  } else if(MEMBERS&&MEMBERS.length){
+    top3=MEMBERS.map(m=>({
+      fullName:m.name,
+      days:Object.keys(payments).filter(dk=>isPaid(m.phone,dk)).length
+    })).sort((a,b)=>b.days-a.days).slice(0,3);
+  } else return;
+  el.innerHTML=top3.map((e,i)=>
+    `<div class="podium-row"><div class="podium-medal">${medals[i]}</div><div class="podium-name">${e.fullName||e.name}</div><div class="podium-days">${e.days} day${e.days!==1?'s':''}</div></div>`
   ).join('');
 }
 
-// ════════════════════════════════════════════════
-// 📊 UPGRADE 5: 7-DAY SPARKLINE
-// ════════════════════════════════════════════════
+// 📊 7-day sparkline
 function renderSparkline() {
-  const canvas = document.getElementById('sparklineCanvas');
-  const labelsEl = document.getElementById('sparklineLabels');
-  if (!canvas) return;
-
-  // Build last 7 dates
-  const dates = [];
-  const today = new Date();
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0,10);
-    dates.push({ key, label: d.toLocaleDateString('en-KE',{weekday:'short'}).slice(0,3) });
+  const canvas=document.getElementById('sparklineCanvas');
+  const labelsEl=document.getElementById('sparklineLabels');
+  if(!canvas) return;
+  const dates=[];
+  const now=new Date();
+  for(let i=6;i>=0;i--){
+    const d=new Date(now); d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    dates.push({key,label:d.toLocaleDateString('en-KE',{weekday:'short'}).slice(0,2)});
   }
-
-  const counts = dates.map(({key}) => countPaidOnDate(key));
-  const maxVal = Math.max(...counts, 1);
-
-  const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || 300;
-  const H = 48;
-  canvas.width  = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  const padL = 4, padR = 4, padT = 6, padB = 4;
-  const w = W - padL - padR;
-  const h = H - padT - padB;
-  const step = w / (dates.length - 1);
-
-  // Draw line
+  const counts=dates.map(({key})=>countPaidOnDate(key));
+  const maxVal=Math.max(...counts,1);
+  const W=canvas.offsetWidth||280; const H=48;
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const padL=4,padR=4,padT=6,padB=4;
+  const w=W-padL-padR; const h=H-padT-padB;
+  const step=w/(dates.length-1);
+  const pts=counts.map((c,i)=>({x:padL+i*step,y:padT+h-(c/maxVal)*h}));
+  // Line
   ctx.beginPath();
-  counts.forEach((c, i) => {
-    const x = padL + i * step;
-    const y = padT + h - (c / maxVal) * h;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle='#3B82F6'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+  // Fill
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.lineTo(pts[pts.length-1].x,H-padB); ctx.lineTo(padL,H-padB); ctx.closePath();
+  ctx.fillStyle='rgba(59,130,246,0.12)'; ctx.fill();
+  // Dots
+  pts.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,3,0,2*Math.PI);
+    ctx.fillStyle=counts[i]>0?'#3B82F6':'#2A3350'; ctx.fill();
   });
-  ctx.strokeStyle = '#3B82F6'; ctx.lineWidth = 2;
-  ctx.lineJoin = 'round'; ctx.stroke();
-
-  // Fill under line
-  ctx.lineTo(padL + (dates.length-1)*step, H - padB);
-  ctx.lineTo(padL, H - padB);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(59,130,246,0.12)'; ctx.fill();
-
-  // Draw dots
-  counts.forEach((c, i) => {
-    const x = padL + i * step;
-    const y = padT + h - (c / maxVal) * h;
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, 2 * Math.PI);
-    ctx.fillStyle = c > 0 ? '#3B82F6' : 'var(--border,#2A3350)'; ctx.fill();
-  });
-
-  // Labels
-  if (labelsEl) {
-    labelsEl.innerHTML = dates.map(({label}) =>
-      `<span style="font-size:9px;color:var(--muted);font-weight:600;">${label}</span>`
-    ).join('');
-  }
+  if(labelsEl) labelsEl.innerHTML=dates.map(({label})=>
+    `<span style="font-size:9px;color:var(--muted);font-weight:600;">${label}</span>`).join('');
 }
 
-// ════════════════════════════════════════════════
-// ⏰ UPGRADE 6: COUNTDOWN NUDGE BANNER
-// ════════════════════════════════════════════════
+// ⏰ Nudge banner
 function renderNudgeBanner() {
-  // Show only to logged-in members who haven't paid today
-  const banner = document.getElementById('nudgeBanner');
-  const nudgeText = document.getElementById('nudgeDaysLeft');
-  if (!banner) return;
-
-  // Get today's day of week (0=Sun) — assume deadline is Saturday (6)
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const daysLeft = 6 - dayOfWeek; // days until Saturday
-
-  if (daysLeft <= 2 && daysLeft >= 0) {
-    const label = daysLeft === 0 ? 'Today is the deadline' : `${daysLeft} day${daysLeft>1?'s':''} left this week`;
-    if (nudgeText) nudgeText.textContent = label;
-    banner.style.display = 'block';
+  const banner=document.getElementById('nudgeBanner');
+  const txt=document.getElementById('nudgeDaysLeft');
+  if(!banner) return;
+  const day=new Date().getDay(); // 0=Sun
+  const left=6-day; // days to Saturday
+  if(left>=0&&left<=2){
+    if(txt) txt.textContent=left===0?'Today is the deadline':`${left} day${left>1?'s':''} left this week`;
+    banner.style.display='block';
   } else {
-    banner.style.display = 'none';
+    banner.style.display='none';
   }
 }
 
-// ════════════════════════════════════════════════
-// ✅ UPGRADE 7: ANIMATED CHECK FLASH (helper)
-// ════════════════════════════════════════════════
-function flashCheckOnCard(card) {
-  const existing = card.querySelector('.check-flash');
-  if (existing) existing.remove();
-  const el = document.createElement('span');
-  el.className = 'check-flash';
-  el.textContent = '✅';
-  card.style.position = 'relative';
-  card.appendChild(el);
-  setTimeout(() => el.remove(), 800);
+// 📲 Enhanced WhatsApp reminder message
+function buildReminderMsg(firstName, rate) {
+  const day=new Date().getDay(); const left=6-day;
+  const deadline=left===0?'TODAY':`in ${left} day${left>1?'s':''}`;
+  return `Hello ${firstName}! 👋\n\nFriendly reminder: your *KSh ${rate}* weekly contribution to *BOGONKO-NGELANI Welfare* is due *${deadline}*.\n\n💳 Paybill: *544600* · Account: *942540*\n\nAsante sana! 🙏🏍️`;
 }
 
-// ════════════════════════════════════════════════
-// 🎂 UPGRADE 8: ANNIVERSARY GLOW
-// ════════════════════════════════════════════════
-function memberAnniversaryGlow(card, joinDate) {
-  if (!joinDate) return;
-  const today = new Date();
-  const join  = new Date(joinDate);
-  if (join.getMonth() === today.getMonth() && join.getDate() === today.getDate()) {
-    card.classList.add('anniversary-glow');
-    card.title = '🎂 Membership anniversary today!';
-  }
-}
-
-// ════════════════════════════════════════════════
-// 🎬 UPGRADE 9: SPLASH TAGLINE ROTATION
-// ════════════════════════════════════════════════
-(function() {
-  const taglines = [
-    'Stronger Together 💪',
-    'Your Stage, Your Family 🏍️',
-    'No Rider Left Behind 🤝',
-    'Umoja ni nguvu 🇰🇪',
-    'Contributing today, covered tomorrow 🙏',
-  ];
-  const el = document.getElementById('splashTagline');
-  if (el) el.textContent = taglines[Math.floor(Math.random() * taglines.length)];
-})();
-
-// ════════════════════════════════════════════════
-// 📲 UPGRADE 10: ENHANCED WA REMINDER TEMPLATE
-// ════════════════════════════════════════════════
-function buildReminderWAMessage(firstName, rate) {
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const daysLeft = 6 - dayOfWeek;
-  const deadline = daysLeft === 0 ? 'TODAY' : `in ${daysLeft} day${daysLeft>1?'s':''}`;
-  return `Hello ${firstName}! 👋\n\nThis is a friendly reminder that your weekly contribution of *KSh ${rate}* to the *BOGONKO-NGELANI Welfare Kitty* is due *${deadline}*.\n\n💳 M-Pesa Paybill: *544600*\n🔑 Account: *942540*\n\nThank you for keeping our stage strong! 🙏🏍️`;
-}
-
-// ════════════════════════════════════════════════
-// HOOK UPGRADES INTO EXISTING FUNCTIONS
-// ════════════════════════════════════════════════
-
-// Hook confetti + check flash into the card click (patch renderMemberList)
-const _origRenderMemberList = window.renderMemberList;
-
-// Patch renderMemberDashboard to also render podium + sparkline + nudge
-const _origRenderMemberDashboard = renderMemberDashboard;
-function renderMemberDashboard() {
-  _origRenderMemberDashboard();
-  renderPodium();
-  renderSparkline();
-  renderNudgeBanner();
-
-  // Enhanced ticker with motivational messages
-  const ticker = document.getElementById('vbTicker');
-  if (ticker && dashboardAgg && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length) {
-    const medals = ['🥇','🥈','🥉'];
-    const names = dashboardAgg.leaderboard.map((e,i) =>
-      `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">${medals[i]} ${e.fullName||e.name} · ${e.days} days</span>`
-    ).join('');
-    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Top Members:</span>`;
-    const motives = buildTickerMotivation().map(m =>
-      `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">${m}</span>`
-    ).join('');
-    const block = title + names + motives;
-    ticker.innerHTML = block + block;
-  }
-}
-
-// Patch renderAll to also render podium + sparkline + nudge when admin
-const _origRenderAll = window.renderAll;
-if (typeof renderAll === 'function') {
-  window.renderAll = function() {
-    _origRenderAll && _origRenderAll();
-    renderPodium();
-    renderSparkline();
-    renderNudgeBanner();
-  };
-}
-
-// Patch defaultWAMessage to use the enhanced template
+// Override defaultWAMessage globally
 window.defaultWAMessage = function() {
-  return buildReminderWAMessage('there', typeof RATE !== 'undefined' ? RATE : 50);
+  return buildReminderMsg('there', typeof RATE!=='undefined'?RATE:50);
 };
 
-// Patch sendWADirect to use enhanced template
-const _origSendWADirect = window.sendWADirect;
-window.sendWADirect = function(phone, firstName) {
-  const msg = buildReminderWAMessage(firstName, typeof RATE !== 'undefined' ? RATE : 50);
-  if (typeof openWAForPhone === 'function') openWAForPhone(phone, msg);
-};
+// Call nudge on initial page render too
+document.addEventListener('DOMContentLoaded', ()=>{ renderNudgeBanner(); });
 
-// Confetti + check flash on markPaid (patch card click in renderMemberList)
-// We intercept the existing togglePaid wrapper by listening to DOM mutations
-// and watching for .paid class additions on member cards.
-(function patchMemberListForConfetti() {
-  // Override renderMemberList to inject streak badge + confetti on click
-  if (typeof renderMemberList !== 'function') return;
-  const _orig = renderMemberList;
-  window.renderMemberList = function() {
-    _orig();
-    // After render, attach enhanced click listeners to each card
-    document.querySelectorAll('.member-list .member-card').forEach(card => {
-      const clone = card.cloneNode(true);
-      // re-attach with enhancement — but renderMemberList already sets listeners
-      // Instead, wrap existing by observing class changes
-    });
-  };
-})();
-
-// Simpler: override the click flow via MutationObserver on member list
-(function watchPaidCards() {
-  const observer = new MutationObserver(mutations => {
-    for (const m of mutations) {
-      if (m.type === 'childList') continue;
-      if (m.attributeName === 'class') {
-        const el = m.target;
-        if (el.classList.contains('member-card') && el.classList.contains('paid') &&
-            !m.oldValue.includes('paid')) {
-          // Card just became paid → confetti + check flash
-          launchConfetti && launchConfetti();
-          flashCheckOnCard(el);
-        }
-      }
-    }
-  });
-  // Start observing once DOM has a member list
-  function startObs() {
-    const list = document.getElementById('memberList');
-    if (list) {
-      observer.observe(list, { subtree: true, attributes: true, attributeOldValue: true, attributeFilter: ['class'] });
-    } else {
-      setTimeout(startObs, 500);
-    }
-  }
-  startObs();
-})();
-
-// Call on admin load too
-document.addEventListener('DOMContentLoaded', () => {
-  renderNudgeBanner();
-  renderSparkline();
-});
-
-Object.assign(window, { renderMemberDashboard, renderPodium, renderSparkline, renderNudgeBanner, launchConfetti, flashCheckOnCard });
-
-
+Object.assign(window,{
   openAdminLogin, closeAdminLogin, confirmAdminLogin, logoutAdmin,
   openMemberLogin, closeMemberLogin, confirmMemberLogin, logoutMember,
   openManageAdmins, closeManageAdmins, saveNewAdmin, removeAdmin, saveAdminRow, toggleAdminRole,
