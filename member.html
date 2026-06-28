@@ -189,17 +189,17 @@ html, body {
 
 /* ── STATS ROW ── */
 .stats-row {
-  display: grid; grid-template-columns: repeat(3,1fr);
+  display: grid; grid-template-columns: repeat(4,1fr);
   gap: 1px; background: var(--border);
   border-bottom: 1px solid var(--border);
 }
 .stat-cell {
-  background: var(--card); padding: 14px 10px;
+  background: var(--card); padding: 12px 6px;
   display: flex; flex-direction: column; align-items: center;
 }
 .stat-val {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 22px; font-weight: 800; line-height: 1;
+  font-size: 18px; font-weight: 800; line-height: 1;
   margin-bottom: 3px;
 }
 .stat-val.green { color: var(--green2); }
@@ -672,6 +672,10 @@ body.light .ws-name { color: #141414; }
     <div class="stat-cell">
       <div class="stat-val amber" id="statTotalKsh">0</div>
       <div class="stat-lbl">KSh Paid</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" id="statStreak" style="color:#FFA000;">0</div>
+      <div class="stat-lbl">🔥 Streak</div>
     </div>
   </div>
 
@@ -1196,14 +1200,26 @@ function renderStats() {
   const totalKsh   = daysPaid * RATE;
   const pct = allDates.length > 0 ? Math.round(daysPaid / allDates.length * 100) : 0;
 
+  // 🔥 Streak: consecutive paid days going backwards from yesterday
+  const today = todayKey();
+  const sortedPast = [...allDates].filter(dk => dk < today).sort().reverse();
+  let streak = 0;
+  for (const dk of sortedPast) {
+    if (isPaid(phone, dk)) streak++;
+    else break;
+  }
+
   document.getElementById('statDaysPaid').textContent   = daysPaid;
   document.getElementById('statDaysUnpaid').textContent = daysUnpaid;
   document.getElementById('statTotalKsh').textContent   = totalKsh.toLocaleString();
+  const streakEl = document.getElementById('statStreak');
+  if (streakEl) streakEl.textContent = streak >= 2 ? streak + ' 🔥' : streak;
 
   document.getElementById('rateLabel').textContent = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressSub').textContent =
-    `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total`;
+    `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total` +
+    (streak >= 3 ? ` · 🔥 ${streak}-day streak!` : '');
 }
 
 // ── HISTORY ──
