@@ -573,6 +573,24 @@ img {
   min-height: 40px;
 }
 .slide-row { display: flex; align-items: flex-start; justify-content: center; width: 100%; }
+/* FAQ styles */
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 11px 14px; background: none; border: none;
+  color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px;
+  font-weight: 600; text-align: left; cursor: pointer; line-height: 1.4;
+}
+.faq-q:active { background: var(--card2); }
+.faq-arrow { font-size: 12px; color: var(--muted); flex-shrink: 0; transition: transform .22s; }
+.faq-arrow.open { transform: rotate(180deg); }
+.faq-a {
+  display: none; padding: 0 14px 12px; font-size: 12px; color: var(--muted);
+  line-height: 1.65;
+}
+.faq-a.open { display: block; }
+.faq-a b { color: var(--amber2); font-weight: 600; }
+
 /* Edit notice btn removed - now in admin menu */
 body.viewer .admin-only  { display: none !important; }
 body.viewer #memberList  { display: none !important; }
@@ -1295,6 +1313,119 @@ body.memberview .vb-unlocked { display: block; }
         <div class="pub-dot" data-idx="3"></div>
         <div class="pub-dot" data-idx="4"></div>
         <div class="pub-dot" data-idx="5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USER MANUAL ──────────────────────────────────────────────────── -->
+  <div style="padding:0 14px 6px;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="toggleManual()">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <span style="font-size:18px;">📖</span>
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);">User Manual</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px;">How to use the Bonge Riders app</div>
+          </div>
+        </div>
+        <span id="manualCaret" style="color:var(--muted);font-size:13px;transition:transform .25s;">▾</span>
+      </div>
+      <!-- PDF embed (collapsed by default) -->
+      <div id="manualBody" style="display:none;padding:12px 14px;">
+        <iframe
+          src="manual.pdf"
+          id="manualFrame"
+          style="width:100%;height:520px;border:none;border-radius:8px;background:var(--card2);"
+          title="Bonge Riders User Manual"
+        ></iframe>
+        <a href="manual.pdf" download="BongeRiders_UserManual.pdf"
+           style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;background:var(--amber-bg);color:var(--amber2);border:1px solid rgba(37,99,235,.25);border-radius:8px;padding:9px;font-size:12px;font-weight:700;text-decoration:none;">
+          ⬇️ Download PDF
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FAQ SECTION ──────────────────────────────────────────────────── -->
+  <div style="padding:8px 14px 14px;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="padding:11px 14px;border-bottom:1px solid var(--border);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);">❓ Frequently Asked Questions</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px;">Tap a question to expand the answer</div>
+      </div>
+      <div id="faqList" style="padding:6px 0;">
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>How do I join the group?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Tap <b>Register</b> on the home screen. Fill in your personal details, motorcycle information, and M-Pesa confirmation code for the KSh 10,000 stage contribution fee (Paybill 544600, Account 942540). The Chairperson will review and approve your application.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>How do I view my payment history?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Tap <b>Member Portal</b> on the home screen. Enter your registered phone number and your 4-digit PIN to access your personal dashboard, which shows all your past payments.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>I forgot my PIN — what do I do?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Contact the Chairperson. They can reset your PIN from the Members List page. Your default PIN is the last 4 digits of your registered phone number.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>How much do I contribute per day?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Each active member contributes <b>KSh 50</b> per working day. This is recorded by the Chairperson or collector at the stage. Payments accumulate in the group welfare fund.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>I paid but the app shows me as Unpaid. Why?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">The Payment page is updated manually by the Chairperson. Remind them to mark you as paid — they can also back-date it to the correct day if it was missed.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>What welfare support does the group offer?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Active members in good standing are eligible for welfare support in the event of a bereavement or medical emergency. The amount is decided by the group and disbursed by the Chairperson. You must be up to date with contributions to qualify.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Can I pay for multiple missed days at once?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Yes. The Chairperson can open any past date on the Payment page and mark you as paid. Each day is recorded individually in the system.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>How do I get push notifications?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Install the app on your phone: on Android tap the three-dot menu in Chrome → <b>Add to Home Screen</b>; on iPhone tap the Share button in Safari → <b>Add to Home Screen</b>. When prompted, allow notifications. You will then receive alerts whenever payments are recorded.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>What happens to my records if I leave the group?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Your name is removed from the active members list so you no longer appear on the daily payment screen. Your past payment history is kept so the group's income totals remain accurate — the contributions you made were real money received.</div>
+        </div>
+
+        <div class="faq-item" style="border-bottom:none;">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Is my personal information safe?</span><span class="faq-arrow">▾</span>
+          </button>
+          <div class="faq-a">Yes. All data is stored in Google Firestore with security rules that enforce access control. Members can only see their own information. Full financial records and member details are accessible only to the admin account.</div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -3988,6 +4119,21 @@ function toggleSection(id) {
   const isOpen = body.classList.toggle('open');
   if (caret)  caret.classList.toggle('open', isOpen);
   if (btn)    btn.setAttribute('aria-expanded', isOpen);
+}
+
+function toggleManual() {
+  const body  = document.getElementById('manualBody');
+  const caret = document.getElementById('manualCaret');
+  const open  = body.style.display === 'none';
+  body.style.display  = open ? 'block' : 'none';
+  caret.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const arrow  = btn.querySelector('.faq-arrow');
+  const isOpen = answer.classList.toggle('open');
+  arrow.classList.toggle('open', isOpen);
 }
 
 
