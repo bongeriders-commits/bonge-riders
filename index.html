@@ -552,14 +552,14 @@ img {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  height: 55mm;
+  height: 75mm;
   display: flex;
   flex-direction: column;
   padding-bottom: 34px; /* room for dots */
 }
 .pub-slide {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 34px;
+  top: 68px; left: 0; right: 0; bottom: 34px;
   padding: 24px 20px 0;
   display: flex; flex-direction: column;
   align-items: center;
@@ -1233,15 +1233,7 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
   </div>
 
-  <!-- JOIN BANNER -->
-  <a class="public-only" href="register.html" style="display:flex;align-items:center;gap:12px;margin:10px 14px 0;padding:12px 14px;background:var(--amber-bg);border:1px solid rgba(196,98,29,.3);border-radius:10px;text-decoration:none;color:var(--text);">
-    <div style="font-size:24px;flex-shrink:0;">🏍️</div>
-    <div style="flex:1;">
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--amber2);">New Member? Join the Stage</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px;">Register online — Chairperson approval required</div>
-    </div>
-    <div style="font-size:16px;color:var(--amber2);">→</div>
-  </a>
+  <!-- JOIN BANNER removed — buttons moved to public view panel -->
 
   <!-- Arc + mini stats -->
   <div class="stats-row">
@@ -1337,12 +1329,23 @@ document.addEventListener('DOMContentLoaded', function(){
     </p>
     <button class="admin-login-btn" onclick="openMemberLogin()">🔢 Enter Dashboard PIN</button>
     <button class="admin-login-btn" style="background:var(--card2);border:1px solid var(--border);color:var(--text);" onclick="openAdminLogin()">🔐 Admin Login</button>
-    <a href="member.html" style="display:block;margin-top:8px;text-decoration:none;">
-      <button class="admin-login-btn" style="background:transparent;border:1px solid var(--border);color:var(--muted);width:100%;">👤 My Profile</button>
-    </a>
 
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
+
+      <!-- Join Us + Member Login buttons at the top -->
+      <div style="display:flex;gap:10px;padding:14px 16px 10px;flex-shrink:0;">
+        <a href="register.html" style="flex:1;text-decoration:none;">
+          <button style="width:100%;padding:11px 8px;background:var(--amber);color:#fff;border:none;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+            👤 Join Us
+          </button>
+        </a>
+        <a href="member.html" style="flex:1;text-decoration:none;">
+          <button style="width:100%;padding:11px 8px;background:#fff;color:var(--amber);border:2px solid var(--amber);border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+            🔐 Member Login
+          </button>
+        </a>
+      </div>
 
       <!-- Slide 1: About the Group -->
       <div class="pub-slide active" id="pubSlide0">
