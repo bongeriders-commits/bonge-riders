@@ -1263,31 +1263,6 @@ body.memberview .vb-unlocked { display: block; }
     </div>
   </div>
 
-  <!-- ── PUB INFO EDITOR MODAL (super admin) ── -->
-  <div class="modal-wrap" id="pubInfoModal">
-    <div class="modal" style="max-width:360px;">
-      <div class="modal-header">
-        <span class="modal-title">✏️ Edit Public Info</span>
-        <button class="modal-close" onclick="closePubInfoEditor()">✕</button>
-      </div>
-      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
-        <div class="modal-field">
-          <label>🏍️ About Group (shown on slide 1)</label>
-          <textarea id="piAbout" rows="3" class="modal-input" style="resize:vertical;"></textarea>
-        </div>
-        <div class="modal-field">
-          <label>🆘 Welfare Benefit Description</label>
-          <textarea id="piWelfare" rows="3" class="modal-input" style="resize:vertical;"></textarea>
-        </div>
-        <div class="modal-field">
-          <label>📣 Public Notice (leave blank to hide)</label>
-          <textarea id="piNotice" rows="3" class="modal-input" style="resize:vertical;"></textarea>
-        </div>
-        <div id="piError" class="pw-error"></div>
-        <button class="modal-btn" onclick="savePubInfo()">💾 Save Changes</button>
-      </div>
-    </div>
-  </div>
   <div class="vb-unlocked">
 
     <!-- 🏆 Leaderboard ticker — scrolls right to left above Today's summary -->
@@ -1357,6 +1332,32 @@ body.memberview .vb-unlocked { display: block; }
     <button class="admin-login-btn" style="background:var(--muted);margin-top:8px" onclick="logoutMember()">🔒 Lock Dashboard</button>
   </div>
 </div>
+  <!-- ── PUB INFO EDITOR MODAL (super admin only) ── -->
+  <div class="modal-wrap admin-only" id="pubInfoModal">
+    <div class="modal" style="max-width:360px;">
+      <div class="modal-header">
+        <span class="modal-title">✏️ Edit Public Info</span>
+        <button class="modal-close" onclick="closePubInfoEditor()">✕</button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+        <div class="modal-field">
+          <label>🏍️ About Group (shown on slide 1)</label>
+          <textarea id="piAbout" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div class="modal-field">
+          <label>🆘 Welfare Benefit Description</label>
+          <textarea id="piWelfare" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div class="modal-field">
+          <label>📣 Public Notice (leave blank to hide)</label>
+          <textarea id="piNotice" rows="3" class="modal-input" style="resize:vertical;"></textarea>
+        </div>
+        <div id="piError" class="pw-error"></div>
+        <button class="modal-btn" onclick="savePubInfo()">💾 Save Changes</button>
+      </div>
+    </div>
+  </div>
+
 
 <!-- Confetti canvas -->
 <canvas id="confettiCanvas"></canvas>
