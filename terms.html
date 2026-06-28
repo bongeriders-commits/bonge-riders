@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Terms & Conditions — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0F1117;
+  --bg2:      #161A23;
+  --card:     #1C2130;
+  --card2:    #212840;
+  --border:   #2A3350;
+  --text:     #E8ECF4;
+  --muted:    #7A85A0;
+  --dim:      #404860;
+  --amber:    #2563EB;
+  --amber2:   #3B82F6;
+  --amber-bg: rgba(37,99,235,0.12);
+  --green2:   #10B981;
+  --red:      #EF4444;
+  --radius:   8px;
+  --radius-lg:12px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F0F4FF;
+    --bg2:    #E6EAF7;
+    --card:   #FFFFFF;
+    --card2:  #F0F4FF;
+    --border: #C8D0E8;
+    --text:   #111827;
+    --muted:  #6B7280;
+    --dim:    #9CA3AF;
+    --amber:  #1D4ED8;
+    --amber2: #2563EB;
+    --amber-bg: rgba(29,78,216,0.08);
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.topbar-sub {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── HERO BANNER ── */
+.hero {
+  background: linear-gradient(135deg, var(--amber) 0%, #1e3a8a 100%);
+  padding: 20px 16px 18px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 40px);
+}
+.hero-icon { font-size: 32px; margin-bottom: 8px; position: relative; z-index: 1; }
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: #fff; position: relative; z-index: 1;
+}
+.hero-meta {
+  font-size: 11px; color: rgba(255,255,255,.65);
+  margin-top: 4px; position: relative; z-index: 1;
+  letter-spacing: .3px;
+}
+
+/* ── CONTENT ── */
+.content { padding: 16px; }
+
+.section-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--amber2); letter-spacing: .8px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  margin-top: 24px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num:first-child, .section-num + .section-title { margin-top: 0; }
+
+.body-text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.body-text b, .body-text strong { color: var(--text); font-weight: 600; }
+
+.sub-title {
+  font-size: 12px; font-weight: 700;
+  color: var(--text);
+  margin: 12px 0 6px;
+}
+
+.bullet-list {
+  list-style: none;
+  padding: 0; margin: 0 0 10px 0;
+}
+.bullet-list li {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.6;
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+.bullet-list li::before {
+  content: '•';
+  position: absolute; left: 4px;
+  color: var(--amber2); font-weight: 700;
+}
+.bullet-list li b, .bullet-list li strong { color: var(--text); font-weight: 600; }
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.info-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.info-table td:first-child {
+  font-weight: 700;
+  color: var(--text);
+  background: var(--card2);
+  white-space: nowrap;
+  width: 38%;
+}
+.info-table td:last-child { color: var(--muted); }
+.info-table tr:nth-child(even) td:last-child { background: var(--card); }
+
+.highlight-box {
+  background: var(--amber-bg);
+  border: 1px solid rgba(59,130,246,.25);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.highlight-box p {
+  font-size: 12px; color: var(--text);
+  line-height: 1.6;
+}
+.highlight-box p b { color: var(--amber2); }
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0 0;
+}
+
+.footer-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 28px;
+  line-height: 1.6;
+  padding: 0 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="javascript:history.back()" class="back-btn">&#8592;</a>
+  <div>
+    <div class="topbar-title">Terms &amp; Conditions</div>
+    <div class="topbar-sub">Bonge Riders — Bogonko-Ngelani Stage</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-icon">📋</div>
+  <h1>Terms &amp; Conditions of Membership</h1>
+  <div class="hero-meta">Effective: June 28, 2026 &nbsp;·&nbsp; Bogonko-Ngelani Stage, Katani, Kenya</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <p class="body-text" style="margin-top:4px;">
+    These Terms govern your membership and use of the Bonge Riders Welfare Tracker App. By registering, you confirm you have read and agreed to be bound by these Terms.
+  </p>
+
+  <!-- 1. DEFINITIONS -->
+  <div class="section-num">Section 1</div>
+  <div class="section-title">Definitions</div>
+  <table class="info-table">
+    <tr><td>"App"</td><td>The Bonge Riders Progressive Web Application and all associated services.</td></tr>
+    <tr><td>"Member"</td><td>Any individual registered and approved as an active member of the Stage.</td></tr>
+    <tr><td>"Stage"</td><td>Bogonko-Ngelani Stage (Bonge Riders), Kwa Bogonko Stage, Katani, Pridelands, Kenya.</td></tr>
+    <tr><td>"Chairperson"</td><td>The elected leader responsible for approving memberships, managing records, and disbursing welfare.</td></tr>
+    <tr><td>"Treasurer"</td><td>The official responsible for managing the Stage fund, income, and expenditure.</td></tr>
+    <tr><td>"Contribution"</td><td>The daily welfare payment of <b>KSh 50</b> per working day.</td></tr>
+    <tr><td>"Stage Fee"</td><td>The one-time mandatory joining fee of <b>KSh 10,000</b>.</td></tr>
+    <tr><td>"Welfare Fund"</td><td>The collective pool of contributions used to provide welfare support.</td></tr>
+  </table>
+
+  <!-- 2. ELIGIBILITY -->
+  <div class="section-num">Section 2</div>
+  <div class="section-title">Eligibility for Membership</div>
+  <p class="body-text">To join, an applicant must:</p>
+  <ul class="bullet-list">
+    <li>Be an active PSV operator (bodaboda rider or matatu crew) at the Bogonko-Ngelani Stage, Katani</li>
+    <li>Be at least <b>18 years of age</b></li>
+    <li>Provide accurate and truthful personal information during registration</li>
+    <li>Pay the one-time Stage Fee of <b>KSh 10,000</b> via M-Pesa Paybill <b>544600</b>, Account <b>942540</b></li>
+    <li>Receive approval from the Stage Chairperson</li>
+  </ul>
+  <p class="body-text">The Stage reserves the right to reject any application at its sole discretion.</p>
+
+  <!-- 3. REGISTRATION -->
+  <div class="section-num">Section 3</div>
+  <div class="section-title">Registration &amp; Account</div>
+  <p class="body-text">Members are responsible for:</p>
+  <ul class="bullet-list">
+    <li>Providing accurate and up-to-date information and notifying the Chairperson of any changes</li>
+    <li>Keeping their 4-digit PIN confidential — the default PIN is the last 4 digits of your registered phone number</li>
+    <li>Any activity conducted through their account</li>
+    <li>Contacting the Chairperson immediately if they suspect unauthorised account access</li>
+  </ul>
+
+  <!-- 4. DAILY CONTRIBUTIONS -->
+  <div class="section-num">Section 4</div>
+  <div class="section-title">Daily Contributions</div>
+
+  <div class="sub-title">4.1 Contribution Rate</div>
+  <p class="body-text">Each active member contributes <b>KSh 50 per working day</b>, collected physically at the stage and recorded by the Chairperson or collector in the App.</p>
+
+  <div class="sub-title">4.2 Back-Dating &amp; Missed Days</div>
+  <p class="body-text">The Chairperson may back-date payments to the correct date. Members may pay for multiple missed days at once; each day is recorded individually.</p>
+
+  <div class="sub-title">4.3 Non-Payment</div>
+  <p class="body-text">Members persistently in arrears risk losing welfare eligibility and may be suspended or removed by the Chairperson.</p>
+
+  <!-- 5. WELFARE BENEFITS -->
+  <div class="section-num">Section 5</div>
+  <div class="section-title">Welfare Benefits</div>
+
+  <div class="sub-title">5.1 Eligibility</div>
+  <p class="body-text">To receive welfare support, a member must be active, in good standing, and up to date with contributions at the time of applying.</p>
+
+  <div class="sub-title">5.2 Covered Events</div>
+  <ul class="bullet-list">
+    <li><b>Bereavement</b> — Death of the member or an immediate family member (spouse, child, or parent)</li>
+    <li><b>Medical Emergency</b> — Hospitalisation or serious illness of the member</li>
+  </ul>
+  <p class="body-text">The Stage does not guarantee welfare for any other event unless resolved by a majority decision at a general meeting.</p>
+
+  <div class="sub-title">5.3 Welfare Amount</div>
+  <p class="body-text">The amount disbursed is decided by the Chairperson or Stage meeting based on the available Welfare Fund balance. No fixed amount is guaranteed.</p>
+
+  <div class="sub-title">5.4 Disqualification</div>
+  <p class="body-text">A member will not be eligible for welfare if they are in arrears, suspended, or their claim is found to be fraudulent.</p>
+
+  <!-- 6. STAGE FEE -->
+  <div class="section-num">Section 6</div>
+  <div class="section-title">Stage Contribution Fee</div>
+  <div class="highlight-box">
+    <p>The Stage Fee of <b>KSh 10,000</b> is a one-time, <b>non-refundable</b> joining contribution. It must be paid via M-Pesa Paybill <b>544600</b>, Account <b>942540</b>. It is not refundable under any circumstances, including voluntary withdrawal, suspension, or removal.</p>
+  </div>
+
+  <!-- 7. MEMBER CONDUCT -->
+  <div class="section-num">Section 7</div>
+  <div class="section-title">Member Conduct &amp; Obligations</div>
+  <ul class="bullet-list">
+    <li>Treat fellow members and Stage officials with respect</li>
+    <li>Comply with decisions made at Stage meetings</li>
+    <li>Report suspected fraud or misuse of the Welfare Fund to the Chairperson</li>
+    <li>Not share your PIN with any other person</li>
+    <li>Not attempt to falsify or interfere with records in the App</li>
+    <li>Not submit fraudulent welfare applications</li>
+    <li>Notify the Chairperson if you leave or take an extended break from the Stage</li>
+  </ul>
+
+  <!-- 8. SUSPENSION & TERMINATION -->
+  <div class="section-num">Section 8</div>
+  <div class="section-title">Suspension &amp; Termination</div>
+
+  <div class="sub-title">8.1 Voluntary Withdrawal</div>
+  <p class="body-text">A member may withdraw at any time by notifying the Chairperson. Your profile will be deactivated; past records are retained for audit purposes. No refunds are made.</p>
+
+  <div class="sub-title">8.2 Involuntary Removal</div>
+  <p class="body-text">The Chairperson may suspend or remove a member for persistent non-payment, fraudulent claims, providing false information, or conduct harmful to the Stage. The member may appeal at a general meeting. The Stage majority decision is final.</p>
+
+  <!-- 9. APP USAGE -->
+  <div class="section-num">Section 9</div>
+  <div class="section-title">Use of the App</div>
+  <p class="body-text">The App is provided exclusively for Bogonko-Ngelani Stage welfare management. You must not:</p>
+  <ul class="bullet-list">
+    <li>Attempt to gain unauthorised access to admin functions or another member's profile</li>
+    <li>Use the App for any purpose other than Stage welfare management</li>
+    <li>Attempt to reverse-engineer, copy, or redistribute any part of the App</li>
+    <li>Share admin credentials with unauthorised individuals</li>
+  </ul>
+
+  <!-- 10. FINANCIAL TRANSPARENCY -->
+  <div class="section-num">Section 10</div>
+  <div class="section-title">Financial Transparency</div>
+  <p class="body-text">The Treasurer records all income and expenditure in the App. Members in good standing may request a summary of their own contribution history at any time. Any member who suspects financial mismanagement may raise it formally at a Stage general meeting.</p>
+
+  <!-- 11. LIMITATION OF LIABILITY -->
+  <div class="section-num">Section 11</div>
+  <div class="section-title">Limitation of Liability</div>
+  <p class="body-text">The Stage and its officials are not liable for loss arising from inability to use the App, errors in recording data, loss of welfare benefits due to a member's own arrears, or disruptions caused by third-party platforms (Firebase, Vercel, M-Pesa, Google).</p>
+
+  <!-- 12. AMENDMENTS -->
+  <div class="section-num">Section 12</div>
+  <div class="section-title">Amendments</div>
+  <p class="body-text">These Terms may be updated by resolution of the Stage or decision of the Chairperson. Members will be notified via WhatsApp or the App. Continued participation after notice of changes constitutes acceptance of the updated Terms.</p>
+
+  <!-- 13. GOVERNING LAW -->
+  <div class="section-num">Section 13</div>
+  <div class="section-title">Governing Law</div>
+  <p class="body-text">These Terms are governed by the laws of the <b>Republic of Kenya</b>. Disputes shall first be referred to the Stage general meeting. If unresolved, they may be escalated in accordance with Kenyan law.</p>
+
+  <!-- 14. CONTACT -->
+  <div class="section-num">Section 14</div>
+  <div class="section-title">Contact</div>
+  <table class="info-table">
+    <tr><td>Stage</td><td>Bogonko-Ngelani Stage (Bonge Riders)</td></tr>
+    <tr><td>Location</td><td>Kwa Bogonko Stage, Katani, Pridelands, Kenya</td></tr>
+    <tr><td>Phone</td><td>0725 672 771</td></tr>
+    <tr><td>M-Pesa</td><td>Paybill 544600 — Account 942540</td></tr>
+  </table>
+
+  <div class="divider"></div>
+  <p class="footer-note">© 2026 Bogonko-Ngelani Stage — Bonge Riders<br>By registering, you confirm you have read and agreed to these Terms &amp; Conditions.</p>
+
+</div>
+</body>
+</html>
