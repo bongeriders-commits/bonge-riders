@@ -850,6 +850,8 @@ import { initializeFirestore, persistentLocalCache, doc, getDoc, onSnapshot, set
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getMessaging, getToken, isSupported as messagingIsSupported }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
@@ -864,6 +866,24 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
+
+// ── PUSH NOTIFICATIONS (Firebase Cloud Messaging) ──
+// Uses the same VAPID key configured in index.html. See setup note there.
+const VAPID_KEY = "BK_Y1BHMvNfYvJGzY43GuOs6xnvWZ3sXKscwtzdw0tW7GfDt3C1MgFfqV9T2QwAFiyyYOY6zEFJTU4P3e_ieDuQ";
+async function setupPushNotifications() {
+  try {
+    if (!('serviceWorker' in navigator) || !(await messagingIsSupported())) return;
+    if (VAPID_KEY.startsWith('PASTE_')) return;
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    const messaging = getMessaging(app);
+    const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if (!token) return;
+    await setDoc(doc(db, 'pushTokens', token), { token, updatedAt: Date.now(), ua: navigator.userAgent.slice(0, 200) });
+  } catch (e) { console.warn('Push setup skipped:', e && e.message); }
+}
+window.addEventListener('load', () => setTimeout(setupPushNotifications, 1500));
 
 // ── CONSTANTS ──
 const RATE       = 50;

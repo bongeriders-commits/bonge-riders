@@ -1,8 +1,48 @@
 // BONGE RIDERS — Service Worker
 // Strategy: Network first for HTML (always gets latest update),
 // Cache first for icons/fonts (they never change).
+// Also handles Firebase Cloud Messaging push notifications in the background.
 
-const CACHE_NAME = 'bonge-riders-cache-v4';
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
+
+firebase.initializeApp({
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+});
+
+const messaging = firebase.messaging();
+
+// Shown when the app is closed or in the background
+messaging.onBackgroundMessage((payload) => {
+  const title = (payload.notification && payload.notification.title) || 'Bogonko-Ngelani Stage';
+  const body  = (payload.notification && payload.notification.body)  || '';
+  self.registration.showNotification(title, {
+    body,
+    icon: '/icon-192.png',
+    badge: '/icon-32.png',
+    data: payload.data || {},
+    vibrate: [120, 60, 120]
+  });
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
+      const existing = clientsArr.find((c) => c.url.includes(self.location.origin));
+      if (existing) return existing.focus();
+      return self.clients.openWindow(targetUrl);
+    })
+  );
+});
+
+const CACHE_NAME = 'bonge-riders-cache-v5';
 const STATIC_ASSETS = [
   '/manifest.json',
   '/icon-192.png',

@@ -1959,6 +1959,8 @@ import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnaps
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getMessaging, getToken, isSupported as messagingIsSupported }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
@@ -1973,6 +1975,42 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
+
+// ════════════════════════════════════════════════
+// PUSH NOTIFICATIONS (Firebase Cloud Messaging)
+// ════════════════════════════════════════════════
+// ⚠️ SETUP REQUIRED: paste your Web Push "VAPID key" below.
+// Firebase Console → Project Settings → Cloud Messaging tab →
+// "Web Push certificates" → Generate key pair (it's a public key,
+// safe to ship in client code).
+const VAPID_KEY = "BK_Y1BHMvNfYvJGzY43GuOs6xnvWZ3sXKscwtzdw0tW7GfDt3C1MgFfqV9T2QwAFiyyYOY6zEFJTU4P3e_ieDuQ";
+
+async function setupPushNotifications() {
+  try {
+    if (!('serviceWorker' in navigator) || !(await messagingIsSupported())) return;
+    if (VAPID_KEY.startsWith('PASTE_')) return; // not configured yet
+
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    const messaging = getMessaging(app);
+    const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if (!token) return;
+
+    // Save this device's token so the server can push to "everyone"
+    await setDoc(doc(db, 'pushTokens', token), {
+      token,
+      updatedAt: Date.now(),
+      ua: navigator.userAgent.slice(0, 200)
+    });
+  } catch (e) {
+    // Fails silently — push notifications are an enhancement, not core functionality
+    console.warn('Push setup skipped:', e && e.message);
+  }
+}
+// Ask once the page has settled, so it doesn't block initial render
+window.addEventListener('load', () => setTimeout(setupPushNotifications, 1500));
 
 let _syncOk = false;
 function setSyncStatus(ok, msg) {
@@ -2264,6 +2302,22 @@ async function savePayments() {
   try { await setDoc(doc(db,"tracker","payments"),payments); setSyncStatus(true,'☁️ Synced'); }
   catch(e){ setSyncStatus(false,'⚠️ Offline'); }
 }
+
+// Fire-and-forget push notification whenever a payment is marked PAID.
+// Never blocks or throws into the calling UI flow.
+function notifyPaymentMade(memberName, dateStr) {
+  const member = MEMBERS.find(m => m.name === memberName) || {};
+  const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+  fetch('/api/notify-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title: '✅ Payment Received',
+      body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`,
+      url: '/'
+    })
+  }).catch(() => {}); // best-effort; ignore failures
+}
 async function saveIncome() {
   try { await setDoc(doc(db,"tracker","income"),{list:otherIncome}); setSyncStatus(true,'☁️ Synced'); }
   catch(e){ setSyncStatus(false,'⚠️ Offline'); }
@@ -2337,11 +2391,18 @@ function togglePaid(phone, dateStr) {
     if(!payments[dateStr].__locked) payments[dateStr].__locked={};
     payments[dateStr].__locked[phone]=true;
     savePayments();
+    const m = MEMBERS.find(x=>x.phone===phone);
+    notifyPaymentMade(m && m.name, dateStr);
     return {ok:true};
   }
   if(!payments[dateStr]) payments[dateStr]={};
-  payments[dateStr][phone]=!wasPaid;
+  const nowPaid = !wasPaid;
+  payments[dateStr][phone]=nowPaid;
   savePayments();
+  if (nowPaid) {
+    const m = MEMBERS.find(x=>x.phone===phone);
+    notifyPaymentMade(m && m.name, dateStr);
+  }
   return {ok:true};
 }
 function markAll(dateStr, state) {
@@ -2349,11 +2410,34 @@ function markAll(dateStr, state) {
     if(!state) return {ok:false, reason:'locked-paid'};
     let changed=0, blocked=0;
     MEMBERS.forEach(m=>{ const r=togglePaidIfUnset(m.phone,dateStr); if(r.ok) changed++; else blocked++; });
+    if (changed > 0) {
+      fetch('/api/notify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: '✅ Payments Received',
+          body: `${changed} member${changed>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
+          url: '/'
+        })
+      }).catch(()=>{});
+    }
     return {ok:true, changed, blocked};
   }
   if(!payments[dateStr]) payments[dateStr]={};
+  const newlyPaid = state ? MEMBERS.filter(m=>!payments[dateStr][m.phone]).length : 0;
   MEMBERS.forEach(m=>{ payments[dateStr][m.phone]=state; });
   savePayments();
+  if (state && newlyPaid > 0) {
+    fetch('/api/notify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: '✅ Payments Received',
+        body: `${newlyPaid} member${newlyPaid>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
+        url: '/'
+      })
+    }).catch(()=>{});
+  }
   return {ok:true, changed:MEMBERS.length, blocked:0};
 }
 function togglePaidIfUnset(phone,dateStr){

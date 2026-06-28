@@ -226,6 +226,24 @@ async function savePayments() {
   catch(e) { showToast('⚠️ Save failed'); }
 }
 
+function notifyPaymentMade(memberName, dateStr) {
+  const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+  fetch('/api/notify-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: '✅ Payment Received', body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`, url: '/' })
+  }).catch(() => {});
+}
+function notifyBulkPaid(count, dateStr) {
+  if (count <= 0) return;
+  const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+  fetch('/api/notify-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: '✅ Payments Received', body: `${count} member${count>1?'s':''} marked paid — ${niceDate}`, url: '/' })
+  }).catch(() => {});
+}
+
 // ── auth (sign-in requirement removed) ───────────
 document.getElementById('loginGate').style.display   = 'none';
 document.getElementById('mainContent').style.display = 'block';
@@ -256,6 +274,7 @@ window.onDateChange = function() {
 
 // ── mark all ─────────────────────────────────────
 window.markAll = function(state) {
+  let newlyPaid = 0;
   if (isPastDate()) {
     // past: only mark unpaid → paid, never reverse
     if (!state) { showToast('⚠️ Cannot unmark past-date payments'); return; }
@@ -265,14 +284,17 @@ window.markAll = function(state) {
         payments[selectedDate][m.phone] = true;
         if (!payments[selectedDate].__locked) payments[selectedDate].__locked = {};
         payments[selectedDate].__locked[m.phone] = true;
+        newlyPaid++;
       }
     });
   } else {
     if (!payments[selectedDate]) payments[selectedDate] = {};
+    newlyPaid = state ? MEMBERS.filter(m => !payments[selectedDate][m.phone]).length : 0;
     MEMBERS.forEach(m => { payments[selectedDate][m.phone] = state; });
   }
   savePayments();
   render();
+  if (state) notifyBulkPaid(newlyPaid, selectedDate);
   showToast(state ? '✅ All marked paid' : '✗ All marked unpaid');
 };
 
@@ -286,12 +308,21 @@ window.toggleMember = function(phone) {
     payments[selectedDate][phone] = true;
     if (!payments[selectedDate].__locked) payments[selectedDate].__locked = {};
     payments[selectedDate].__locked[phone] = true;
-  } else {
-    if (!payments[selectedDate]) payments[selectedDate] = {};
-    payments[selectedDate][phone] = !wasPaid;
+    savePayments();
+    render();
+    const m = MEMBERS.find(x => x.phone === phone);
+    notifyPaymentMade(m && m.name, selectedDate);
+    return;
   }
+  if (!payments[selectedDate]) payments[selectedDate] = {};
+  const nowPaid = !wasPaid;
+  payments[selectedDate][phone] = nowPaid;
   savePayments();
   render();
+  if (nowPaid) {
+    const m = MEMBERS.find(x => x.phone === phone);
+    notifyPaymentMade(m && m.name, selectedDate);
+  }
 };
 
 // ── render ────────────────────────────────────────
