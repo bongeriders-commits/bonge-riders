@@ -574,7 +574,7 @@ img {
   flex: 1;
 }
 .cal-cell {
-  aspect-ratio: 1;
+  min-height: 40px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   border-radius: 8px;
@@ -582,6 +582,7 @@ img {
   border: 1px solid transparent;
   transition: all .12s;
   position: relative;
+  padding: 4px 2px;
 }
 .cal-cell:active { transform: scale(.88); }
 .cal-cell.empty { cursor: default; pointer-events: none; }
@@ -1438,7 +1439,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <!-- ── CALENDAR POPUP OVERLAY ── -->
-<div class="cal-overlay" id="calOverlay" onclick="closeCalPopup(event)">
+<div class="cal-overlay" id="calOverlay" onclick="if(event.target===this)closeCalPopup()">
   <div class="cal-popup" id="calPopup">
     <div class="cal-popup-handle"></div>
     <div class="cal-popup-head">
@@ -2856,9 +2857,10 @@ function openCalPopup(){
   document.body.style.overflow = 'hidden';
 }
 
-/* Close popup */
+/* Close popup — call with no args from buttons, or pass event from overlay tap */
 function closeCalPopup(e){
-  if(e && e.target !== document.getElementById('calOverlay')) return;
+  // If called from overlay click, only close when tapping the dim backdrop itself
+  if(e && e.currentTarget === document.getElementById('calOverlay') && e.target !== e.currentTarget) return;
   document.getElementById('calOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
@@ -2878,8 +2880,6 @@ function applyCalDate(){
 function calPrevMonth(){
   calViewMonth--;
   if(calViewMonth<0){ calViewMonth=11; calViewYear--; }
-  // sync year pill
-  calPending = calPending; // keep
   renderCalYearRow();
   renderCalGrid();
 }
@@ -2937,8 +2937,7 @@ function renderCalGrid(){
     const cell = document.createElement('div');
     cell.className = 'cal-cell';
     if(key === today)     cell.classList.add('is-today');
-    if(key === calPending && key !== today) cell.classList.add('is-selected');
-    if(key === calPending && key === today) cell.classList.add('is-selected');
+    if(key === calPending) cell.classList.add('is-selected');
     if(dt.getDay()===0)   cell.classList.add('is-sunday');
     if(isFuture)          cell.classList.add('is-future');
     if(paid===MEMBERS.length&&paid>0) cell.classList.add('has-full');
