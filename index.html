@@ -1339,7 +1339,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <!-- Header -->
 <div class="header">
   <div class="header-row1">
-    <div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="icon-192.png" alt="Bonge Riders logo" style="width:36px;height:36px;border-radius:8px;flex-shrink:0;">
       <div class="logo">BOGONKO<em>-NGELANI</em></div>
     </div>
     <div class="header-right">
@@ -1685,9 +1686,41 @@ document.addEventListener('DOMContentLoaded', function(){
     <span id="vbBalIncome" style="display:none">KSh 0</span>
     <span id="vbBalSpent" style="display:none">KSh 0</span>
 
-    <a href="member.html" style="display:block;margin-top:4px;text-decoration:none;">
-      <button class="admin-login-btn" style="background:var(--green);color:#fff;width:100%;">👤 My Profile &amp; History</button>
-    </a>
+    <!-- 🧰 Our Services -->
+    <div style="margin-top:4px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:var(--text);">Our Services</div>
+        <a href="#" style="font-size:13px;font-weight:700;color:var(--amber2);text-decoration:none;">View All</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🔧</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Service 1</div>
+        </button>
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🔧</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Service 2</div>
+        </button>
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🔧</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Service 3</div>
+        </button>
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🔧</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Service 4</div>
+        </button>
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🔧</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Service 5</div>
+        </button>
+
+      </div>
+    </div>
 
     <!-- 🏆 Leaderboard ticker -->
     <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-top:12px;position:relative;">
