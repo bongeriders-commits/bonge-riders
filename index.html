@@ -1618,71 +1618,80 @@ document.addEventListener('DOMContentLoaded', function(){
 
   <div class="vb-unlocked">
 
-    <!-- 🏆 Leaderboard ticker — scrolls right to left above Today's summary -->
-    <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-bottom:10px;position:relative;">
-      <div style="overflow:hidden;">
-        <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
-          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="vb-heading">Today's summary</div>
-
-    <!-- Mini gauge for locked/viewer dashboard -->
-    <div style="margin-bottom:12px;">
-      <span style="background:rgba(78,153,100,.15);color:var(--green2);border:1px solid rgba(78,153,100,.3);border-radius:20px;font-size:11px;font-weight:700;padding:4px 12px;">💰 Other Income: KSh <span id="vbOtherIncomeInline">0</span></span>
-    </div>
-    <!-- keep hidden for JS compat -->
+    <!-- hidden for JS compat -->
     <span id="vbArcFill" style="display:none"></span>
     <span id="vbArcPct" style="display:none"></span>
     <span id="vbArcKsh" style="display:none">0</span>
     <span id="vbArcPaid" style="display:none">0</span>
     <span id="vbArcTotal" style="display:none">65</span>
+    <span id="vbKshToday" style="display:none">0</span>
+    <span id="vbOtherIncome" style="display:none">0</span>
+    <span id="vbOtherIncomeInline" style="display:none">0</span>
+    <div id="vbTicker" style="display:none"></div>
+    <div id="vbDate" style="display:none"></div>
+    <div id="podiumCard" style="display:none"><div id="podiumRows"></div></div>
+    <div id="sparklineWrap" style="display:none"><canvas id="sparklineCanvas"></canvas><div id="sparklineLabels"></div></div>
 
-    <div class="vb-grid">
-      <div class="vb-card"><div class="vb-val green" id="vbPaid">0</div><div class="vb-lbl">Paid Today</div></div>
-      <div class="vb-card"><div class="vb-val amber" id="vbUnpaid">0</div><div class="vb-lbl">Unpaid</div></div>
-      <div class="vb-card"><div class="vb-val" id="vbKshAll">0</div><div class="vb-lbl">KSh Total</div></div>
-      <div class="vb-card"><div class="vb-val" style="color:#EF4444;" id="vbTotalSpent">KSh 0</div><div class="vb-lbl">Total Spent</div></div>
-      <!-- hidden for JS compat -->
-      <span id="vbKshToday" style="display:none">0</span>
-      <span id="vbOtherIncome" style="display:none">0</span>
-    </div>
-    <div class="vb-date" id="vbDate"></div>
+    <!-- ── 4 Big Stat Cards (matches dashboard screenshot) ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
 
-    <!-- Running Balance -->
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px;">💰 Running Balance</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;line-height:1;" id="vbRunningBal">KSh 0</div>
+      <!-- Total Members -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">👥</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;line-height:1;color:var(--text);" id="vbPaid">0</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Members</div>
+        <div style="margin-top:10px;">
+          <span id="vbMembersMonthBadge" style="display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.12);color:#16a34a;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;">
+            ↑ <span id="vbUnpaid">0</span> unpaid
+          </span>
+        </div>
       </div>
-      <div style="text-align:right;">
-        <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">Income</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--green2);" id="vbBalIncome">KSh 0</div>
-        <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:6px;margin-bottom:2px;">Spent</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#E05540;" id="vbBalSpent">KSh 0</div>
+
+      <!-- Total Contributions -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">👛</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbKshAll">KSh 0</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Contributions</div>
+        <div style="margin-top:10px;">
+          <span id="vbContribMonthBadge" style="display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.12);color:#16a34a;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;">
+            ↑ this month
+          </span>
+        </div>
       </div>
+
+      <!-- Total Spending -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">📈</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbTotalSpent">KSh 0</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Spending</div>
+        <div style="margin-top:10px;">
+          <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.10);color:#dc2626;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;">
+            ↓ this month
+          </span>
+        </div>
+      </div>
+
+      <!-- Available Balance -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">🪙</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;" id="vbRunningBal">KSh 0</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Available Balance</div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:5px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+          <span style="font-size:11px;color:var(--muted);font-weight:500;">Updated just now</span>
+        </div>
+      </div>
+
     </div>
 
+    <!-- hidden compat IDs for running balance breakdown -->
+    <span id="vbBalIncome" style="display:none">KSh 0</span>
+    <span id="vbBalSpent" style="display:none">KSh 0</span>
 
-    <a href="member.html" style="display:block;margin-top:10px;text-decoration:none;">
+    <a href="member.html" style="display:block;margin-top:4px;text-decoration:none;">
       <button class="admin-login-btn" style="background:var(--green);color:#fff;width:100%;">👤 My Profile &amp; History</button>
     </a>
-
-    <!-- 🏆 Podium -->
-    <div id="podiumCard">
-      <div class="podium-title">🏆 Most Consistent Members</div>
-      <div id="podiumRows"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
-    </div>
-
-    <!-- 📊 7-day sparkline -->
-    <div id="sparklineWrap">
-      <div class="sparkline-title">📊 Payments — Last 7 Days</div>
-      <canvas id="sparklineCanvas"></canvas>
-      <div id="sparklineLabels"></div>
-    </div>
-    <button class="admin-login-btn" style="background:var(--muted);margin-top:8px" onclick="logoutMember()">🔒 Lock Dashboard</button>
+    <button class="admin-login-btn" style="background:var(--muted);margin-top:8px;width:100%;" onclick="logoutMember()">🔒 Lock Dashboard</button>
   </div>
 </div>
   <!-- ── PUB INFO EDITOR MODAL (super admin only) ── -->
@@ -3133,15 +3142,23 @@ function renderMemberDashboard(){
   if (!dashboardAgg) return;
   const vbPaidEl=document.getElementById('vbPaid');
   if(!vbPaidEl) return;
-  vbPaidEl.textContent=dashboardAgg.paidToday||0;
-  document.getElementById('vbUnpaid').textContent=dashboardAgg.unpaidToday||0;
+
+  // Total Members card
+  const memberCount = dashboardAgg.memberCount || 0;
+  vbPaidEl.textContent = memberCount;
+
+  // Unpaid badge (shown inside Total Members card)
+  const unpaidEl = document.getElementById('vbUnpaid');
+  if(unpaidEl) unpaidEl.textContent = (dashboardAgg.unpaidToday||0);
+
+  // Total Contributions
   document.getElementById('vbKshAll').textContent='KSh '+(dashboardAgg.kshAllDays||0).toLocaleString();
 
   // Total Spent card
   const spentEl=document.getElementById('vbTotalSpent');
   if(spentEl) spentEl.textContent='KSh '+(dashboardAgg.totalSpent||0).toLocaleString();
 
-  // Other Income inline pill
+  // Other Income inline (hidden compat)
   const otherInlineEl=document.getElementById('vbOtherIncomeInline');
   if(otherInlineEl) otherInlineEl.textContent=(dashboardAgg.otherIncome||0).toLocaleString();
 
