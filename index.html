@@ -552,14 +552,14 @@ img {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  height: 75mm;
+  height: 55mm;
   display: flex;
   flex-direction: column;
   padding-bottom: 34px; /* room for dots */
 }
 .pub-slide {
   position: absolute;
-  top: 68px; left: 0; right: 0; bottom: 34px;
+  top: 0; left: 0; right: 0; bottom: 34px;
   padding: 24px 20px 0;
   display: flex; flex-direction: column;
   align-items: center;
@@ -1323,6 +1323,21 @@ document.addEventListener('DOMContentLoaded', function(){
        in this section regardless of state. -->
 <div class="viewer-board" id="viewerBoard">
   <div class="vb-signin">
+
+    <!-- ── JOIN US + MEMBER LOGIN — top of public panel ── -->
+    <div style="display:flex;gap:10px;padding:4px 0 16px;flex-shrink:0;">
+      <a href="register.html" style="flex:1;text-decoration:none;">
+        <button style="width:100%;padding:12px 8px;background:var(--amber);color:#fff;border:none;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+          👤 Join Us
+        </button>
+      </a>
+      <a href="member.html" style="flex:1;text-decoration:none;">
+        <button style="width:100%;padding:12px 8px;background:#fff;color:var(--amber);border:2px solid var(--amber);border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+          🔐 Member Login
+        </button>
+      </a>
+    </div>
+
     <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">🔒 SIGN IN REQUIRED</div>
     <p style="color:var(--muted);font-size:13px;text-align:center;margin:6px 0 20px;line-height:1.6;">
       This tracker contains private member information.<br>Members can view the totals dashboard with the group PIN.
@@ -1332,20 +1347,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
-
-      <!-- Join Us + Member Login buttons at the top -->
-      <div style="display:flex;gap:10px;padding:14px 16px 10px;flex-shrink:0;">
-        <a href="register.html" style="flex:1;text-decoration:none;">
-          <button style="width:100%;padding:11px 8px;background:var(--amber);color:#fff;border:none;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-            👤 Join Us
-          </button>
-        </a>
-        <a href="member.html" style="flex:1;text-decoration:none;">
-          <button style="width:100%;padding:11px 8px;background:#fff;color:var(--amber);border:2px solid var(--amber);border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-            🔐 Member Login
-          </button>
-        </a>
-      </div>
 
       <!-- Slide 1: About the Group -->
       <div class="pub-slide active" id="pubSlide0">
