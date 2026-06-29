@@ -1627,10 +1627,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <span id="vbKshToday" style="display:none">0</span>
     <span id="vbOtherIncome" style="display:none">0</span>
     <span id="vbOtherIncomeInline" style="display:none">0</span>
-    <div id="vbTicker" style="display:none"></div>
     <div id="vbDate" style="display:none"></div>
-    <div id="podiumCard" style="display:none"><div id="podiumRows"></div></div>
-    <div id="sparklineWrap" style="display:none"><canvas id="sparklineCanvas"></canvas><div id="sparklineLabels"></div></div>
 
     <!-- ── 4 Big Stat Cards (matches dashboard screenshot) ── -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -1691,6 +1688,29 @@ document.addEventListener('DOMContentLoaded', function(){
     <a href="member.html" style="display:block;margin-top:4px;text-decoration:none;">
       <button class="admin-login-btn" style="background:var(--green);color:#fff;width:100%;">👤 My Profile &amp; History</button>
     </a>
+
+    <!-- 🏆 Leaderboard ticker -->
+    <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-top:12px;position:relative;">
+      <div style="overflow:hidden;">
+        <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
+          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🏆 Podium -->
+    <div id="podiumCard">
+      <div class="podium-title">🏆 Most Consistent Members</div>
+      <div id="podiumRows"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
+    </div>
+
+    <!-- 📊 7-day sparkline -->
+    <div id="sparklineWrap">
+      <div class="sparkline-title">📊 Payments — Last 7 Days</div>
+      <canvas id="sparklineCanvas"></canvas>
+      <div id="sparklineLabels"></div>
+    </div>
+
     <button class="admin-login-btn" style="background:var(--muted);margin-top:8px;width:100%;" onclick="logoutMember()">🔒 Lock Dashboard</button>
   </div>
 </div>
