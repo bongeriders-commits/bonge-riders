@@ -786,6 +786,8 @@ body.viewer .fab-wrap    { display: none !important; }
 body.viewer .admin-toolbar { display: none !important; }
 body.viewer .viewer-board  { display: block; }
 body.viewer .income-section { display: none !important; }
+body.viewer .stats-row   { display: none !important; }
+body.viewer .cal-bar     { display: none !important; }
 /* Public-only elements: visible only in viewer mode (not admin) */
 body:not(.viewer) .public-only { display: none !important; }
 body.memberview .public-only  { display: none !important; }
@@ -1352,8 +1354,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   <!-- JOIN BANNER removed — buttons moved to public view panel -->
 
-  <!-- Arc + mini stats — hidden until PIN is entered -->
-  <div class="stats-row" id="publicStatsRow" style="display:none;">
+  <!-- Arc + mini stats -->
+  <div class="stats-row">
     <div class="arc-card">
       <div style="position:relative;width:56px;height:56px;flex-shrink:0;">
         <svg class="arc-svg" width="56" height="56" viewBox="0 0 56 56" style="display:block;">
@@ -2431,9 +2433,6 @@ function updateHeaderFromAggregate() {
 function setMemberMode(on) {
   isMemberMode = on;
   document.body.classList.toggle('memberview', on);
-  // Show the KSh / Paybill / Account stats row only after PIN is entered
-  var statsRow = document.getElementById('publicStatsRow');
-  if (statsRow) statsRow.style.display = on ? '' : 'none';
   if (on) loadDashboard();
   // Never tear down the dashboard listener — it feeds the public header gauge too.
   // Just hide the unlocked view if turning off member mode.
