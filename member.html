@@ -265,6 +265,137 @@ html, body {
   width: 100%; font-family: 'Inter', sans-serif;
 }
 
+/* ── CONTRIBUTION CALENDAR (GitHub-style heatmap) ── */
+.contrib-cal-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 12px 10px;
+  overflow-x: auto;
+}
+.contrib-cal-inner { display: inline-flex; flex-direction: column; gap: 4px; min-width: 100%; }
+.contrib-cal-months { display: flex; gap: 3px; padding-left: 0; }
+.contrib-cal-grid { display: flex; gap: 3px; }
+.contrib-week { display: flex; flex-direction: column; gap: 3px; }
+.contrib-month-label {
+  width: 14px; font-size: 9px; font-weight: 600; color: var(--muted);
+  flex-shrink: 0; white-space: nowrap; overflow: visible;
+}
+.contrib-day {
+  width: 11px; height: 11px; border-radius: 2.5px;
+  background: var(--card2); flex-shrink: 0;
+  transition: transform .12s;
+}
+.contrib-day:hover { transform: scale(1.35); }
+.contrib-day.lvl-empty  { background: transparent; }
+.contrib-day.lvl-unpaid { background: var(--amber-bg); border: 1px solid rgba(204,24,24,0.25); }
+.contrib-day.lvl-paid   { background: var(--green2); }
+.contrib-day.lvl-future { background: var(--card2); border: 1px solid var(--border); opacity: .5; }
+.contrib-cal-legend {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin-top: 8px; font-size: 10px; color: var(--muted); font-weight: 600;
+}
+.cal-leg-item { display: flex; align-items: center; gap: 5px; }
+.cal-leg-item .contrib-day { width: 10px; height: 10px; }
+
+/* ── MONTHLY BAR CHART ── */
+.month-chart-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 16px 10px 10px;
+  display: flex; align-items: flex-end; gap: 10px;
+  overflow-x: auto; min-height: 150px;
+}
+.month-bar-col {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; flex: 0 0 auto; width: 36px;
+}
+.month-bar-val { font-size: 9px; font-weight: 700; color: var(--text); white-space: nowrap; }
+.month-bar-track {
+  width: 20px; height: 90px; background: var(--card2);
+  border-radius: 5px; display: flex; align-items: flex-end;
+  overflow: hidden; border: 1px solid var(--border);
+}
+.month-bar-fill {
+  width: 100%; min-height: 3px; border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, var(--green2) 0%, var(--green) 100%);
+  transition: height .6s cubic-bezier(.34,1.56,.64,1);
+}
+.month-bar-fill.is-current { background: linear-gradient(180deg, var(--amber2) 0%, var(--amber) 100%); }
+.month-bar-label { font-size: 9.5px; color: var(--muted); font-weight: 700; }
+.month-chart-empty { padding: 28px 14px; text-align: center; font-size: 13px; color: var(--muted); }
+
+/* ── ANIMATED STREAK ── */
+@keyframes streakPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+@keyframes streakFlicker {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .75; }
+}
+.stat-val.fire {
+  animation: streakPulse 1s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(255,160,0,.65), 0 0 2px rgba(255,160,0,.4);
+}
+.stat-val.fire .flame-emoji {
+  display: inline-block;
+  animation: streakFlicker .55s ease-in-out infinite alternate;
+}
+
+/* ── MEMBER SINCE BADGE (boda group colours) ── */
+.member-since-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; padding: 3px 9px;
+  border-radius: 20px; color: #fff; white-space: nowrap;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber2) 100%);
+  box-shadow: 0 1px 5px rgba(204,24,24,.35);
+}
+
+/* ── BODA RIDER RANK PILL ── */
+.rider-rank-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; padding: 5px 12px;
+  border-radius: 20px; color: var(--text);
+  background: var(--card2); border: 1px solid var(--border);
+}
+
+/* ── ROAD PROGRESS BAR (motorcycle moving along a road) ── */
+.road-track {
+  position: relative; height: 36px; margin-top: 8px;
+  border-radius: 18px; overflow: hidden;
+  background: linear-gradient(180deg, #4a4a4a 0%, #2e2e2e 100%);
+  border: 1px solid #1c1c1c;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.35);
+}
+.road-dashes {
+  position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+  transform: translateY(-50%);
+  background-image: repeating-linear-gradient(90deg, #FFD23F 0 10px, transparent 10px 22px);
+  opacity: .85;
+}
+.road-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: linear-gradient(90deg, rgba(204,24,24,.40) 0%, rgba(224,32,32,.10) 100%);
+  transition: width .7s cubic-bezier(.34,1.56,.64,1);
+}
+.road-finish {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  font-size: 15px; line-height: 1;
+}
+.road-rider {
+  position: absolute; top: 50%; transform: translate(-50%,-50%) scaleX(1);
+  font-size: 20px; line-height: 1;
+  transition: left .7s cubic-bezier(.34,1.56,.64,1);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
+  display: flex; align-items: center;
+}
+.road-dust {
+  font-size: 12px; margin-left: -4px; opacity: .8;
+  animation: dustPuff 1.1s ease-in-out infinite;
+}
+@keyframes dustPuff {
+  0%, 100% { opacity: .25; transform: translateX(0) scale(.85); }
+  50%      { opacity: .8;  transform: translateX(-3px) scale(1); }
+}
+
 /* ── MONTHLY CHALLENGE ── */
 .challenge-card {
   background: linear-gradient(135deg, rgba(255,165,0,.10) 0%, rgba(204,24,24,.06) 100%);
@@ -725,8 +856,14 @@ body.light .ws-name { color: #141414; }
     <div class="avatar-info">
       <h1 id="memberName" style="font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.1;">—</h1>
       <div class="phone-row" id="memberPhone" style="font-size:13px;margin-top:3px;margin-bottom:6px;">—</div>
-      <span id="pinBadge" class="pin-badge">🔐 PIN Active</span>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <span id="pinBadge" class="pin-badge">🔐 PIN Active</span>
+        <span id="memberSinceBadge" class="member-since-badge">🏁 Member since —</span>
+      </div>
     </div>
+  </div>
+  <div style="padding:0 16px 4px;">
+    <span id="riderRankPill" class="rider-rank-pill">🏍️ Loading rider status…</span>
   </div>
 
   <!-- ── APP PURPOSE NOTICE ── -->
@@ -794,10 +931,41 @@ body.light .ws-name { color: #141414; }
       <div class="section-title">📊 Contribution Rate</div>
       <div class="section-pill" id="rateLabel">—</div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    <div class="road-track" id="roadTrack">
+      <div class="road-dashes"></div>
+      <div class="road-fill" id="roadFill" style="width:0%"></div>
+      <div class="road-finish">🏁</div>
+      <div class="road-rider" id="roadRider" style="left:0%;">🏍️<span class="road-dust">💨</span></div>
     </div>
     <div style="font-size:10px;color:var(--muted);margin-top:5px;" id="progressSub"></div>
+  </div>
+
+  <!-- Contribution Calendar -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">🗓️ Contribution Calendar</div>
+      <div class="section-pill" id="calRangeLabel">—</div>
+    </div>
+    <div class="contrib-cal-wrap">
+      <div class="contrib-cal-inner">
+        <div class="contrib-cal-months" id="contribCalMonths"></div>
+        <div class="contrib-cal-grid" id="contribCalGrid"></div>
+      </div>
+    </div>
+    <div class="contrib-cal-legend">
+      <span class="cal-leg-item"><span class="contrib-day lvl-unpaid" style="display:inline-block;"></span> Unpaid</span>
+      <span class="cal-leg-item"><span class="contrib-day lvl-paid" style="display:inline-block;"></span> Paid</span>
+      <span class="cal-leg-item"><span class="contrib-day lvl-future" style="display:inline-block;"></span> Upcoming</span>
+    </div>
+  </div>
+
+  <!-- Monthly Contributions Chart -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">📊 Monthly Contributions</div>
+      <div class="section-pill" id="monthChartTotal">KSh 0</div>
+    </div>
+    <div class="month-chart-wrap" id="monthChartWrap"></div>
   </div>
 
   <!-- Monthly Challenge -->
@@ -1429,15 +1597,161 @@ function renderStats() {
   document.getElementById('statDaysUnpaid').textContent = daysUnpaid;
   document.getElementById('statTotalKsh').textContent   = totalKsh.toLocaleString();
   const sEl = document.getElementById('statStreak');
-  if(sEl) sEl.textContent = streak >= 1 ? (streak >= 3 ? streak+'🔥' : streak) : '—';
+  if (sEl) {
+    if (streak >= 1) {
+      sEl.innerHTML = streak >= 3 ? `${streak}<span class="flame-emoji">🔥</span>` : String(streak);
+      sEl.classList.toggle('fire', streak >= 3);
+    } else {
+      sEl.textContent = '—';
+      sEl.classList.remove('fire');
+    }
+  }
 
   document.getElementById('rateLabel').textContent = pct + '%';
-  document.getElementById('progressFill').style.width = pct + '%';
+  const roadFill  = document.getElementById('roadFill');
+  const roadRider = document.getElementById('roadRider');
+  if (roadFill && roadRider) {
+    roadFill.style.width = pct + '%';
+    // Clamp so the bike emoji never clips past the road edges
+    const riderPos = Math.min(94, Math.max(6, pct));
+    roadRider.style.left = riderPos + '%';
+  }
   document.getElementById('progressSub').textContent =
     `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total` +
     (streak >= 3 ? ` · 🔥 ${streak}-day streak!` : '');
 
   renderGamification();
+  renderContribCalendar();
+  renderMonthlyChart();
+  renderMemberSinceBadge();
+  renderRiderRank(pct, streak);
+}
+
+// ── MEMBER SINCE BADGE (earliest contribution on record, group colours) ──
+function renderMemberSinceBadge() {
+  const el = document.getElementById('memberSinceBadge');
+  if (!el) return;
+  const phone = currentMember.phone;
+  let earliest = null;
+  Object.keys(payments || {}).forEach(dk => {
+    if (payments[dk] && payments[dk][phone]) {
+      if (!earliest || dk < earliest) earliest = dk;
+    }
+  });
+  if (!earliest && allDates.length) earliest = allDates[0];
+  if (!earliest) { el.textContent = '🏁 Member since —'; return; }
+  const d = new Date(earliest + 'T00:00:00');
+  el.textContent = '🏁 Member since ' + d.toLocaleDateString('en-KE', { month: 'short', year: 'numeric' });
+}
+
+// ── BODA RIDER RANK (fun, boda-themed status tag) ──
+function renderRiderRank(pct, streak) {
+  const el = document.getElementById('riderRankPill');
+  if (!el) return;
+  let icon, label;
+  if (streak >= 30)      { icon = '👑'; label = 'Road Captain'; }
+  else if (streak >= 7)   { icon = '🛵'; label = 'Highway Cruiser'; }
+  else if (pct >= 80)     { icon = '⚡'; label = 'Steady Rider'; }
+  else if (pct >= 50)     { icon = '🛣️'; label = 'On the Move'; }
+  else if (pct > 0)       { icon = '🐢'; label = 'Slow Starter'; }
+  else                    { icon = '🅿️'; label = 'Parked Up'; }
+  el.innerHTML = `${icon} <span>${label}</span>`;
+}
+
+// ── CONTRIBUTION CALENDAR (GitHub-style heatmap) ──
+function renderContribCalendar() {
+  const calGrid   = document.getElementById('contribCalGrid');
+  const calMonths = document.getElementById('contribCalMonths');
+  const rangeEl   = document.getElementById('calRangeLabel');
+  if (!calGrid || !allDates.length) return;
+
+  const phone   = currentMember.phone;
+  const todayDk = todayKey();
+
+  // Pad the front so the grid starts on a Sunday (GitHub-style columns = weeks)
+  const first = new Date(allDates[0] + 'T00:00:00');
+  const firstDow = first.getDay(); // 0 = Sun
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push(null);
+  allDates.forEach(dk => cells.push(dk));
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  const weeks = [];
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+
+  let lastMonth = null;
+  const monthLabels = weeks.map(week => {
+    const validDay = week.find(d => d);
+    if (!validDay) return '';
+    const d = new Date(validDay + 'T00:00:00');
+    const m = d.getMonth();
+    if (m !== lastMonth) { lastMonth = m; return d.toLocaleDateString('en-KE', { month: 'short' }); }
+    return '';
+  });
+
+  calGrid.innerHTML = weeks.map(week => {
+    const daysHtml = week.map(dk => {
+      if (!dk) return `<div class="contrib-day lvl-empty"></div>`;
+      const future = dk > todayDk;
+      const paid   = isPaid(phone, dk);
+      const cls    = future ? 'lvl-future' : (paid ? 'lvl-paid' : 'lvl-unpaid');
+      const status = future ? 'Upcoming' : (paid ? `Paid · KSh ${RATE}` : 'Unpaid');
+      return `<div class="contrib-day ${cls}" title="${fmtDate(dk)} — ${status}"></div>`;
+    }).join('');
+    return `<div class="contrib-week">${daysHtml}</div>`;
+  }).join('');
+
+  calMonths.innerHTML = monthLabels.map(l => `<div class="contrib-month-label">${l}</div>`).join('');
+
+  if (rangeEl) {
+    rangeEl.textContent = allDates.length
+      ? `${fmtDate(allDates[0])} → today`
+      : '—';
+  }
+}
+
+// ── MONTHLY CONTRIBUTIONS BAR CHART ──
+function renderMonthlyChart() {
+  const wrap = document.getElementById('monthChartWrap');
+  const totalEl = document.getElementById('monthChartTotal');
+  if (!wrap) return;
+
+  const phone = currentMember.phone;
+  const totals = {}; // "YYYY-MM" -> KSh
+  allDates.forEach(dk => {
+    if (isPaid(phone, dk)) {
+      const ym = dk.slice(0, 7);
+      totals[ym] = (totals[ym] || 0) + RATE;
+    }
+  });
+
+  const months = Object.keys(totals).sort();
+  const grandTotal = months.reduce((s, m) => s + totals[m], 0);
+  if (totalEl) totalEl.textContent = 'KSh ' + grandTotal.toLocaleString();
+
+  if (!months.length) {
+    wrap.innerHTML = '<div class="month-chart-empty">No paid contributions yet.</div>';
+    return;
+  }
+
+  const todayYm = todayKey().slice(0, 7);
+  const max = Math.max(...months.map(m => totals[m]), 1);
+
+  wrap.innerHTML = months.map(m => {
+    const val = totals[m];
+    const pct = Math.max(4, Math.round(val / max * 100));
+    const d = new Date(m + '-01T00:00:00');
+    const label = d.toLocaleDateString('en-KE', { month: 'short' });
+    const isCurrent = m === todayYm;
+    return `
+    <div class="month-bar-col" title="${d.toLocaleDateString('en-KE',{month:'long',year:'numeric'})}: KSh ${val.toLocaleString()}">
+      <div class="month-bar-val">${val.toLocaleString()}</div>
+      <div class="month-bar-track">
+        <div class="month-bar-fill${isCurrent ? ' is-current' : ''}" style="height:${pct}%"></div>
+      </div>
+      <div class="month-bar-label">${label}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── GAMIFICATION: shared stat calculator for any phone (own or others) ──
