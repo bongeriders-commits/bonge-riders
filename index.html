@@ -1333,11 +1333,21 @@ body.memberview .vb-unlocked { display: block; }
 </div>
 
 <script>
-// Trigger video play as early as possible (outside module scope)
-document.addEventListener('DOMContentLoaded', function(){
-  var vid = document.getElementById('splashVideoBg');
-  if(vid){ vid.currentTime = 0; vid.play().catch(function(){}); }
-});
+// Only show the splash once per app session (i.e. when the app is first
+// loaded), not every time the user navigates back to this page.
+(function(){
+  if (sessionStorage.getItem('bongeRidersSplashShown')) {
+    var el = document.getElementById('splashScreen');
+    if (el) el.remove();
+    return;
+  }
+  sessionStorage.setItem('bongeRidersSplashShown', '1');
+  // Trigger video play as early as possible (outside module scope)
+  document.addEventListener('DOMContentLoaded', function(){
+    var vid = document.getElementById('splashVideoBg');
+    if(vid){ vid.currentTime = 0; vid.play().catch(function(){}); }
+  });
+})();
 </script>
 
 <!-- Header -->
