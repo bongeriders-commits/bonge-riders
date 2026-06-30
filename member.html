@@ -265,6 +265,75 @@ html, body {
   width: 100%; font-family: 'Inter', sans-serif;
 }
 
+/* ── MONTHLY CHALLENGE ── */
+.challenge-card {
+  background: linear-gradient(135deg, rgba(255,165,0,.10) 0%, rgba(204,24,24,.06) 100%);
+  border: 1px solid rgba(255,165,0,.30);
+  border-radius: var(--radius-lg);
+  padding: 14px 14px 12px;
+}
+.challenge-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:8px; }
+.challenge-name { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; color:var(--text); }
+.challenge-star { font-size:18px; line-height:1; flex-shrink:0; transition: transform .25s; }
+.challenge-star.locked { opacity:.35; filter:grayscale(1); }
+.challenge-bar-wrap {
+  height: 8px; border-radius: 20px; background: var(--card2);
+  overflow: hidden; border: 1px solid var(--border);
+}
+.challenge-bar-fill {
+  height: 100%; border-radius: 20px; transition: width .4s;
+  background: linear-gradient(90deg, #FFA000 0%, #FFC107 100%);
+}
+.challenge-sub { font-size: 10.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+.challenge-done-msg {
+  margin-top: 8px; font-size: 11.5px; font-weight: 700; color: #FFA000;
+  display:flex; align-items:center; gap:5px;
+}
+
+/* ── BADGES ── */
+.badge-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+}
+.badge-chip {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 6px 10px;
+  display: flex; flex-direction: column; align-items: center; text-align:center; gap: 5px;
+}
+.badge-chip.locked { opacity: .42; }
+.badge-icon { font-size: 22px; line-height:1; }
+.badge-chip.locked .badge-icon { filter: grayscale(1); }
+.badge-name { font-size: 10px; font-weight: 700; color: var(--text); line-height:1.25; }
+.badge-req { font-size: 8.5px; color: var(--muted); line-height:1.3; }
+.badge-earned-pill {
+  font-size: 8px; font-weight: 700; color: var(--green2);
+  background: var(--green-bg); border-radius: 10px; padding: 1px 6px; margin-top: 1px;
+}
+
+/* ── LEADERBOARD ── */
+.leaderboard-list {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.lb-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row.lb-you { background: var(--green-bg); }
+.lb-rank {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 800; font-family:'Space Grotesk',sans-serif;
+  background: var(--card2); color: var(--muted);
+}
+.lb-rank.top1 { background: #FFD700; color:#5c4400; }
+.lb-rank.top2 { background: #C7CDD6; color:#3a3f47; }
+.lb-rank.top3 { background: #D9A066; color:#4a2e10; }
+.lb-name { flex:1; font-size: 12.5px; font-weight: 600; color: var(--text); }
+.lb-name .lb-you-tag { color: var(--green2); font-weight: 800; }
+.lb-pct { font-size: 12px; font-weight: 800; color: var(--green2); font-family:'Space Grotesk',sans-serif; }
+.lb-empty { padding: 24px 14px; text-align:center; font-size:12px; color: var(--muted); }
+
 /* ── WELFARE SECTION ── */
 .welfare-apply-btn {
   width: 100%; background: var(--green); color: #fff;
@@ -729,6 +798,43 @@ body.light .ws-name { color: #141414; }
       <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
     <div style="font-size:10px;color:var(--muted);margin-top:5px;" id="progressSub"></div>
+  </div>
+
+  <!-- Monthly Challenge -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">🎯 Monthly Challenge</div>
+    </div>
+    <div class="challenge-card" id="challengeCard">
+      <div class="challenge-top">
+        <div class="challenge-name" id="challengeName">Pay every day this month</div>
+        <div class="challenge-star locked" id="challengeStar">⭐</div>
+      </div>
+      <div class="challenge-bar-wrap">
+        <div class="challenge-bar-fill" id="challengeBarFill" style="width:0%"></div>
+      </div>
+      <div class="challenge-sub" id="challengeSub">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Badges & Achievements -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">🏅 Badges &amp; Achievements</div>
+      <div class="section-pill" id="badgeCount">0 earned</div>
+    </div>
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">📈 Leaderboard</div>
+      <div class="section-pill">Most consistent</div>
+    </div>
+    <div class="leaderboard-list" id="leaderboardList">
+      <div class="lb-empty">Loading…</div>
+    </div>
   </div>
 
   <!-- Contribution history -->
@@ -1330,6 +1436,160 @@ function renderStats() {
   document.getElementById('progressSub').textContent =
     `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total` +
     (streak >= 3 ? ` · 🔥 ${streak}-day streak!` : '');
+
+  renderGamification();
+}
+
+// ── GAMIFICATION: shared stat calculator for any phone (own or others) ──
+function statsForPhone(phone) {
+  const daysPaid = allDates.filter(dk => isPaid(phone, dk)).length;
+  const pct = allDates.length > 0 ? Math.round(daysPaid / allDates.length * 100) : 0;
+  const today = todayKey();
+  const past = [...allDates].filter(dk => dk < today).sort().reverse();
+  let streak = 0;
+  for (const dk of past) { if (isPaid(phone, dk)) streak++; else break; }
+  return { daysPaid, pct, streak };
+}
+
+// Every phone that has ever appeared in the payments doc (excluding the internal __locked marker)
+function allKnownPhones() {
+  const set = new Set();
+  Object.keys(payments || {}).forEach(dk => {
+    const dayObj = payments[dk] || {};
+    Object.keys(dayObj).forEach(k => { if (k !== '__locked' && dayObj[k]) set.add(k); });
+  });
+  return [...set];
+}
+
+function maskPhone(p) {
+  const s = String(p);
+  if (s.length < 7) return s;
+  return s.slice(0,4) + '****' + s.slice(-3);
+}
+
+// ── LEADERBOARD ── (anonymized — masked phone numbers, ranked by consistency %)
+function buildLeaderboard() {
+  const phones = allKnownPhones();
+  const rows = phones.map(phone => {
+    const { daysPaid, pct } = statsForPhone(phone);
+    return { phone, daysPaid, pct };
+  });
+  rows.sort((a,b) => b.pct - a.pct || b.daysPaid - a.daysPaid);
+  return rows;
+}
+
+function renderLeaderboard() {
+  const list = document.getElementById('leaderboardList');
+  if (!list) return;
+  const rows = buildLeaderboard();
+  if (!rows.length) {
+    list.innerHTML = '<div class="lb-empty">No contribution data yet.</div>';
+    return;
+  }
+  const top = rows.slice(0, 10);
+  const myPhone = currentMember.phone;
+  list.innerHTML = top.map((r, i) => {
+    const rank = i + 1;
+    const rankCls = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+    const isYou = r.phone === myPhone;
+    const label = isYou ? '<span class="lb-you-tag">You</span>' : maskPhone(r.phone);
+    return `
+    <div class="lb-row${isYou ? ' lb-you' : ''}">
+      <div class="lb-rank ${rankCls}">${rank}</div>
+      <div class="lb-name">${label}</div>
+      <div class="lb-pct">${r.pct}%</div>
+    </div>`;
+  }).join('');
+
+  // If "you" aren't in the visible top 10, append your own row at the bottom for context
+  if (!top.some(r => r.phone === myPhone)) {
+    const myIdx = rows.findIndex(r => r.phone === myPhone);
+    if (myIdx > -1) {
+      const r = rows[myIdx];
+      list.innerHTML += `
+      <div class="lb-row lb-you">
+        <div class="lb-rank">${myIdx + 1}</div>
+        <div class="lb-name"><span class="lb-you-tag">You</span></div>
+        <div class="lb-pct">${r.pct}%</div>
+      </div>`;
+    }
+  }
+  return rows;
+}
+
+// ── MONTHLY CHALLENGE: pay every day so far in the current calendar month ──
+function renderMonthlyChallenge() {
+  const card = document.getElementById('challengeCard');
+  if (!card) return;
+  const phone = currentMember.phone;
+  const now = new Date();
+  const today = todayKey();
+  const monthDates = allDates.filter(dk => {
+    const d = new Date(dk + 'T00:00:00');
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && dk <= today;
+  });
+  const paidThisMonth = monthDates.filter(dk => isPaid(phone, dk)).length;
+  const totalSoFar = monthDates.length;
+  const pct = totalSoFar > 0 ? Math.round(paidThisMonth / totalSoFar * 100) : 0;
+  const perfect = totalSoFar > 0 && paidThisMonth === totalSoFar;
+  const monthName = now.toLocaleDateString('en-KE', { month: 'long' });
+
+  document.getElementById('challengeName').textContent = `Pay every day in ${monthName}`;
+  document.getElementById('challengeBarFill').style.width = pct + '%';
+  const starEl = document.getElementById('challengeStar');
+  starEl.classList.toggle('locked', !perfect);
+
+  const subEl = document.getElementById('challengeSub');
+  if (perfect) {
+    subEl.innerHTML = `🌟 Perfect so far — ${paidThisMonth}/${totalSoFar} days paid in ${monthName}. Keep it up to earn this month's star!`;
+  } else {
+    const missed = totalSoFar - paidThisMonth;
+    subEl.textContent = `${paidThisMonth}/${totalSoFar} days paid this month — ${missed} missed. Pay every remaining day to earn the star ⭐`;
+  }
+}
+
+// ── BADGES & ACHIEVEMENTS ──
+function computeBadges(myStats, leaderboardRows) {
+  const { daysPaid, pct, streak } = myStats;
+  const myRank = leaderboardRows.findIndex(r => r.phone === currentMember.phone) + 1; // 1-based, 0 = not found
+  const minHistoryForPerfect = 7; // need a meaningful history before "Never Missed" counts
+
+  return [
+    { id:'streak3',  icon:'🔥', name:'3-Day Warrior',   req:'3-day streak',          earned: streak >= 3 },
+    { id:'streak7',  icon:'🔥', name:'7-Day Warrior',   req:'7-day streak',          earned: streak >= 7 },
+    { id:'streak30', icon:'🚀', name:'30-Day Warrior',  req:'30-day streak',         earned: streak >= 30 },
+    { id:'never',    icon:'🎯', name:'Never Missed',    req:'100% record',           earned: allDates.length >= minHistoryForPerfect && pct === 100 },
+    { id:'century',  icon:'💯', name:'Century Club',    req:'100 days paid',         earned: daysPaid >= 100 },
+    { id:'star90',   icon:'🌟', name:'Consistency Star',req:'90%+ rate',             earned: pct >= 90 },
+    { id:'top3',     icon:'🏆', name:'Top Contributor', req:'Top 3 on leaderboard',  earned: myRank >= 1 && myRank <= 3 },
+    { id:'top10',    icon:'⭐', name:'Top 10',          req:'Top 10 on leaderboard', earned: myRank >= 1 && myRank <= 10 },
+    { id:'first',    icon:'🌱', name:'First Payment',   req:'Made 1 contribution',   earned: daysPaid >= 1 },
+  ];
+}
+
+function renderBadges(leaderboardRows) {
+  const grid = document.getElementById('badgeGrid');
+  const countEl = document.getElementById('badgeCount');
+  if (!grid) return;
+  const myStats = statsForPhone(currentMember.phone);
+  const badges = computeBadges(myStats, leaderboardRows || []);
+  const earnedCount = badges.filter(b => b.earned).length;
+  if (countEl) countEl.textContent = earnedCount + ' earned';
+
+  grid.innerHTML = badges.map(b => `
+    <div class="badge-chip${b.earned ? '' : ' locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-req">${b.req}</div>
+      ${b.earned ? '<div class="badge-earned-pill">Earned</div>' : ''}
+    </div>`).join('');
+}
+
+function renderGamification() {
+  if (!currentMember) return;
+  const leaderboardRows = renderLeaderboard();
+  renderMonthlyChallenge();
+  renderBadges(leaderboardRows);
 }
 
 // ── HISTORY ──
