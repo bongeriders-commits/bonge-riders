@@ -22,7 +22,8 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
     match /tracker/spending {
-      allow read, write: if isAdmin();
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
     }
     match /tracker/dashboard {
       allow read: if isAnyAuth();
@@ -46,6 +47,10 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     match /tracker/saccoSettings {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/publicInfo {
       allow read:  if isAnyAuth();
       allow write: if isAdmin();
     }

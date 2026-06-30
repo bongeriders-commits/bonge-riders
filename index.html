@@ -1349,6 +1349,10 @@ document.addEventListener('DOMContentLoaded', function(){
         <span id="syncStatus" class="sync-pill err">⏳</span>
         <span id="lastSynced" class="last-synced" style="display:none"></span>
       </div>
+      <button class="icon-btn" onclick="location.href='notifications.html'" id="notifBell" title="Notifications" style="position:relative;">
+        🔔
+        <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--amber2);color:#fff;font-size:9px;font-weight:800;line-height:1;border-radius:999px;min-width:15px;height:15px;padding:0 3px;display:flex;align-items:center;justify-content:center;border:2px solid var(--card);"></span>
+      </button>
       <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
     </div>
   </div>
@@ -3299,8 +3303,39 @@ function renderAll(){
   renderPodium();
   renderSparkline();
   renderNudgeBanner();
+  updateNotifBadge();
   // When not admin, the header gauge feeds from aggregate not live data
   if (!isAdmin) updateHeaderFromAggregate();
+}
+
+// ════════════════════════════════════════════════
+// NOTIFICATION BELL BADGE
+// ════════════════════════════════════════════════
+function updateNotifBadge(){
+  try {
+    const readIds = new Set(JSON.parse(localStorage.getItem('bonge_notif_read_ids') || '[]'));
+    let unread = 0;
+
+    Object.keys(payments || {}).forEach(dateStr => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
+      const dayObj = payments[dateStr] || {};
+      const hasPaid = Object.keys(dayObj).some(k => k !== '__locked' && dayObj[k]);
+      if (hasPaid && !readIds.has('pay-' + dateStr)) unread++;
+    });
+
+    (spending || []).forEach(e => {
+      if (!readIds.has('spend-' + e.id)) unread++;
+    });
+
+    const badge = document.getElementById('notifBadge');
+    if (!badge) return;
+    if (unread > 0) {
+      badge.textContent = unread > 9 ? '9+' : String(unread);
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch(e) { /* ignore badge errors */ }
 }
 
 // ════════════════════════════════════════════════

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Notifications — BONGE RIDERS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BONGE RIDERS">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #F7F8FA;
+  --card:     #FFFFFF;
+  --card2:    #F2F3F6;
+  --border:   #E2E5EC;
+  --text:     #111827;
+  --muted:    #6B7280;
+  --dim:      #9CA3AF;
+  --amber:    #CC1818;
+  --amber2:   #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --blue:     #2563EB;
+  --blue-bg:  rgba(37,99,235,0.10);
+}
+[data-theme="dark"] {
+  --bg:       #0F1115;
+  --card:     #181B22;
+  --card2:    #1F232C;
+  --border:   #2A2E38;
+  --text:     #F3F4F6;
+  --muted:    #9CA3AF;
+  --dim:      #6B7280;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text); cursor: pointer; flex-shrink: 0;
+  text-decoration: none;
+}
+.header-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 800; flex: 1;
+}
+.mark-read-btn {
+  font-size: 12px; font-weight: 700; color: var(--amber2);
+  background: none; border: none; cursor: pointer; white-space: nowrap;
+}
+
+.tabs {
+  display: flex; gap: 6px; padding: 12px 16px 0 16px;
+  overflow-x: auto;
+}
+.tab {
+  font-size: 12.5px; font-weight: 700; color: var(--muted);
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 7px 14px; white-space: nowrap;
+  cursor: pointer; flex-shrink: 0;
+}
+.tab.active { background: var(--amber2); color: #fff; border-color: var(--amber2); }
+
+.feed { padding: 14px 16px 0 16px; display: flex; flex-direction: column; gap: 10px; }
+
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--muted);
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+.empty-state .sub { font-size: 13px; margin-top: 4px; }
+
+.notif-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px; display: flex; gap: 12px;
+  position: relative;
+}
+.notif-card.unread { border-color: rgba(204,24,24,0.3); }
+.notif-card.unread::before {
+  content: ''; position: absolute; top: 14px; left: 6px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--amber2);
+}
+.notif-icon {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.notif-icon.payment  { background: var(--green-bg); }
+.notif-icon.spending { background: var(--amber-bg); }
+.notif-icon.notice   { background: var(--blue-bg); }
+.notif-body { flex: 1; min-width: 0; }
+.notif-title { font-size: 13.5px; font-weight: 700; color: var(--text); line-height: 1.35; }
+.notif-desc  { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.notif-time  { font-size: 11px; color: var(--dim); margin-top: 6px; font-weight: 500; }
+
+.loading { text-align: center; padding: 40px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <div class="header-title">Notifications</div>
+  <button class="mark-read-btn" onclick="markAllRead()">Mark all read</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-filter="all" onclick="setFilter('all')">All</div>
+  <div class="tab" data-filter="payment" onclick="setFilter('payment')">Payments</div>
+  <div class="tab" data-filter="spending" onclick="setFilter('spending')">Spending</div>
+  <div class="tab" data-filter="notice" onclick="setFilter('notice')">Notices</div>
+</div>
+
+<div class="feed" id="feed">
+  <div class="loading">Loading notifications…</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId:     "G-VWL91EJW1H"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+const RATE = 50;
+const READ_KEY = 'bonge_notif_read_ids';
+const THEME_KEY = 'bonge_theme';
+
+// theme
+try {
+  const t = localStorage.getItem(THEME_KEY) || 'light';
+  if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+} catch(e) {}
+
+function getReadIds() {
+  try { return new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); }
+  catch(e) { return new Set(); }
+}
+function saveReadIds(set) {
+  try { localStorage.setItem(READ_KEY, JSON.stringify([...set])); } catch(e) {}
+}
+
+function timeAgo(ts) {
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+  return new Date(ts).toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function dateKeyToTs(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return isNaN(d.getTime()) ? Date.now() : d.getTime();
+}
+
+async function ensureAuth() {
+  return new Promise((resolve) => {
+    let unsub;
+    unsub = onAuthStateChanged(auth, async (user) => {
+      if (unsub) unsub();
+      if (user) { resolve(user); return; }
+      try {
+        const cred = await signInAnonymously(auth);
+        resolve(cred.user);
+      } catch (e) {
+        console.error('Anonymous sign-in failed:', e);
+        resolve(null);
+      }
+    });
+  });
+}
+
+async function safeGetDoc(name) {
+  try {
+    return await getDoc(doc(db, 'tracker', name));
+  } catch (e) {
+    console.error('Could not read tracker/' + name + ':', e);
+    return { exists: () => false, data: () => ({}) };
+  }
+}
+
+let allItems = [];
+let currentFilter = 'all';
+
+async function loadAll() {
+  const feed = document.getElementById('feed');
+  try {
+    await ensureAuth();
+
+    const [paySnap, spendSnap, pubSnap, memSnap] = await Promise.all([
+      safeGetDoc('payments'),
+      safeGetDoc('spending'),
+      safeGetDoc('publicInfo'),
+      safeGetDoc('memberDetails')
+    ]);
+
+    const members = (memSnap.exists() && memSnap.data().list) ? memSnap.data().list : [];
+    const nameByPhone = {};
+    members.forEach(m => { nameByPhone[m.phone] = m.name; });
+
+    const items = [];
+
+    // ── Payments: build one notification per day that has paid members ──
+    if (paySnap.exists()) {
+      const payments = paySnap.data();
+      Object.keys(payments).forEach(dateStr => {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
+        const dayObj = payments[dateStr] || {};
+        const paidPhones = Object.keys(dayObj).filter(k => k !== '__locked' && dayObj[k]);
+        if (paidPhones.length === 0) return;
+        const ts = dateKeyToTs(dateStr);
+        const total = paidPhones.length * RATE;
+        const names = paidPhones.slice(0,3).map(p => (nameByPhone[p] || p).split(' ')[0]);
+        let who = names.join(', ');
+        if (paidPhones.length > 3) who += ` +${paidPhones.length - 3} more`;
+        items.push({
+          id: 'pay-' + dateStr,
+          type: 'payment',
+          icon: '💰',
+          title: `${paidPhones.length} member${paidPhones.length>1?'s':''} paid — KSh ${total.toLocaleString()}`,
+          desc: `${who} contributed KSh ${RATE} each on ${dateStr}.`,
+          ts
+        });
+      });
+    }
+
+    // ── Spending ──
+    if (spendSnap.exists() && Array.isArray(spendSnap.data().list)) {
+      spendSnap.data().list.forEach(e => {
+        const ts = e.id && /^\d+$/.test(e.id) ? parseInt(e.id, 10) : dateKeyToTs(e.date);
+        items.push({
+          id: 'spend-' + e.id,
+          type: 'spending',
+          icon: '📉',
+          title: `KSh ${Number(e.amount||0).toLocaleString()} spent${e.category ? ' — ' + e.category : ''}`,
+          desc: `${e.desc || 'Expense recorded'}${e.recipient ? ' · Paid to ' + e.recipient : ''}`,
+          ts
+        });
+      });
+    }
+
+    // ── Notice / announcement ──
+    if (pubSnap.exists()) {
+      const data = pubSnap.data();
+      if (data.notice && data.notice.trim()) {
+        items.push({
+          id: 'notice-' + (data.updatedAt || 'current'),
+          type: 'notice',
+          icon: '📢',
+          title: 'Notice Board update',
+          desc: data.notice.trim(),
+          ts: data.updatedAt || Date.now()
+        });
+      }
+      if (data.welfare && data.welfare.trim()) {
+        items.push({
+          id: 'welfare-info',
+          type: 'notice',
+          icon: '🤝',
+          title: 'Welfare Benefit info',
+          desc: data.welfare.trim(),
+          ts: data.updatedAt ? data.updatedAt - 1 : Date.now() - 1
+        });
+      }
+    }
+
+    items.sort((a,b) => b.ts - a.ts);
+    allItems = items;
+    render();
+  } catch (err) {
+    console.error(err);
+    feed.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><div>Could not load notifications</div><div class="sub">Check your connection and try again.</div></div>';
+  }
+}
+
+function render() {
+  const feed = document.getElementById('feed');
+  const readIds = getReadIds();
+  const filtered = currentFilter === 'all' ? allItems : allItems.filter(i => i.type === currentFilter);
+
+  if (filtered.length === 0) {
+    feed.innerHTML = '<div class="empty-state"><div class="icon">🔔</div><div>No notifications yet</div><div class="sub">Payment, spending and notice updates will show up here.</div></div>';
+    return;
+  }
+
+  feed.innerHTML = filtered.map(item => {
+    const unread = !readIds.has(item.id);
+    return `<div class="notif-card ${unread ? 'unread' : ''}" data-id="${item.id}">
+      <div class="notif-icon ${item.type}">${item.icon}</div>
+      <div class="notif-body">
+        <div class="notif-title">${escapeHtml(item.title)}</div>
+        <div class="notif-desc">${escapeHtml(item.desc)}</div>
+        <div class="notif-time">${timeAgo(item.ts)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  feed.querySelectorAll('.notif-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const ids = getReadIds();
+      ids.add(card.dataset.id);
+      saveReadIds(ids);
+      card.classList.remove('unread');
+    });
+  });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+window.setFilter = function(f) {
+  currentFilter = f;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.filter === f));
+  render();
+};
+
+window.markAllRead = function() {
+  const ids = getReadIds();
+  allItems.forEach(i => ids.add(i.id));
+  saveReadIds(ids);
+  render();
+};
+
+loadAll();
+</script>
+</body>
+</html>
