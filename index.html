@@ -312,8 +312,12 @@ img {
   display: none;
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 999;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 10px; overflow: hidden;
+  border-radius: 10px;
   min-width: 230px;
+  max-height: min(70vh, 480px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   box-shadow: 0 8px 32px rgba(0,0,0,.45);
   padding: 8px;
   gap: 3px;
