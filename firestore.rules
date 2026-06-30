@@ -46,6 +46,10 @@ service cloud.firestore {
       allow read:  if isAnyAuth();
       allow write: if isAdmin();
     }
+    match /tracker/memberPhotos {
+      // Members upload their own profile photo for the personal portal & virtual ID card.
+      allow read, write: if isAnyAuth();
+    }
     match /tracker/saccoSettings {
       allow read:  if isAnyAuth();
       allow write: if isAdmin();
