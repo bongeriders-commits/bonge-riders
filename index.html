@@ -4479,7 +4479,12 @@ async function logAdminAction(action, details) {
       clientTime:  new Date().toISOString(),
       userAgent:   (navigator.userAgent || '').slice(0, 200)
     });
-  } catch(e) { /* never let logging failures block the admin's actual action */ }
+  } catch(e) {
+    // Don't block the admin's actual action, but DO surface the failure
+    // visibly (toast) so it's debuggable on mobile without devtools.
+    console.error('[activityLog] failed to write entry:', action, e);
+    showToast('⚠️ Log write failed: ' + (e && e.code ? e.code : (e && e.message ? e.message : 'unknown error')), 5000);
+  }
 }
 
 async function loadActivityLog(force) {
@@ -4490,6 +4495,7 @@ async function loadActivityLog(force) {
     _activityLogCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     _activityLogLoaded = true;
   } catch(e) {
+    console.error('[activityLog] failed to load:', e);
     showToast('⚠️ Could not load activity log. Check connection/permissions.');
   }
   return _activityLogCache;
