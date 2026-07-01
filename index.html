@@ -4444,6 +4444,15 @@ async function loadAdminRoles() {
     const snap = await getDoc(doc(db, 'tracker', 'admins'));
     _adminList = (snap.exists() && snap.data().list) ? snap.data().list : [];
   } catch(e) { _adminList = []; }
+  // Keep tracker/superAdmins in sync on every login so Firestore security
+  // rules (which can't evaluate arbitrary app JS) can cheaply check
+  // super-admin status for gated reads like the activity log. This makes
+  // the check self-healing instead of depending on someone remembering to
+  // click "Save Roles" after the admin list changes.
+  try {
+    const superEmails = _adminList.filter(a => a.isSuperAdmin).map(a => a.email);
+    await setDoc(doc(db, 'tracker', 'superAdmins'), { emails: superEmails });
+  } catch(e) { /* best-effort — activityLog read will show its own toast if this matters */ }
 }
 
 async function saveAdminRoles() {
