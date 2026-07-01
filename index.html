@@ -1714,27 +1714,27 @@ body.memberview .vb-unlocked { display: block; }
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('transport')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🏍️</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🏍️</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Rides</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('stage')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🚦</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🚦</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Stage</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('savings')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">💵</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">💵</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Savings</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('welfare')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🤲</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🤲</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Welfare</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('vetting')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">📋</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">📋</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Vetting</div>
         </button>
 
@@ -3977,7 +3977,7 @@ function openAllServicesModal(){
     const s = SERVICES[key];
     return `
     <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="closeAllServicesModal();openServiceModal('${key}')">
-      <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon}</div>
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon}</div>
       <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">${s.label}</div>
     </button>`;
   }).join('');
