@@ -867,6 +867,7 @@ body.memberview .vb-unlocked { display: block; }
 .income-item-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .income-item-amount { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--green2); white-space: nowrap; }
 .income-item-del { background: none; border: none; color: var(--dim); font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1; flex-shrink: 0; }
+.income-item-locked { font-size: 14px; flex-shrink: 0; padding: 0 2px; cursor: default; }
 .income-add-btn {
   width: 100%;
   background: transparent;
@@ -3918,7 +3919,7 @@ function renderIncome(){
     <div class="income-item">
       <div class="income-item-left"><div class="income-item-desc">${e.desc}</div><div class="income-item-date">${e.date}</div></div>
       <div class="income-item-amount">KSh ${Number(e.amount).toLocaleString()}</div>
-      <button class="income-item-del" onclick="deleteIncomeEntry('${e.id}')" title="Delete">×</button>
+      ${e.regId ? `<span class="income-item-locked" title="Auto-recorded on member approval — cannot be deleted">🔒</span>` : `<button class="income-item-del" onclick="deleteIncomeEntry('${e.id}')" title="Delete">×</button>`}
     </div>`).join('');
 }
 function openIncomeModal(){
@@ -3943,6 +3944,11 @@ async function saveIncomeEntry(){
   showToast('✓ Income entry added');
 }
 async function deleteIncomeEntry(id){
+  const target = otherIncome.find(e=>e.id===id);
+  if (target && target.regId) {
+    showToast('🔒 This entry was auto-recorded from an approved member registration and cannot be deleted.', 4000);
+    return;
+  }
   otherIncome=otherIncome.filter(e=>e.id!==id);
   await saveIncome(); renderIncome(); renderStats();
   showToast('Entry deleted');

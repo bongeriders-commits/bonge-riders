@@ -985,7 +985,9 @@ async function recordStageFeeIncome(app) {
       regId,
       desc: `Stage contribution fee — ${app.name || app.phone} (new member)`,
       amount: 10000,
-      date: new Date().toISOString().slice(0, 10)
+      date: new Date().toISOString().slice(0, 10),
+      addedAt: Date.now(),
+      addedBy: 'System (auto, on registration approval)'
     };
     incomeList.push(entry);
     await setDoc(doc(db, 'tracker', 'income'), { list: incomeList });
