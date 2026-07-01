@@ -1713,29 +1713,29 @@ body.memberview .vb-unlocked { display: block; }
       </div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
 
-        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('tracking')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">📊</div>
-          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Tracking</div>
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('transport')">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🏍️</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Rides</div>
         </button>
 
-        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('payments')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">💳</div>
-          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Payments</div>
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('stage')">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🚦</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Stage</div>
+        </button>
+
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('savings')">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">💵</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Savings</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('welfare')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🤝</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">🤲</div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Welfare</div>
         </button>
 
-        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('registration')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">📝</div>
-          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Joining</div>
-        </button>
-
-        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('finances')">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">💰</div>
-          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Finances</div>
+        <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('vetting')">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;">📋</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Vetting</div>
         </button>
 
       </div>
@@ -3931,33 +3931,33 @@ function confirmMarkAll(){
 // OUR SERVICES
 // ════════════════════════════════════════════════
 const SERVICES = {
-  tracking: {
-    icon: '📊', label: 'Tracking', title: 'Daily Contribution Tracking',
-    body: "Every day you pay your stage fee, it's recorded against your name in real time. Open your profile any time to see a full calendar of paid and unpaid days, your current payment streak, and your overall contribution rate for the month. No more guessing whether you're up to date — the app keeps the record for you and for the group."
+  transport: {
+    icon: '🏍️', label: 'Rides', title: 'Passenger & Goods Transport',
+    body: "At the heart of what Bonge Riders does is getting people and goods where they need to go, quickly and safely. Our riders provide point-to-point passenger transport and small parcel or goods delivery around Bogonko-Ngelani and the surrounding area — a reliable, everyday service the community can count on."
   },
-  payments: {
-    icon: '💳', label: 'Payments', title: 'Easy M-Pesa Payment Confirmation',
-    body: "Pay your daily stage fee via M-Pesa and confirm it straight in the app. Your confirmation is logged instantly, so there's no waiting on the chairperson to manually enter it, and disputes over \"I paid but it still shows unpaid\" are easy to resolve because there's a clear digital trail."
+  stage: {
+    icon: '🚦', label: 'Stage', title: 'Stage Membership & Order',
+    body: "We organize our riders into a recognized, disciplined stage with a fair queue system. Customers know they're getting a vetted, accountable rider, and members get an orderly, fair turn at picking up fares instead of competing for customers."
+  },
+  savings: {
+    icon: '💵', label: 'Savings', title: 'Table Banking / Chama Savings',
+    body: "Beyond transport, Bonge Riders runs a table banking system — members contribute daily savings into a shared pool. Over time this builds group capital that can support members' financial goals and strengthen the stage as a whole."
   },
   welfare: {
-    icon: '🤝', label: 'Welfare', title: 'Welfare & Emergency Support',
-    body: "When life throws a curveball — an accident, a hospital bill, or a bereavement — members can apply for welfare support directly through the app. The chairperson reviews and approves applications, and you can track the status of your request instead of having to follow up in person."
+    icon: '🤲', label: 'Welfare', title: 'Welfare Fund',
+    body: "We maintain a welfare fund built from member contributions, so that when a rider or their family faces an emergency — an accident, a hospital bill, or a bereavement — there's a system in place to offer financial support during a difficult time."
   },
-  registration: {
-    icon: '📝', label: 'Joining', title: 'Simple Online Registration',
-    body: "New riders can join Bogonko-Ngelani Stage entirely from their phone — no paperwork, no queuing. Fill in your details, your motorcycle information, and your next of kin, submit your stage joining fee, and the chairperson reviews and approves your application. You'll get an SMS the moment a decision is made."
+  vetting: {
+    icon: '📋', label: 'Vetting', title: 'Member Registration & Vetting',
+    body: "Every rider who joins goes through a formal registration process — ID verification, motorcycle registration details, and next-of-kin records. This vetting builds trust with the community, supports accountability, and helps with compliance with local transport regulations."
   },
-  finances: {
-    icon: '💰', label: 'Finances', title: 'Transparent Group Finances',
-    body: "See exactly what's coming into the group (contributions plus other income) and what's going out (spending records), with a running balance. The app is a transparency tool, not a wallet — it doesn't hold your money, but it shows every member exactly where the group's money stands."
+  leadership: {
+    icon: '⚖️', label: 'Leadership', title: 'Leadership & Dispute Resolution',
+    body: "Bonge Riders is governed by an elected chairperson and signatories who oversee the stage's affairs, resolve disagreements between riders or with customers, and represent the group when dealing with local authorities such as county offices or traffic police."
   },
-  id: {
-    icon: '🪪', label: 'ID Card', title: 'Your Digital Member ID',
-    body: "Every approved member gets a virtual ID card and profile inside the app — proof of your membership you can pull up on your phone any time, wherever you are, without carrying a physical card."
-  },
-  rewards: {
-    icon: '🏅', label: 'Rewards', title: 'Rewards for Consistency',
-    body: "Staying consistent with your contributions earns you something back. Build a payment streak, unlock badges and achievements, and see how you rank anonymously on the group leaderboard — a bit of friendly motivation to stay on top of your daily fee."
+  support: {
+    icon: '🛡️', label: 'Support', title: 'Rider Support & Solidarity',
+    body: "Membership means you're never riding alone. From mentorship for newcomers, to collective bargaining power with fuel and spares suppliers, to support in recovering a stolen motorcycle, Bonge Riders looks out for its own."
   }
 };
 
