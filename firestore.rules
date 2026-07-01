@@ -10,6 +10,35 @@ service cloud.firestore {
     function isAnyAuth() {
       return request.auth != null;
     }
+    // A caller is a super admin if their email is listed in tracker/superAdmins,
+    // OR if no admins have been configured yet at all (first-time setup bootstrap,
+    // matching the client-side isSuperAdminUser() fallback in index.html).
+    function isSuperAdmin() {
+      let adminsDoc = /databases/$(database)/documents/tracker/admins;
+      let noAdminsYet = !exists(adminsDoc)
+        || !('list' in get(adminsDoc).data)
+        || get(adminsDoc).data.list.size() == 0;
+      let superAdminsDoc = /databases/$(database)/documents/tracker/superAdmins;
+      return isAdmin() && (
+        noAdminsYet ||
+        (exists(superAdminsDoc) && request.auth.token.email in get(superAdminsDoc).data.emails)
+      );
+    }
+
+    match /tracker/superAdmins {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+
+    // Administrator activity log — append-only, undeletable audit trail.
+    // Any signed-in admin can CREATE an entry (to log their own action),
+    // but only a super admin can READ the log, and nobody — not even a
+    // super admin — can UPDATE or DELETE an entry once it's written.
+    match /activityLog/{entryId} {
+      allow create: if isAdmin();
+      allow read: if isSuperAdmin();
+      allow update, delete: if false;
+    }
 
     match /tracker/members {
       allow read, write: if isAdmin();

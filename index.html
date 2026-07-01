@@ -28,21 +28,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
-  --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
-  --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
+  --bg:       #0E1013;
+  --bg2:      #171A20;
+  --card:     #1B1E25;
+  --card2:    #242832;
+  --border:   #333844;
+  --text:     #F3F4F6;
+  --muted:    #9CA3AF;
+  --dim:      #6B7280;
+  --amber:    #E02020;
+  --amber2:   #FF4747;
+  --amber-bg: rgba(224,32,32,0.18);
+  --green:    #34D399;
+  --green2:   #10B981;
+  --green-bg: rgba(16,185,129,0.16);
+  --red:      #E02020;
   --radius:   10px;
   --radius-lg:14px;
 }
@@ -1436,6 +1436,7 @@ body.memberview .vb-unlocked { display: block; }
         <div class="adm-group-label">Settings</div>
         <button class="adm-item" id="manageAdminsBtn" onclick="openManageAdmins();closeAdmMenu()">🛡️ MANAGE ADMINS</button>
         <button class="adm-item" id="saccoSettingsBtn" onclick="openSaccoSettings();closeAdmMenu()">⚙️ ID CARD SETTINGS</button>
+        <button class="adm-item" id="activityLogBtn" onclick="openActivityLog();closeAdmMenu()">🗒️ ACTIVITY LOG</button>
         <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">🌐 PUBLIC VIEW EDITOR</button>
         <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">💳 PAYMENT</button>
         <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">👑 CHAIRPERSON VIEW</button>
@@ -2025,6 +2026,27 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 </div>
 
+<!-- ═══ ACTIVITY LOG (Super Admin, undeletable audit trail) ═══ -->
+<div class="modal-backdrop" id="activityLogModal">
+  <div class="modal" style="max-height:90vh;overflow-y:auto;max-width:520px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🗒️ Admin Activity Log</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Every administrator action is recorded here permanently. Entries cannot be edited or deleted by anyone — including super admins.</p>
+    <input class="panel-search" id="activityLogSearch" type="text" placeholder="Search by action, admin, or detail…" oninput="filterActivityLog()" style="margin-bottom:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span id="activityLogCount" style="font-size:11px;color:var(--muted);"></span>
+      <div style="display:flex;gap:6px;">
+        <button onclick="renderActivityLog(true)" style="border:none;background:var(--card2);color:var(--muted);border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">↻ Refresh</button>
+        <button onclick="printActivityLog()" style="border:none;background:var(--amber);color:#141414;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">📄 Print / Save PDF</button>
+      </div>
+    </div>
+    <div id="activityLogList" style="max-height:50vh;overflow-y:auto;border:1px solid var(--card2);border-radius:8px;"></div>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeActivityLog()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ CONFIRM DELETE ═══ -->
 <div class="modal-backdrop" id="deleteModal">
   <div class="modal">
@@ -2375,7 +2397,8 @@ body.memberview .vb-unlocked { display: block; }
 // FIREBASE SETUP
 // ════════════════════════════════════════════════
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnapshot }
+import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnapshot,
+         collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -2557,7 +2580,7 @@ onAuthStateChanged(auth, (user) => {
     loadPayments();
     loadIncome();
     loadSpending();
-    loadAdminRoles().then(() => applyRoleRestrictions());
+    loadAdminRoles().then(() => { applyRoleRestrictions(); logAdminAction('Login'); });
     loadAllWelfareApps();
     loadPayConfirmRequests();
   } else if (user && user.isAnonymous && isMemberMode) {
@@ -2615,6 +2638,7 @@ async function confirmAdminLogin() {
   } finally { btn.textContent = 'Login'; btn.disabled = false; }
 }
 async function logoutAdmin() {
+  await logAdminAction('Logout');
   await signOut(auth);
   showToast('Logged out');
 }
@@ -2816,16 +2840,18 @@ function togglePaid(phone, dateStr) {
     savePayments();
     const m = MEMBERS.find(x=>x.phone===phone);
     notifyPaymentMade(m && m.name, dateStr);
+    logAdminAction('Marked paid', `${m ? m.name : phone} — ${dateStr}`);
     return {ok:true};
   }
   if(!payments[dateStr]) payments[dateStr]={};
   const nowPaid = !wasPaid;
   payments[dateStr][phone]=nowPaid;
   savePayments();
+  const m = MEMBERS.find(x=>x.phone===phone);
   if (nowPaid) {
-    const m = MEMBERS.find(x=>x.phone===phone);
     notifyPaymentMade(m && m.name, dateStr);
   }
+  logAdminAction(nowPaid ? 'Marked paid' : 'Marked unpaid', `${m ? m.name : phone} — ${dateStr}`);
   return {ok:true};
 }
 function markAll(dateStr, state) {
@@ -2844,12 +2870,14 @@ function markAll(dateStr, state) {
         })
       }).catch(()=>{});
     }
+    logAdminAction('Mark-all paid (locked date)', `${dateStr} — ${changed} marked, ${blocked} blocked`);
     return {ok:true, changed, blocked};
   }
   if(!payments[dateStr]) payments[dateStr]={};
   const newlyPaid = state ? MEMBERS.filter(m=>!payments[dateStr][m.phone]).length : 0;
   MEMBERS.forEach(m=>{ payments[dateStr][m.phone]=state; });
   savePayments();
+  logAdminAction(state ? 'Mark-all paid' : 'Mark-all cleared', `${dateStr} — ${MEMBERS.length} members`);
   if (state && newlyPaid > 0) {
     fetch('/api/notify-payment', {
       method: 'POST',
@@ -3452,6 +3480,7 @@ function addMember(){
   document.getElementById('addPhone').value='';
   renderPanelList();
   showToast(`✓ ${name.split(' ')[0]} added — default PIN: ${defaultPin}`);
+  logAdminAction('Added member', `${name} (${phone})`);
 }
 
 // ════════════════════════════════════════════════
@@ -3483,6 +3512,7 @@ async function saveSaccoSettings() {
     await setDoc(doc(db, 'tracker', 'saccoSettings'), { saccoName, saccoCounty, saccoAuthority, adminPhone, updatedAt: Date.now() });
     closeSaccoSettings();
     showToast('✓ Sacco settings saved');
+    logAdminAction('Updated Sacco/ID card settings', saccoName);
   } catch(e) { errEl.textContent = '⚠️ Failed to save. Try again.'; errEl.style.display='block'; }
 }
 
@@ -3575,6 +3605,8 @@ function applyTheme(theme){
   document.body.classList.toggle('light',isLight);
   const btn=document.getElementById('themeToggle');
   if(btn) btn.textContent=isLight?'🌙':'☀️';
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', isLight?'#FFFFFF':'#0E1013');
 }
 function toggleTheme(){
   const isLight=document.body.classList.contains('light');
@@ -3667,6 +3699,7 @@ async function saveEdit(){
   } catch(e) { showToast('⚠️ Details save failed'); }
   saveMembers(); closeEditModal();
   showToast('✓ Member updated'); renderAll();
+  logAdminAction('Edited member', `${name} (${phone})`);
 }
 function openDeleteModal(phone,name){ requirePassword(()=>_openDeleteModal(phone,name),'Enter password to remove this member.'); }
 function _openDeleteModal(phone,name){
@@ -3681,6 +3714,7 @@ function confirmDelete(){
   // Do NOT delete payment entries — past contributions stay in group totals
   // The member can be refunded via Spending. Only remove from active member list.
   saveMembers();
+  logAdminAction('Removed member', `${deletingName} (${deletingPhone})`);
   closeDeleteModal();
   showToast(`🗑️ ${deletingName.split(' ')[0]} removed`); renderAll();
 }
@@ -3803,6 +3837,7 @@ async function confirmSetMemberPin() {
     _currentMemberPin = pin;
     showToast('✓ PIN saved for ' + _setPinName);
     closeSetMemberPinModal();
+    logAdminAction('Reset member PIN', `${_setPinFullName || _setPinName} (${_setPinPhone})`);
   } catch(e) { errEl.textContent='⚠️ Could not save PIN.'; errEl.classList.add('show'); }
   finally { btn.textContent='Save PIN'; btn.disabled=false; }
 }
@@ -3836,7 +3871,7 @@ function exportPDF(){
   const tableTitle=isSun?`<div style="font-size:13px;font-weight:700;color:#3D7A4F;margin:4px 0 6px;">Contributing Members — ${paid.length} of ${MEMBERS.length}</div>`:'';
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${dateLabel}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;}.stat-val.green{color:#3D7A4F;}.stat-val.amber{color:#C4621D;}table{width:100%;border-collapse:collapse;margin-top:4px;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">${isSun?'Weekly Sunday Report':'Daily Report'} — ${dateLabel} &nbsp;|&nbsp; Rate: KSh ${RATE}/day &nbsp;|&nbsp; ${MEMBERS.length} Members</div>${openingBalanceBlock}<div class="stats"><div class="stat"><div class="stat-val green">${paid.length}</div><div class="stat-lbl">Paid</div></div><div class="stat"><div class="stat-val amber">${unpaid.length}</div><div class="stat-lbl">Unpaid</div></div><div class="stat"><div class="stat-val">${(paid.length*RATE).toLocaleString()}</div><div class="stat-lbl">KSh Today</div></div><div class="stat"><div class="stat-val">${allKsh.toLocaleString()}</div><div class="stat-lbl">KSh All Days</div></div></div>${tableTitle}<table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Status</th><th style="text-align:right;">Total Paid</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
   const win=window.open('','_blank');
-  if(win){ win.document.write(html); win.document.close(); } else showToast('⚠️ Allow pop-ups for PDF export');
+  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported daily PDF report', dateLabel); } else showToast('⚠️ Allow pop-ups for PDF export');
 }
 
 // ════════════════════════════════════════════════
@@ -3907,7 +3942,7 @@ function printReport(){
   const rows=perMember.map((m,i)=>`<tr><td>${i+1}</td><td>${m.name}</td><td style="text-align:center;">${m.daysPaid}</td><td style="text-align:right;">KSh ${m.ksh.toLocaleString()}</td></tr>`).join('');
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${monthName} ${year}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;}table{width:100%;border-collapse:collapse;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">Monthly Report — ${monthName} ${year} | Rate: KSh ${RATE}/day | ${MEMBERS.length} Members</div><div class="stats"><div class="stat"><div class="stat-val">${totalDaysActive}</div><div class="stat-lbl">Days Active</div></div><div class="stat"><div class="stat-val">KSh ${totalKsh.toLocaleString()}</div><div class="stat-lbl">Total</div></div></div><table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Days Paid</th><th style="text-align:right;">KSh</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
   const win=window.open('','_blank');
-  if(win){ win.document.write(html); win.document.close(); } else showToast('⚠️ Allow pop-ups for PDF export');
+  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported monthly PDF report', `${monthName} ${year}`); } else showToast('⚠️ Allow pop-ups for PDF export');
 }
 
 // ════════════════════════════════════════════════
@@ -4022,6 +4057,7 @@ async function saveIncomeEntry(){
   otherIncome.push(entry);
   await saveIncome(); closeIncomeModal(); renderIncome(); renderStats();
   showToast('✓ Income entry added');
+  logAdminAction('Added income entry', `${desc} — KSh ${amount} (${date})`);
 }
 async function deleteIncomeEntry(id){
   const target = otherIncome.find(e=>e.id===id);
@@ -4032,6 +4068,7 @@ async function deleteIncomeEntry(id){
   otherIncome=otherIncome.filter(e=>e.id!==id);
   await saveIncome(); renderIncome(); renderStats();
   showToast('Entry deleted');
+  logAdminAction('Deleted income entry', target ? `${target.desc} — KSh ${target.amount} (${target.date})` : id);
 }
 
 // ════════════════════════════════════════════════
@@ -4145,6 +4182,7 @@ async function saveSpendingEntry() {
     closeAddSpendingModal();
     renderSpending();
     showToast('✓ Spending entry updated');
+    logAdminAction('Edited spending entry', `${desc} — KSh ${amount} (${date})`);
   } else {
     // Add mode — create new entry
     const entry = { id: Date.now().toString(36), desc, amount, date, category, recipient };
@@ -4153,13 +4191,16 @@ async function saveSpendingEntry() {
     closeAddSpendingModal();
     renderSpending();
     showToast('✓ Spending entry added');
+    logAdminAction('Added spending entry', `${desc} — KSh ${amount} (${date})`);
   }
 }
 async function deleteSpendingEntry(id) {
+  const target = spending.find(e => e.id === id);
   spending = spending.filter(e => e.id !== id);
   await saveSpending();
   renderSpending();
   showToast('Entry deleted');
+  logAdminAction('Deleted spending entry', target ? `${target.desc} — KSh ${target.amount} (${target.date})` : id);
 }
 function openSpendingModal() {
   const total = totalSpending();
@@ -4230,9 +4271,11 @@ function closeAddSpendingModal() {
 }
 async function deleteSpendingEntryFromModal(id) {
   if (!confirm('Delete this spending entry? This cannot be undone.')) return;
+  const target = spending.find(e => e.id === id);
   spending = spending.filter(e => e.id !== id);
   await saveSpending();
   showToast('Entry deleted');
+  logAdminAction('Deleted spending entry', target ? `${target.desc} — KSh ${target.amount} (${target.date})` : id);
   openSpendingModal(); // refresh the modal list
 }
 
@@ -4322,7 +4365,7 @@ function exportSpendingPDF() {
 <script>window.onload=()=>{window.print();}<\/script>
 </body></html>`;
   const win = window.open('','_blank');
-  if (win) { win.document.write(html); win.document.close(); }
+  if (win) { win.document.write(html); win.document.close(); logAdminAction('Exported spending PDF report'); }
   else showToast('⚠️ Allow pop-ups for PDF export');
 }
 
@@ -4405,6 +4448,146 @@ async function loadAdminRoles() {
 
 async function saveAdminRoles() {
   await setDoc(doc(db, 'tracker', 'admins'), { list: _adminList });
+  // Mirror the super-admin emails into their own doc so Firestore security
+  // rules (which cannot run arbitrary JS) can cheaply check "is this caller
+  // a super admin?" when guarding read access to the activity log.
+  const superEmails = _adminList.filter(a => a.isSuperAdmin).map(a => a.email);
+  try { await setDoc(doc(db, 'tracker', 'superAdmins'), { emails: superEmails }); } catch(e) {}
+}
+
+// ════════════════════════════════════════════════
+// ACTIVITY LOG (Super Admin only, undeletable)
+// ════════════════════════════════════════════════
+// Every write goes to its own auto-ID document in the `activityLog`
+// collection. Firestore rules allow admins to CREATE entries but forbid
+// update/delete entirely (see firestore.rules) — so once written, an
+// entry cannot be edited or removed by anyone, including super admins,
+// through the app or the console-level client SDK.
+let _activityLogCache = [];
+let _activityLogLoaded = false;
+
+async function logAdminAction(action, details) {
+  try {
+    if (!auth.currentUser || auth.currentUser.isAnonymous) return; // only real admin sessions are logged
+    const rec = _adminList.find(a => a.email === _currentAdminEmail);
+    await addDoc(collection(db, 'activityLog'), {
+      action:      action || '',
+      details:     details || '',
+      adminEmail:  _currentAdminEmail || (auth.currentUser.email || '').toLowerCase(),
+      adminName:   (rec && rec.name) ? rec.name : '',
+      timestamp:   serverTimestamp(),
+      clientTime:  new Date().toISOString(),
+      userAgent:   (navigator.userAgent || '').slice(0, 200)
+    });
+  } catch(e) { /* never let logging failures block the admin's actual action */ }
+}
+
+async function loadActivityLog(force) {
+  if (_activityLogLoaded && !force) return _activityLogCache;
+  try {
+    const q = query(collection(db, 'activityLog'), orderBy('timestamp', 'desc'), limit(1000));
+    const snap = await getDocs(q);
+    _activityLogCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    _activityLogLoaded = true;
+  } catch(e) {
+    showToast('⚠️ Could not load activity log. Check connection/permissions.');
+  }
+  return _activityLogCache;
+}
+
+function openActivityLog() {
+  if (!isAdmin) { showToast('🔐 Admin login required'); return; }
+  if (!isSuperAdminUser()) { showToast('⛔ Super-admin access required'); return; }
+  document.getElementById('activityLogModal').classList.add('open');
+  document.getElementById('activityLogSearch').value = '';
+  renderActivityLog(true);
+}
+function closeActivityLog() { document.getElementById('activityLogModal').classList.remove('open'); }
+
+async function renderActivityLog(refresh) {
+  const listEl = document.getElementById('activityLogList');
+  listEl.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">Loading…</div>`;
+  const entries = await loadActivityLog(!!refresh);
+  _renderActivityLogRows(entries);
+}
+
+function _fmtLogTime(entry) {
+  try {
+    const t = entry.timestamp && entry.timestamp.toDate ? entry.timestamp.toDate() : new Date(entry.clientTime || Date.now());
+    return t.toLocaleString('en-KE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  } catch(e) { return entry.clientTime || ''; }
+}
+
+function _renderActivityLogRows(entries) {
+  const listEl = document.getElementById('activityLogList');
+  const term = (document.getElementById('activityLogSearch').value || '').trim().toLowerCase();
+  const filtered = !term ? entries : entries.filter(e =>
+    (e.action||'').toLowerCase().includes(term) ||
+    (e.details||'').toLowerCase().includes(term) ||
+    (e.adminEmail||'').toLowerCase().includes(term) ||
+    (e.adminName||'').toLowerCase().includes(term)
+  );
+  document.getElementById('activityLogCount').textContent = `${filtered.length} of ${entries.length} entries`;
+  if (!filtered.length) {
+    listEl.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">No activity found.</div>`;
+    return;
+  }
+  listEl.innerHTML = filtered.map(e => `
+    <div style="padding:10px 12px;border-bottom:1px solid var(--card2);font-size:12.5px;">
+      <div style="display:flex;justify-content:space-between;gap:8px;">
+        <strong style="color:var(--text);">${escHtml(e.action||'—')}</strong>
+        <span style="color:var(--muted);white-space:nowrap;font-size:11px;">${_fmtLogTime(e)}</span>
+      </div>
+      ${e.details ? `<div style="color:var(--muted);margin-top:2px;">${escHtml(e.details)}</div>` : ''}
+      <div style="color:var(--muted);margin-top:2px;font-size:11px;">${escHtml(e.adminName ? (e.adminName + ' · ') : '')}${escHtml(e.adminEmail||'')}</div>
+    </div>`).join('');
+}
+
+function filterActivityLog() {
+  _renderActivityLogRows(_activityLogCache);
+}
+
+// Print / export the currently-visible (filtered) log entries to PDF via
+// the browser's native print dialog — the same "print → save as PDF"
+// pattern used elsewhere in this app for daily/monthly reports.
+function printActivityLog() {
+  const term = (document.getElementById('activityLogSearch').value || '').trim().toLowerCase();
+  const entries = !term ? _activityLogCache : _activityLogCache.filter(e =>
+    (e.action||'').toLowerCase().includes(term) ||
+    (e.details||'').toLowerCase().includes(term) ||
+    (e.adminEmail||'').toLowerCase().includes(term) ||
+    (e.adminName||'').toLowerCase().includes(term)
+  );
+  const rows = entries.map(e => `<tr>
+    <td>${_fmtLogTime(e)}</td>
+    <td>${escHtml(e.action||'')}</td>
+    <td>${escHtml(e.details||'')}</td>
+    <td>${escHtml(e.adminName||'')}</td>
+    <td>${escHtml(e.adminEmail||'')}</td>
+  </tr>`).join('');
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — Admin Activity Log</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}
+    h1{font-size:20px;color:#141414;margin-bottom:2px;}
+    .sub{color:#6B7280;font-size:12px;margin-bottom:16px;}
+    table{width:100%;border-collapse:collapse;margin-top:4px;}
+    th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+    td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:11.5px;vertical-align:top;}
+    tr:nth-child(even){background:#F7F5F0;}
+    .footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}
+    @media print{body{padding:10px;}}
+  </style></head><body>
+  <h1>🏍️ Bogonko Stage — Admin Activity Log</h1>
+  <div class="sub">${entries.length} entries &nbsp;|&nbsp; Generated ${new Date().toLocaleString('en-KE')}</div>
+  <table><thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th><th>Email</th></tr></thead>
+  <tbody>${rows}</tbody></table>
+  <div class="footer">This is an unalterable audit record — entries cannot be edited or deleted. · Bogonko Stage Welfare Tracker</div>
+  <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`;
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+  logAdminAction('Printed activity log', `${entries.length} entries${term ? ' (filtered: "' + term + '")' : ''}`);
 }
 
 // Check if current user has a specific role (superAdmin has all)
@@ -4496,6 +4679,7 @@ async function saveAdminRow(idx) {
   try {
     await saveAdminRoles();
     showToast('✓ Roles saved');
+    logAdminAction('Changed admin roles', `${_adminList[idx].email} → [${roles.join(', ')}]`);
   } catch(e) { showToast('⚠️ Save failed'); }
 }
 
@@ -4507,6 +4691,7 @@ async function removeAdmin(idx) {
     await saveAdminRoles();
     renderAdminMgmtModal();
     showToast('Admin removed');
+    logAdminAction('Removed admin', adm.email);
   } catch(e) { showToast('⚠️ Remove failed'); }
 }
 
@@ -4533,6 +4718,7 @@ async function saveNewAdmin() {
     await saveAdminRoles();
     renderAdminMgmtModal();
     showToast(`✓ ${email} added as admin`);
+    logAdminAction('Added admin', `${email}${isSuperAdmin ? ' (super admin)' : ''}`);
   } catch(e) {
     errEl.textContent = 'Failed to save. Check connection.';
     errEl.classList.add('show');
@@ -4581,6 +4767,8 @@ function applyRoleRestrictions() {
   if (manageAdminsBtn) manageAdminsBtn.style.display = isSuperAdmin ? '' : 'none';
   const saccoSettingsBtn = document.getElementById('saccoSettingsBtn');
   if (saccoSettingsBtn) saccoSettingsBtn.style.display = isSuperAdmin ? '' : 'none';
+  const activityLogBtn = document.getElementById('activityLogBtn');
+  if (activityLogBtn) activityLogBtn.style.display = isSuperAdmin ? '' : 'none';
   if (typeof refreshPubEditBtn === 'function') refreshPubEditBtn();
 
   // ── PAYMENT (super-admin grants viewPayment role) ──
@@ -4832,6 +5020,7 @@ async function updateWelfareStatus(phone, appIdx, newStatus) {
     apps[appIdx].reviewedAt = Date.now();
     await setDoc(docRef, { ...data, applications: apps });
     showToast(newStatus === 'approved' ? '✓ Application approved' : newStatus === 'declined' ? 'Application declined' : 'Set back to pending');
+    logAdminAction('Welfare application ' + newStatus, `${phone} — application #${appIdx+1}`);
   } catch(e) {
     showToast('⚠️ Could not update. Check connection.');
   }
@@ -4984,6 +5173,7 @@ async function approvePayConfirm(reqId) {
     }
     await setDoc(docRef, { requests: _allPayConfirmRequests });
     showToast('✓ Payment approved for ' + (req.memberName || req.memberPhone));
+    logAdminAction('Approved payment confirmation', `${req.memberName || req.memberPhone} — ${req.dateKey}`);
     renderAll();
   } catch(e) {
     showToast('⚠️ Could not approve. Check connection.');
@@ -5003,6 +5193,7 @@ async function invalidatePayConfirm(reqId) {
     }
     await setDoc(docRef, { requests: _allPayConfirmRequests });
     showToast('✕ Marked invalid — member will be notified');
+    logAdminAction('Invalidated payment confirmation', `${req.memberName || req.memberPhone} — ${req.dateKey}`);
   } catch(e) {
     showToast('⚠️ Could not update. Check connection.');
   }
@@ -5301,6 +5492,7 @@ async function savePubInfo() {
     await setDoc(doc(db, 'tracker', 'publicInfo'), { about, welfare, notice, updatedAt: Date.now() });
     closePubInfoEditor();
     showToast('\u2713 Public info updated');
+    logAdminAction('Updated public view info', 'about/welfare/notice text');
     if (about)   document.getElementById('pubAboutText').textContent   = about;
     if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
     document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
