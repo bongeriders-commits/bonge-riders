@@ -40,6 +40,14 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Announcements board — visible to everyone (members + admins),
+    // editable only by admins.
+    match /announcements/{announcementId} {
+      allow read: if isAnyAuth();
+      allow create, update, delete: if isAdmin();
+    }
+
+
     match /tracker/members {
       allow read, write: if isAdmin();
     }
