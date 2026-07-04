@@ -1447,51 +1447,6 @@ body.memberview .vb-unlocked { display: block; }
   </div>
 </div>
 
-<!-- ═══ ANNOUNCEMENTS BOARD (visible to everyone) ═══ -->
-<div style="padding:10px 14px 0;">
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
-      <div class="welfare-admin-title">📢 Announcements</div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="admin-only" onclick="openAddAnnouncementModal()" style="background:var(--amber);border:none;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">+ New</button>
-        <button onclick="openLeaderboard()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">🏆 Leaderboard</button>
-      </div>
-    </div>
-    <div id="announcementsList" style="padding:10px 14px;">
-      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">Loading…</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ NEW ANNOUNCEMENT (admin) ═══ -->
-<div class="modal-backdrop admin-only" id="addAnnouncementModal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">📢 New Announcement</div>
-    <textarea id="announcementText" rows="4" placeholder="Write an announcement for all members…" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:'Inter',sans-serif;font-size:14px;resize:vertical;background:var(--card2);color:var(--text);"></textarea>
-    <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--muted);">
-      <input type="checkbox" id="announcementPinned"> 📌 Pin to top
-    </label>
-    <div class="modal-btns">
-      <button class="mbtn cancel" onclick="closeAddAnnouncementModal()">Cancel</button>
-      <button class="mbtn confirm" onclick="addAnnouncement()">Post</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ LEADERBOARD (visible to everyone) ═══ -->
-<div class="modal-backdrop" id="leaderboardModal">
-  <div class="modal" style="max-height:90vh;overflow-y:auto;max-width:480px;">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🏆 Contribution Leaderboard</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Ranked by payment consistency since joining, with current streaks.</p>
-    <div id="leaderboardList"></div>
-    <div class="modal-btns">
-      <button class="mbtn cancel" onclick="closeLeaderboard()">Close</button>
-    </div>
-  </div>
-</div>
-
 <!-- Hidden stubs kept so old renderYearNav/renderDateStrip JS doesn't error -->
 <div class="ym-nav" id="ymNav" style="display:none;"></div>
 <div class="date-strip-wrap" style="display:none;"><div class="date-strip" id="dateStrip"></div></div>
@@ -2443,7 +2398,7 @@ body.memberview .vb-unlocked { display: block; }
 // ════════════════════════════════════════════════
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnapshot,
-         collection, addDoc, deleteDoc, query, orderBy, limit, getDocs, serverTimestamp }
+         collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -2612,7 +2567,6 @@ function setMemberMode(on) {
 // Start the public dashboard listener immediately on page load.
 // Firestore security rules must allow read on tracker/dashboard without auth.
 loadDashboard();
-subscribeAnnouncements();
 
 onAuthStateChanged(auth, (user) => {
   if (user && !user.isAnonymous) {
@@ -3504,7 +3458,7 @@ function addMember(){
   if(!name){ showToast('⚠️ Enter a name'); return; }
   if(!phone||phone.length<9){ showToast('⚠️ Enter a valid phone'); return; }
   if(MEMBERS.find(m=>m.phone===phone)){ showToast('⚠️ Phone already exists'); return; }
-  MEMBERS.push({name,phone,joinedDate:todayKey()});
+  MEMBERS.push({name,phone});
   saveMembers();
 
   // Auto-create a default PIN (last 4 digits of phone) so the member can log in immediately
@@ -4651,136 +4605,6 @@ function printActivityLog() {
   logAdminAction('Printed activity log', `${entries.length} entries${term ? ' (filtered: "' + term + '")' : ''}`);
 }
 
-// ════════════════════════════════════════════════
-// ANNOUNCEMENTS BOARD (everyone can read, admins write)
-// ════════════════════════════════════════════════
-let _announcements = [];
-let _announcementsUnsub = null;
-
-function subscribeAnnouncements() {
-  if (_announcementsUnsub) { _announcementsUnsub(); _announcementsUnsub = null; }
-  const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(30));
-  _announcementsUnsub = onSnapshot(q, (snap) => {
-    _announcements = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderAnnouncementsBoard();
-  }, () => { /* soft-fail for signed-out visitors, matching the public dashboard listener */ });
-}
-
-function _fmtAnnTime(a) {
-  try {
-    const t = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.clientTime || Date.now());
-    return t.toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' });
-  } catch(e) { return ''; }
-}
-
-function renderAnnouncementsBoard() {
-  const el = document.getElementById('announcementsList');
-  if (!el) return;
-  if (!_announcements.length) {
-    el.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">No announcements yet.</div>`;
-    return;
-  }
-  const sorted = [..._announcements].sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0));
-  el.innerHTML = sorted.map(a => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--card2);">
-      <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
-        <div style="font-size:13.5px;color:var(--text);white-space:pre-wrap;line-height:1.4;">${a.pinned ? '📌 ' : ''}${escHtml(a.text||'')}</div>
-        <button class="admin-only" onclick="deleteAnnouncement('${a.id}')" style="flex-shrink:0;background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px;">🗑️</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px;">${escHtml(a.authorName||'Admin')} · ${_fmtAnnTime(a)}</div>
-    </div>`).join('');
-}
-
-function openAddAnnouncementModal() {
-  if (!isAdmin) { showToast('🔐 Admin login required'); return; }
-  document.getElementById('announcementText').value = '';
-  document.getElementById('announcementPinned').checked = false;
-  document.getElementById('addAnnouncementModal').classList.add('open');
-}
-function closeAddAnnouncementModal() { document.getElementById('addAnnouncementModal').classList.remove('open'); }
-
-async function addAnnouncement() {
-  const text = document.getElementById('announcementText').value.trim();
-  if (!text) { showToast('⚠️ Write something first'); return; }
-  const pinned = document.getElementById('announcementPinned').checked;
-  const rec = _adminList.find(a => a.email === _currentAdminEmail);
-  try {
-    await addDoc(collection(db, 'announcements'), {
-      text, pinned,
-      authorName: (rec && rec.name) ? rec.name : (_currentAdminEmail || 'Admin'),
-      authorEmail: _currentAdminEmail || '',
-      createdAt: serverTimestamp(),
-      clientTime: new Date().toISOString()
-    });
-    closeAddAnnouncementModal();
-    showToast('✓ Announcement posted');
-    logAdminAction('Posted announcement', text.slice(0, 80));
-  } catch(e) { showToast('⚠️ Could not post announcement'); }
-}
-
-async function deleteAnnouncement(id) {
-  if (!isAdmin) { showToast('🔐 Admin login required'); return; }
-  if (!confirm('Delete this announcement?')) return;
-  const target = _announcements.find(a => a.id === id);
-  try {
-    await deleteDoc(doc(db, 'announcements', id));
-    showToast('Announcement deleted');
-    logAdminAction('Deleted announcement', target ? target.text.slice(0, 80) : id);
-  } catch(e) { showToast('⚠️ Could not delete'); }
-}
-
-// ════════════════════════════════════════════════
-// LEADERBOARD — payment consistency & streaks
-// (admin-only for now: relies on the full MEMBERS/payments data set,
-// which member sessions never load into memory by design — see the
-// privacy note in onAuthStateChanged.)
-// ════════════════════════════════════════════════
-function _daysBetween(a, b) { return Math.round((b - a) / 86400000); }
-
-function computeLeaderboard() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  return MEMBERS.map(m => {
-    const joinDate = m.joinedDate ? new Date(m.joinedDate + 'T00:00:00') : new Date(START_DATE);
-    const start = joinDate < START_DATE ? new Date(START_DATE) : joinDate;
-    const daysTracked = Math.max(1, _daysBetween(start, today) + 1);
-    let paidCount = 0;
-    let streak = 0;
-    let streakBroken = false;
-    for (let i = 0; i < daysTracked; i++) {
-      const d = new Date(today); d.setDate(today.getDate() - i);
-      const ds = dateKey(d);
-      const paid = !!(payments[ds] && payments[ds][m.phone]);
-      if (paid) paidCount++;
-      if (!streakBroken) { if (paid) streak++; else streakBroken = true; }
-    }
-    const consistency = Math.round((paidCount / daysTracked) * 100);
-    return { name: m.name, phone: m.phone, consistency, streak, paidCount, daysTracked };
-  }).sort((a,b) => b.consistency - a.consistency || b.streak - a.streak);
-}
-
-function openLeaderboard() {
-  if (!isAdmin) { showToast('🔐 Admin login required to view the leaderboard'); return; }
-  document.getElementById('leaderboardModal').classList.add('open');
-  renderLeaderboard();
-}
-function closeLeaderboard() { document.getElementById('leaderboardModal').classList.remove('open'); }
-
-function renderLeaderboard() {
-  const el = document.getElementById('leaderboardList');
-  const rows = computeLeaderboard();
-  if (!rows.length) { el.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:16px 0;">No members yet.</div>`; return; }
-  const medals = ['🥇','🥈','🥉'];
-  el.innerHTML = rows.map((r,i) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--card2);">
-      <div style="width:26px;text-align:center;font-size:${i<3?'18px':'13px'};font-weight:700;color:var(--muted);">${medals[i] || (i+1)}</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-size:13.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(r.name)}</div>
-        <div style="font-size:11px;color:var(--muted);">${r.paidCount}/${r.daysTracked} days paid${r.streak>0 ? ` · 🔥 ${r.streak}-day streak` : ''}</div>
-      </div>
-      <div style="font-size:15px;font-weight:800;color:var(--green2);">${r.consistency}%</div>
-    </div>`).join('');
-}
-
 // Check if current user has a specific role (superAdmin has all)
 function hasRole(roleId) {
   if (!isAdmin) return false;
@@ -5590,8 +5414,6 @@ Object.assign(window,{
   openPayConfirmPanel, closePayConfirmPanel, setPayConfirmFilter, approvePayConfirm, invalidatePayConfirm,
   openServiceModal, closeServiceModal, openAllServicesModal, closeAllServicesModal,
   openActivityLog, closeActivityLog, renderActivityLog, filterActivityLog, printActivityLog,
-  openAddAnnouncementModal, closeAddAnnouncementModal, addAnnouncement, deleteAnnouncement,
-  openLeaderboard, closeLeaderboard,
 });
 
 // ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
