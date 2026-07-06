@@ -328,15 +328,30 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
 });
 
 // ── LIVE DATA ──
-PLEDGES_COL.onSnapshot((snap) => {
-  pledgesCache = [];
-  snap.forEach((d) => pledgesCache.push({ id: d.id, ...d.data() }));
-  pledgesCache.sort((a, b) => (b.amount || 0) - (a.amount || 0));
-  el("loadingMsg").style.display = "none";
-  render();
-}, (err) => {
-  console.error("pledges error:", err);
-  el("loadingMsg").textContent = "⚠️ Could not load data. Check connection.";
+// The pledges listener starts only once we have *some* auth session
+// (anonymous visitors included), since Firestore rules require isAnyAuth()
+// to read. It's kicked off from the auth-state handler below.
+let pledgesListenerStarted = false;
+function startPledgesListener() {
+  if (pledgesListenerStarted) return;
+  pledgesListenerStarted = true;
+  PLEDGES_COL.onSnapshot((snap) => {
+    pledgesCache = [];
+    snap.forEach((d) => pledgesCache.push({ id: d.id, ...d.data() }));
+    pledgesCache.sort((a, b) => (b.amount || 0) - (a.amount || 0));
+    el("loadingMsg").style.display = "none";
+    render();
+  }, (err) => {
+    console.error("pledges error:", err);
+    el("loadingMsg").textContent = "⚠️ Could not load data. Check connection.";
+  });
+}
+
+// Every visitor needs an auth session (even anonymous) because the
+// Firestore rules require isAnyAuth() to read/create pledges.
+auth.signInAnonymously().catch((e) => {
+  console.error("Anonymous sign-in failed:", e);
+  el("loadingMsg").textContent = "⚠️ Could not connect. Check your connection.";
 });
 
 // Returns the amount actually paid so far for a pledge (backward-compatible
@@ -520,8 +535,10 @@ function escapeHtml(str) {
 
 // ── ADMIN AUTH ──
 el("adminLink").addEventListener("click", async () => {
-  if (auth.currentUser) {
+  if (isAdmin) {
     await auth.signOut();
+    // Drop back to an anonymous session so pledges can still be read.
+    auth.signInAnonymously().catch((e) => console.error("Anonymous sign-in failed:", e));
     return;
   }
   el("loginEmail").value = "";
@@ -553,10 +570,15 @@ el("loginPw").addEventListener("keydown", (e) => {
 });
 
 auth.onAuthStateChanged((user) => {
-  isAdmin = !!user;
+  // Anonymous sessions (every regular visitor) must NOT count as admin —
+  // only a real password sign-in does.
+  isAdmin = !!(user && !user.isAnonymous);
   el("adminLink").textContent = isAdmin ? `Sign out (${user.email})` : "Admin sign in";
   el("pdfBtn").style.display = isAdmin ? "inline-block" : "none";
   el("loginBtn").textContent = "Sign In";
+
+  // Any auth session (anonymous or admin) is enough to read pledges.
+  if (user) startPledgesListener();
 
   // Phone numbers are only ever fetched for a signed-in admin, and are
   // dropped again the moment they sign out.
@@ -566,7 +588,7 @@ auth.onAuthStateChanged((user) => {
       phonesCache = {};
       snap.forEach((d) => { phonesCache[d.id] = d.data().phone; });
       render();
-    });
+    }, (err) => console.error("phones error:", err));
   } else {
     phonesCache = {};
   }
@@ -629,9 +651,9 @@ el("pdfBtn").addEventListener("click", async () => {
   const totalReceived = pledgesCache.reduce((s, p) => s + getAmountPaid(p), 0);
 
   const stats = [
-    { label: "MEMBERS PLEDGING", value: String(pledgesCache.length) },
-    { label: "TOTAL PLEDGED", value: `KSh ${totalPledged.toLocaleString()}` },
-    { label: "CASH RECEIVED", value: `KSh ${totalReceived.toLocaleString()}` }
+    { label: "MEMBERS PLEDGING", value: String(pledgesCache.length), color: [37, 99, 235] },
+    { label: "TOTAL PLEDGED", value: `KSh ${totalPledged.toLocaleString()}`, color: [202, 138, 4] },
+    { label: "CASH RECEIVED", value: `KSh ${totalReceived.toLocaleString()}`, color: [5, 150, 105] }
   ];
 
   const gap = 6;
@@ -640,18 +662,18 @@ el("pdfBtn").addEventListener("click", async () => {
 
   stats.forEach((s, i) => {
     const x = margin + i * (boxWidth + gap);
-    pdf.setDrawColor(210, 213, 220);
-    pdf.setLineWidth(0.4);
+    pdf.setDrawColor(s.color[0], s.color[1], s.color[2]);
+    pdf.setLineWidth(0.6);
     pdf.roundedRect(x, y, boxWidth, boxHeight, 2, 2, "S");
 
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(8);
-    pdf.setTextColor(107, 114, 128);
+    pdf.setTextColor(s.color[0], s.color[1], s.color[2]);
     pdf.text(s.label, x + boxWidth / 2, y + 8, { align: "center" });
 
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(17);
-    pdf.setTextColor(17, 24, 39);
+    pdf.setTextColor(s.color[0], s.color[1], s.color[2]);
     pdf.text(s.value, x + boxWidth / 2, y + 19, { align: "center" });
   });
 
@@ -665,7 +687,6 @@ el("pdfBtn").addEventListener("click", async () => {
     return [
       i + 1,
       p.name || "Anonymous",
-      phonesCache[p.id] || "",
       `KSh ${amount.toLocaleString()}`,
       `KSh ${amountPaid.toLocaleString()}`,
       status
@@ -675,7 +696,7 @@ el("pdfBtn").addEventListener("click", async () => {
   pdf.autoTable({
     startY: y,
     margin: { left: margin, right: margin },
-    head: [["#", "Name", "Phone", "Amount", "Paid", "Status"]],
+    head: [["#", "Name", "Amount", "Paid", "Status"]],
     body: rows,
     theme: "grid",
     styles: {
@@ -690,6 +711,9 @@ el("pdfBtn").addEventListener("click", async () => {
       fontStyle: "bold",
       lineWidth: 0.3,
       lineColor: [170, 175, 185]
+    },
+    columnStyles: {
+      1: { fontStyle: "bold" }
     },
     alternateRowStyles: { fillColor: [247, 248, 250] }
   });
