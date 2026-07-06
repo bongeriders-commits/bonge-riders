@@ -64,6 +64,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .cta-row{padding:0 16px;margin-bottom:20px;}
 .add-btn{width:100%;padding:14px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;}
 .add-btn:active{opacity:.9;}
+.closed-notice{text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;color:var(--muted);font-size:13px;line-height:1.5;}
 
 /* ── LIST ── */
 .list-header{display:flex;justify-content:space-between;align-items:center;padding:0 16px;margin-bottom:10px;}
@@ -83,6 +84,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .act-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
 .act-btn.del{color:var(--red);border-color:rgba(204,24,24,0.3);}
 .act-btn.partial-btn{color:#B45309;border-color:rgba(180,83,9,0.35);}
+.act-btn.remind-btn{color:var(--green2);border-color:rgba(5,150,105,0.35);}
 
 /* ── PARTIAL PAYMENT PANEL ── */
 .pledge-item{display:flex;flex-direction:column;gap:0;}
@@ -136,7 +138,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
     <a href="index.html" class="back-btn">‹</a>
     <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
     <div>
-      <div class="page-title">🚲 Kelvin's Bike Fund</div>
+      <div class="page-title">Kelvin's Bike Fund</div>
       <div class="page-sub">Bonge Riders Welfare Association</div>
     </div>
   </div>
@@ -169,6 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <!-- CTA -->
 <div class="cta-row">
   <button class="add-btn" id="openPledgeBtn">＋ Pledge Now</button>
+  <div class="closed-notice" id="closedNotice" style="display:none;">This fundraiser is now closed to new pledges. Thank you to everyone who backed Kelvin! 🙏</div>
 </div>
 
 <!-- LIST -->
@@ -240,6 +243,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <script>
 const ORGANIZER_PHONE = "254725672771"; // 0725672771 in international format, no leading +
 
+// This fundraiser only accepts new pledges for 7 days from launch.
+// After this, existing pledges stay visible/manageable by admin, but the
+// "Pledge Now" button is replaced with a closed notice.
+const CAMPAIGN_END = new Date("2026-07-13T23:59:59+03:00");
+function isCampaignOpen() {
+  return new Date() <= CAMPAIGN_END;
+}
+
 firebase.initializeApp({
   apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
   authDomain:        "bonge-96f37.firebaseapp.com",
@@ -272,6 +283,12 @@ function showToast(msg) {
 }
 
 // ── PLEDGE MODAL ──
+// Show/hide the pledge CTA depending on whether the 7-day window has passed
+if (!isCampaignOpen()) {
+  el("openPledgeBtn").style.display = "none";
+  el("closedNotice").style.display = "block";
+}
+
 el("openPledgeBtn").addEventListener("click", () => {
   el("pName").value = "";
   el("pPhone").value = "";
@@ -290,6 +307,12 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
   const phone = el("pPhone").value.trim();
   const amount = Number(el("pAmount").value);
   const hint = el("modalHint");
+
+  if (!isCampaignOpen()) {
+    hint.textContent = "This fundraiser is now closed to new pledges.";
+    hint.className = "merr";
+    return;
+  }
 
   if (!name || !phone || !amount || amount <= 0) {
     hint.textContent = "Please fill in your name, phone number, and a valid amount.";
@@ -393,7 +416,8 @@ function render() {
         <span class="rank ${i < 3 ? 'top' : ''}">${i + 1}</span>
         <div style="min-width:0;">
           <div class="p-name">${escapeHtml(p.name || "Anonymous")}</div>
-          ${isAdmin && phonesCache[p.id] ? `<div class="p-meta">${escapeHtml(phonesCache[p.id])}</div>` : ""}
+          ${isAdmin && phonesCache[p.id] ? `<div class="p-meta">${escapeHtml(phonesCache[p.id])} <a data-edit-phone="${p.id}" style="text-decoration:underline;cursor:pointer;">edit</a></div>` : ""}
+          ${isAdmin && !phonesCache[p.id] ? `<div class="p-meta"><a data-edit-phone="${p.id}" style="text-decoration:underline;cursor:pointer;">+ add phone</a></div>` : ""}
         </div>
       </div>
       <div class="amt-wrap">
@@ -403,6 +427,7 @@ function render() {
         </div>
         ${isAdmin ? `
           <div style="display:flex;flex-direction:column;gap:4px;">
+            ${(amount - amountPaid) > 0 && phonesCache[p.id] ? `<button class="act-btn remind-btn" data-remind="${p.id}">💬 Remind</button>` : ""}
             <button class="act-btn partial-btn" data-partial-toggle="${p.id}">${openPartialId === p.id ? 'Close' : 'Partial'}</button>
             <button class="act-btn" data-toggle="${p.id}" data-paid="${status === 'paid' ? 'false' : 'true'}">${status === 'paid' ? 'Undo' : 'Mark full'}</button>
             <button class="act-btn del" data-del="${p.id}">Remove</button>
@@ -461,6 +486,44 @@ function render() {
             showToast("Could not remove: " + e.message);
           }
         }
+      });
+    });
+
+    // Edit a pledger's phone number (admin only)
+    list.querySelectorAll("[data-edit-phone]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.editPhone;
+        const current = phonesCache[id] || "";
+        const next = prompt("Phone number:", current);
+        if (next === null) return; // cancelled
+        const trimmed = next.trim();
+        if (!trimmed) {
+          showToast("Phone number can't be empty");
+          return;
+        }
+        try {
+          await PHONES_COL.doc(id).set({ phone: trimmed });
+          showToast("Phone number updated");
+        } catch (e) {
+          showToast("Could not update phone: " + e.message);
+        }
+      });
+    });
+
+    // WhatsApp balance reminder (admin only)
+    list.querySelectorAll("[data-remind]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.remind;
+        const p = pledgesCache.find(x => x.id === id);
+        const phone = phonesCache[id];
+        if (!p || !phone) return;
+        const amount = Number(p.amount) || 0;
+        const amountPaid = getAmountPaid(p);
+        const balance = amount - amountPaid;
+        const msg = `Hi ${p.name || "there"}, this is a friendly reminder from Bonge Riders about your pledge to Kelvin's Bike Fund.\nPledged: KSh ${amount.toLocaleString()}\nPaid so far: KSh ${amountPaid.toLocaleString()}\nBalance remaining: KSh ${balance.toLocaleString()}\nWhenever you're able to complete it, we'd really appreciate it. Thank you for backing Kelvin! 🏍️`;
+        const digits = phone.replace(/[^0-9]/g, "");
+        const waPhone = digits.startsWith("0") ? "254" + digits.slice(1) : digits;
+        window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, "_blank");
       });
     });
 
@@ -714,6 +777,15 @@ el("pdfBtn").addEventListener("click", async () => {
     },
     columnStyles: {
       1: { fontStyle: "bold" }
+    },
+    didParseCell: (data) => {
+      if (data.section === "body" && data.column.index === 4) {
+        const val = data.cell.raw;
+        data.cell.styles.fontStyle = "bold";
+        if (val === "Received") data.cell.styles.textColor = [5, 150, 105];
+        else if (val === "Partial") data.cell.styles.textColor = [202, 138, 4];
+        else if (val === "Pledged") data.cell.styles.textColor = [204, 24, 24];
+      }
     },
     alternateRowStyles: { fillColor: [247, 248, 250] }
   });
