@@ -79,8 +79,21 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .p-amt{font-family:'Space Grotesk',sans-serif;color:var(--green2);font-weight:700;font-size:14.5px;white-space:nowrap;}
 .tag{font-size:9.5px;padding:3px 8px;border-radius:20px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
 .tag.paid{color:var(--green2);border-color:var(--green2);background:var(--green-bg);}
+.tag.partial{color:#B45309;border-color:#B45309;background:rgba(180,83,9,0.10);}
 .act-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
 .act-btn.del{color:var(--red);border-color:rgba(204,24,24,0.3);}
+.act-btn.partial-btn{color:#B45309;border-color:rgba(180,83,9,0.35);}
+
+/* ── PARTIAL PAYMENT PANEL ── */
+.pledge-item{display:flex;flex-direction:column;gap:0;}
+.partial-panel{background:var(--card2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:12px 14px;margin-top:-1px;}
+.partial-panel label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.partial-panel select, .partial-panel input{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13.5px;font-family:'Inter',sans-serif;outline:none;margin-bottom:8px;}
+.partial-panel select:focus, .partial-panel input:focus{border-color:var(--amber);}
+.partial-btns{display:flex;gap:8px;}
+.partial-btns button{flex:1;padding:9px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;}
+.partial-btns .p-cancel{background:var(--bg2);color:var(--muted);border:1px solid var(--border);}
+.partial-btns .p-save{background:var(--red-dark);color:#fff;}
 .empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
 .loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
 
@@ -245,6 +258,7 @@ const PLEDGES_COL = db.collection("tracker/kelvinBikeFund/pledges");
 const el = (id) => document.getElementById(id);
 let isAdmin = false;
 let pledgesCache = [];
+let openPartialId = null; // id of pledge whose "amount paid" dropdown panel is open
 
 function showToast(msg) {
   const t = el("toast");
@@ -285,7 +299,7 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
 
   try {
     await PLEDGES_COL.add({
-      name, phone, amount, paid: false,
+      name, phone, amount, paid: false, amountPaid: 0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
@@ -317,10 +331,20 @@ PLEDGES_COL.onSnapshot((snap) => {
   el("loadingMsg").textContent = "⚠️ Could not load data. Check connection.";
 });
 
+// Returns the amount actually paid so far for a pledge (backward-compatible
+// with older records that only ever had the boolean `paid` field).
+function getAmountPaid(p) {
+  const amount = Number(p.amount) || 0;
+  if (p.amountPaid !== undefined && p.amountPaid !== null) {
+    return Math.min(Number(p.amountPaid) || 0, amount);
+  }
+  return p.paid ? amount : 0;
+}
+
 function render() {
   const count = pledgesCache.length;
   const totalPledged = pledgesCache.reduce((s, p) => s + (Number(p.amount) || 0), 0);
-  const totalRedeemed = pledgesCache.filter(p => p.paid).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const totalRedeemed = pledgesCache.reduce((s, p) => s + getAmountPaid(p), 0);
 
   el("statCount").textContent = count;
   el("statPledged").textContent = `KSh ${totalPledged.toLocaleString()}`;
@@ -331,7 +355,16 @@ function render() {
     list.innerHTML = `<div class="empty-msg">No pledges yet — be the first to back Kelvin. 🏍️</div>`;
     return;
   }
-  list.innerHTML = pledgesCache.map((p, i) => `
+  list.innerHTML = pledgesCache.map((p, i) => {
+    const amount = Number(p.amount) || 0;
+    const amountPaid = getAmountPaid(p);
+    const status = amount > 0 && amountPaid >= amount ? "paid" : (amountPaid > 0 ? "partial" : "pledged");
+    const tagClass = status === "paid" ? "paid" : status === "partial" ? "partial" : "";
+    const tagLabel = status === "paid" ? "Received"
+                   : status === "partial" ? `Partial · KSh ${amountPaid.toLocaleString()}`
+                   : "Pledged";
+
+    const card = `
     <div class="pledge-card">
       <div class="who">
         <span class="rank ${i < 3 ? 'top' : ''}">${i + 1}</span>
@@ -342,30 +375,59 @@ function render() {
       </div>
       <div class="amt-wrap">
         <div style="text-align:right;">
-          <div class="p-amt">KSh ${(Number(p.amount) || 0).toLocaleString()}</div>
-          <span class="tag ${p.paid ? 'paid' : ''}">${p.paid ? 'Received' : 'Pledged'}</span>
+          <div class="p-amt">KSh ${amount.toLocaleString()}</div>
+          <span class="tag ${tagClass}">${tagLabel}</span>
         </div>
         ${isAdmin ? `
           <div style="display:flex;flex-direction:column;gap:4px;">
-            <button class="act-btn" data-toggle="${p.id}" data-paid="${p.paid ? 'false' : 'true'}">${p.paid ? 'Undo' : 'Mark paid'}</button>
+            <button class="act-btn partial-btn" data-partial-toggle="${p.id}">${openPartialId === p.id ? 'Close' : 'Partial'}</button>
+            <button class="act-btn" data-toggle="${p.id}" data-paid="${status === 'paid' ? 'false' : 'true'}">${status === 'paid' ? 'Undo' : 'Mark full'}</button>
             <button class="act-btn del" data-del="${p.id}">Remove</button>
           </div>` : ""}
       </div>
-    </div>
-  `).join("");
+    </div>`;
+
+    const panel = (isAdmin && openPartialId === p.id) ? `
+    <div class="partial-panel" data-panel="${p.id}">
+      <label>Amount paid so far</label>
+      <select data-preset="${p.id}">
+        <option value="">Select amount…</option>
+        <option value="${Math.round(amount * 0.25)}">25% — KSh ${Math.round(amount * 0.25).toLocaleString()}</option>
+        <option value="${Math.round(amount * 0.5)}">50% — KSh ${Math.round(amount * 0.5).toLocaleString()}</option>
+        <option value="${Math.round(amount * 0.75)}">75% — KSh ${Math.round(amount * 0.75).toLocaleString()}</option>
+        <option value="${amount}">Full — KSh ${amount.toLocaleString()}</option>
+        <option value="custom">Custom amount…</option>
+      </select>
+      <input type="number" min="1" inputmode="numeric" class="partial-custom" data-custom="${p.id}" placeholder="Enter KSh amount" style="display:none;" value="${amountPaid || ''}">
+      <div class="partial-btns">
+        <button class="p-cancel" data-partial-cancel="${p.id}">Cancel</button>
+        <button class="p-save" data-partial-save="${p.id}">Save</button>
+      </div>
+    </div>` : "";
+
+    return `<div class="pledge-item">${card}${panel}</div>`;
+  }).join("");
 
   if (isAdmin) {
+    // Full paid / undo toggle
     list.querySelectorAll("[data-toggle]").forEach(btn => {
       btn.addEventListener("click", async () => {
+        const id = btn.dataset.toggle;
+        const p = pledgesCache.find(x => x.id === id);
+        const amount = Number(p?.amount) || 0;
+        const markPaid = btn.dataset.paid === "true";
         try {
-          await db.collection("tracker/kelvinBikeFund/pledges").doc(btn.dataset.toggle).update({
-            paid: btn.dataset.paid === "true"
+          await db.collection("tracker/kelvinBikeFund/pledges").doc(id).update({
+            paid: markPaid,
+            amountPaid: markPaid ? amount : 0
           });
         } catch (e) {
           showToast("Could not update: " + e.message);
         }
       });
     });
+
+    // Remove pledge
     list.querySelectorAll("[data-del]").forEach(btn => {
       btn.addEventListener("click", async () => {
         if (confirm("Remove this pledge?")) {
@@ -375,6 +437,67 @@ function render() {
           } catch (e) {
             showToast("Could not remove: " + e.message);
           }
+        }
+      });
+    });
+
+    // Open/close the "amount paid" dropdown panel
+    list.querySelectorAll("[data-partial-toggle]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.partialToggle;
+        openPartialId = openPartialId === id ? null : id;
+        render();
+      });
+    });
+
+    // Dropdown: reveal custom input when "Custom amount…" is chosen
+    list.querySelectorAll("[data-preset]").forEach(sel => {
+      sel.addEventListener("change", () => {
+        const id = sel.dataset.preset;
+        const customInput = list.querySelector(`[data-custom="${id}"]`);
+        if (sel.value === "custom") {
+          customInput.style.display = "block";
+          customInput.focus();
+        } else {
+          customInput.style.display = "none";
+        }
+      });
+    });
+
+    // Cancel partial edit
+    list.querySelectorAll("[data-partial-cancel]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        openPartialId = null;
+        render();
+      });
+    });
+
+    // Save partial payment amount
+    list.querySelectorAll("[data-partial-save]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.partialSave;
+        const sel = list.querySelector(`[data-preset="${id}"]`);
+        const customInput = list.querySelector(`[data-custom="${id}"]`);
+        let val = sel.value === "custom" ? Number(customInput.value) : Number(sel.value);
+
+        if (!val || val <= 0) {
+          showToast("Enter a valid amount paid");
+          return;
+        }
+
+        const p = pledgesCache.find(x => x.id === id);
+        const amount = Number(p?.amount) || 0;
+        const clamped = Math.min(val, amount);
+
+        try {
+          await db.collection("tracker/kelvinBikeFund/pledges").doc(id).update({
+            amountPaid: clamped,
+            paid: clamped >= amount
+          });
+          openPartialId = null;
+          showToast("Payment updated");
+        } catch (e) {
+          showToast("Could not update: " + e.message);
         }
       });
     });
@@ -441,20 +564,27 @@ el("pdfBtn").addEventListener("click", () => {
   pdf.text(`Generated: ${new Date().toLocaleString()}`, 14, 23);
 
   const totalPledged = pledgesCache.reduce((s, p) => s + (Number(p.amount) || 0), 0);
-  const totalReceived = pledgesCache.filter(p => p.paid).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const totalReceived = pledgesCache.reduce((s, p) => s + getAmountPaid(p), 0);
   pdf.text(`People pledging: ${pledgesCache.length}   Total pledged: KSh ${totalPledged.toLocaleString()}   Cash received: KSh ${totalReceived.toLocaleString()}`, 14, 30);
 
-  const rows = pledgesCache.map((p, i) => [
-    i + 1,
-    p.name || "Anonymous",
-    p.phone || "",
-    `KSh ${(Number(p.amount) || 0).toLocaleString()}`,
-    p.paid ? "Received" : "Pledged"
-  ]);
+  const rows = pledgesCache.map((p, i) => {
+    const amount = Number(p.amount) || 0;
+    const amountPaid = getAmountPaid(p);
+    const status = amount > 0 && amountPaid >= amount ? "Received"
+                 : amountPaid > 0 ? "Partial" : "Pledged";
+    return [
+      i + 1,
+      p.name || "Anonymous",
+      p.phone || "",
+      `KSh ${amount.toLocaleString()}`,
+      `KSh ${amountPaid.toLocaleString()}`,
+      status
+    ];
+  });
 
   pdf.autoTable({
     startY: 36,
-    head: [["#", "Name", "Phone", "Amount", "Status"]],
+    head: [["#", "Name", "Phone", "Amount", "Paid", "Status"]],
     body: rows,
     styles: { fontSize: 10 },
     headStyles: { fillColor: [204, 24, 24] }
