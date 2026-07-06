@@ -252,12 +252,16 @@ firebase.initializeApp({
 const db   = firebase.firestore();
 const auth = firebase.auth();
 
-// Firestore: tracker/kelvinBikeFund/pledges/{autoId} -> { name, phone, amount, paid, createdAt }
+// Firestore: tracker/kelvinBikeFund/pledges/{autoId} -> { name, amount, paid, amountPaid, createdAt }
+// Phone numbers are kept separate and are admin-read-only (see firestore.rules).
 const PLEDGES_COL = db.collection("tracker/kelvinBikeFund/pledges");
+const PHONES_COL  = db.collection("tracker/kelvinBikeFund/pledgePhones");
 
 const el = (id) => document.getElementById(id);
 let isAdmin = false;
 let pledgesCache = [];
+let phonesCache = {}; // { pledgeId: phone } — only populated when signed in as admin
+let phonesUnsub = null;
 let openPartialId = null; // id of pledge whose "amount paid" dropdown panel is open
 
 function showToast(msg) {
@@ -298,10 +302,14 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
   hint.className = "merr";
 
   try {
-    await PLEDGES_COL.add({
-      name, phone, amount, paid: false, amountPaid: 0,
+    const pledgeRef = PLEDGES_COL.doc();
+    const batch = db.batch();
+    batch.set(pledgeRef, {
+      name, amount, paid: false, amountPaid: 0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
+    batch.set(PHONES_COL.doc(pledgeRef.id), { phone });
+    await batch.commit();
 
     // Opens WhatsApp with the message ready — the pledger taps Send in WhatsApp.
     const msg = `New bike fund pledge!\nName: ${name}\nPhone: ${phone}\nAmount: KSh ${amount.toLocaleString()}`;
@@ -370,7 +378,7 @@ function render() {
         <span class="rank ${i < 3 ? 'top' : ''}">${i + 1}</span>
         <div style="min-width:0;">
           <div class="p-name">${escapeHtml(p.name || "Anonymous")}</div>
-          <div class="p-meta">${escapeHtml(p.phone || "")}</div>
+          ${isAdmin && phonesCache[p.id] ? `<div class="p-meta">${escapeHtml(phonesCache[p.id])}</div>` : ""}
         </div>
       </div>
       <div class="amt-wrap">
@@ -549,23 +557,105 @@ auth.onAuthStateChanged((user) => {
   el("adminLink").textContent = isAdmin ? `Sign out (${user.email})` : "Admin sign in";
   el("pdfBtn").style.display = isAdmin ? "inline-block" : "none";
   el("loginBtn").textContent = "Sign In";
+
+  // Phone numbers are only ever fetched for a signed-in admin, and are
+  // dropped again the moment they sign out.
+  if (phonesUnsub) { phonesUnsub(); phonesUnsub = null; }
+  if (isAdmin) {
+    phonesUnsub = PHONES_COL.onSnapshot((snap) => {
+      phonesCache = {};
+      snap.forEach((d) => { phonesCache[d.id] = d.data().phone; });
+      render();
+    });
+  } else {
+    phonesCache = {};
+  }
+
   render();
 });
 
 // ── PDF EXPORT ──
-el("pdfBtn").addEventListener("click", () => {
+el("pdfBtn").addEventListener("click", async () => {
   if (!isAdmin) return;
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 14;
 
-  pdf.setFontSize(16);
-  pdf.text("Bonge Riders — Kelvin's Bike Fund Pledges", 14, 16);
-  pdf.setFontSize(10);
-  pdf.text(`Generated: ${new Date().toLocaleString()}`, 14, 23);
+  // Load the club logo so it can be embedded in the PDF
+  let logoData = null;
+  try {
+    const res = await fetch("icon-512.png");
+    const blob = await res.blob();
+    logoData = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (e) {
+    console.warn("Could not load logo for PDF:", e);
+  }
 
+  let y = 14;
+
+  // Logo
+  if (logoData) {
+    const logoSize = 22;
+    pdf.addImage(logoData, "PNG", (pageWidth - logoSize) / 2, y, logoSize, logoSize);
+    y += logoSize + 6;
+  }
+
+  // Heading
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(24);
+  pdf.setTextColor(17, 24, 39);
+  pdf.text("BOGONKO NGELANI STAGE", pageWidth / 2, y, { align: "center" });
+  y += 8;
+
+  // Subtitle
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(13);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text("Kelvin Maore Motorcycle Fundraiser", pageWidth / 2, y, { align: "center" });
+  y += 6;
+
+  pdf.setFontSize(9);
+  pdf.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, y, { align: "center" });
+  y += 10;
+
+  // Stat boxes
   const totalPledged = pledgesCache.reduce((s, p) => s + (Number(p.amount) || 0), 0);
   const totalReceived = pledgesCache.reduce((s, p) => s + getAmountPaid(p), 0);
-  pdf.text(`People pledging: ${pledgesCache.length}   Total pledged: KSh ${totalPledged.toLocaleString()}   Cash received: KSh ${totalReceived.toLocaleString()}`, 14, 30);
+
+  const stats = [
+    { label: "MEMBERS PLEDGING", value: String(pledgesCache.length) },
+    { label: "TOTAL PLEDGED", value: `KSh ${totalPledged.toLocaleString()}` },
+    { label: "CASH RECEIVED", value: `KSh ${totalReceived.toLocaleString()}` }
+  ];
+
+  const gap = 6;
+  const boxWidth = (pageWidth - margin * 2 - gap * 2) / 3;
+  const boxHeight = 26;
+
+  stats.forEach((s, i) => {
+    const x = margin + i * (boxWidth + gap);
+    pdf.setDrawColor(210, 213, 220);
+    pdf.setLineWidth(0.4);
+    pdf.roundedRect(x, y, boxWidth, boxHeight, 2, 2, "S");
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(8);
+    pdf.setTextColor(107, 114, 128);
+    pdf.text(s.label, x + boxWidth / 2, y + 8, { align: "center" });
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(17);
+    pdf.setTextColor(17, 24, 39);
+    pdf.text(s.value, x + boxWidth / 2, y + 19, { align: "center" });
+  });
+
+  y += boxHeight + 10;
 
   const rows = pledgesCache.map((p, i) => {
     const amount = Number(p.amount) || 0;
@@ -575,7 +665,7 @@ el("pdfBtn").addEventListener("click", () => {
     return [
       i + 1,
       p.name || "Anonymous",
-      p.phone || "",
+      phonesCache[p.id] || "",
       `KSh ${amount.toLocaleString()}`,
       `KSh ${amountPaid.toLocaleString()}`,
       status
@@ -583,11 +673,25 @@ el("pdfBtn").addEventListener("click", () => {
   });
 
   pdf.autoTable({
-    startY: 36,
+    startY: y,
+    margin: { left: margin, right: margin },
     head: [["#", "Name", "Phone", "Amount", "Paid", "Status"]],
     body: rows,
-    styles: { fontSize: 10 },
-    headStyles: { fillColor: [204, 24, 24] }
+    theme: "grid",
+    styles: {
+      fontSize: 10,
+      cellPadding: 4,
+      lineWidth: 0.3,
+      lineColor: [170, 175, 185]
+    },
+    headStyles: {
+      fillColor: [204, 24, 24],
+      textColor: 255,
+      fontStyle: "bold",
+      lineWidth: 0.3,
+      lineColor: [170, 175, 185]
+    },
+    alternateRowStyles: { fillColor: [247, 248, 250] }
   });
 
   pdf.save(`kelvin-bike-fund-pledges-${new Date().toISOString().slice(0,10)}.pdf`);
