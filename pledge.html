@@ -52,6 +52,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;line-height:1.15;margin:8px 0 6px;}
 .hero .sub{color:var(--muted);font-size:13.5px;line-height:1.5;max-width:420px;margin:0 auto;}
 
+/* ── PAYMENT DETAILS ── */
+.pay-details{margin:18px 16px 0;padding:16px;background:var(--green-bg);border:1.5px solid var(--green2);border-radius:var(--radius-lg);text-align:center;}
+.pay-label{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--green);margin-bottom:6px;}
+.pay-number{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:var(--green);letter-spacing:.5px;cursor:pointer;user-select:all;}
+.pay-number:active{opacity:.7;}
+.pay-hint{font-size:10.5px;color:var(--green2);margin-top:4px;}
+
 /* ── STATS ── */
 .summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 16px 16px;}
 .sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 8px;text-align:center;}
@@ -156,6 +163,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
   <div class="eyebrow">Community Fundraiser</div>
   <h1>Get Kelvin Back on the Road</h1>
   <p class="sub">Kelvin's motorcycle was stolen. Pledge what you can — every rider is welcome to contribute.</p>
+</div>
+
+<!-- PAYMENT DETAILS -->
+<div class="pay-details">
+  <div class="pay-label">Pay via M-Pesa · Pochi la Biashara</div>
+  <div class="pay-number" id="payNumber" title="Tap to copy">0725672771</div>
+  <div class="pay-hint" id="payHint">Tap the number to copy</div>
 </div>
 
 <!-- STATS -->
@@ -340,6 +354,17 @@ el("pledgeModal").addEventListener("click", (e) => {
 el("searchInput").addEventListener("input", (e) => {
   searchQuery = e.target.value;
   render();
+});
+
+// ── COPY PAY NUMBER ──
+el("payNumber").addEventListener("click", async () => {
+  const number = el("payNumber").textContent.trim();
+  try {
+    await navigator.clipboard.writeText(number);
+    showToast("Number copied ✓");
+  } catch (e) {
+    showToast("Could not copy — long-press the number to copy manually");
+  }
 });
 
 el("confirmPledgeBtn").addEventListener("click", async () => {
