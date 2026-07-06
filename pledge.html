@@ -69,6 +69,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 /* ── LIST ── */
 .list-header{display:flex;justify-content:space-between;align-items:center;padding:0 16px;margin-bottom:10px;}
 .list-header h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;}
+.search-row{padding:0 16px;margin-bottom:14px;}
+.search-input{width:100%;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13.5px;font-family:'Inter',sans-serif;outline:none;}
+.search-input:focus{border-color:var(--amber);}
+.search-input::placeholder{color:var(--dim);}
 .pledge-list{display:flex;flex-direction:column;gap:8px;padding:0 16px;}
 .pledge-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .who{display:flex;align-items:center;gap:10px;min-width:0;}
@@ -178,6 +182,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <div class="list-header">
   <h3>Pledges</h3>
 </div>
+<div class="search-row">
+  <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search by name…">
+</div>
 <div class="loading-msg" id="loadingMsg">Loading…</div>
 <div class="pledge-list" id="pledgeList"></div>
 
@@ -276,6 +283,7 @@ let pledgesCache = [];
 let phonesCache = {}; // { pledgeId: phone } — only populated when signed in as admin
 let phonesUnsub = null;
 let isAdminAdd = false; // true when the open pledge modal was launched by admin's "Add Pledge" button
+let searchQuery = ""; // current text in the name search box
 let openPartialId = null; // id of pledge whose "amount paid" dropdown panel is open
 
 function showToast(msg) {
@@ -324,6 +332,12 @@ el("adminAddPledgeBtn").addEventListener("click", () => {
 el("closePledgeBtn").addEventListener("click", () => el("pledgeModal").classList.remove("open"));
 el("pledgeModal").addEventListener("click", (e) => {
   if (e.target.id === "pledgeModal") el("pledgeModal").classList.remove("open");
+});
+
+// ── SEARCH ──
+el("searchInput").addEventListener("input", (e) => {
+  searchQuery = e.target.value;
+  render();
 });
 
 el("confirmPledgeBtn").addEventListener("click", async () => {
@@ -433,7 +447,17 @@ function render() {
     list.innerHTML = `<div class="empty-msg">No pledges yet — be the first to back Kelvin. 🏍️</div>`;
     return;
   }
-  list.innerHTML = pledgesCache.map((p, i) => {
+
+  const query = (searchQuery || "").trim().toLowerCase();
+  const ranked = pledgesCache.map((p, i) => ({ ...p, rank: i + 1 }));
+  const visible = query ? ranked.filter(p => (p.name || "").toLowerCase().includes(query)) : ranked;
+
+  if (visible.length === 0) {
+    list.innerHTML = `<div class="empty-msg">No pledges match "${escapeHtml(searchQuery)}".</div>`;
+    return;
+  }
+
+  list.innerHTML = visible.map((p) => {
     const amount = Number(p.amount) || 0;
     const amountPaid = getAmountPaid(p);
     const status = amount > 0 && amountPaid >= amount ? "paid" : (amountPaid > 0 ? "partial" : "pledged");
@@ -445,7 +469,7 @@ function render() {
     const card = `
     <div class="pledge-card">
       <div class="who">
-        <span class="rank ${i < 3 ? 'top' : ''}">${i + 1}</span>
+        <span class="rank ${p.rank <= 3 ? 'top' : ''}">${p.rank}</span>
         <div style="min-width:0;">
           <div class="p-name">${escapeHtml(p.name || "Anonymous")}</div>
           ${isAdmin && phonesCache[p.id] ? `<div class="p-meta">${escapeHtml(phonesCache[p.id])} <a data-edit-phone="${p.id}" style="text-decoration:underline;cursor:pointer;">edit</a></div>` : ""}
