@@ -1,0 +1,39 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/index.html", "destination": "/index.html" },
+    { "source": "/member.html", "destination": "/member.html" },
+    { "source": "/spending.html", "destination": "/spending.html" },
+    { "source": "/members-list.html", "destination": "/members-list.html" },
+    { "source": "/payment.html", "destination": "/payment.html" },
+    { "source": "/chairperson.html", "destination": "/chairperson.html" },
+    { "source": "/sw.js", "destination": "/sw.js" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
+    { "source": "/icon-512.png", "destination": "/icon-512.png" },
+    { "source": "/icon-192.png", "destination": "/icon-192.png" },
+    { "source": "/icon-180.png", "destination": "/icon-180.png" },
+    { "source": "/icon-32.png", "destination": "/icon-32.png" },
+    { "source": "/icon-16.png", "destination": "/icon-16.png" },
+    { "source": "/privacy-policy.pdf", "destination": "/privacy-policy.pdf" },
+    { "source": "/register.html", "destination": "/register.html" },
+    { "source": "/faq.html", "destination": "/faq.html" },
+    { "source": "/terms.html", "destination": "/terms.html" },
+    { "source": "/manual.pdf", "destination": "/manual.pdf" }
+  ],
+  "headers": [
+    {
+      "source": "/manifest.json",
+      "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript" },
+        { "key": "Service-Worker-Allowed", "value": "/" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    }
+  ]
+}
