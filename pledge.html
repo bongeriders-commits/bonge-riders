@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kelvin's Bike Fund — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root {
+  --bg:       #F7F8FA;
+  --bg2:      #FFFFFF;
+  --card:     #FFFFFF;
+  --card2:    #F2F3F6;
+  --border:   #E2E5EC;
+  --text:     #111827;
+  --muted:    #6B7280;
+  --dim:      #9CA3AF;
+  --amber:    #CC1818;
+  --amber2:   #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green:    #065F46;
+  --green2:   #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --red:      #CC1818;
+  --red2:     #E02020;
+  --red-dark: #A01212;
+  --red-bg:   rgba(204,24,24,0.10);
+  --radius:   10px;
+  --radius-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:40px;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:13px 16px;gap:10px;}
+.back-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;text-decoration:none;flex-shrink:0;}
+.topbar-title-wrap{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.topbar-logo{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;}
+.page-sub{font-size:10px;color:var(--muted);font-weight:400;}
+.pdf-btn{background:none;border:1px solid rgba(192,57,43,0.4);color:var(--red);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{padding:24px 16px 6px;text-align:center;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber2);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;line-height:1.15;margin:8px 0 6px;}
+.hero .sub{color:var(--muted);font-size:13.5px;line-height:1.5;max-width:420px;margin:0 auto;}
+
+/* ── STATS ── */
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 16px 16px;}
+.sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 8px;text-align:center;}
+.sum-val{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--amber2);}
+.sum-val.small{font-size:13.5px;}
+.sum-val.green{color:var(--green2);}
+.sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
+
+/* ── CTA ── */
+.cta-row{padding:0 16px;margin-bottom:20px;}
+.add-btn{width:100%;padding:14px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;}
+.add-btn:active{opacity:.9;}
+
+/* ── LIST ── */
+.list-header{display:flex;justify-content:space-between;align-items:center;padding:0 16px;margin-bottom:10px;}
+.list-header h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;}
+.pledge-list{display:flex;flex-direction:column;gap:8px;padding:0 16px;}
+.pledge-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.who{display:flex;align-items:center;gap:10px;min-width:0;}
+.rank{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--card2);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--dim);flex-shrink:0;}
+.rank.top{background:var(--amber2);color:#fff;}
+.p-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.amt-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.p-amt{font-family:'Space Grotesk',sans-serif;color:var(--green2);font-weight:700;font-size:14.5px;white-space:nowrap;}
+.tag{font-size:9.5px;padding:3px 8px;border-radius:20px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
+.tag.paid{color:var(--green2);border-color:var(--green2);background:var(--green-bg);}
+.act-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.act-btn.del{color:var(--red);border-color:rgba(204,24,24,0.3);}
+.empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
+.loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
+
+/* ── ADMIN TOGGLE ── */
+.admin-toggle{text-align:center;margin-top:26px;padding:0 16px;}
+.admin-toggle a{color:var(--dim);font-size:11.5px;text-decoration:underline;cursor:pointer;}
+.page-footer{text-align:center;color:var(--dim);font-size:11px;padding:18px 0 4px;}
+
+/* ── MODALS ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(17,24,39,.55);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;max-height:92vh;overflow-y:auto;}
+@media (min-width:640px){
+  .modal-backdrop{align-items:center;}
+  .modal{border-radius:var(--radius-lg);max-width:400px;}
+}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+.mfield{margin-bottom:14px;}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.mfield input{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.mfield input:focus{border-color:var(--amber);}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.mbtn.save{background:var(--red-dark);color:#fff;}
+.merr{color:var(--red);font-size:12px;font-weight:600;margin-top:8px;min-height:14px;}
+.merr.ok{color:var(--green2);}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:#fff;border:1px solid var(--border);border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title-wrap">
+    <a href="index.html" class="back-btn">‹</a>
+    <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
+    <div>
+      <div class="page-title">🚲 Kelvin's Bike Fund</div>
+      <div class="page-sub">Bonge Riders Welfare Association</div>
+    </div>
+  </div>
+  <button class="pdf-btn" id="pdfBtn" style="display:none;">🖨️ PDF</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Community Fundraiser</div>
+  <h1>Get Kelvin Back on the Road</h1>
+  <p class="sub">Kelvin's motorcycle was stolen. Pledge what you can — every rider is welcome to contribute.</p>
+</div>
+
+<!-- STATS -->
+<div class="summary-row">
+  <div class="sum-card">
+    <div class="sum-val" id="statCount">0</div>
+    <div class="sum-lbl">Pledging</div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-val small" id="statPledged">KSh 0</div>
+    <div class="sum-lbl">Total Pledged</div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-val small green" id="statRedeemed">KSh 0</div>
+    <div class="sum-lbl">Cash Received</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-row">
+  <button class="add-btn" id="openPledgeBtn">＋ Pledge Now</button>
+</div>
+
+<!-- LIST -->
+<div class="list-header">
+  <h3>Pledges</h3>
+</div>
+<div class="loading-msg" id="loadingMsg">Loading…</div>
+<div class="pledge-list" id="pledgeList"></div>
+
+<div class="admin-toggle">
+  <a id="adminLink">Admin sign in</a>
+</div>
+
+<div class="page-footer">© Bogonko-Ngelani Stage · Bonge Riders</div>
+
+<!-- PLEDGE MODAL -->
+<div class="modal-backdrop" id="pledgeModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Pledge for Kelvin's bike</div>
+    <p class="modal-sub">This posts instantly, then opens WhatsApp so you can notify the organiser.</p>
+    <div class="mfield">
+      <label>Your Name</label>
+      <input type="text" id="pName" placeholder="e.g. Otieno Mwangi">
+    </div>
+    <div class="mfield">
+      <label>Phone Number</label>
+      <input type="tel" id="pPhone" placeholder="07XX XXX XXX">
+    </div>
+    <div class="mfield">
+      <label>Amount Pledged (KSh)</label>
+      <input type="number" id="pAmount" min="1" inputmode="numeric" placeholder="e.g. 1000">
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn cancel" id="closePledgeBtn">Cancel</button>
+      <button class="mbtn save" id="confirmPledgeBtn">Confirm Pledge</button>
+    </div>
+    <p class="merr" id="modalHint"></p>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔐 Admin Sign In</div>
+    <p class="modal-sub">Sign in to mark pledges as received or export a report.</p>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password">
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn cancel" id="closeLoginBtn">Cancel</button>
+      <button class="mbtn save" id="loginBtn">Sign In</button>
+    </div>
+    <p class="merr" id="loginErr"></p>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const ORGANIZER_PHONE = "254725672771"; // 0725672771 in international format, no leading +
+
+firebase.initializeApp({
+  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain:        "bonge-96f37.firebaseapp.com",
+  projectId:         "bonge-96f37",
+  storageBucket:     "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+});
+
+const db   = firebase.firestore();
+const auth = firebase.auth();
+
+// Firestore: tracker/kelvinBikeFund/pledges/{autoId} -> { name, phone, amount, paid, createdAt }
+const PLEDGES_COL = db.collection("tracker/kelvinBikeFund/pledges");
+
+const el = (id) => document.getElementById(id);
+let isAdmin = false;
+let pledgesCache = [];
+
+function showToast(msg) {
+  const t = el("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+// ── PLEDGE MODAL ──
+el("openPledgeBtn").addEventListener("click", () => {
+  el("pName").value = "";
+  el("pPhone").value = "";
+  el("pAmount").value = "";
+  el("modalHint").textContent = "";
+  el("modalHint").className = "merr";
+  el("pledgeModal").classList.add("open");
+});
+el("closePledgeBtn").addEventListener("click", () => el("pledgeModal").classList.remove("open"));
+el("pledgeModal").addEventListener("click", (e) => {
+  if (e.target.id === "pledgeModal") el("pledgeModal").classList.remove("open");
+});
+
+el("confirmPledgeBtn").addEventListener("click", async () => {
+  const name = el("pName").value.trim();
+  const phone = el("pPhone").value.trim();
+  const amount = Number(el("pAmount").value);
+  const hint = el("modalHint");
+
+  if (!name || !phone || !amount || amount <= 0) {
+    hint.textContent = "Please fill in your name, phone number, and a valid amount.";
+    hint.className = "merr";
+    return;
+  }
+
+  el("confirmPledgeBtn").disabled = true;
+  hint.textContent = "Saving…";
+  hint.className = "merr";
+
+  try {
+    await PLEDGES_COL.add({
+      name, phone, amount, paid: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Opens WhatsApp with the message ready — the pledger taps Send in WhatsApp.
+    const msg = `New bike fund pledge!\nName: ${name}\nPhone: ${phone}\nAmount: KSh ${amount.toLocaleString()}`;
+    const waUrl = `https://wa.me/${ORGANIZER_PHONE}?text=${encodeURIComponent(msg)}`;
+    window.open(waUrl, "_blank");
+
+    hint.textContent = "Pledge posted ✓ Opening WhatsApp to notify the organiser…";
+    hint.className = "merr ok";
+    setTimeout(() => el("pledgeModal").classList.remove("open"), 1200);
+  } catch (e) {
+    hint.textContent = "Could not save your pledge: " + e.message;
+    hint.className = "merr";
+  } finally {
+    el("confirmPledgeBtn").disabled = false;
+  }
+});
+
+// ── LIVE DATA ──
+PLEDGES_COL.onSnapshot((snap) => {
+  pledgesCache = [];
+  snap.forEach((d) => pledgesCache.push({ id: d.id, ...d.data() }));
+  pledgesCache.sort((a, b) => (b.amount || 0) - (a.amount || 0));
+  el("loadingMsg").style.display = "none";
+  render();
+}, (err) => {
+  console.error("pledges error:", err);
+  el("loadingMsg").textContent = "⚠️ Could not load data. Check connection.";
+});
+
+function render() {
+  const count = pledgesCache.length;
+  const totalPledged = pledgesCache.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const totalRedeemed = pledgesCache.filter(p => p.paid).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+
+  el("statCount").textContent = count;
+  el("statPledged").textContent = `KSh ${totalPledged.toLocaleString()}`;
+  el("statRedeemed").textContent = `KSh ${totalRedeemed.toLocaleString()}`;
+
+  const list = el("pledgeList");
+  if (count === 0) {
+    list.innerHTML = `<div class="empty-msg">No pledges yet — be the first to back Kelvin. 🏍️</div>`;
+    return;
+  }
+  list.innerHTML = pledgesCache.map((p, i) => `
+    <div class="pledge-card">
+      <div class="who">
+        <span class="rank ${i < 3 ? 'top' : ''}">${i + 1}</span>
+        <div style="min-width:0;">
+          <div class="p-name">${escapeHtml(p.name || "Anonymous")}</div>
+          <div class="p-meta">${escapeHtml(p.phone || "")}</div>
+        </div>
+      </div>
+      <div class="amt-wrap">
+        <div style="text-align:right;">
+          <div class="p-amt">KSh ${(Number(p.amount) || 0).toLocaleString()}</div>
+          <span class="tag ${p.paid ? 'paid' : ''}">${p.paid ? 'Received' : 'Pledged'}</span>
+        </div>
+        ${isAdmin ? `
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <button class="act-btn" data-toggle="${p.id}" data-paid="${p.paid ? 'false' : 'true'}">${p.paid ? 'Undo' : 'Mark paid'}</button>
+            <button class="act-btn del" data-del="${p.id}">Remove</button>
+          </div>` : ""}
+      </div>
+    </div>
+  `).join("");
+
+  if (isAdmin) {
+    list.querySelectorAll("[data-toggle]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        try {
+          await db.collection("tracker/kelvinBikeFund/pledges").doc(btn.dataset.toggle).update({
+            paid: btn.dataset.paid === "true"
+          });
+        } catch (e) {
+          showToast("Could not update: " + e.message);
+        }
+      });
+    });
+    list.querySelectorAll("[data-del]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (confirm("Remove this pledge?")) {
+          try {
+            await db.collection("tracker/kelvinBikeFund/pledges").doc(btn.dataset.del).delete();
+            showToast("Pledge removed");
+          } catch (e) {
+            showToast("Could not remove: " + e.message);
+          }
+        }
+      });
+    });
+  }
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (m) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[m]));
+}
+
+// ── ADMIN AUTH ──
+el("adminLink").addEventListener("click", async () => {
+  if (auth.currentUser) {
+    await auth.signOut();
+    return;
+  }
+  el("loginEmail").value = "";
+  el("loginPw").value = "";
+  el("loginErr").textContent = "";
+  el("loginModal").classList.add("open");
+});
+el("closeLoginBtn").addEventListener("click", () => el("loginModal").classList.remove("open"));
+el("loginModal").addEventListener("click", (e) => {
+  if (e.target.id === "loginModal") el("loginModal").classList.remove("open");
+});
+
+el("loginBtn").addEventListener("click", async () => {
+  const email = el("loginEmail").value.trim();
+  const pw = el("loginPw").value;
+  const errEl = el("loginErr");
+  errEl.textContent = "";
+  el("loginBtn").textContent = "Signing in…";
+  try {
+    await auth.signInWithEmailAndPassword(email, pw);
+    el("loginModal").classList.remove("open");
+  } catch (e) {
+    errEl.textContent = "Incorrect email or password.";
+    el("loginBtn").textContent = "Sign In";
+  }
+});
+el("loginPw").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") el("loginBtn").click();
+});
+
+auth.onAuthStateChanged((user) => {
+  isAdmin = !!user;
+  el("adminLink").textContent = isAdmin ? `Sign out (${user.email})` : "Admin sign in";
+  el("pdfBtn").style.display = isAdmin ? "inline-block" : "none";
+  el("loginBtn").textContent = "Sign In";
+  render();
+});
+
+// ── PDF EXPORT ──
+el("pdfBtn").addEventListener("click", () => {
+  if (!isAdmin) return;
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+
+  pdf.setFontSize(16);
+  pdf.text("Bonge Riders — Kelvin's Bike Fund Pledges", 14, 16);
+  pdf.setFontSize(10);
+  pdf.text(`Generated: ${new Date().toLocaleString()}`, 14, 23);
+
+  const totalPledged = pledgesCache.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const totalReceived = pledgesCache.filter(p => p.paid).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  pdf.text(`People pledging: ${pledgesCache.length}   Total pledged: KSh ${totalPledged.toLocaleString()}   Cash received: KSh ${totalReceived.toLocaleString()}`, 14, 30);
+
+  const rows = pledgesCache.map((p, i) => [
+    i + 1,
+    p.name || "Anonymous",
+    p.phone || "",
+    `KSh ${(Number(p.amount) || 0).toLocaleString()}`,
+    p.paid ? "Received" : "Pledged"
+  ]);
+
+  pdf.autoTable({
+    startY: 36,
+    head: [["#", "Name", "Phone", "Amount", "Status"]],
+    body: rows,
+    styles: { fontSize: 10 },
+    headStyles: { fillColor: [204, 24, 24] }
+  });
+
+  pdf.save(`kelvin-bike-fund-pledges-${new Date().toISOString().slice(0,10)}.pdf`);
+});
+</script>
+</body>
+</html>
