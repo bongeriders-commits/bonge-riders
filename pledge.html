@@ -181,6 +181,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <div class="loading-msg" id="loadingMsg">Loading…</div>
 <div class="pledge-list" id="pledgeList"></div>
 
+<button class="add-btn" id="adminAddPledgeBtn" style="display:none;margin:0 16px 16px;width:calc(100% - 32px);">＋ Add Pledge (on someone's behalf)</button>
+
 <div class="admin-toggle">
   <a id="adminLink">Admin sign in</a>
 </div>
@@ -191,10 +193,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <div class="modal-backdrop" id="pledgeModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">Pledge for Kelvin's bike</div>
-    <p class="modal-sub">This posts instantly, then opens WhatsApp so you can notify the organiser.</p>
+    <div class="modal-title" id="pledgeModalTitle">Pledge for Kelvin's bike</div>
+    <p class="modal-sub" id="pledgeModalSub">This posts instantly, then opens WhatsApp so you can notify the organiser.</p>
     <div class="mfield">
-      <label>Your Name</label>
+      <label id="pNameLabel">Your Name</label>
       <input type="text" id="pName" placeholder="e.g. Otieno Mwangi">
     </div>
     <div class="mfield">
@@ -273,6 +275,7 @@ let isAdmin = false;
 let pledgesCache = [];
 let phonesCache = {}; // { pledgeId: phone } — only populated when signed in as admin
 let phonesUnsub = null;
+let isAdminAdd = false; // true when the open pledge modal was launched by admin's "Add Pledge" button
 let openPartialId = null; // id of pledge whose "amount paid" dropdown panel is open
 
 function showToast(msg) {
@@ -290,13 +293,34 @@ if (!isCampaignOpen()) {
 }
 
 el("openPledgeBtn").addEventListener("click", () => {
+  isAdminAdd = false;
   el("pName").value = "";
   el("pPhone").value = "";
   el("pAmount").value = "";
   el("modalHint").textContent = "";
   el("modalHint").className = "merr";
+  el("pledgeModalTitle").textContent = "Pledge for Kelvin's bike";
+  el("pledgeModalSub").textContent = "This posts instantly, then opens WhatsApp so you can notify the organiser.";
+  el("pNameLabel").textContent = "Your Name";
   el("pledgeModal").classList.add("open");
 });
+
+// Admin adding a pledge on someone else's behalf — always available to
+// admin, even after the 7-day public window has closed, and doesn't open
+// WhatsApp on save (that's only relevant for the person pledging for themselves).
+el("adminAddPledgeBtn").addEventListener("click", () => {
+  isAdminAdd = true;
+  el("pName").value = "";
+  el("pPhone").value = "";
+  el("pAmount").value = "";
+  el("modalHint").textContent = "";
+  el("modalHint").className = "merr";
+  el("pledgeModalTitle").textContent = "Add a pledge";
+  el("pledgeModalSub").textContent = "Record a pledge for someone who isn't able to submit it themselves.";
+  el("pNameLabel").textContent = "Pledger's Name";
+  el("pledgeModal").classList.add("open");
+});
+
 el("closePledgeBtn").addEventListener("click", () => el("pledgeModal").classList.remove("open"));
 el("pledgeModal").addEventListener("click", (e) => {
   if (e.target.id === "pledgeModal") el("pledgeModal").classList.remove("open");
@@ -308,14 +332,14 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
   const amount = Number(el("pAmount").value);
   const hint = el("modalHint");
 
-  if (!isCampaignOpen()) {
+  if (!isAdminAdd && !isCampaignOpen()) {
     hint.textContent = "This fundraiser is now closed to new pledges.";
     hint.className = "merr";
     return;
   }
 
   if (!name || !phone || !amount || amount <= 0) {
-    hint.textContent = "Please fill in your name, phone number, and a valid amount.";
+    hint.textContent = "Please fill in the name, phone number, and a valid amount.";
     hint.className = "merr";
     return;
   }
@@ -334,14 +358,22 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
     batch.set(PHONES_COL.doc(pledgeRef.id), { phone });
     await batch.commit();
 
-    // Opens WhatsApp with the message ready — the pledger taps Send in WhatsApp.
-    const msg = `New bike fund pledge!\nName: ${name}\nPhone: ${phone}\nAmount: KSh ${amount.toLocaleString()}`;
-    const waUrl = `https://wa.me/${ORGANIZER_PHONE}?text=${encodeURIComponent(msg)}`;
-    window.open(waUrl, "_blank");
+    if (isAdminAdd) {
+      // Admin added this on someone else's behalf — no need to notify
+      // the organiser via WhatsApp.
+      hint.textContent = "Pledge added ✓";
+      hint.className = "merr ok";
+      setTimeout(() => el("pledgeModal").classList.remove("open"), 900);
+    } else {
+      // Opens WhatsApp with the message ready — the pledger taps Send in WhatsApp.
+      const msg = `New bike fund pledge!\nName: ${name}\nPhone: ${phone}\nAmount: KSh ${amount.toLocaleString()}`;
+      const waUrl = `https://wa.me/${ORGANIZER_PHONE}?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, "_blank");
 
-    hint.textContent = "Pledge posted ✓ Opening WhatsApp to notify the organiser…";
-    hint.className = "merr ok";
-    setTimeout(() => el("pledgeModal").classList.remove("open"), 1200);
+      hint.textContent = "Pledge posted ✓ Opening WhatsApp to notify the organiser…";
+      hint.className = "merr ok";
+      setTimeout(() => el("pledgeModal").classList.remove("open"), 1200);
+    }
   } catch (e) {
     hint.textContent = "Could not save your pledge: " + e.message;
     hint.className = "merr";
@@ -638,6 +670,7 @@ auth.onAuthStateChanged((user) => {
   isAdmin = !!(user && !user.isAnonymous);
   el("adminLink").textContent = isAdmin ? `Sign out (${user.email})` : "Admin sign in";
   el("pdfBtn").style.display = isAdmin ? "inline-block" : "none";
+  el("adminAddPledgeBtn").style.display = isAdmin ? "block" : "none";
   el("loginBtn").textContent = "Sign In";
 
   // Any auth session (anonymous or admin) is enough to read pledges.
