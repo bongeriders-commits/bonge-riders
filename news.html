@@ -46,11 +46,29 @@ header {
   width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0;
 }
 h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans-serif; }
-.refresh-btn {
-  margin-left:auto; background:none; border:none; color:var(--amber);
+.menu-wrap { margin-left:auto; position:relative; }
+.kebab-btn {
+  background:none; border:none; color:var(--text);
   font-size:20px; cursor:pointer; width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
 }
-.refresh-btn.spin { animation: spin 0.9s linear infinite; }
+.kebab-btn:active { background:var(--card2); }
+.menu-dropdown {
+  position:absolute; top:42px; right:0; min-width:160px;
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:0 8px 24px rgba(17,24,39,0.12); overflow:hidden;
+  opacity:0; visibility:hidden; transform:translateY(-6px);
+  transition:opacity .15s ease, transform .15s ease; z-index:30;
+}
+.menu-dropdown.open { opacity:1; visibility:visible; transform:translateY(0); }
+.menu-item {
+  display:flex; align-items:center; gap:8px; width:100%; padding:11px 14px;
+  background:none; border:none; color:var(--text); font-size:14px; font-weight:600;
+  font-family:'Inter',sans-serif; cursor:pointer; text-align:left;
+}
+.menu-item:active { background:var(--card2); }
+.menu-item .ic { font-size:15px; color:var(--amber); flex-shrink:0; }
+.menu-item .ic.spin { display:inline-block; animation: spin 0.9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .tabs {
@@ -123,7 +141,14 @@ h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans
   <button class="back-btn" onclick="goBack()">‹</button>
   <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
   <h1>News</h1>
-  <button class="refresh-btn" id="refreshBtn" onclick="loadAll(true)" aria-label="Refresh">⟳</button>
+  <div class="menu-wrap">
+    <button class="kebab-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="More options">⋮</button>
+    <div class="menu-dropdown" id="menuDropdown">
+      <button class="menu-item" id="refreshItem" onclick="loadAll(true); toggleMenu();">
+        <span class="ic" id="refreshIcon">⟳</span> Refresh
+      </button>
+    </div>
+  </div>
 </header>
 
 <div class="tabs" id="tabs">
@@ -169,6 +194,15 @@ function goBack(){
   if (document.referrer) history.back(); else location.href = 'index.html';
 }
 
+function toggleMenu(e){
+  if (e) e.stopPropagation();
+  document.getElementById('menuDropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e)=>{
+  const wrap = document.querySelector('.menu-wrap');
+  if (wrap && !wrap.contains(e.target)) document.getElementById('menuDropdown').classList.remove('open');
+});
+
 function renderSourceChips(){
   const row = document.getElementById('sourceRow');
   row.innerHTML = SOURCE_META
@@ -185,8 +219,8 @@ function setCategory(cat){
 }
 
 async function loadAll(isRefresh){
-  const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spin');
+  const icon = document.getElementById('refreshIcon');
+  icon.classList.add('spin');
   if (!isRefresh){
     document.getElementById('feed').innerHTML = Array(4).fill(
       `<div class="skeleton"><div class="img-ph"></div><div class="lines"><div class="line w1"></div><div class="line w2"></div><div class="line w3"></div></div></div>`
@@ -204,7 +238,7 @@ async function loadAll(isRefresh){
   }
   renderSourceChips();
   renderFeed();
-  btn.classList.remove('spin');
+  icon.classList.remove('spin');
 }
 
 function timeAgo(date){
