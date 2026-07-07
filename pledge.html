@@ -772,7 +772,8 @@ function renderUnmatched() {
         <div class="p-top">
           <div class="p-name">KSh ${Number(u.amount || 0).toLocaleString()} from ${escapeHtml(u.senderName || "Unknown")}</div>
         </div>
-        <div class="p-meta">${escapeHtml(u.senderPhone || "no phone")} ${u.mpesaCode ? "• " + escapeHtml(u.mpesaCode) : ""}</div>
+        <div class="p-meta">${u.mpesaCode ? escapeHtml(u.mpesaCode) : "no M-PESA code"}</div>
+        <div class="p-meta" style="opacity:0.75;">Name matched from SMS: "${escapeHtml(u.senderName || "Unknown")}" — check spelling matches a pledge below</div>
       </div>
       <div class="partial-panel" style="display:block;">
         <select class="partial-preset" data-assign-select="${u.id}">
