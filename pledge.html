@@ -534,7 +534,7 @@ function render() {
     <div class="pledge-card">
       <div class="pledge-card-top">
         <div class="who">
-          <span class="rank ${p.rank <= 3 ? 'top' : ''}">${p.rank}</span>
+          <span class="rank">${p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : p.rank}</span>
           <div style="min-width:0;">
             <div class="p-name">${escapeHtml(p.name || "Anonymous")}</div>
             ${isAdmin && phonesCache[p.id] ? `<div class="p-meta">${escapeHtml(phonesCache[p.id])} <a data-edit-phone="${p.id}" style="text-decoration:underline;cursor:pointer;">edit</a></div>` : ""}

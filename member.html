@@ -1014,7 +1014,7 @@ body.light .ws-name { color: #141414; }
   <!-- Badges & Achievements -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">Badges &amp; Achievements</div>
+      <div class="section-title">🏅 Badges &amp; Achievements</div>
       <div class="section-pill" id="badgeCount">0 earned</div>
     </div>
     <div class="badge-grid" id="badgeGrid"></div>
@@ -1911,11 +1911,12 @@ function renderLeaderboard() {
   list.innerHTML = top.map((r, i) => {
     const rank = i + 1;
     const rankCls = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
     const isYou = r.phone === myPhone;
     const label = isYou ? '<span class="lb-you-tag">You</span>' : maskPhone(r.phone);
     return `
     <div class="lb-row${isYou ? ' lb-you' : ''}">
-      <div class="lb-rank ${rankCls}">${rank}</div>
+      <div class="lb-rank ${rankCls}">${medal}</div>
       <div class="lb-name">${label}</div>
       <div class="lb-pct">${r.pct}%</div>
     </div>`;
@@ -1964,7 +1965,7 @@ function renderMonthlyChallenge() {
     subEl.innerHTML = ` Perfect so far — ${paidThisMonth}/${totalSoFar} days paid in ${monthName}. Keep it up to earn this month's star!`;
   } else {
     const missed = totalSoFar - paidThisMonth;
-    subEl.textContent = `${paidThisMonth}/${totalSoFar} days paid this month — ${missed} missed. Pay every remaining day to earn the star `;
+    subEl.textContent = `${paidThisMonth}/${totalSoFar} days paid this month — ${missed} missed. Pay every remaining day to earn the star ⭐`;
   }
 }
 
@@ -1975,15 +1976,15 @@ function computeBadges(myStats, leaderboardRows) {
   const minHistoryForPerfect = 7; // need a meaningful history before "Never Missed" counts
 
   return [
-    { id:'streak3', icon:'', name:'3-Day Warrior', req:'3-day streak', earned: streak >= 3 },
-    { id:'streak7', icon:'', name:'7-Day Warrior', req:'7-day streak', earned: streak >= 7 },
-    { id:'streak30', icon:'', name:'30-Day Warrior', req:'30-day streak', earned: streak >= 30 },
-    { id:'never', icon:'', name:'Never Missed', req:'100% record', earned: allDates.length >= minHistoryForPerfect && pct === 100 },
-    { id:'century', icon:'', name:'Century Club', req:'100 days paid', earned: daysPaid >= 100 },
-    { id:'star90', icon:'', name:'Consistency Star',req:'90%+ rate', earned: pct >= 90 },
-    { id:'top3', icon:'', name:'Top Contributor', req:'Top 3 on leaderboard', earned: myRank >= 1 && myRank <= 3 },
-    { id:'top10', icon:'', name:'Top 10', req:'Top 10 on leaderboard', earned: myRank >= 1 && myRank <= 10 },
-    { id:'first', icon:'', name:'First Payment', req:'Made 1 contribution', earned: daysPaid >= 1 },
+    { id:'streak3', icon:'🔥', name:'3-Day Warrior', req:'3-day streak', earned: streak >= 3 },
+    { id:'streak7', icon:'🔥', name:'7-Day Warrior', req:'7-day streak', earned: streak >= 7 },
+    { id:'streak30', icon:'🚀', name:'30-Day Warrior', req:'30-day streak', earned: streak >= 30 },
+    { id:'never', icon:'🎯', name:'Never Missed', req:'100% record', earned: allDates.length >= minHistoryForPerfect && pct === 100 },
+    { id:'century', icon:'💯', name:'Century Club', req:'100 days paid', earned: daysPaid >= 100 },
+    { id:'star90', icon:'🌟', name:'Consistency Star',req:'90%+ rate', earned: pct >= 90 },
+    { id:'top3', icon:'🏆', name:'Top Contributor', req:'Top 3 on leaderboard', earned: myRank >= 1 && myRank <= 3 },
+    { id:'top10', icon:'⭐', name:'Top 10', req:'Top 10 on leaderboard', earned: myRank >= 1 && myRank <= 10 },
+    { id:'first', icon:'🌱', name:'First Payment', req:'Made 1 contribution', earned: daysPaid >= 1 },
   ];
 }
 
