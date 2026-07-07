@@ -909,7 +909,7 @@ body.memberview .vb-signin-only { display: none !important; }
    prompt; visitors who unlocked with the PIN see the dashboard.
    Both states are mutually exclusive and neither ever shows names
    or phone numbers — that markup is not present in this section. */
-.vb-signin   { display: block; }
+.vb-signin   { display: block; position: relative; }
 .vb-unlocked { display: none; }
 body.memberview .vb-signin   { display: none; }
 body.memberview .vb-unlocked { display: block; }
@@ -1662,21 +1662,22 @@ body.memberview .vb-unlocked { display: block; }
 <div class="viewer-board" id="viewerBoard">
   <div class="vb-signin">
 
+    <!-- ── PUBLIC HAMBURGER MENU ── -->
+    <div class="pub-menu-wrap" id="pubMenuWrap">
+      <button class="pub-menu-btn" onclick="togglePubMenu(event)" aria-label="Menu">☰</button>
+      <div class="pub-menu-dropdown" id="pubMenuDropdown">
+        <button class="pub-menu-item" onclick="closePubMenu()">ABOUT US</button>
+        <button class="pub-menu-item" onclick="closePubMenu()">CONTACT</button>
+        <button class="pub-menu-item" onclick="closePubMenu()">GALLERY</button>
+        <button class="pub-menu-item" onclick="closePubMenu()">PROJECTS</button>
+        <button class="pub-menu-item" onclick="closePubMenu()">NEWS</button>
+        <button class="pub-menu-item" onclick="closePubMenu();window.open('faq.html','_blank')">FAQ</button>
+        <button class="pub-menu-item" onclick="closePubMenu();window.open('manual.pdf','_blank')">HELP</button>
+      </div>
+    </div>
+
     <!-- ── LOGO HERO (sunset background, no overlay panel) ── -->
     <div style="position:relative;margin:-20px -16px 14px;min-height:300px;border-radius:0 0 26px 26px;overflow:hidden;background-image:url('hero-sunset.jpg');background-size:cover;background-position:center 78%;display:flex;align-items:flex-end;">
-      <!-- ── PUBLIC HAMBURGER MENU ── -->
-      <div class="pub-menu-wrap" id="pubMenuWrap">
-        <button class="pub-menu-btn" onclick="togglePubMenu(event)" aria-label="Menu">☰</button>
-        <div class="pub-menu-dropdown" id="pubMenuDropdown">
-          <button class="pub-menu-item" onclick="closePubMenu()">ABOUT US</button>
-          <button class="pub-menu-item" onclick="closePubMenu()">CONTACT</button>
-          <button class="pub-menu-item" onclick="closePubMenu()">GALLERY</button>
-          <button class="pub-menu-item" onclick="closePubMenu()">PROJECTS</button>
-          <button class="pub-menu-item" onclick="closePubMenu()">NEWS</button>
-          <button class="pub-menu-item" onclick="closePubMenu();window.open('faq.html','_blank')">FAQ</button>
-          <button class="pub-menu-item" onclick="closePubMenu();window.open('manual.pdf','_blank')">HELP</button>
-        </div>
-      </div>
       <div style="width:100%;padding:20px 18px 22px;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0) 100%);text-align:left;">
         <img src="icon-512.png" alt="Bonge Riders Logo"
              style="width:112px;height:112px;object-fit:contain;border-radius:50%;box-shadow:0 6px 24px rgba(0,0,0,0.5);background:rgba(255,255,255,0.95);margin-bottom:12px;">
@@ -5560,6 +5561,7 @@ Object.assign(window,{
   openWABlast, closeWAModal, waSelectAll, sendWAReminders, sendWADirect,
   exportPDF, exportSundayPDF, openReportModal, closeReportModal, renderMonthlyReport, printReport,
   toggleAdmMenu, closeAdmMenu,
+  togglePubMenu, closePubMenu,
   requirePassword, closePwModal, confirmPassword,
   closeThanksModal, confirmThanksWA,
   markAllToday, openMarkAllModal, closeMarkAllModal, confirmMarkAll,
