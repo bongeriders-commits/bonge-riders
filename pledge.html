@@ -234,6 +234,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
   <div class="closed-notice" id="closedNotice" style="display:none;">This fundraiser is now closed to new pledges. Thank you to everyone who backed Kelvin! </div>
 </div>
 
+<!-- UNMATCHED AUTO-PAYMENTS (admin only) -->
+<div id="unmatchedPanel" style="display:none;">
+  <div class="list-header">
+    <h3>Unmatched Pochi Payments <span id="unmatchedCount" style="font-weight:400;color:#b45309;"></span></h3>
+  </div>
+  <div id="unmatchedList"></div>
+</div>
+
 <!-- LIST -->
 <div class="list-header">
   <h3>Pledges</h3>
@@ -332,6 +340,7 @@ const auth = firebase.auth();
 // Phone numbers are kept separate and are admin-read-only (see firestore.rules).
 const PLEDGES_COL = db.collection("tracker/kelvinBikeFund/pledges");
 const PHONES_COL = db.collection("tracker/kelvinBikeFund/pledgePhones");
+const AUTOPAY_COL = db.collection("tracker/kelvinBikeFund/autoPayments");
 
 const el = (id) => document.getElementById(id);
 
@@ -357,6 +366,8 @@ syncThemeUI();
 let isAdmin = false;
 let pledgesCache = [];
 let phonesCache = {}; // { pledgeId: phone } — only populated when signed in as admin
+let unmatchedCache = []; // auto-payments that couldn't be matched to a pledge by phone
+let autopayUnsub = null;
 let phonesUnsub = null;
 let isAdminAdd = false; // true when the open pledge modal was launched by admin's "Add Pledge" button
 let searchQuery = ""; // current text in the name search box
@@ -599,6 +610,8 @@ function render() {
     return `<div class="pledge-item">${card}${panel}</div>`;
   }).join("");
 
+  renderUnmatched();
+
   if (isAdmin) {
     // Full paid / undo toggle
     list.querySelectorAll("[data-toggle]").forEach(btn => {
@@ -733,6 +746,89 @@ function render() {
   }
 }
 
+// Auto-payments received via Pochi la Biashara SMS that couldn't be
+// matched to a pledge by phone number. Admin manually links them here.
+function renderUnmatched() {
+  const panel = el("unmatchedPanel");
+  const listEl = el("unmatchedList");
+  const countEl = el("unmatchedCount");
+  if (!panel || !listEl) return;
+
+  if (!isAdmin || unmatchedCache.length === 0) {
+    panel.style.display = "none";
+    return;
+  }
+  panel.style.display = "block";
+  countEl.textContent = `(${unmatchedCache.length})`;
+
+  const options = pledgesCache.map(p => {
+    const bal = (Number(p.amount) || 0) - getAmountPaid(p);
+    return `<option value="${p.id}">${escapeHtml(p.name || "Unnamed")} — balance KSh ${bal.toLocaleString()}</option>`;
+  }).join("");
+
+  listEl.innerHTML = unmatchedCache.map(u => `
+    <div class="pledge-item" style="border-left:3px solid #b45309;">
+      <div class="p-card">
+        <div class="p-top">
+          <div class="p-name">KSh ${Number(u.amount || 0).toLocaleString()} from ${escapeHtml(u.senderName || "Unknown")}</div>
+        </div>
+        <div class="p-meta">${escapeHtml(u.senderPhone || "no phone")} ${u.mpesaCode ? "• " + escapeHtml(u.mpesaCode) : ""}</div>
+      </div>
+      <div class="partial-panel" style="display:block;">
+        <select class="partial-preset" data-assign-select="${u.id}">
+          <option value="">Assign to pledge…</option>
+          ${options}
+        </select>
+        <div class="partial-btns">
+          <button class="p-cancel" data-dismiss="${u.id}">Dismiss</button>
+          <button class="p-save" data-assign="${u.id}">Assign</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  listEl.querySelectorAll("[data-assign]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.assign;
+      const sel = listEl.querySelector(`[data-assign-select="${id}"]`);
+      const pledgeId = sel.value;
+      if (!pledgeId) { showToast("Choose a pledge first"); return; }
+
+      const u = unmatchedCache.find(x => x.id === id);
+      const p = pledgesCache.find(x => x.id === pledgeId);
+      if (!u || !p) return;
+
+      try {
+        await db.runTransaction(async (tx) => {
+          const pledgeRef = db.collection("tracker/kelvinBikeFund/pledges").doc(pledgeId);
+          const snap = await tx.get(pledgeRef);
+          const pledge = snap.data();
+          const pledgeAmount = Number(pledge.amount) || 0;
+          const currentPaid = Number(pledge.amountPaid) || 0;
+          const newPaid = Math.min(currentPaid + (Number(u.amount) || 0), pledgeAmount);
+          tx.update(pledgeRef, { amountPaid: newPaid, paid: newPaid >= pledgeAmount });
+          tx.update(AUTOPAY_COL.doc(id), { matchedPledgeId: pledgeId });
+        });
+        showToast("Payment assigned to " + (p.name || "pledge"));
+      } catch (e) {
+        showToast("Could not assign: " + e.message);
+      }
+    });
+  });
+
+  listEl.querySelectorAll("[data-dismiss]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.dismiss;
+      if (!confirm("Dismiss this payment without assigning it to a pledge? It stays in the audit log.")) return;
+      try {
+        await AUTOPAY_COL.doc(id).update({ matchedPledgeId: "IGNORED" });
+      } catch (e) {
+        showToast("Could not dismiss: " + e.message);
+      }
+    });
+  });
+}
+
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -798,6 +894,20 @@ auth.onAuthStateChanged((user) => {
     }, (err) => console.error("phones error:", err));
   } else {
     phonesCache = {};
+  }
+
+  // Unmatched auto-payments (from Pochi la Biashara SMS webhook) — admin only
+  if (autopayUnsub) { autopayUnsub(); autopayUnsub = null; }
+  if (isAdmin) {
+    autopayUnsub = AUTOPAY_COL.where("matchedPledgeId", "==", null).onSnapshot((snap) => {
+      unmatchedCache = [];
+      snap.forEach((d) => unmatchedCache.push({ id: d.id, ...d.data() }));
+      unmatchedCache.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      renderUnmatched();
+    }, (err) => console.error("autoPayments error:", err));
+  } else {
+    unmatchedCache = [];
+    el("unmatchedPanel").style.display = "none";
   }
 
   render();
