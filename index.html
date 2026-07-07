@@ -1754,64 +1754,8 @@ body.viewer .toast {
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
 
-      <!-- Slide 1: About the Group -->
+      <!-- Slide: World Cup Highlights (only public slide) -->
       <div class="pub-slide active" id="pubSlide0">
-        <div class="pub-slide-title">About This Group</div>
-        <div class="pub-slide-body" id="pubAboutText">Bogonko-Ngelani Stage — Official Boda Boda Welfare Group, Katani, Pridelands. Est. &amp; registered with county authorities.</div>
-      </div>
-
-      <!-- Slide 2: How to Pay -->
-      <div class="pub-slide" id="pubSlide1">
-        <div class="pub-slide-title">How to Pay via M-Pesa</div>
-        <div class="pub-slide-body">
-          1. M-Pesa &rarr; Lipa na M-Pesa &rarr; Pay Bill<br>
-          2. Business No: <b>544600</b><br>
-          3. Account No: <b>942540</b><br>
-          <button class="pay-copy-btn" onclick="copyAccNo()">&#128203; Copy Acc No.</button>
-        </div>
-      </div>
-
-      <!-- Slide 3: Quick Stats -->
-      <div class="pub-slide" id="pubSlide2">
-        <div class="pub-slide-title">Group Stats</div>
-        <div class="pub-slide-body">
-          Members: <b id="pubMemberCount">&#8212;</b><br>
-          Daily Rate: <b>KSh 50</b><br>
-          Days left this month: <b id="pubDaysLeft">&#8212;</b>
-        </div>
-      </div>
-
-      <!-- Slide 4: Contribution Reminder -->
-      <div class="pub-slide" id="pubSlide3">
-        <div class="pub-slide-title">Contribution Reminder</div>
-        <div class="pub-slide-body" id="pubReminderText">Loading&#8230;</div>
-      </div>
-
-      <!-- Slide 5: Welfare Benefit -->
-      <div class="pub-slide" id="pubSlide4">
-        <div class="pub-slide-title">Welfare Benefit</div>
-        <div class="pub-slide-body" id="pubWelfareText">Active members are entitled to welfare support in times of need. Stay up to date with contributions to remain eligible.</div>
-      </div>
-
-      <!-- Slide 6: Notice Board -->
-      <div class="pub-slide" id="pubSlide5">
-        <div class="pub-slide-title">Notice Board</div>
-        <div class="pub-slide-body" id="pubNoticeText">No current notices. Check back soon.</div>
-      </div>
-
-      <!-- Slide 7: Fuel Prices -->
-      <div class="pub-slide" id="pubSlide6">
-        <div class="pub-slide-title">Fuel Prices (EPRA)</div>
-        <div class="pub-slide-body">
-          Petrol: <b id="pubFuelPetrol">&#8212;</b>/L<br>
-          Diesel: <b id="pubFuelDiesel">&#8212;</b>/L<br>
-          Kerosene: <b id="pubFuelKerosene">&#8212;</b>/L<br>
-          <span style="font-size:10.5px;color:var(--muted);display:block;margin-top:6px;">Updated: <span id="pubFuelUpdated">&#8212;</span></span>
-        </div>
-      </div>
-
-      <!-- Slide 8: World Cup Highlights -->
-      <div class="pub-slide" id="pubSlide7">
         <div class="pub-slide-title" style="margin-bottom:8px;" id="pubWCTitle">World Cup Highlights</div>
         <div class="pub-slide-body" style="width:100%;padding:0;">
           <div style="position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;">
@@ -1819,18 +1763,6 @@ body.viewer .toast {
           </div>
           <a href="https://www.youtube.com/@fifa/videos" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--amber2);text-decoration:none;">Watch more on FIFA's channel &rarr;</a>
         </div>
-      </div>
-
-      <!-- Dots -->
-      <div class="pub-dots" id="pubDots">
-        <div class="pub-dot active" data-idx="0"></div>
-        <div class="pub-dot" data-idx="1"></div>
-        <div class="pub-dot" data-idx="2"></div>
-        <div class="pub-dot" data-idx="3"></div>
-        <div class="pub-dot" data-idx="4"></div>
-        <div class="pub-dot" data-idx="5"></div>
-        <div class="pub-dot" data-idx="6"></div>
-        <div class="pub-dot" data-idx="7"></div>
       </div>
     </div>
   </div>
@@ -5721,67 +5653,11 @@ Object.assign(window,{
   openActivityLog, closeActivityLog, renderActivityLog, filterActivityLog, printActivityLog,
 });
 
-// ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
+// ── PUBLIC SLIDESHOW (single slide: World Cup Highlights) ────────────────
 (function() {
-  const TOTAL = 8;
-  let current = 0;
-  let timer = null;
   const container = document.getElementById('pubSlideshow');
   if (!container) return;
-
-  function getSlides() { return container.querySelectorAll('.pub-slide'); }
-  function getDots() { return container.querySelectorAll('.pub-dot'); }
-
-  function goTo(idx) {
-    const slides = getSlides();
-    const dots = getDots();
-    if (!slides.length) return;
-    slides[current].classList.remove('active');
-    slides[current].classList.add('zoom-out');
-    const outIdx = current;
-    setTimeout(() => { if(slides[outIdx]) slides[outIdx].classList.remove('zoom-out'); }, 600);
-    current = ((idx % TOTAL) + TOTAL) % TOTAL;
-    slides[current].classList.add('active');
-    dots.forEach((d,i) => d.classList.toggle('active', i === current));
-  }
-
-  function startAuto() {
-    clearInterval(timer);
-    timer = setInterval(() => goTo(current + 1), 7000);
-  }
-
-  getDots().forEach((dot) => {
-    dot.addEventListener('click', () => {
-      const i = parseInt(dot.getAttribute('data-idx') || '0', 10);
-      goTo(i); clearInterval(timer); startAuto();
-    });
-  });
-
-  let sx = 0;
-  container.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-  container.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 40) { goTo(dx < 0 ? current+1 : current-1); clearInterval(timer); startAuto(); }
-  }, { passive: true });
-
-  startAuto();
-
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  const daysLeft = lastDay - now.getDate();
-  const dlEl = document.getElementById('pubDaysLeft');
-  if (dlEl) dlEl.textContent = daysLeft;
-
-  const reminderEl = document.getElementById('pubReminderText');
-  if (reminderEl) {
-    if (daysLeft === 0) {
-      reminderEl.innerHTML = '\u26a0\ufe0f <b>Last day of the month!</b>Don\'t miss today\'s KSh 50 contribution.';
-    } else if (daysLeft <= 3) {
-      reminderEl.innerHTML = 'Only <b>' + daysLeft + ' day' + (daysLeft>1?'s':'') + ' left</b> this month. Stay up to date — <b>KSh 50/day</b>.';
-    } else {
-      reminderEl.innerHTML = 'Today is <b>Day ' + now.getDate() + '</b>. Contribute <b>KSh 50</b> daily to remain an active member.';
-    }
-  }
+  // Only one slide remains, so no rotation, dots, or swipe logic is needed.
 })();
 
 function copyAccNo() {
@@ -5814,9 +5690,12 @@ async function savePubInfo() {
     closePubInfoEditor();
     showToast('\u2713 Public info updated');
     logAdminAction('Updated public view info', 'about/welfare/notice text');
-    if (about) document.getElementById('pubAboutText').textContent = about;
-    if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
-    document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
+    const aboutEl = document.getElementById('pubAboutText');
+    const welfareEl = document.getElementById('pubWelfareText');
+    const noticeEl = document.getElementById('pubNoticeText');
+    if (aboutEl && about) aboutEl.textContent = about;
+    if (welfareEl && welfare) welfareEl.textContent = welfare;
+    if (noticeEl) noticeEl.textContent = notice || 'No current notices. Check back soon.';
   } catch(e) {
     piError.textContent = '\u26a0\ufe0f Failed to save. Try again.';
     piError.style.display = 'block';
@@ -5828,9 +5707,12 @@ async function savePubInfo() {
     const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
     if (!snap.exists()) return;
     const d = snap.data();
-    if (d.about) document.getElementById('pubAboutText').textContent = d.about;
-    if (d.welfare) document.getElementById('pubWelfareText').textContent = d.welfare;
-    if (d.notice) document.getElementById('pubNoticeText').textContent = d.notice;
+    const aboutEl = document.getElementById('pubAboutText');
+    const welfareEl = document.getElementById('pubWelfareText');
+    const noticeEl = document.getElementById('pubNoticeText');
+    if (aboutEl && d.about) aboutEl.textContent = d.about;
+    if (welfareEl && d.welfare) welfareEl.textContent = d.welfare;
+    if (noticeEl && d.notice) noticeEl.textContent = d.notice;
   } catch(e) {}
 })();
 
