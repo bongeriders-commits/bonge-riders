@@ -88,6 +88,15 @@ html, body {
   color: var(--text); border-radius: 8px; width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
 }
+.theme-toggle-pill { display:flex; align-items:center; gap:6px; height:32px; padding:3px; border-radius:999px; background:#E8E8EA; border:1px solid var(--border); cursor:pointer; transition:background .2s ease; flex-shrink:0; }
+.theme-toggle-pill.dark { background:#000; flex-direction:row-reverse; }
+.theme-toggle-pill .ttp-label { font-size:9.5px; font-weight:800; letter-spacing:.3px; color:#111; white-space:nowrap; padding:0 5px; }
+.theme-toggle-pill.dark .ttp-label { color:#fff; }
+.theme-toggle-pill .ttp-knob { width:26px; height:26px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+.theme-toggle-pill .ttp-knob svg { width:15px; height:15px; }
+.theme-toggle-pill .icon-moon { display:none; }
+.theme-toggle-pill.dark .icon-sun { display:none; }
+.theme-toggle-pill.dark .icon-moon { display:block; }
 
 /* ── LOGIN ── */
 #loginScreen {
@@ -394,7 +403,13 @@ html, body {
     </div>
   </div>
   <div class="header-right">
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"></button>
+    <button class="theme-toggle-pill" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+      <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
+      <span class="ttp-knob">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      </span>
+    </button>
   </div>
 </div>
 
@@ -577,10 +592,20 @@ const START_DATE = new Date(2026, 5, 22);
 // ── THEME ──
 const savedTheme = localStorage.getItem('theme') || 'dark';
 if (savedTheme === 'light') document.body.classList.add('light');
+function syncThemeUI() {
+  const isLight = document.body.classList.contains('light');
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.classList.toggle('dark', !isLight);
+  const label = document.getElementById('themeToggleLabel');
+  if (label) label.textContent = isLight ? 'Day Mode' : 'Night Mode';
+}
 window.toggleTheme = function() {
   document.body.classList.toggle('light');
   localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  syncThemeUI();
 };
+syncThemeUI();
 
 // ── TOAST ──
 function showToast(msg, dur = 3000) {

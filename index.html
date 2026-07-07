@@ -286,6 +286,22 @@ img {
 }
 .icon-btn:active { background: var(--border); }
 
+.theme-toggle-pill {
+  display: flex; align-items: center; gap: 6px;
+  height: 32px; padding: 3px; border-radius: 999px;
+  background: #E8E8EA; border: 1px solid var(--border);
+  cursor: pointer; transition: background .2s ease;
+  flex-shrink: 0;
+}
+.theme-toggle-pill.dark { background: #000; flex-direction: row-reverse; }
+.theme-toggle-pill .ttp-label { font-size: 9.5px; font-weight: 800; letter-spacing: .3px; color: #111; white-space: nowrap; padding: 0 5px; }
+.theme-toggle-pill.dark .ttp-label { color: #fff; }
+.theme-toggle-pill .ttp-knob { width: 26px; height: 26px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.theme-toggle-pill .ttp-knob svg { width: 15px; height: 15px; }
+.theme-toggle-pill .icon-moon { display: none; }
+.theme-toggle-pill.dark .icon-sun { display: none; }
+.theme-toggle-pill.dark .icon-moon { display: block; }
+
 /* Arc stats row */
 .stats-row {
   display: flex; gap: 8px; align-items: stretch;
@@ -1543,10 +1559,16 @@ body.viewer .toast {
         <span id="lastSynced" class="last-synced" style="display:none"></span>
       </div>
       <button class="icon-btn" onclick="location.href='notifications.html'" id="notifBell" title="Notifications" style="position:relative;">
-        
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--amber2);color:#fff;font-size:9px;font-weight:800;line-height:1;border-radius:999px;min-width:15px;height:15px;padding:0 3px;display:flex;align-items:center;justify-content:center;border:2px solid var(--card);"></span>
       </button>
-      <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme"></button>
+      <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
+        <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
+        <span class="ttp-knob">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </span>
+      </button>
     </div>
   </div>
 
@@ -1810,7 +1832,9 @@ body.viewer .toast {
 
       <!-- Total Members -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;line-height:1;color:var(--text);" id="vbPaid">0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Members</div>
         <div style="margin-top:10px;">
@@ -1822,7 +1846,9 @@ body.viewer .toast {
 
       <!-- Total Contributions -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbKshAll">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Contributions</div>
         <div style="margin-top:10px;">
@@ -1834,7 +1860,9 @@ body.viewer .toast {
 
       <!-- Total Spending -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbTotalSpent">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Spending</div>
         <div style="margin-top:10px;">
@@ -1846,7 +1874,9 @@ body.viewer .toast {
 
       <!-- Available Balance -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+        </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;" id="vbRunningBal">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Available Balance</div>
         <div style="margin-top:10px;display:flex;align-items:center;gap:5px;">
@@ -3759,7 +3789,11 @@ function applyTheme(theme){
   const isLight=theme==='light';
   document.body.classList.toggle('light',isLight);
   const btn=document.getElementById('themeToggle');
-  if(btn) btn.textContent=isLight?'':'';
+  if(btn){
+    btn.classList.toggle('dark', !isLight);
+    const label=document.getElementById('themeToggleLabel');
+    if(label) label.textContent = isLight ? 'Day Mode' : 'Night Mode';
+  }
   const meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content', isLight?'#FFFFFF':'#0E1013');
 }
