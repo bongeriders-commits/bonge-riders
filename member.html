@@ -2635,5 +2635,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) logoutBtn.addEventListener('click', doLogout);
 });
 </script>
+<script>
+// Keep the focused field visible above the on-screen keyboard on mobile
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if (el.matches && el.matches('input, textarea, select')) {
+    setTimeout(function(){
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 300);
+  }
+});
+</script>
 </body>
 </html>
