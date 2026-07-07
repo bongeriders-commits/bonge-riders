@@ -385,6 +385,43 @@ img {
 .adm-item-danger { background: var(--card); color: var(--muted); border-color: var(--border); }
 .adm-item-danger:hover, .adm-item-danger:active { background: rgba(220,38,38,.12); border-color: rgba(220,38,38,.35); color: #EF4444; }
 
+/* ── PUBLIC HAMBURGER MENU (viewer board hero) ── */
+.pub-menu-wrap { position: absolute; top: 14px; right: 14px; z-index: 50; }
+.pub-menu-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(20,22,30,0.55); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s, transform .15s;
+}
+.pub-menu-btn:active { background: rgba(20,22,30,0.8); transform: scale(0.94); }
+.pub-menu-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 999;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 190px;
+  box-shadow: 0 10px 34px rgba(0,0,0,.5);
+  padding: 8px;
+}
+.pub-menu-dropdown.open { display: flex; flex-direction: column; gap: 3px; }
+.pub-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  padding: 11px 14px; text-align: left; cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+.pub-menu-item:active, .pub-menu-item:hover { background: var(--card2); border-color: var(--amber); }
+
 /* ── ADMIN MANAGEMENT MODAL ── */
 .adm-mgmt-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .adm-mgmt-row {
@@ -707,6 +744,10 @@ img {
   transition: opacity .15s, transform .1s;
 }
 .admin-login-btn:active { opacity: .85; }
+
+/* ── PUBLIC ADMIN SIGN-IN LINK (styled like pledge.html) ── */
+.pub-admin-toggle { text-align: center; margin-top: 10px; }
+.pub-admin-toggle a { color: var(--muted); font-size: 11.5px; text-decoration: underline; cursor: pointer; }
 
 /* ── PUBLIC SLIDESHOW ─────────────────────────────────────────── */
 .pub-slideshow {
@@ -1623,6 +1664,19 @@ body.memberview .vb-unlocked { display: block; }
 
     <!-- ── LOGO HERO (sunset background, no overlay panel) ── -->
     <div style="position:relative;margin:-20px -16px 14px;min-height:300px;border-radius:0 0 26px 26px;overflow:hidden;background-image:url('hero-sunset.jpg');background-size:cover;background-position:center 78%;display:flex;align-items:flex-end;">
+      <!-- ── PUBLIC HAMBURGER MENU ── -->
+      <div class="pub-menu-wrap" id="pubMenuWrap">
+        <button class="pub-menu-btn" onclick="togglePubMenu(event)" aria-label="Menu">☰</button>
+        <div class="pub-menu-dropdown" id="pubMenuDropdown">
+          <button class="pub-menu-item" onclick="closePubMenu()">ABOUT US</button>
+          <button class="pub-menu-item" onclick="closePubMenu()">CONTACT</button>
+          <button class="pub-menu-item" onclick="closePubMenu()">GALLERY</button>
+          <button class="pub-menu-item" onclick="closePubMenu()">PROJECTS</button>
+          <button class="pub-menu-item" onclick="closePubMenu()">NEWS</button>
+          <button class="pub-menu-item" onclick="closePubMenu();window.open('faq.html','_blank')">FAQ</button>
+          <button class="pub-menu-item" onclick="closePubMenu();window.open('manual.pdf','_blank')">HELP</button>
+        </div>
+      </div>
       <div style="width:100%;padding:20px 18px 22px;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0) 100%);text-align:left;">
         <img src="icon-512.png" alt="Bonge Riders Logo"
              style="width:112px;height:112px;object-fit:contain;border-radius:50%;box-shadow:0 6px 24px rgba(0,0,0,0.5);background:rgba(255,255,255,0.95);margin-bottom:12px;">
@@ -1636,26 +1690,11 @@ body.memberview .vb-unlocked { display: block; }
       </div>
     </div>
 
-    <!-- ── JOIN US + MEMBER LOGIN — top of public panel ── -->
-    <div style="display:flex;gap:10px;padding:4px 0 16px;flex-shrink:0;">
-      <a href="register.html" style="flex:1;text-decoration:none;">
-        <button style="width:100%;padding:12px 8px;background:var(--amber);color:#fff;border:none;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-          👤 Join Us
-        </button>
-      </a>
-      <a href="member.html" style="flex:1;text-decoration:none;">
-        <button style="width:100%;padding:12px 8px;background:#fff;color:var(--amber);border:2px solid var(--amber);border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-          🔐 Member Login
-        </button>
-      </a>
-    </div>
-
     <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">🔒 SIGN IN REQUIRED</div>
     <p style="color:var(--muted);font-size:13px;text-align:center;margin:6px 0 20px;line-height:1.6;">
       This tracker contains private member information.<br>Members can view the totals dashboard with the group PIN.
     </p>
     <button class="admin-login-btn" onclick="openMemberLogin()">🔢 Enter Dashboard PIN</button>
-    <button class="admin-login-btn" style="background:var(--card2);border:1px solid var(--border);color:var(--text);" onclick="openAdminLogin()">🔐 Admin Login</button>
 
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
@@ -1723,22 +1762,6 @@ body.memberview .vb-unlocked { display: block; }
     </div>
   </div>
 
-  <!-- ── USER MANUAL ──────────────────────────────────────────────────── -->
-  <div class="vb-signin-only" style="padding:0 14px 6px;">
-    <a href="manual.pdf" download="BongeRiders_UserManual.pdf" style="text-decoration:none;display:block;">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:20px;">📖</span>
-          <div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);">User Manual</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px;">How to use the Bonge Riders app</div>
-          </div>
-        </div>
-        <span style="font-size:11px;font-weight:700;color:var(--amber2);background:var(--amber-bg);border:1px solid rgba(204,24,24,.25);border-radius:6px;padding:5px 10px;">⬇️ Download</span>
-      </div>
-    </a>
-  </div>
-
   <!-- ── PLEDGE / FUNDRAISER SECTION ─────────────────────────────────── -->
   <div class="vb-signin-only" style="padding:10px 14px 8px;">
     <a href="pledge.html" style="text-decoration:none;display:block;">
@@ -1748,21 +1771,6 @@ body.memberview .vb-unlocked { display: block; }
     </a>
   </div>
 
-  <!-- ── FAQ SECTION ──────────────────────────────────────────────────── -->
-  <div class="vb-signin-only" style="padding:8px 14px 14px;">
-    <a href="faq.html" style="text-decoration:none;display:block;">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:20px;">❓</span>
-          <div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);">Frequently Asked Questions</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px;">Tap a question to expand the answer</div>
-          </div>
-        </div>
-        <span style="color:var(--muted);font-size:16px;">›</span>
-      </div>
-    </a>
-  </div>
 
   <div class="vb-unlocked">
 
@@ -4949,6 +4957,20 @@ document.addEventListener('click', (e) => {
   if (wrap && !wrap.contains(e.target)) closeAdmMenu();
 });
 
+// ── PUBLIC HAMBURGER MENU ──────────────────────────────────────────────
+function togglePubMenu(e) {
+  e.stopPropagation();
+  document.getElementById('pubMenuDropdown').classList.toggle('open');
+}
+function closePubMenu() {
+  const dd = document.getElementById('pubMenuDropdown');
+  if (dd) dd.classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('pubMenuWrap');
+  if (wrap && !wrap.contains(e.target)) closePubMenu();
+});
+
 // ── SERVICE WORKER + UPDATE BANNER ──────────────────────────────────────
 let _swReg = null;
 if ('serviceWorker' in navigator) {
@@ -5515,6 +5537,13 @@ window.defaultWAMessage = function() {
 
 // Call nudge on initial page render too
 document.addEventListener('DOMContentLoaded', ()=>{ renderNudgeBanner(); });
+
+// Auto-open Admin Login when arriving via the "Admin sign in" link on member.html
+document.addEventListener('DOMContentLoaded', ()=>{
+  if (new URLSearchParams(window.location.search).get('admin') === '1') {
+    setTimeout(()=>{ if (typeof openAdminLogin === 'function') openAdminLogin(); }, 300);
+  }
+});
 
 Object.assign(window,{
   openAdminLogin, closeAdminLogin, confirmAdminLogin, logoutAdmin,
