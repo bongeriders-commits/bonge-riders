@@ -136,32 +136,25 @@ h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans
 
 <script>
 // ─────────────────────────────────────────────────────────────
-// FREE NEWS SOURCES (public RSS feeds — no API key required)
-// Each feed is fetched client-side through a public CORS proxy
-// since browsers block direct cross-origin XML requests.
+// News is fetched from our own /api/news serverless function,
+// which pulls RSS feeds server-side (no browser CORS issues,
+// no dependency on third-party proxies).
 // ─────────────────────────────────────────────────────────────
-const SOURCES = [
-  { id:'aljazeera', name:'Al Jazeera', cat:'world',    url:'https://www.aljazeera.com/xml/rss/all.xml' },
-  { id:'bbc',       name:'BBC News',   cat:'world',    url:'https://feeds.bbci.co.uk/news/world/rss.xml' },
-  { id:'guardian',  name:'The Guardian', cat:'world',  url:'https://www.theguardian.com/world/rss' },
-  { id:'npr',       name:'NPR',        cat:'world',    url:'https://feeds.npr.org/1004/rss.xml' },
-  { id:'nation',    name:'Nation Kenya', cat:'kenya',  url:'https://nation.africa/kenya/rss' },
-  { id:'standard',  name:'The Standard', cat:'kenya',  url:'https://www.standardmedia.co.ke/rss/headlines.php' },
-  { id:'capitalke', name:'Capital FM',  cat:'kenya',   url:'https://www.capitalfm.co.ke/news/feed/' },
-  { id:'bbcbiz',    name:'BBC Business', cat:'business', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
-  { id:'aljbiz',    name:'AJ Economy', cat:'business', url:'https://www.aljazeera.com/xml/rss/economy.xml' },
-  { id:'bbcsport',  name:'BBC Sport',  cat:'sports',   url:'https://feeds.bbci.co.uk/sport/rss.xml' },
-];
-
-// Proxies tried in order until one works for a given feed
-const PROXIES = [
-  u => `https://proxy.corsfix.com/?${u}`,
-  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+const SOURCE_META = [
+  { id:'aljazeera', name:'Al Jazeera',   cat:'world' },
+  { id:'bbc',       name:'BBC News',     cat:'world' },
+  { id:'guardian',  name:'The Guardian', cat:'world' },
+  { id:'npr',       name:'NPR',          cat:'world' },
+  { id:'nation',    name:'Nation Kenya', cat:'kenya' },
+  { id:'standard',  name:'The Standard', cat:'kenya' },
+  { id:'capitalke', name:'Capital FM',   cat:'kenya' },
+  { id:'bbcbiz',    name:'BBC Business', cat:'business' },
+  { id:'aljbiz',    name:'AJ Economy',   cat:'business' },
+  { id:'bbcsport',  name:'BBC Sport',    cat:'sports' },
 ];
 
 let currentCategory = 'all';
-let allArticles = []; // {title, link, date, source, img}
+let allArticles = []; // {title, link, date, source, cat, img}
 let sourceStatus = {}; // id -> 'ok' | 'error' | 'loading'
 
 function goBack(){
@@ -170,7 +163,7 @@ function goBack(){
 
 function renderSourceChips(){
   const row = document.getElementById('sourceRow');
-  row.innerHTML = SOURCES
+  row.innerHTML = SOURCE_META
     .filter(s => currentCategory==='all' || s.cat===currentCategory)
     .map(s => `<button class="src-chip ${sourceStatus[s.id]==='error'?'error':''}" title="${sourceStatus[s.id]||''}">${s.name}</button>`)
     .join('');
@@ -183,59 +176,6 @@ function setCategory(cat){
   renderFeed();
 }
 
-function stripCdata(s){ return (s||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim(); }
-
-function extractImage(itemEl, descHtml){
-  // Try media:content, enclosure, then first <img> in description
-  const media = itemEl.getElementsByTagName('media:content')[0] || itemEl.getElementsByTagName('media:thumbnail')[0];
-  if (media && media.getAttribute('url')) return media.getAttribute('url');
-  const enclosure = itemEl.getElementsByTagName('enclosure')[0];
-  if (enclosure && enclosure.getAttribute('url') && (enclosure.getAttribute('type')||'').includes('image')) return enclosure.getAttribute('url');
-  if (descHtml){
-    const m = descHtml.match(/<img[^>]+src="([^"]+)"/i);
-    if (m) return m[1];
-  }
-  return null;
-}
-
-async function fetchFeed(source){
-  sourceStatus[source.id] = 'loading';
-  for (const buildProxyUrl of PROXIES){
-    try{
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 9000);
-      const res = await fetch(buildProxyUrl(source.url), { cache:'no-store', signal: controller.signal });
-      clearTimeout(timeout);
-      if (!res.ok) continue;
-      const text = await res.text();
-      if (!text || text.length < 20) continue;
-      const xml = new DOMParser().parseFromString(text, 'text/xml');
-      if (xml.querySelector('parsererror')) continue;
-      const items = [...xml.querySelectorAll('item')].slice(0, 12);
-      if (!items.length) continue;
-
-      const articles = items.map(it => {
-        const title = stripCdata(it.querySelector('title')?.textContent);
-        const link = stripCdata(it.querySelector('link')?.textContent) || it.querySelector('link')?.getAttribute('href');
-        const pubDate = it.querySelector('pubDate')?.textContent || it.querySelector('date')?.textContent;
-        const descRaw = it.querySelector('description')?.textContent || '';
-        const img = extractImage(it, stripCdata(descRaw));
-        return {
-          title, link,
-          date: pubDate ? new Date(pubDate) : new Date(0),
-          source: source.name,
-          img
-        };
-      }).filter(a => a.title && a.link);
-
-      sourceStatus[source.id] = 'ok';
-      return articles;
-    } catch(e){ /* try next proxy */ }
-  }
-  sourceStatus[source.id] = 'error';
-  return [];
-}
-
 async function loadAll(isRefresh){
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spin');
@@ -244,8 +184,16 @@ async function loadAll(isRefresh){
       `<div class="skeleton"><div class="img-ph"></div><div class="lines"><div class="line w1"></div><div class="line w2"></div><div class="line w3"></div></div></div>`
     ).join('');
   }
-  const results = await Promise.all(SOURCES.map(fetchFeed));
-  allArticles = results.flat().sort((a,b) => b.date - a.date);
+  try{
+    const res = await fetch('/api/news?cat=all', { cache:'no-store' });
+    if (!res.ok) throw new Error('bad status ' + res.status);
+    const data = await res.json();
+    allArticles = (data.articles || []).map(a => ({ ...a, date: a.date ? new Date(a.date) : new Date(0) }));
+    (data.sources || []).forEach(s => { sourceStatus[s.id] = s.ok ? 'ok' : 'error'; });
+  } catch(e){
+    allArticles = [];
+    SOURCE_META.forEach(s => sourceStatus[s.id] = 'error');
+  }
   renderSourceChips();
   renderFeed();
   btn.classList.remove('spin');
@@ -266,7 +214,7 @@ function timeAgo(date){
 function renderFeed(){
   const feedEl = document.getElementById('feed');
   const catSourceNames = new Set(
-    SOURCES.filter(s => currentCategory==='all' || s.cat===currentCategory).map(s=>s.name)
+    SOURCE_META.filter(s => currentCategory==='all' || s.cat===currentCategory).map(s=>s.name)
   );
   const list = allArticles.filter(a => catSourceNames.has(a.source));
 
