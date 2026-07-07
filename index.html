@@ -817,15 +817,6 @@ img {
   transform: scale(1.06);
   position: absolute;
 }
-/* Logo in each slide */
-.pub-slide-logo {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 14px;
-  border: 2px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
 .pub-slide-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px; font-weight: 800;
@@ -1652,6 +1643,7 @@ body.viewer .toast {
         <button class="adm-item" id="activityLogBtn" onclick="openActivityLog();closeAdmMenu()">ACTIVITY LOG</button>
         <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">PUBLIC VIEW EDITOR</button>
         <button class="adm-item" id="fuelPricesMenuBtn" onclick="openFuelPricesEditor();closeAdmMenu()" style="display:none;">FUEL PRICES EDITOR</button>
+        <button class="adm-item" id="wcVideoMenuBtn" onclick="openWCVideoEditor();closeAdmMenu()" style="display:none;">WORLD CUP VIDEO EDITOR</button>
         <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">PAYMENT</button>
         <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">CHAIRPERSON VIEW</button>
         <div class="adm-divider"></div>
@@ -1764,14 +1756,12 @@ body.viewer .toast {
 
       <!-- Slide 1: About the Group -->
       <div class="pub-slide active" id="pubSlide0">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">About This Group</div>
         <div class="pub-slide-body" id="pubAboutText">Bogonko-Ngelani Stage — Official Boda Boda Welfare Group, Katani, Pridelands. Est. &amp; registered with county authorities.</div>
       </div>
 
       <!-- Slide 2: How to Pay -->
       <div class="pub-slide" id="pubSlide1">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">How to Pay via M-Pesa</div>
         <div class="pub-slide-body">
           1. M-Pesa &rarr; Lipa na M-Pesa &rarr; Pay Bill<br>
@@ -1783,7 +1773,6 @@ body.viewer .toast {
 
       <!-- Slide 3: Quick Stats -->
       <div class="pub-slide" id="pubSlide2">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Group Stats</div>
         <div class="pub-slide-body">
           Members: <b id="pubMemberCount">&#8212;</b><br>
@@ -1794,28 +1783,24 @@ body.viewer .toast {
 
       <!-- Slide 4: Contribution Reminder -->
       <div class="pub-slide" id="pubSlide3">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Contribution Reminder</div>
         <div class="pub-slide-body" id="pubReminderText">Loading&#8230;</div>
       </div>
 
       <!-- Slide 5: Welfare Benefit -->
       <div class="pub-slide" id="pubSlide4">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Welfare Benefit</div>
         <div class="pub-slide-body" id="pubWelfareText">Active members are entitled to welfare support in times of need. Stay up to date with contributions to remain eligible.</div>
       </div>
 
       <!-- Slide 6: Notice Board -->
       <div class="pub-slide" id="pubSlide5">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Notice Board</div>
         <div class="pub-slide-body" id="pubNoticeText">No current notices. Check back soon.</div>
       </div>
 
       <!-- Slide 7: Fuel Prices -->
       <div class="pub-slide" id="pubSlide6">
-        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
         <div class="pub-slide-title">Fuel Prices (EPRA)</div>
         <div class="pub-slide-body">
           Petrol: <b id="pubFuelPetrol">&#8212;</b>/L<br>
@@ -1827,10 +1812,10 @@ body.viewer .toast {
 
       <!-- Slide 8: World Cup Highlights -->
       <div class="pub-slide" id="pubSlide7">
-        <div class="pub-slide-title" style="margin-bottom:8px;">&#9917; World Cup Highlights</div>
+        <div class="pub-slide-title" style="margin-bottom:8px;" id="pubWCTitle">World Cup Highlights</div>
         <div class="pub-slide-body" style="width:100%;padding:0;">
           <div style="position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;">
-            <iframe src="https://www.youtube.com/embed/videoseries?list=PLBRLtDhTHh5o" title="FIFA World Cup 2026 Highlights" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            <iframe id="worldCupIframe" src="https://www.youtube.com/embed/n7cA4k6TJbs" title="World Cup Highlights" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
           </div>
           <a href="https://www.youtube.com/@fifa/videos" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--amber2);text-decoration:none;">Watch more on FIFA's channel &rarr;</a>
         </div>
@@ -2056,6 +2041,28 @@ body.viewer .toast {
         </div>
         <div id="fpError" class="pw-error"></div>
         <button class="modal-btn" onclick="saveFuelPrices()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WORLD CUP VIDEO EDITOR MODAL (admin only) ── -->
+  <div class="modal-backdrop admin-only" id="wcVideoModal">
+    <div class="modal-box" style="max-width:400px;">
+      <div class="modal-header">
+        <span class="modal-title">Edit World Cup Video</span>
+        <button class="modal-close" onclick="closeWCVideoEditor()"></button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+        <div class="modal-field">
+          <label>YouTube link or video ID</label>
+          <input type="text" id="wcVideoUrl" class="modal-input" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+        <div class="modal-field">
+          <label>Slide title (optional)</label>
+          <input type="text" id="wcVideoTitle" class="modal-input" placeholder="World Cup Highlights">
+        </div>
+        <div id="wcError" class="pw-error"></div>
+        <button class="modal-btn" onclick="saveWCVideo()">Save Changes</button>
       </div>
     </div>
   </div>
@@ -5693,6 +5700,7 @@ Object.assign(window,{
   openSaccoSettings, closeSaccoSettings, saveSaccoSettings,
   openPubInfoEditor, closePubInfoEditor, savePubInfo, copyAccNo,
   openFuelPricesEditor, closeFuelPricesEditor, saveFuelPrices,
+  openWCVideoEditor, closeWCVideoEditor, saveWCVideo,
   openDeleteModal, closeDeleteModal, confirmDelete,
   openWABlast, closeWAModal, waSelectAll, sendWAReminders, sendWADirect,
   exportPDF, exportSundayPDF, openReportModal, closeReportModal, renderMonthlyReport, printReport,
@@ -5831,7 +5839,75 @@ function refreshPubEditBtn() {
   if (btn) btn.style.display = isSuperAdminUser() ? '' : 'none';
   const fpBtn = document.getElementById('fuelPricesMenuBtn');
   if (fpBtn) fpBtn.style.display = isSuperAdminUser() ? '' : 'none';
+  const wcBtn = document.getElementById('wcVideoMenuBtn');
+  if (wcBtn) wcBtn.style.display = isSuperAdminUser() ? '' : 'none';
 }
+
+// ── WORLD CUP HIGHLIGHT VIDEO (public slide, admin-editable) ────────────
+function extractYouTubeId(input) {
+  input = (input || '').trim();
+  if (/^[\w-]{11}$/.test(input)) return input; // already a bare video ID
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{11})/
+  ];
+  for (const re of patterns) {
+    const m = input.match(re);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+async function openWCVideoEditor() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  document.getElementById('wcError').style.display = 'none';
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'worldCupHighlight'));
+    const d = snap.exists() ? snap.data() : {};
+    document.getElementById('wcVideoUrl').value = d.videoId || '';
+    document.getElementById('wcVideoTitle').value = d.title || '';
+  } catch(e) {}
+  document.getElementById('wcVideoModal').classList.add('open');
+}
+
+function closeWCVideoEditor() { document.getElementById('wcVideoModal').classList.remove('open'); }
+
+async function saveWCVideo() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  const raw = document.getElementById('wcVideoUrl').value;
+  const title = document.getElementById('wcVideoTitle').value.trim();
+  const wcError = document.getElementById('wcError');
+  const videoId = extractYouTubeId(raw);
+  if (!videoId) {
+    wcError.textContent = '\u26a0\ufe0f Paste a valid YouTube link or 11-character video ID.';
+    wcError.style.display = 'block';
+    return;
+  }
+  try {
+    await setDoc(doc(db, 'tracker', 'worldCupHighlight'), { videoId, title, updatedAt: Date.now() });
+    closeWCVideoEditor();
+    showToast('\u2713 World Cup video updated');
+    logAdminAction('Updated World Cup highlight video', videoId);
+    renderWCVideo({ videoId, title });
+  } catch(e) {
+    wcError.textContent = '\u26a0\ufe0f Failed to save. Try again.';
+    wcError.style.display = 'block';
+  }
+}
+
+function renderWCVideo(d) {
+  const iframe = document.getElementById('worldCupIframe');
+  const titleEl = document.getElementById('pubWCTitle');
+  if (iframe && d.videoId) iframe.src = 'https://www.youtube.com/embed/' + d.videoId;
+  if (titleEl && d.title) titleEl.textContent = d.title;
+}
+
+(async function loadWCVideo() {
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'worldCupHighlight'));
+    if (!snap.exists()) return; // keep the built-in default video
+    renderWCVideo(snap.data());
+  } catch(e) {}
+})();
 
 // ── FUEL PRICES (public slide, admin-editable) ──────────────────────────
 async function openFuelPricesEditor() {
