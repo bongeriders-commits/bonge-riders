@@ -180,6 +180,49 @@ img {
   animation: splashFadeUp .5s .55s ease both;
 }
 
+.poster-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.92);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  animation: splashFadeUp .3s ease both;
+}
+.poster-overlay .poster-img {
+  flex: 1 1 auto; min-height: 0; width: 100%;
+  max-width: 100%; max-height: 100%; object-fit: contain;
+}
+.poster-close {
+  position: absolute; top: 16px; right: 16px; z-index: 2001;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.poster-close:active { background: rgba(255,255,255,0.3); }
+
+.poster-actions {
+  flex: 0 0 auto; width: 100%; max-width: 480px;
+  padding: 14px 18px 20px; box-sizing: border-box;
+  background: rgba(0,0,0,0.55);
+}
+.poster-actions-row {
+  display: flex; gap: 10px;
+}
+.poster-btn {
+  flex: 1; padding: 13px; border-radius: 10px; border: none;
+  font-size: 14.5px; font-weight: 700; cursor: pointer;
+  font-family: inherit;
+}
+.poster-btn-cancel {
+  background: rgba(255,255,255,0.12); color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.poster-btn-cancel:active { background: rgba(255,255,255,0.25); }
+.poster-btn-support {
+  background: #CC1818; color: #fff;
+}
+.poster-btn-support:active { background: #A01212; }
+
 @keyframes splashDrop {
   0%   { transform: translateY(-40px) scale(.85); opacity: 0; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
@@ -1333,13 +1376,52 @@ body.memberview .vb-unlocked { display: block; }
   <div id="splashTagline" style="position:relative;z-index:1;"></div>
 </div>
 
+<!-- Kelvin's Bike Fund poster — shown once per session, right after the splash finishes -->
+<div id="posterOverlay" class="poster-overlay" style="display:none;">
+  <button id="posterCloseBtn" class="poster-close" aria-label="Close">✕</button>
+  <img src="kelvin-poster.jpg" alt="Kelvin Maore needs your help — Bike Fund" class="poster-img">
+  <div class="poster-actions">
+    <div class="poster-actions-row">
+      <button id="posterCancelBtn" class="poster-btn poster-btn-cancel">Cancel</button>
+      <button id="posterSupportBtn" class="poster-btn poster-btn-support">Support Now →</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Only show the splash once per app session (i.e. when the app is first
 // loaded), not every time the user navigates back to this page.
 (function(){
+  function showPosterOnce(){
+    if (sessionStorage.getItem('bongeRidersPosterShown')) return;
+    sessionStorage.setItem('bongeRidersPosterShown', '1');
+    const poster = document.getElementById('posterOverlay');
+    if (poster) poster.style.display = 'flex';
+  }
+  window.__showBikeFundPoster = showPosterOnce;
+
+  function hidePoster(){
+    const poster = document.getElementById('posterOverlay');
+    if (poster) poster.style.display = 'none';
+  }
+
+  const posterCloseBtn = document.getElementById('posterCloseBtn');
+  if (posterCloseBtn) posterCloseBtn.addEventListener('click', hidePoster);
+
+  const posterCancelBtn = document.getElementById('posterCancelBtn');
+  if (posterCancelBtn) posterCancelBtn.addEventListener('click', hidePoster);
+
+  const posterSupportBtn = document.getElementById('posterSupportBtn');
+  if (posterSupportBtn) {
+    posterSupportBtn.addEventListener('click', function(){
+      window.location.href = 'pledge.html';
+    });
+  }
+
   if (sessionStorage.getItem('bongeRidersSplashShown')) {
     var el = document.getElementById('splashScreen');
     if (el) el.remove();
+    showPosterOnce();
     return;
   }
   sessionStorage.setItem('bongeRidersSplashShown', '1');
@@ -4420,7 +4502,10 @@ setTimeout(()=>{
     const vid=splash.querySelector('video');
     if(vid){ vid.pause(); }
     splash.classList.add('fade-out');
-    setTimeout(()=>splash.remove(),550);
+    setTimeout(()=>{
+      splash.remove();
+      if (window.__showBikeFundPoster) window.__showBikeFundPoster();
+    },550);
   }
 },6000);
 
