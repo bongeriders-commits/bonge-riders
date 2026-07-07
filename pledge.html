@@ -13,46 +13,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 body.dark{
-  --bg:       #0B0F14;
-  --bg2:      #111721;
-  --card:     #161D27;
-  --card2:    #1C2531;
-  --border:   #2A3341;
-  --text:     #F3F4F6;
-  --muted:    #9CA3AF;
-  --dim:      #6B7280;
-  --amber:    #FF5A5A;
-  --amber2:   #FF7A7A;
+  --bg: #0B0F14;
+  --bg2: #111721;
+  --card: #161D27;
+  --card2: #1C2531;
+  --border: #2A3341;
+  --text: #F3F4F6;
+  --muted: #9CA3AF;
+  --dim: #6B7280;
+  --amber: #FF5A5A;
+  --amber2: #FF7A7A;
   --amber-bg: rgba(255,90,90,0.16);
-  --green:    #34D399;
-  --green2:   #10B981;
+  --green: #34D399;
+  --green2: #10B981;
   --green-bg: rgba(16,185,129,0.16);
-  --red:      #FF5A5A;
-  --red2:     #FF7A7A;
+  --red: #FF5A5A;
+  --red2: #FF7A7A;
   --red-dark: #C0392B;
-  --red-bg:   rgba(255,90,90,0.16);
+  --red-bg: rgba(255,90,90,0.16);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 
@@ -178,8 +178,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
-    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-    <button class="pdf-btn" id="pdfBtn" style="display:none;">🖨️ PDF</button>
+    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle theme"></button>
+    <button class="pdf-btn" id="pdfBtn" style="display:none;">PDF</button>
   </div>
 </div>
 
@@ -216,7 +216,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <!-- CTA -->
 <div class="cta-row">
   <button class="add-btn" id="openPledgeBtn">＋ Pledge Now</button>
-  <div class="closed-notice" id="closedNotice" style="display:none;">This fundraiser is now closed to new pledges. Thank you to everyone who backed Kelvin! 🙏</div>
+  <div class="closed-notice" id="closedNotice" style="display:none;">This fundraiser is now closed to new pledges. Thank you to everyone who backed Kelvin! </div>
 </div>
 
 <!-- LIST -->
@@ -224,7 +224,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
   <h3>Pledges</h3>
 </div>
 <div class="search-row">
-  <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search by name…">
+  <input type="text" id="searchInput" class="search-input" placeholder="Search by name…">
 </div>
 <div class="loading-msg" id="loadingMsg">Loading…</div>
 <div class="pledge-list" id="pledgeList"></div>
@@ -267,7 +267,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <div class="modal-backdrop" id="loginModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">🔐 Admin Sign In</div>
+    <div class="modal-title">Admin Sign In</div>
     <p class="modal-sub">Sign in to mark pledges as received or export a report.</p>
     <div class="mfield">
       <label>Email</label>
@@ -302,21 +302,21 @@ function isCampaignOpen() {
 }
 
 firebase.initializeApp({
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca"
 });
 
-const db   = firebase.firestore();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
 // Firestore: tracker/kelvinBikeFund/pledges/{autoId} -> { name, amount, paid, amountPaid, createdAt }
 // Phone numbers are kept separate and are admin-read-only (see firestore.rules).
 const PLEDGES_COL = db.collection("tracker/kelvinBikeFund/pledges");
-const PHONES_COL  = db.collection("tracker/kelvinBikeFund/pledgePhones");
+const PHONES_COL = db.collection("tracker/kelvinBikeFund/pledgePhones");
 
 const el = (id) => document.getElementById(id);
 
@@ -327,9 +327,9 @@ if (localStorage.getItem('theme') === 'dark') {
 function toggleTheme() {
   document.body.classList.toggle('dark');
   localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  el("themeToggle").textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  el("themeToggle").textContent = document.body.classList.contains('dark') ? '' : '';
 }
-el("themeToggle").textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+el("themeToggle").textContent = document.body.classList.contains('dark') ? '' : '';
 
 let isAdmin = false;
 let pledgesCache = [];
@@ -398,7 +398,7 @@ el("payNumber").addEventListener("click", async () => {
   const number = el("payNumber").textContent.trim();
   try {
     await navigator.clipboard.writeText(number);
-    showToast("Number copied ✓");
+    showToast("Number copied ");
   } catch (e) {
     showToast("Could not copy — long-press the number to copy manually");
   }
@@ -439,7 +439,7 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
     if (isAdminAdd) {
       // Admin added this on someone else's behalf — no need to notify
       // the organiser via WhatsApp.
-      hint.textContent = "Pledge added ✓";
+      hint.textContent = "Pledge added ";
       hint.className = "merr ok";
       setTimeout(() => el("pledgeModal").classList.remove("open"), 900);
     } else {
@@ -448,7 +448,7 @@ el("confirmPledgeBtn").addEventListener("click", async () => {
       const waUrl = `https://wa.me/${ORGANIZER_PHONE}?text=${encodeURIComponent(msg)}`;
       window.open(waUrl, "_blank");
 
-      hint.textContent = "Pledge posted ✓ Opening WhatsApp to notify the organiser…";
+      hint.textContent = "Pledge posted Opening WhatsApp to notify the organiser…";
       hint.className = "merr ok";
       setTimeout(() => el("pledgeModal").classList.remove("open"), 1200);
     }
@@ -476,7 +476,7 @@ function startPledgesListener() {
     render();
   }, (err) => {
     console.error("pledges error:", err);
-    el("loadingMsg").textContent = "⚠️ Could not load data. Check connection.";
+    el("loadingMsg").textContent = "Could not load data. Check connection.";
   });
 }
 
@@ -484,7 +484,7 @@ function startPledgesListener() {
 // Firestore rules require isAnyAuth() to read/create pledges.
 auth.signInAnonymously().catch((e) => {
   console.error("Anonymous sign-in failed:", e);
-  el("loadingMsg").textContent = "⚠️ Could not connect. Check your connection.";
+  el("loadingMsg").textContent = "Could not connect. Check your connection.";
 });
 
 // Returns the amount actually paid so far for a pledge (backward-compatible
@@ -508,7 +508,7 @@ function render() {
 
   const list = el("pledgeList");
   if (count === 0) {
-    list.innerHTML = `<div class="empty-msg">No pledges yet — be the first to back Kelvin. 🏍️</div>`;
+    list.innerHTML = `<div class="empty-msg">No pledges yet — be the first to back Kelvin. </div>`;
     return;
   }
 
@@ -548,7 +548,7 @@ function render() {
       </div>
       ${isAdmin ? `
         <div class="admin-actions">
-          ${(amount - amountPaid) > 0 && phonesCache[p.id] ? `<button class="act-btn remind-btn" data-remind="${p.id}">💬 Remind</button>` : ""}
+          ${(amount - amountPaid) > 0 && phonesCache[p.id] ? `<button class="act-btn remind-btn" data-remind="${p.id}">Remind</button>` : ""}
           <button class="act-btn partial-btn" data-partial-toggle="${p.id}">${openPartialId === p.id ? 'Close' : 'Partial'}</button>
           <button class="act-btn" data-toggle="${p.id}" data-paid="${status === 'paid' ? 'false' : 'true'}">${status === 'paid' ? 'Undo' : 'Mark full'}</button>
           <button class="act-btn del" data-del="${p.id}">Remove</button>
@@ -640,7 +640,7 @@ function render() {
         const amount = Number(p.amount) || 0;
         const amountPaid = getAmountPaid(p);
         const balance = amount - amountPaid;
-        const msg = `Hi ${p.name || "there"}, this is a friendly reminder from Bonge Riders about your pledge to Kelvin's Bike Fund.\nPledged: KSh ${amount.toLocaleString()}\nPaid so far: KSh ${amountPaid.toLocaleString()}\nBalance remaining: KSh ${balance.toLocaleString()}\nWhenever you're able to complete it, we'd really appreciate it. Thank you for backing Kelvin! 🏍️`;
+        const msg = `Hi ${p.name || "there"}, this is a friendly reminder from Bonge Riders about your pledge to Kelvin's Bike Fund.\nPledged: KSh ${amount.toLocaleString()}\nPaid so far: KSh ${amountPaid.toLocaleString()}\nBalance remaining: KSh ${balance.toLocaleString()}\nWhenever you're able to complete it, we'd really appreciate it. Thank you for backing Kelvin! `;
         const digits = phone.replace(/[^0-9]/g, "");
         const waPhone = digits.startsWith("0") ? "254" + digits.slice(1) : digits;
         window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, "_blank");

@@ -15,46 +15,46 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 body.light {
-  --bg:       #F0F2F7;
-  --bg2:      #E6E9F0;
-  --card:     #FFFFFF;
-  --card2:    #F0F2F7;
-  --border:   #D0D5E8;
-  --text:     #0F1117;
-  --muted:    #5A6380;
-  --dim:      #A0AACC;
-  --amber:    #1D4ED8;
-  --amber2:   #2563EB;
+  --bg: #F0F2F7;
+  --bg2: #E6E9F0;
+  --card: #FFFFFF;
+  --card2: #F0F2F7;
+  --border: #D0D5E8;
+  --text: #0F1117;
+  --muted: #5A6380;
+  --dim: #A0AACC;
+  --amber: #1D4ED8;
+  --amber2: #2563EB;
   --amber-bg: rgba(29,78,216,0.08);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #B91C1C;
-  --red2:     #EF4444;
-  --red-bg:   rgba(185,28,28,0.08);
-  --radius:   8px;
+  --red: #B91C1C;
+  --red2: #EF4444;
+  --red-bg: rgba(185,28,28,0.08);
+  --radius: 8px;
   --radius-lg:12px;
 }
 html,body { min-height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; -webkit-tap-highlight-color:transparent; transition:background .2s,color .2s; padding-bottom:40px; }
@@ -104,8 +104,8 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 .act-btn { flex:1; min-width:60px; padding:6px 8px; border-radius:7px; font-size:11px; font-weight:700; border:none; cursor:pointer; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; gap:4px; transition:opacity .15s; }
 .act-btn:active { opacity:.75; }
 .act-btn.details { background:rgba(91,110,174,.2); color:#7B8FD4; border:1px solid rgba(91,110,174,.3); }
-.act-btn.edit    { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(37,99,235,.25); }
-.act-btn.delete  { background:rgba(192,57,43,.12); color:var(--red2); border:1px solid rgba(192,57,43,.25); }
+.act-btn.edit { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(37,99,235,.25); }
+.act-btn.delete { background:rgba(192,57,43,.12); color:var(--red2); border:1px solid rgba(192,57,43,.25); }
 
 /* SPINNER / EMPTY */
 .spinner { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
@@ -149,12 +149,12 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
   <div class="header-left">
     <a href="index.html" class="back-btn" title="Back">←</a>
     <div>
-      <div class="header-title">👥 Members</div>
+      <div class="header-title">Members</div>
       <div class="header-sub" id="headerSub">Bogonko-Ngelani Stage</div>
     </div>
   </div>
   <div class="header-right">
-    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme"></button>
   </div>
 </div>
 
@@ -180,12 +180,12 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div id="mainContent" style="display:none;">
   <div style="padding:14px 16px 4px;max-width:600px;margin:0 auto;">
     <button onclick="openAddModal()" style="width:100%;background:var(--green2);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;letter-spacing:.4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-      <span style="font-size:20px;">＋</span> ADD MEMBER
+      <span style="font-size:20px;">＋</span>ADD MEMBER
     </button>
   </div>
   <div class="search-wrap">
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"></span>
       <input class="search-input" id="searchInput" type="text" placeholder="Search member name or phone…"
         autocomplete="off" autocorrect="off" spellcheck="false" oninput="renderList()">
     </div>
@@ -194,7 +194,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
     <span class="count-pill" id="countPill">Loading…</span>
   </div>
   <div class="member-list" id="memberList">
-    <div class="spinner"><span class="spin">⏳</span> Loading members…</div>
+    <div class="spinner"><span class="spin">⏳</span>Loading members…</div>
   </div>
 </div>
 
@@ -202,7 +202,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">➕ Add New Member</div>
+    <div class="modal-title">Add New Member</div>
     <div class="modal-field">
       <label>Full Name</label>
       <input type="text" id="addName" placeholder="e.g. JOHN MWANGI" autocomplete="off" autocapitalize="characters">
@@ -223,7 +223,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div class="modal-backdrop" id="detailsModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">📋 Member Details</div>
+    <div class="modal-title">Member Details</div>
     <div id="detailsContent"><div class="spinner"><span class="spin">⏳</span></div></div>
     <div class="modal-btns"><button class="mbtn cancel" onclick="closeModal('detailsModal')">Close</button></div>
   </div>
@@ -233,21 +233,21 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div class="modal-backdrop" id="editModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">✏️ Edit Member</div>
+    <div class="modal-title">Edit Member</div>
     <div class="modal-field"><label>Full Name</label><input type="text" id="editName" autocapitalize="characters"></div>
     <div class="modal-field"><label>Phone Number</label><input type="tel" id="editPhone"></div>
-    <div class="sec-hdr">🪪 ID Card Details</div>
+    <div class="sec-hdr">ID Card Details</div>
     <div class="modal-field">
       <label>Membership Number <span style="color:var(--amber2);font-size:10px;">(unique)</span></label>
       <input type="text" id="editMemberNo" placeholder="e.g. BNG-001" autocapitalize="characters">
-      <div id="memberNoErr" class="err-inline">⚠️ This membership number is already assigned to another member.</div>
+      <div id="memberNoErr" class="err-inline">This membership number is already assigned to another member.</div>
     </div>
     <div class="modal-field"><label>National ID Number</label><input type="tel" inputmode="numeric" id="editNatId" placeholder="e.g. 12345678"></div>
     <div class="modal-field"><label>County of Operation</label><input type="text" id="editCounty" placeholder="e.g. Nairobi" autocapitalize="words"></div>
-    <div class="sec-hdr">🧑‍🤝‍🧑 Next of Kin</div>
+    <div class="sec-hdr">Next of Kin</div>
     <div class="modal-field"><label>Next of Kin Name</label><input type="text" id="editNokName" placeholder="Full name" autocapitalize="words"></div>
     <div class="modal-field"><label>Next of Kin Phone</label><input type="tel" id="editNokPhone" placeholder="e.g. 0712345678"></div>
-    <div class="sec-hdr">🏍️ Motorcycle Details</div>
+    <div class="sec-hdr">Motorcycle Details</div>
     <div class="modal-field"><label>Registration No.</label><input type="text" id="editMotoReg" placeholder="e.g. KDZ 123A" autocapitalize="characters"></div>
     <div class="modal-field"><label>Year of Manufacture</label><input type="tel" inputmode="numeric" id="editMotoYear" placeholder="e.g. 2022" maxlength="4"></div>
     <div class="modal-field"><label>Model</label><input type="text" id="editMotoModel" placeholder="e.g. Honda CB150" autocapitalize="words"></div>
@@ -262,7 +262,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div class="modal-backdrop" id="deleteModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">🗑️ Remove Member</div>
+    <div class="modal-title">Remove Member</div>
     <p class="confirm-body" id="deleteBody">Are you sure?</p>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeModal('deleteModal')">Cancel</button>
@@ -274,29 +274,29 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 <div id="toast"></div>
 
 <script type="module">
-import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
-  measurementId:     "G-VWL91EJW1H"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
 };
-const app  = initializeApp(firebaseConfig);
-const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
 
 let MEMBERS = [];
-let editingPhone  = null;
+let editingPhone = null;
 let deletingPhone = null;
-let deletingName  = null;
+let deletingName = null;
 
 // ── helpers ──────────────────────────────────────
 function initials(name) {
@@ -319,26 +319,26 @@ window.closeModal = closeModal;
 // ── auth ─────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   if (user) {
-    document.getElementById('loginGate').style.display    = 'none';
-    document.getElementById('mainContent').style.display  = 'block';
-    document.getElementById('headerSub').textContent      = user.email || 'Admin';
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('headerSub').textContent = user.email || 'Admin';
     loadMembers();
   } else {
-    document.getElementById('loginGate').style.display    = 'block';
-    document.getElementById('mainContent').style.display  = 'none';
+    document.getElementById('loginGate').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
   }
 });
 
 window.doLogin = async function() {
   const email = document.getElementById('loginEmail').value.trim();
-  const pw    = document.getElementById('loginPw').value;
-  const err   = document.getElementById('loginErr');
+  const pw = document.getElementById('loginPw').value;
+  const err = document.getElementById('loginErr');
   err.style.display = 'none';
   try {
     await signInWithEmailAndPassword(auth, email, pw);
   } catch(e) {
     err.style.display = 'block';
-    err.textContent   = e.code === 'auth/too-many-requests'
+    err.textContent = e.code === 'auth/too-many-requests'
       ? 'Too many attempts. Try again later.'
       : 'Incorrect email or password.';
   }
@@ -353,7 +353,7 @@ function loadMembers() {
     renderList();
   }, () => {
     document.getElementById('memberList').innerHTML =
-      `<div class="empty-state">⚠️ Could not load members. Check your connection.</div>`;
+      `<div class="empty-state">Could not load members. Check your connection.</div>`;
     document.getElementById('countPill').textContent = 'Offline';
   });
 }
@@ -381,7 +381,7 @@ window.renderList = function() {
 
   listEl.innerHTML = filtered.map(m => {
     const stageNo = MEMBERS.indexOf(m) + 1;
-    const phone   = m.phone;
+    const phone = m.phone;
     return `
       <div class="member-card">
         <div class="member-card-top">
@@ -393,9 +393,9 @@ window.renderList = function() {
           </div>
         </div>
         <div class="member-actions">
-          <button class="act-btn details" onclick="openDetails('${phone}')">📋 Details</button>
-          <button class="act-btn edit"    onclick="openEdit('${phone}')">✏️ Edit</button>
-          <button class="act-btn delete"  onclick="openDelete('${phone}','${(m.name||'').replace(/'/g,"\\'")}')">🗑️ Delete</button>
+          <button class="act-btn details" onclick="openDetails('${phone}')">Details</button>
+          <button class="act-btn edit" onclick="openEdit('${phone}')">Edit</button>
+          <button class="act-btn delete" onclick="openDelete('${phone}','${(m.name||'').replace(/'/g,"\\'")}')">Delete</button>
         </div>
       </div>`;
   }).join('');
@@ -427,17 +427,17 @@ window.openDetails = async function(phone) {
           <div style="font-size:12px;color:var(--muted);">${phone} &nbsp;·&nbsp; Stage No. <strong style="color:var(--amber2);">#${stageNo}</strong></div>
         </div>
       </div>
-      <div class="sec-hdr">🪪 ID Card</div>
-      ${row('🔢','Membership No.', d.memberNo)}
-      ${row('🪪','National ID No.', d.natId)}
-      ${row('📍','County', d.county)}
-      <div class="sec-hdr">🧑‍🤝‍🧑 Next of Kin</div>
-      ${row('👤','Name', d.nokName)}
-      ${row('📞','Phone', d.nokPhone)}
-      <div class="sec-hdr">🏍️ Motorcycle</div>
-      ${row('🔖','Reg No.', d.motoReg)}
-      ${row('📅','Year', d.motoYear)}
-      ${row('🏷️','Model', d.motoModel)}`;
+      <div class="sec-hdr">ID Card</div>
+      ${row('','Membership No.', d.memberNo)}
+      ${row('','National ID No.', d.natId)}
+      ${row('','County', d.county)}
+      <div class="sec-hdr">Next of Kin</div>
+      ${row('','Name', d.nokName)}
+      ${row('','Phone', d.nokPhone)}
+      <div class="sec-hdr">Motorcycle</div>
+      ${row('','Reg No.', d.motoReg)}
+      ${row('','Year', d.motoYear)}
+      ${row('','Model', d.motoModel)}`;
   } catch(e) {
     content.innerHTML = `<div class="empty-state">Could not load details.</div>`;
   }
@@ -448,7 +448,7 @@ window.openEdit = async function(phone) {
   const m = MEMBERS.find(x => x.phone === phone);
   if (!m) return;
   editingPhone = phone;
-  document.getElementById('editName').value  = m.name;
+  document.getElementById('editName').value = m.name;
   document.getElementById('editPhone').value = m.phone;
   document.getElementById('memberNoErr').style.display = 'none';
   ['editMemberNo','editNatId','editCounty','editNokName','editNokPhone','editMotoReg','editMotoYear','editMotoModel']
@@ -457,13 +457,13 @@ window.openEdit = async function(phone) {
     const snap = await getDoc(doc(db,'tracker','memberDetails'));
     if (snap.exists()) {
       const d = (snap.data()||{})[phone] || {};
-      document.getElementById('editMemberNo').value  = d.memberNo  || '';
-      document.getElementById('editNatId').value     = d.natId     || '';
-      document.getElementById('editCounty').value    = d.county    || '';
-      document.getElementById('editNokName').value   = d.nokName   || '';
-      document.getElementById('editNokPhone').value  = d.nokPhone  || '';
-      document.getElementById('editMotoReg').value   = d.motoReg   || '';
-      document.getElementById('editMotoYear').value  = d.motoYear  || '';
+      document.getElementById('editMemberNo').value = d.memberNo || '';
+      document.getElementById('editNatId').value = d.natId || '';
+      document.getElementById('editCounty').value = d.county || '';
+      document.getElementById('editNokName').value = d.nokName || '';
+      document.getElementById('editNokPhone').value = d.nokPhone || '';
+      document.getElementById('editMotoReg').value = d.motoReg || '';
+      document.getElementById('editMotoYear').value = d.motoYear || '';
       document.getElementById('editMotoModel').value = d.motoModel || '';
     }
   } catch(e) {}
@@ -472,22 +472,22 @@ window.openEdit = async function(phone) {
 
 window.saveEdit = async function() {
   if (!editingPhone) return;
-  const name   = document.getElementById('editName').value.trim().toUpperCase();
+  const name = document.getElementById('editName').value.trim().toUpperCase();
   const rawPhone = document.getElementById('editPhone').value.trim();
-  const phone  = rawPhone.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
-  if (!name || !phone) { showToast('⚠️ Fill all fields'); return; }
+  const phone = rawPhone.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
+  if (!name || !phone) { showToast('Fill all fields'); return; }
   const m = MEMBERS.find(x => x.phone === editingPhone);
   if (!m) return;
 
-  const memberNo  = document.getElementById('editMemberNo').value.trim().toUpperCase();
-  const natId     = document.getElementById('editNatId').value.trim();
-  const county    = document.getElementById('editCounty').value.trim();
-  const nokName   = document.getElementById('editNokName').value.trim();
-  const nokPhone  = document.getElementById('editNokPhone').value.trim();
-  const motoReg   = document.getElementById('editMotoReg').value.trim().toUpperCase();
-  const motoYear  = document.getElementById('editMotoYear').value.trim();
+  const memberNo = document.getElementById('editMemberNo').value.trim().toUpperCase();
+  const natId = document.getElementById('editNatId').value.trim();
+  const county = document.getElementById('editCounty').value.trim();
+  const nokName = document.getElementById('editNokName').value.trim();
+  const nokPhone = document.getElementById('editNokPhone').value.trim();
+  const motoReg = document.getElementById('editMotoReg').value.trim().toUpperCase();
+  const motoYear = document.getElementById('editMotoYear').value.trim();
   const motoModel = document.getElementById('editMotoModel').value.trim();
-  const errEl     = document.getElementById('memberNoErr');
+  const errEl = document.getElementById('memberNoErr');
   errEl.style.display = 'none';
 
   if (memberNo) {
@@ -499,33 +499,33 @@ window.saveEdit = async function() {
         if (conflict) {
           errEl.style.display = 'block';
           const cm = MEMBERS.find(x => x.phone === conflict[0]);
-          errEl.textContent = `⚠️ "${memberNo}" is already assigned to ${cm ? cm.name : conflict[0]}.`;
+          errEl.textContent = ` "${memberNo}" is already assigned to ${cm ? cm.name : conflict[0]}.`;
           return;
         }
       }
     } catch(e) {}
   }
 
-  m.name  = name;
+  m.name = name;
   m.phone = phone;
   try {
-    const ref  = doc(db,'tracker','memberDetails');
+    const ref = doc(db,'tracker','memberDetails');
     const snap = await getDoc(ref);
-    const all  = snap.exists() ? (snap.data()||{}) : {};
+    const all = snap.exists() ? (snap.data()||{}) : {};
     if (phone !== editingPhone && all[editingPhone]) { all[phone]=all[editingPhone]; delete all[editingPhone]; }
     all[phone] = { memberNo, natId, county, nokName, nokPhone, motoReg, motoYear, motoModel, updatedAt: Date.now() };
     await setDoc(ref, all);
-  } catch(e) { showToast('⚠️ Details save failed'); }
+  } catch(e) { showToast('Details save failed'); }
   await saveMembers();
   closeModal('editModal');
-  showToast('✓ Member updated');
+  showToast('Member updated');
   renderList();
 };
 
 // ── DELETE ───────────────────────────────────────
 window.openDelete = function(phone, name) {
   deletingPhone = phone;
-  deletingName  = name;
+  deletingName = name;
   document.getElementById('deleteBody').textContent =
     `Remove "${name}" (${phone})? Their contribution history will be preserved in the group totals.`;
   document.getElementById('deleteModal').classList.add('open');
@@ -537,14 +537,14 @@ window.confirmDelete = async function() {
   await saveMembers();
   // Payment history is intentionally preserved — past contributions were
   // real income the group received and must remain in the financial totals.
-  showToast(`🗑️ ${deletingName.split(' ')[0]} removed`);
+  showToast(` ${deletingName.split(' ')[0]} removed`);
   closeModal('deleteModal');
   renderList();
 };
 
 // ── ADD MEMBER ────────────────────────────────────
 window.openAddModal = function() {
-  document.getElementById('addName').value  = '';
+  document.getElementById('addName').value = '';
   document.getElementById('addPhone').value = '';
   document.getElementById('addErr').style.display = 'none';
   document.getElementById('addModal').classList.add('open');
@@ -552,33 +552,33 @@ window.openAddModal = function() {
 };
 
 window.doAddMember = async function() {
-  const name  = document.getElementById('addName').value.trim().toUpperCase();
-  const rawP  = document.getElementById('addPhone').value.trim();
+  const name = document.getElementById('addName').value.trim().toUpperCase();
+  const rawP = document.getElementById('addPhone').value.trim();
   const phone = rawP.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
   const errEl = document.getElementById('addErr');
   errEl.style.display = 'none';
 
-  if (!name)                  { errEl.textContent='⚠️ Enter a name';           errEl.style.display='block'; return; }
-  if (!phone||phone.length<9) { errEl.textContent='⚠️ Enter a valid phone';    errEl.style.display='block'; return; }
-  if (MEMBERS.find(m=>m.phone===phone)) { errEl.textContent='⚠️ Phone already exists'; errEl.style.display='block'; return; }
+  if (!name) { errEl.textContent='Enter a name'; errEl.style.display='block'; return; }
+  if (!phone||phone.length<9) { errEl.textContent='Enter a valid phone'; errEl.style.display='block'; return; }
+  if (MEMBERS.find(m=>m.phone===phone)) { errEl.textContent='Phone already exists'; errEl.style.display='block'; return; }
 
   MEMBERS.push({ name, phone });
   await saveMembers();
 
   const defaultPin = phone.replace(/\D/g,'').slice(-4);
   try {
-    const ref  = doc(db,'tracker','memberPins');
+    const ref = doc(db,'tracker','memberPins');
     const snap = await getDoc(ref);
     const pins = snap.exists() ? (snap.data()||{}) : {};
     if (!pins[phone]) {
-      pins[phone]          = defaultPin;
+      pins[phone] = defaultPin;
       pins['_meta_'+phone] = { name, adminSet: true };
       await setDoc(ref, pins);
     }
   } catch(e) { /* best-effort */ }
 
   closeModal('addModal');
-  showToast(`✓ ${name.split(' ')[0]} added — PIN: ${defaultPin}`);
+  showToast(` ${name.split(' ')[0]} added — PIN: ${defaultPin}`);
   renderList();
 };
 
@@ -587,11 +587,11 @@ const THEME_KEY = 'bonge-theme';
 window.toggleTheme = function() {
   const isLight = document.body.classList.toggle('light');
   localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
-  document.getElementById('themeToggle').textContent = isLight ? '🌞' : '🌙';
+  document.getElementById('themeToggle').textContent = isLight ? '' : '';
 };
 if (localStorage.getItem(THEME_KEY) === 'light') {
   document.body.classList.add('light');
-  document.getElementById('themeToggle').textContent = '🌞';
+  document.getElementById('themeToggle').textContent = '';
 }
 </script>
 <script>

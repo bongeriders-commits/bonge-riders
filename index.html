@@ -28,43 +28,43 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0E1013;
-  --bg2:      #171A20;
-  --card:     #1B1E25;
-  --card2:    #242832;
-  --border:   #333844;
-  --text:     #F3F4F6;
-  --muted:    #9CA3AF;
-  --dim:      #6B7280;
-  --amber:    #E02020;
-  --amber2:   #FF4747;
+  --bg: #0E1013;
+  --bg2: #171A20;
+  --card: #1B1E25;
+  --card2: #242832;
+  --border: #333844;
+  --text: #F3F4F6;
+  --muted: #9CA3AF;
+  --dim: #6B7280;
+  --amber: #E02020;
+  --amber2: #FF4747;
   --amber-bg: rgba(224,32,32,0.18);
-  --green:    #34D399;
-  --green2:   #10B981;
+  --green: #34D399;
+  --green2: #10B981;
   --green-bg: rgba(16,185,129,0.16);
-  --red:      #E02020;
-  --radius:   10px;
+  --red: #E02020;
+  --radius: 10px;
   --radius-lg:14px;
 }
 
 /* Light mode */
 body.light {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #CC1818;
-  --radius:   10px;
+  --red: #CC1818;
+  --radius: 10px;
   --radius-lg:14px;
 }
 
@@ -224,11 +224,11 @@ img {
 .poster-btn-support:active { background: #A01212; }
 
 @keyframes splashDrop {
-  0%   { transform: translateY(-40px) scale(.85); opacity: 0; }
+  0% { transform: translateY(-40px) scale(.85); opacity: 0; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 @keyframes splashFadeUp {
-  0%   { transform: translateY(16px); opacity: 0; }
+  0% { transform: translateY(16px); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
 }
 
@@ -300,7 +300,7 @@ img {
   position: relative; overflow: hidden;
 }
 .arc-svg { flex-shrink: 0; }
-.arc-bg  { stroke: var(--border); }
+.arc-bg { stroke: var(--border); }
 .arc-fill { stroke: var(--amber2); stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
 .arc-label {
   font-family: 'Space Grotesk', sans-serif;
@@ -348,10 +348,10 @@ img {
 
 /* ── ADMIN DROPDOWN MENU ── */
 .adm-menu-wrap { position: relative; }
-.adm-menu-btn  { gap: 6px; }
-.adm-caret     { font-size: 10px; display: inline-block; transition: transform .2s; }
+.adm-menu-btn { gap: 6px; }
+.adm-caret { font-size: 10px; display: inline-block; transition: transform .2s; }
 .adm-caret.open { transform: rotate(180deg); }
-.adm-dropdown  {
+.adm-dropdown {
   display: none;
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 999;
   background: var(--bg2); border: 1px solid var(--border);
@@ -583,7 +583,7 @@ img {
 }
 @keyframes calSlideUp {
   from { transform: translateY(120%); }
-  to   { transform: translateY(0); }
+  to { transform: translateY(0); }
 }
 .cal-popup-handle {
   width: 40px; height: 4px;
@@ -866,19 +866,19 @@ img {
 .faq-a b { color: var(--amber2); font-weight: 600; }
 
 /* Edit notice btn removed - now in admin menu */
-body.viewer .admin-only  { display: none !important; }
-body.viewer #memberList  { display: none !important; }
+body.viewer .admin-only { display: none !important; }
+body.viewer #memberList { display: none !important; }
 body.viewer .search-wrap { display: none !important; }
 body.viewer .filter-tabs { display: none !important; }
-body.viewer .fab-wrap    { display: none !important; }
+body.viewer .fab-wrap { display: none !important; }
 body.viewer .admin-toolbar { display: none !important; }
-body.viewer .viewer-board  { display: block; }
+body.viewer .viewer-board { display: block; }
 body.viewer .income-section { display: none !important; }
-body.viewer .stats-row   { display: none !important; }
-body.viewer .cal-bar     { display: none !important; }
+body.viewer .stats-row { display: none !important; }
+body.viewer .cal-bar { display: none !important; }
 /* Public-only elements: visible only in viewer mode (not admin) */
 body:not(.viewer) .public-only { display: none !important; }
-body.memberview .public-only  { display: none !important; }
+body.memberview .public-only { display: none !important; }
 
 /* ── PUBLIC BOTTOM NAV: account (left) · + (middle) · home (right) ── */
 :root { --pub-nav-h: 82px; --pub-copyright-h: 14px; }
@@ -917,9 +917,9 @@ body.memberview .vb-signin-only { display: none !important; }
    prompt; visitors who unlocked with the PIN see the dashboard.
    Both states are mutually exclusive and neither ever shows names
    or phone numbers — that markup is not present in this section. */
-.vb-signin   { display: block; position: relative; }
+.vb-signin { display: block; position: relative; }
 .vb-unlocked { display: none; }
-body.memberview .vb-signin   { display: none; }
+body.memberview .vb-signin { display: none; }
 body.memberview .vb-unlocked { display: block; }
 
 /* ── SEARCH ── */
@@ -1123,11 +1123,11 @@ body.memberview .vb-unlocked { display: block; }
   transition: all .15s;
   display: flex; align-items: center; justify-content: center;
 }
-.wa-btn  { background: rgba(37,211,102,.15); color: #25D366; width: 28px; height: 24px; padding: 0; }
+.wa-btn { background: rgba(37,211,102,.15); color: #25D366; width: 28px; height: 24px; padding: 0; }
 .wa-btn:active { transform: scale(.9); }
 .wa-btn svg { width: 15px; height: 15px; display: block; }
 .edit-btn { background: var(--card2); color: var(--muted); border: 1px solid var(--border); font-size: 10px; letter-spacing: .3px; padding: 4px 9px; }
-.del-btn  { background: rgba(192,57,43,.12); color: var(--red); border: 1px solid rgba(192,57,43,.2); font-size: 10px; letter-spacing: .3px; padding: 4px 9px; }
+.del-btn { background: rgba(192,57,43,.12); color: var(--red); border: 1px solid rgba(192,57,43,.2); font-size: 10px; letter-spacing: .3px; padding: 4px 9px; }
 .lock-tag { font-size: 8px; vertical-align: middle; margin-left: 2px; opacity: .7; }
 .member-status { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .status-badge {
@@ -1139,7 +1139,7 @@ body.memberview .vb-unlocked { display: block; }
 }
 .member-card.paid .status-badge { background: rgba(78,153,100,.2); color: var(--green2); border-color: rgba(78,153,100,.3); }
 .member-card.locked { cursor: default; }
-.member-card.locked .status-badge::after { content: ' 🔒'; }
+.member-card.locked .status-badge::after { content: ' '; }
 .member-total { font-size: 11px; color: var(--dim); font-weight: 500; }
 .member-card.paid .member-total { color: var(--green2); font-weight: 600; }
 
@@ -1293,16 +1293,16 @@ body.viewer .toast {
   cursor: pointer; transition: all .15s;
 }
 .mbtn.primary { background: var(--amber); color: #fff; }
-.mbtn.danger  { background: var(--red); color: #fff; }
-.mbtn.cancel  { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
-.mbtn:active  { transform: scale(.97); }
+.mbtn.danger { background: var(--red); color: #fff; }
+.mbtn.cancel { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+.mbtn:active { transform: scale(.97); }
 .confirm-body { font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
 
 /* Members panel */
 .panel-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; max-height: 50vh; overflow-y: auto; }
 .panel-item { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--border); }
 .panel-item-info { flex: 1; min-width: 0; }
-.panel-item-name  { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.panel-item-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel-item-phone { font-size: 12px; color: var(--muted); }
 .panel-item-num { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 20px; }
 .panel-search, .add-form input {
@@ -1407,18 +1407,18 @@ body.viewer .toast {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 8px;
 }
-.welfare-app-card.pending  { border-left: 3px solid var(--amber2); }
+.welfare-app-card.pending { border-left: 3px solid var(--amber2); }
 .welfare-app-card.approved { border-left: 3px solid var(--green2); }
 .welfare-app-card.declined { border-left: 3px solid #EF4444; }
 .welfare-app-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
 .welfare-app-member { font-size: 13px; font-weight: 700; color: var(--text); }
-.welfare-app-phone  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.welfare-app-phone { font-size: 11px; color: var(--muted); margin-top: 1px; }
 .welfare-app-reason { font-size: 12px; color: var(--text); margin: 4px 0; font-weight: 600; }
-.welfare-app-desc   { font-size: 11px; color: var(--muted); margin-bottom: 4px; line-height: 1.4; }
+.welfare-app-desc { font-size: 11px; color: var(--muted); margin-bottom: 4px; line-height: 1.4; }
 .welfare-app-amount { font-size: 12px; font-weight: 700; color: var(--green2); }
-.welfare-app-date   { font-size: 10px; color: var(--dim); margin-top: 4px; }
+.welfare-app-date { font-size: 10px; color: var(--dim); margin-top: 4px; }
 .welfare-status-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
-.welfare-status-badge.pending  { background: var(--amber-bg); color: var(--amber2); }
+.welfare-status-badge.pending { background: var(--amber-bg); color: var(--amber2); }
 .welfare-status-badge.approved { background: var(--green-bg); color: var(--green2); }
 .welfare-status-badge.declined { background: rgba(220,38,38,.1); color: #EF4444; }
 .welfare-action-btns { display: flex; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
@@ -1474,7 +1474,7 @@ body.viewer .toast {
 
 <!-- Kelvin's Bike Fund poster — shown once per session, right after the splash finishes -->
 <div id="posterOverlay" class="poster-overlay" style="display:none;">
-  <button id="posterCloseBtn" class="poster-close" aria-label="Close">✕</button>
+  <button id="posterCloseBtn" class="poster-close" aria-label="Close"></button>
   <img src="kelvin-poster.jpg" alt="Kelvin Maore needs your help — Bike Fund" class="poster-img">
   <div class="poster-actions">
     <div class="poster-actions-row">
@@ -1543,10 +1543,10 @@ body.viewer .toast {
         <span id="lastSynced" class="last-synced" style="display:none"></span>
       </div>
       <button class="icon-btn" onclick="location.href='notifications.html'" id="notifBell" title="Notifications" style="position:relative;">
-        🔔
+        
         <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--amber2);color:#fff;font-size:9px;font-weight:800;line-height:1;border-radius:999px;min-width:15px;height:15px;padding:0 3px;display:flex;align-items:center;justify-content:center;border:2px solid var(--card);"></span>
       </button>
-      <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
+      <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme"></button>
     </div>
   </div>
 
@@ -1595,31 +1595,31 @@ body.viewer .toast {
   <div class="admin-toolbar admin-only" style="justify-content:flex-end;">
     <div class="adm-menu-wrap" id="admMenuWrap">
       <button class="tbtn amber adm-menu-btn" onclick="toggleAdmMenu(event)">
-        ☰ Menu <span class="adm-caret" id="admCaret">▾</span>
+         Menu <span class="adm-caret" id="admCaret">▾</span>
       </button>
       <div class="adm-dropdown" id="admDropdown">
-        <button class="adm-item" id="membersBtn" onclick="openMembersPanel();closeAdmMenu()">👥 MEMBERS</button>
-        <button class="adm-item" id="membersListBtn" onclick="window.open('members-list.html','_blank');closeAdmMenu()">📋 MEMBERS LIST</button>
+        <button class="adm-item" id="membersBtn" onclick="openMembersPanel();closeAdmMenu()">MEMBERS</button>
+        <button class="adm-item" id="membersListBtn" onclick="window.open('members-list.html','_blank');closeAdmMenu()">MEMBERS LIST</button>
         <div class="adm-divider"></div>
         <div class="adm-group-label">Reports</div>
-        <button class="adm-item" id="dailyPdfBtn" onclick="exportPDF();closeAdmMenu()">📄 DAILY REPORT PDF</button>
-        <button class="adm-item" id="sundayPdfBtn" onclick="exportSundayPDF();closeAdmMenu()">🌅 SUNDAY REPORT PDF</button>
-        <button class="adm-item" id="monthlyReportBtn" onclick="openReportModal();closeAdmMenu()">📊 MONTHLY REPORT</button>
+        <button class="adm-item" id="dailyPdfBtn" onclick="exportPDF();closeAdmMenu()">DAILY REPORT PDF</button>
+        <button class="adm-item" id="sundayPdfBtn" onclick="exportSundayPDF();closeAdmMenu()">SUNDAY REPORT PDF</button>
+        <button class="adm-item" id="monthlyReportBtn" onclick="openReportModal();closeAdmMenu()">MONTHLY REPORT</button>
         <div class="adm-divider"></div>
-        <button class="adm-item" id="spendingBtn" onclick="window.location.href='spending.html';closeAdmMenu()">💸 SPENDING</button>
-        <button class="adm-item" id="welfareBtn" onclick="openWelfareAdminPanel();closeAdmMenu()">🏥 WELFARE APPLICATIONS</button>
-        <button class="adm-item" id="payConfirmBtn" onclick="openPayConfirmPanel();closeAdmMenu()">📨 PAYMENT CONFIRMATIONS <span class="welfare-badge-count" id="payConfirmMenuBadge" style="display:none;margin-left:4px;"></span></button>
-        <button class="adm-item" id="waBlastBtn" onclick="openWABlast();closeAdmMenu()">📲 WA BLAST</button>
+        <button class="adm-item" id="spendingBtn" onclick="window.location.href='spending.html';closeAdmMenu()">SPENDING</button>
+        <button class="adm-item" id="welfareBtn" onclick="openWelfareAdminPanel();closeAdmMenu()">WELFARE APPLICATIONS</button>
+        <button class="adm-item" id="payConfirmBtn" onclick="openPayConfirmPanel();closeAdmMenu()">PAYMENT CONFIRMATIONS <span class="welfare-badge-count" id="payConfirmMenuBadge" style="display:none;margin-left:4px;"></span></button>
+        <button class="adm-item" id="waBlastBtn" onclick="openWABlast();closeAdmMenu()">WA BLAST</button>
         <div class="adm-divider"></div>
         <div class="adm-group-label">Settings</div>
-        <button class="adm-item" id="manageAdminsBtn" onclick="openManageAdmins();closeAdmMenu()">🛡️ MANAGE ADMINS</button>
-        <button class="adm-item" id="saccoSettingsBtn" onclick="openSaccoSettings();closeAdmMenu()">⚙️ ID CARD SETTINGS</button>
-        <button class="adm-item" id="activityLogBtn" onclick="openActivityLog();closeAdmMenu()">🗒️ ACTIVITY LOG</button>
-        <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">🌐 PUBLIC VIEW EDITOR</button>
-        <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">💳 PAYMENT</button>
-        <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">👑 CHAIRPERSON VIEW</button>
+        <button class="adm-item" id="manageAdminsBtn" onclick="openManageAdmins();closeAdmMenu()">MANAGE ADMINS</button>
+        <button class="adm-item" id="saccoSettingsBtn" onclick="openSaccoSettings();closeAdmMenu()">ID CARD SETTINGS</button>
+        <button class="adm-item" id="activityLogBtn" onclick="openActivityLog();closeAdmMenu()">ACTIVITY LOG</button>
+        <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">PUBLIC VIEW EDITOR</button>
+        <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">PAYMENT</button>
+        <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">CHAIRPERSON VIEW</button>
         <div class="adm-divider"></div>
-        <button class="adm-item adm-item-danger" onclick="logoutAdmin();closeAdmMenu()">🔓 LOGOUT</button>
+        <button class="adm-item adm-item-danger" onclick="logoutAdmin();closeAdmMenu()">LOGOUT</button>
       </div>
     </div>
   </div>
@@ -1632,11 +1632,11 @@ body.viewer .toast {
 <!-- ── CALENDAR BAR ── -->
 <div class="cal-bar" id="calBar">
   <button class="cal-btn" id="calPickerBtn" onclick="openCalPopup()">
-    <span class="cal-btn-icon">📅</span>
+    <span class="cal-btn-icon"></span>
     <span id="calBtnLabel">Today</span>
     <span class="cal-btn-caret">▾</span>
   </button>
-  <button class="cal-today-pill" id="calTodayBtn" onclick="jumpToToday()" style="display:none;">↩ Today</button>
+  <button class="cal-today-pill" id="calTodayBtn" onclick="jumpToToday()" style="display:none;">Today</button>
 </div>
 
 <!-- ── CALENDAR POPUP OVERLAY ── -->
@@ -1644,8 +1644,8 @@ body.viewer .toast {
   <div class="cal-popup" id="calPopup">
     <div class="cal-popup-handle"></div>
     <div class="cal-popup-head">
-      <div class="cal-popup-title">📅 Pick a Date</div>
-      <button class="cal-popup-close" onclick="closeCalPopup()">✕</button>
+      <div class="cal-popup-title">Pick a Date</div>
+      <button class="cal-popup-close" onclick="closeCalPopup()"></button>
     </div>
     <!-- Year selector row -->
     <div class="cal-year-row" id="calYearRow"></div>
@@ -1683,7 +1683,7 @@ body.viewer .toast {
 
     <!-- ── PUBLIC HAMBURGER MENU ── -->
     <div class="pub-menu-wrap" id="pubMenuWrap">
-      <button class="pub-menu-btn" onclick="togglePubMenu(event)" aria-label="Menu">☰</button>
+      <button class="pub-menu-btn" onclick="togglePubMenu(event)" aria-label="Menu"></button>
       <div class="pub-menu-dropdown" id="pubMenuDropdown">
         <button class="pub-menu-item" onclick="closePubMenu()">ABOUT US</button>
         <button class="pub-menu-item" onclick="closePubMenu()">CONTACT</button>
@@ -1710,11 +1710,11 @@ body.viewer .toast {
       </div>
     </div>
 
-    <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">🔒 SIGN IN REQUIRED</div>
+    <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">SIGN IN REQUIRED</div>
     <p style="color:var(--muted);font-size:13px;text-align:center;margin:6px 0 20px;line-height:1.6;">
       This tracker contains private member information.<br>Members can view the totals dashboard with the group PIN.
     </p>
-    <button class="admin-login-btn" onclick="openMemberLogin()">🔢 Enter Dashboard PIN</button>
+    <button class="admin-login-btn" onclick="openMemberLogin()">Enter Dashboard PIN</button>
 
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
@@ -1810,7 +1810,7 @@ body.viewer .toast {
 
       <!-- Total Members -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">👥</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;line-height:1;color:var(--text);" id="vbPaid">0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Members</div>
         <div style="margin-top:10px;">
@@ -1822,7 +1822,7 @@ body.viewer .toast {
 
       <!-- Total Contributions -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">👛</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbKshAll">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Contributions</div>
         <div style="margin-top:10px;">
@@ -1834,7 +1834,7 @@ body.viewer .toast {
 
       <!-- Total Spending -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">📈</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text);" id="vbTotalSpent">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Total Spending</div>
         <div style="margin-top:10px;">
@@ -1846,7 +1846,7 @@ body.viewer .toast {
 
       <!-- Available Balance -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">🪙</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;"></div>
         <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;line-height:1;" id="vbRunningBal">KSh 0</div>
         <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px;">Available Balance</div>
         <div style="margin-top:10px;display:flex;align-items:center;gap:5px;">
@@ -1861,7 +1861,7 @@ body.viewer .toast {
     <span id="vbBalIncome" style="display:none">KSh 0</span>
     <span id="vbBalSpent" style="display:none">KSh 0</span>
 
-    <!-- 🧰 Our Services -->
+    <!-- Our Services -->
     <div style="margin-top:4px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:var(--text);">Our Services</div>
@@ -1870,80 +1870,80 @@ body.viewer .toast {
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('transport')">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🏍️</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;"></div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Rides</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('stage')">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🚦</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;"></div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Stage</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('savings')">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">💵</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;"></div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Savings</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('welfare')">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">🤲</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;"></div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Welfare</div>
         </button>
 
         <button class="service-btn" style="background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;" onclick="openServiceModal('vetting')">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;">📋</div>
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(204,24,24,0.10);display:flex;align-items:center;justify-content:center;font-size:24px;"></div>
           <div style="font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3;">Vetting</div>
         </button>
 
       </div>
     </div>
 
-    <!-- 🏆 Leaderboard ticker -->
+    <!-- Leaderboard ticker -->
     <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-top:12px;position:relative;">
       <div style="overflow:hidden;">
         <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
-          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
+          <span style="font-size:11px;font-weight:700;color:var(--amber2);">Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
         </div>
       </div>
     </div>
 
-    <!-- 🏆 Podium -->
+    <!-- Podium -->
     <div id="podiumCard">
-      <div class="podium-title">🏆 Most Consistent Members</div>
+      <div class="podium-title">Most Consistent Members</div>
       <div id="podiumRows"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
     </div>
 
-    <!-- 📊 7-day sparkline -->
+    <!-- 7-day sparkline -->
     <div id="sparklineWrap">
-      <div class="sparkline-title">📊 Payments — Last 7 Days</div>
+      <div class="sparkline-title">Payments — Last 7 Days</div>
       <canvas id="sparklineCanvas"></canvas>
       <div id="sparklineLabels"></div>
     </div>
 
-    <button class="admin-login-btn" style="background:var(--muted);margin-top:8px;width:100%;" onclick="logoutMember()">🔒 Lock Dashboard</button>
+    <button class="admin-login-btn" style="background:var(--muted);margin-top:8px;width:100%;" onclick="logoutMember()">Lock Dashboard</button>
   </div>
 </div>
   <!-- ── PUB INFO EDITOR MODAL (super admin only) ── -->
   <div class="modal-backdrop admin-only" id="pubInfoModal">
     <div class="modal-box" style="max-width:420px;">
       <div class="modal-header">
-        <span class="modal-title">✏️ Edit Public Info</span>
-        <button class="modal-close" onclick="closePubInfoEditor()">✕</button>
+        <span class="modal-title">Edit Public Info</span>
+        <button class="modal-close" onclick="closePubInfoEditor()"></button>
       </div>
       <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
         <div class="modal-field">
-          <label>🏍️ About Group (shown on slide 1)</label>
+          <label>About Group (shown on slide 1)</label>
           <textarea id="piAbout" rows="3" class="modal-input" style="resize:vertical;"></textarea>
         </div>
         <div class="modal-field">
-          <label>🆘 Welfare Benefit Description</label>
+          <label>Welfare Benefit Description</label>
           <textarea id="piWelfare" rows="3" class="modal-input" style="resize:vertical;"></textarea>
         </div>
         <div class="modal-field">
-          <label>📣 Public Notice (leave blank to hide)</label>
+          <label>Public Notice (leave blank to hide)</label>
           <textarea id="piNotice" rows="3" class="modal-input" style="resize:vertical;"></textarea>
         </div>
         <div id="piError" class="pw-error"></div>
-        <button class="modal-btn" onclick="savePubInfo()">💾 Save Changes</button>
+        <button class="modal-btn" onclick="savePubInfo()">Save Changes</button>
       </div>
     </div>
   </div>
@@ -1958,7 +1958,7 @@ body.viewer .toast {
 <!-- Search -->
 <div class="search-wrap admin-only">
   <div class="search-box">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"></span>
     <input class="search-input" id="searchInput" type="text" placeholder="Search member name…" autocomplete="off" autocorrect="off" spellcheck="false">
   </div>
 </div>
@@ -1974,7 +1974,7 @@ body.viewer .toast {
 <div class="income-section admin-only" id="incomeSection">
   <div class="income-header">
     <button class="section-toggle-btn" onclick="toggleSection('income')" aria-expanded="false" aria-controls="incomeBody">
-      <div class="income-title">💰 Other Income</div>
+      <div class="income-title">Other Income</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <div class="income-total-pill" id="incomeTotalPill">KSh 0</div>
         <span class="section-caret" id="incomeCaretIcon">▾</span>
@@ -1992,7 +1992,7 @@ body.viewer .toast {
 <div class="spending-section admin-only" style="padding:10px 14px 0;">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
     <div>
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px;">💰 Running Balance</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px;">Running Balance</div>
       <div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;line-height:1;" id="adminRunningBal">KSh 0</div>
     </div>
     <div style="text-align:right;">
@@ -2010,10 +2010,10 @@ body.viewer .toast {
   <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
     <!-- Header row -->
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
-      <div style="font-size:13px;font-weight:700;color:var(--text);">💸 Spending Catalog</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);">Spending Catalog</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <div class="spending-total-pill" id="spendingTotalPill">KSh 0</div>
-        <button onclick="exportSpendingPDF()" style="background:none;border:1px solid rgba(192,57,43,0.3);color:#E05540;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">🖨️ PDF</button>
+        <button onclick="exportSpendingPDF()" style="background:none;border:1px solid rgba(192,57,43,0.3);color:#E05540;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">PDF</button>
       </div>
     </div>
     <!-- Amount Spent row -->
@@ -2041,7 +2041,7 @@ body.viewer .toast {
 <div class="welfare-admin-section admin-only" id="welfareAdminSection">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
-      <div class="welfare-admin-title">🏥 Welfare Applications</div>
+      <div class="welfare-admin-title">Welfare Applications</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="welfare-badge-count none" id="welfarePendingBadge">0 pending</span>
         <button onclick="openWelfareAdminPanel()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">View All</button>
@@ -2057,7 +2057,7 @@ body.viewer .toast {
 <div class="welfare-admin-section admin-only" id="payConfirmSection">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
-      <div class="welfare-admin-title">📨 Payment Confirmation Requests</div>
+      <div class="welfare-admin-title">Payment Confirmation Requests</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="welfare-badge-count none" id="payConfirmPendingBadge">0 pending</span>
         <button onclick="openPayConfirmPanel()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;">View All</button>
@@ -2072,7 +2072,7 @@ body.viewer .toast {
 <!-- Payment button -->
 <div class="admin-only" style="padding:10px 14px 4px;">
   <button onclick="window.open('payment.html','_blank')" style="width:100%;background:var(--green2);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;letter-spacing:.4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-    💳 PAYMENT
+     PAYMENT
   </button>
 </div>
 
@@ -2081,13 +2081,13 @@ body.viewer .toast {
 
 <!-- FABs -->
 <div class="fab-wrap">
-  <button class="fab green-fab admin-only" id="markAllBtn" onclick="markAllToday()">✓ Mark All Paid</button>
+  <button class="fab green-fab admin-only" id="markAllBtn" onclick="markAllToday()">Mark All Paid</button>
 </div>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 <div id="updateBanner">
-  <span>🔄 New update available!</span>
+  <span>New update available!</span>
   <button id="updateBannerBtn" onclick="applyUpdate()">Refresh now</button>
 </div>
 
@@ -2095,9 +2095,9 @@ body.viewer .toast {
 <div class="modal-backdrop" id="membersModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">👥 Manage Members</div>
+    <div class="modal-title">Manage Members</div>
     <div class="add-form" style="margin-bottom:14px">
-      <div class="add-form-title">🔢 Member Dashboard PIN</div>
+      <div class="add-form-title">Member Dashboard PIN</div>
       <input type="tel" inputmode="numeric" id="dashboardPinInput" placeholder="Set a PIN (e.g. 1234)" autocomplete="off">
       <div class="modal-btns" style="margin-top:8px">
         <button class="mbtn primary" onclick="saveDashboardPin()">Save PIN</button>
@@ -2107,9 +2107,9 @@ body.viewer .toast {
     <input class="panel-search" id="panelSearch" type="text" placeholder="Search members…" oninput="renderPanelList()">
     <div class="panel-list" id="panelList"></div>
     <div class="add-form">
-      <div class="add-form-title">➕ Add New Member</div>
+      <div class="add-form-title">Add New Member</div>
       <input type="text" id="addName" placeholder="Full Name (e.g. JOHN MWANGI)" autocomplete="off" autocapitalize="characters">
-      <input type="tel"  id="addPhone" placeholder="Phone (e.g. 0712345678)" autocomplete="off">
+      <input type="tel" id="addPhone" placeholder="Phone (e.g. 0712345678)" autocomplete="off">
       <div class="modal-btns" style="margin-top:8px">
         <button class="mbtn primary" onclick="addMember()">Add Member</button>
       </div>
@@ -2124,21 +2124,21 @@ body.viewer .toast {
 <div class="modal-backdrop" id="editModal">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <div class="modal-title">✏️ Edit Member</div>
+    <div class="modal-title">Edit Member</div>
     <div class="modal-field"><label>Full Name</label><input type="text" id="editName" autocapitalize="characters"></div>
     <div class="modal-field"><label>Phone Number</label><input type="tel" id="editPhone"></div>
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">🪪 ID Card Details</div>
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">ID Card Details</div>
     <div class="modal-field">
       <label>Membership Number <span style="color:var(--amber2);font-size:10px;">(unique)</span></label>
       <input type="text" id="editMemberNo" placeholder="e.g. BNG-001" autocapitalize="characters">
-      <div id="memberNoErr" style="font-size:11px;color:#E05540;font-weight:600;margin-top:3px;display:none;">⚠️ This membership number is already assigned to another member.</div>
+      <div id="memberNoErr" style="font-size:11px;color:#E05540;font-weight:600;margin-top:3px;display:none;">This membership number is already assigned to another member.</div>
     </div>
     <div class="modal-field"><label>National ID Number</label><input type="tel" inputmode="numeric" id="editNatId" placeholder="e.g. 12345678"></div>
     <div class="modal-field"><label>County of Operation</label><input type="text" id="editCounty" placeholder="e.g. Nairobi" autocapitalize="words"></div>
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">🧑‍🤝‍🧑 Next of Kin</div>
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">Next of Kin</div>
     <div class="modal-field"><label>Next of Kin Name</label><input type="text" id="editNokName" placeholder="Full name of next of kin" autocapitalize="words"></div>
     <div class="modal-field"><label>Next of Kin Phone</label><input type="tel" id="editNokPhone" placeholder="e.g. 0712345678"></div>
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">🏍️ Motorcycle Details</div>
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border);">Motorcycle Details</div>
     <div class="modal-field"><label>Registration No.</label><input type="text" id="editMotoReg" placeholder="e.g. KDZ 123A" autocapitalize="characters"></div>
     <div class="modal-field"><label>Year of Manufacture</label><input type="tel" inputmode="numeric" id="editMotoYear" placeholder="e.g. 2022" maxlength="4"></div>
     <div class="modal-field"><label>Model</label><input type="text" id="editMotoModel" placeholder="e.g. Honda CB150" autocapitalize="words"></div>
@@ -2153,7 +2153,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="detailsModal">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <div class="modal-title">📋 Member Details</div>
+    <div class="modal-title">Member Details</div>
     <div id="detailsContent" style="font-size:14px;color:var(--text);">
       <div style="text-align:center;padding:24px;color:var(--muted);">Loading…</div>
     </div>
@@ -2167,7 +2167,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="saccoSettingsModal">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <div class="modal-title">⚙️ Sacco / ID Card Settings</div>
+    <div class="modal-title">Sacco / ID Card Settings</div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">These details appear on every member's virtual ID card.</p>
     <div class="modal-field"><label>Sacco / Stage Name</label><input type="text" id="saccoName" placeholder="e.g. BOGONKO-NGELANI STAGE" autocapitalize="characters"></div>
     <div class="modal-field"><label>County of Operation (default)</label><input type="text" id="saccoCounty" placeholder="e.g. Nairobi" autocapitalize="words"></div>
@@ -2185,14 +2185,14 @@ body.viewer .toast {
 <div class="modal-backdrop" id="activityLogModal">
   <div class="modal" style="max-height:90vh;overflow-y:auto;max-width:520px;">
     <div class="modal-handle"></div>
-    <div class="modal-title">🗒️ Admin Activity Log</div>
+    <div class="modal-title">Admin Activity Log</div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Every administrator action is recorded here permanently. Entries cannot be edited or deleted by anyone — including super admins.</p>
     <input class="panel-search" id="activityLogSearch" type="text" placeholder="Search by action, admin, or detail…" oninput="filterActivityLog()" style="margin-bottom:8px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <span id="activityLogCount" style="font-size:11px;color:var(--muted);"></span>
       <div style="display:flex;gap:6px;">
         <button onclick="renderActivityLog(true)" style="border:none;background:var(--card2);color:var(--muted);border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">↻ Refresh</button>
-        <button onclick="printActivityLog()" style="border:none;background:var(--amber);color:#141414;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">📄 Print / Save PDF</button>
+        <button onclick="printActivityLog()" style="border:none;background:var(--amber);color:#141414;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">Print / Save PDF</button>
       </div>
     </div>
     <div id="activityLogList" style="max-height:50vh;overflow-y:auto;border:1px solid var(--card2);border-radius:8px;"></div>
@@ -2206,7 +2206,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="deleteModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">🗑️ Remove Member</div>
+    <div class="modal-title">Remove Member</div>
     <p class="confirm-body" id="deleteBody">Are you sure you want to remove this member?</p>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeDeleteModal()">Cancel</button>
@@ -2219,7 +2219,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="waModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">📲 WhatsApp Reminder</div>
+    <div class="modal-title">WhatsApp Reminder</div>
     <div class="modal-field">
       <label>Message</label>
       <textarea id="waMessage"></textarea>
@@ -2227,7 +2227,7 @@ body.viewer .toast {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Unpaid members</div>
       <div style="display:flex;gap:6px;">
-        <button onclick="waSelectAll(true)"  style="border:none;background:var(--green-bg);color:var(--green2);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">All</button>
+        <button onclick="waSelectAll(true)" style="border:none;background:var(--green-bg);color:var(--green2);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">All</button>
         <button onclick="waSelectAll(false)" style="border:none;background:var(--card2);color:var(--muted);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">None</button>
       </div>
     </div>
@@ -2235,7 +2235,7 @@ body.viewer .toast {
     <div id="waUnpaidList" style="max-height:200px;overflow-y:auto;margin-bottom:12px;"></div>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeWAModal()">Cancel</button>
-      <button class="mbtn primary" style="background:#25D366;" onclick="sendWAReminders()">📲 Open WhatsApp</button>
+      <button class="mbtn primary" style="background:#25D366;" onclick="sendWAReminders()">Open WhatsApp</button>
     </div>
   </div>
 </div>
@@ -2244,7 +2244,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="incomeModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="modal-title">💰 Add Income Entry</div>
+    <div class="modal-title">Add Income Entry</div>
     <div class="modal-field">
       <label>Description</label>
       <input type="text" id="incomeDesc" placeholder="e.g. Fine from John, Donation">
@@ -2269,7 +2269,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="addSpendingModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="modal-title">💸 Add Spending Entry</div>
+    <div class="modal-title">Add Spending Entry</div>
     <div class="modal-field">
       <label>Description / Purpose</label>
       <input type="text" id="spendDesc" placeholder="e.g. Funeral transport, Medical support">
@@ -2309,7 +2309,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="spendingModal">
   <div class="modal" style="max-width:560px">
     <div class="modal-handle"></div>
-    <div class="modal-title">💸 Spending Catalog</div>
+    <div class="modal-title">Spending Catalog</div>
     <div style="display:flex;gap:10px;margin-bottom:14px;">
       <div style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;text-align:center;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#E05540;" id="smTotalSpent">KSh 0</div>
@@ -2323,7 +2323,7 @@ body.viewer .toast {
     <div style="max-height:340px;overflow-y:auto;" id="smList"></div>
     <div class="modal-btns" style="margin-top:12px;">
       <button class="mbtn cancel" onclick="closeSpendingModal()">Close</button>
-      <button class="mbtn primary" style="background:#C0392B;" onclick="exportSpendingPDF()">🖨️ Print PDF</button>
+      <button class="mbtn primary" style="background:#C0392B;" onclick="exportSpendingPDF()">Print PDF</button>
     </div>
   </div>
 </div>
@@ -2332,7 +2332,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="adminLoginModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="pw-icon-wrap">🔐</div>
+    <div class="pw-icon-wrap"></div>
     <div class="modal-title" style="text-align:center">Admin Login</div>
     <p class="confirm-body" style="text-align:center;margin-bottom:14px">Sign in to access admin controls.</p>
     <div class="modal-field">
@@ -2353,8 +2353,8 @@ body.viewer .toast {
 <div class="modal-backdrop" id="manageAdminsModal">
   <div class="modal-box" style="max-width:420px;max-height:90vh;overflow-y:auto;">
     <div class="modal-header">
-      <div class="modal-title">🛡️ Manage Admins</div>
-      <button class="modal-close" onclick="closeManageAdmins()">✕</button>
+      <div class="modal-title">Manage Admins</div>
+      <button class="modal-close" onclick="closeManageAdmins()"></button>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5;">
       Each admin signs in with their own email &amp; password on Firebase. Assign roles to control what each admin can do.
@@ -2363,7 +2363,7 @@ body.viewer .toast {
       <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Loading admins…</div>
     </div>
     <div class="adm-add-section">
-      <div class="adm-add-title">➕ Add New Admin</div>
+      <div class="adm-add-title">Add New Admin</div>
       <p class="adm-add-note">The person must first create a Firebase account with the email below, or you can create one in your <strong>Firebase Console → Authentication → Add user</strong>.</p>
       <input class="adm-input" id="newAdmEmail" type="email" placeholder="admin@example.com" autocomplete="off">
       <input class="adm-input" id="newAdmName" type="text" placeholder="Display name (optional)" autocomplete="off">
@@ -2379,7 +2379,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="memberLoginModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="pw-icon-wrap">🔢</div>
+    <div class="pw-icon-wrap"></div>
     <div class="modal-title" style="text-align:center">Dashboard PIN</div>
     <p class="confirm-body" style="text-align:center;margin-bottom:14px">Enter the group PIN to view today's totals.</p>
     <div class="modal-field">
@@ -2397,7 +2397,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="setMemberPinModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="pw-icon-wrap">📱</div>
+    <div class="pw-icon-wrap"></div>
     <div class="modal-title" style="text-align:center">Set Member PIN</div>
     <p class="confirm-body" style="text-align:center;margin-bottom:6px" id="setPinMemberName">—</p>
     <p class="confirm-body" style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:14px;">This PIN lets the member log in to their personal profile page.</p>
@@ -2408,7 +2408,7 @@ body.viewer .toast {
     <div style="display:flex;gap:8px;margin-top:4px;">
       <button class="mbtn cancel" style="flex:1" onclick="closeSetMemberPinModal()">Cancel</button>
       <button class="mbtn primary" style="flex:1" id="setPinSaveBtn" onclick="confirmSetMemberPin()">Save PIN</button>
-      <button class="mbtn" style="flex:1;background:var(--green2);color:#fff;" id="setPinWABtn" onclick="sendMemberPinWA()">📲 Send</button>
+      <button class="mbtn" style="flex:1;background:var(--green2);color:#fff;" id="setPinWABtn" onclick="sendMemberPinWA()">Send</button>
     </div>
   </div>
 </div>
@@ -2418,7 +2418,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="pwModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="pw-icon-wrap">🔒</div>
+    <div class="pw-icon-wrap"></div>
     <div class="modal-title" style="text-align:center">Admin Required</div>
     <p class="confirm-body" style="text-align:center;margin-bottom:14px" id="pwBody">Sign in as admin to continue.</p>
     <div class="modal-field">
@@ -2427,7 +2427,7 @@ body.viewer .toast {
     <div class="modal-field">
       <input type="password" id="pwInput" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmPassword()">
     </div>
-    <div class="pw-error" id="pwError">⚠️ Incorrect email or password.</div>
+    <div class="pw-error" id="pwError">Incorrect email or password.</div>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closePwModal()">Cancel</button>
       <button class="mbtn primary" id="pwConfirmBtn" onclick="confirmPassword()">Unlock</button>
@@ -2439,8 +2439,8 @@ body.viewer .toast {
 <div class="modal-backdrop" id="serviceDetailModal">
   <div class="modal-box" style="max-width:420px;max-height:85vh;overflow-y:auto;">
     <div class="modal-header">
-      <div class="modal-title"><span id="svcDetailIcon">🔧</span> <span id="svcDetailTitle">Service</span></div>
-      <button class="modal-close" onclick="closeServiceModal()">✕</button>
+      <div class="modal-title"><span id="svcDetailIcon"></span> <span id="svcDetailTitle">Service</span></div>
+      <button class="modal-close" onclick="closeServiceModal()"></button>
     </div>
     <p id="svcDetailBody" style="font-size:13px;color:var(--muted);line-height:1.6;"></p>
   </div>
@@ -2450,8 +2450,8 @@ body.viewer .toast {
 <div class="modal-backdrop" id="allServicesModal">
   <div class="modal-box" style="max-width:460px;max-height:85vh;overflow-y:auto;">
     <div class="modal-header">
-      <div class="modal-title">🧰 All Services</div>
-      <button class="modal-close" onclick="closeAllServicesModal()">✕</button>
+      <div class="modal-title">All Services</div>
+      <button class="modal-close" onclick="closeAllServicesModal()"></button>
     </div>
     <div id="allServicesGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px;"></div>
   </div>
@@ -2461,7 +2461,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="thanksModal">
   <div class="modal" style="max-width:400px">
     <div class="modal-handle"></div>
-    <div class="thanks-icon-wrap">🎉</div>
+    <div class="thanks-icon-wrap"></div>
     <div class="thanks-title" id="thanksTitle">Payment Recorded!</div>
     <div class="thanks-sub" id="thanksSub">Send a thank-you on WhatsApp?</div>
     <div class="modal-btns">
@@ -2478,7 +2478,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="reportModal">
   <div class="modal" style="max-width:560px">
     <div class="modal-handle"></div>
-    <div class="modal-title">📊 Monthly Report</div>
+    <div class="modal-title">Monthly Report</div>
     <div class="month-pick-row">
       <select id="reportMonth"></select>
       <select id="reportYear"></select>
@@ -2492,7 +2492,7 @@ body.viewer .toast {
     </div>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeReportModal()">Close</button>
-      <button class="mbtn primary" onclick="printReport()">🖨️ Print / PDF</button>
+      <button class="mbtn primary" onclick="printReport()">Print / PDF</button>
     </div>
   </div>
 </div>
@@ -2501,7 +2501,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="welfareAdminModal">
   <div class="modal" style="max-width:560px;">
     <div class="modal-handle"></div>
-    <div class="modal-title">🏥 Welfare Applications</div>
+    <div class="modal-title">Welfare Applications</div>
     <div class="welfare-filter-tabs">
       <div class="welfare-filter-tab active" data-wfilter="all" onclick="setWelfareFilter('all',this)">All</div>
       <div class="welfare-filter-tab" data-wfilter="pending" onclick="setWelfareFilter('pending',this)">Pending</div>
@@ -2519,7 +2519,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="payConfirmModal">
   <div class="modal" style="max-width:560px;">
     <div class="modal-handle"></div>
-    <div class="modal-title">📨 Payment Confirmation Requests</div>
+    <div class="modal-title">Payment Confirmation Requests</div>
     <div class="welfare-filter-tabs">
       <div class="welfare-filter-tab active" data-pfilter="pending" onclick="setPayConfirmFilter('pending',this)">Pending</div>
       <div class="welfare-filter-tab" data-pfilter="all" onclick="setPayConfirmFilter('all',this)">All</div>
@@ -2537,7 +2537,7 @@ body.viewer .toast {
 <div class="modal-backdrop" id="markAllModal">
   <div class="modal" style="max-width:380px">
     <div class="modal-handle"></div>
-    <div class="modal-title">✓ Confirm Bulk Action</div>
+    <div class="modal-title">Confirm Bulk Action</div>
     <p class="confirm-body" id="markAllBody">Mark all members as paid for this date?</p>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeMarkAllModal()">Cancel</button>
@@ -2561,23 +2561,23 @@ import { getMessaging, getToken, isSupported as messagingIsSupported }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
-  measurementId:     "G-VWL91EJW1H"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
 };
 
-const app  = initializeApp(firebaseConfig);
-const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
 
 // ════════════════════════════════════════════════
 // PUSH NOTIFICATIONS (Firebase Cloud Messaging)
 // ════════════════════════════════════════════════
-// ⚠️ SETUP REQUIRED: paste your Web Push "VAPID key" below.
+// SETUP REQUIRED: paste your Web Push "VAPID key" below.
 // Firebase Console → Project Settings → Cloud Messaging tab →
 // "Web Push certificates" → Generate key pair (it's a public key,
 // safe to ship in client code).
@@ -2642,10 +2642,10 @@ function setSyncStatus(ok, msg) {
 // inside the page source, which any visitor could read via "View
 // Source" or dev tools regardless of any on-screen lock icons.
 
-const RATE        = 50;
-const START_DATE  = new Date(2026, 5, 22);
-const TOTAL_DAYS  = 365 * 20;
-const THEME_KEY   = 'bogonko_theme_v1';
+const RATE = 50;
+const START_DATE = new Date(2026, 5, 22);
+const TOTAL_DAYS = 365 * 20;
+const THEME_KEY = 'bogonko_theme_v1';
 
 // ════════════════════════════════════════════════
 // ADMIN
@@ -2682,9 +2682,9 @@ let dashboardAgg = null;
 // so the gauge is live for any visitor — no auth required.
 function updateHeaderFromAggregate() {
   if (!dashboardAgg) return;
-  const paid  = dashboardAgg.paidToday  || 0;
+  const paid = dashboardAgg.paidToday || 0;
   const unpaid= dashboardAgg.unpaidToday|| 0;
-  const ksh   = dashboardAgg.kshToday   || 0;
+  const ksh = dashboardAgg.kshToday || 0;
   const total = dashboardAgg.memberCount || 65;
 
   const statKshEl = document.getElementById('statKsh');
@@ -2730,7 +2730,7 @@ onAuthStateChanged(auth, (user) => {
     document.body.classList.remove('memberview');
     _currentAdminEmail = user.email ? user.email.toLowerCase() : '';
     setAdminMode(true);
-    showToast('✓ Signed in as ' + user.email);
+    showToast('Signed in as ' + user.email);
     loadMembers();
     loadPayments();
     loadIncome();
@@ -2750,9 +2750,9 @@ onAuthStateChanged(auth, (user) => {
     // memory/DOM so a signed-out viewer (or the next person on a
     // shared device) cannot see member names, phone numbers, or
     // payment records.
-    if (_membersUnsub)  { _membersUnsub();  _membersUnsub  = null; }
+    if (_membersUnsub) { _membersUnsub(); _membersUnsub = null; }
     if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
-    if (_incomeUnsub)   { _incomeUnsub();   _incomeUnsub   = null; }
+    if (_incomeUnsub) { _incomeUnsub(); _incomeUnsub = null; }
     if (_spendingUnsub) { _spendingUnsub(); _spendingUnsub = null; }
     _welfareUnsubs.forEach(u => u()); _welfareUnsubs = []; _allWelfareApps = [];
     renderWelfareSummaryPreview();
@@ -2777,9 +2777,9 @@ function openAdminLogin() {
 function closeAdminLogin() { document.getElementById('adminLoginModal').classList.remove('open'); }
 async function confirmAdminLogin() {
   const email = document.getElementById('adminEmailInput').value.trim();
-  const pw    = document.getElementById('adminPwInput').value;
+  const pw = document.getElementById('adminPwInput').value;
   const errEl = document.getElementById('adminPwError');
-  const btn   = document.getElementById('adminLoginBtn');
+  const btn = document.getElementById('adminLoginBtn');
   if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
   btn.textContent = 'Signing in…'; btn.disabled = true;
   try {
@@ -2814,9 +2814,9 @@ function openMemberLogin() {
 }
 function closeMemberLogin() { document.getElementById('memberLoginModal').classList.remove('open'); }
 async function confirmMemberLogin() {
-  const pin   = document.getElementById('memberPinInput').value.trim();
+  const pin = document.getElementById('memberPinInput').value.trim();
   const errEl = document.getElementById('memberPinError');
-  const btn   = document.getElementById('memberLoginBtn');
+  const btn = document.getElementById('memberLoginBtn');
   if (!pin) { errEl.textContent = 'Enter the dashboard PIN.'; errEl.classList.add('show'); return; }
   btn.textContent = 'Checking…'; btn.disabled = true;
   try {
@@ -2832,7 +2832,7 @@ async function confirmMemberLogin() {
     }
     setMemberMode(true);
     closeMemberLogin();
-    showToast('✓ Dashboard unlocked');
+    showToast('Dashboard unlocked');
   } catch(e) {
     errEl.textContent = 'Could not verify PIN. Try again.';
     errEl.classList.add('show');
@@ -2847,19 +2847,19 @@ function logoutMember() {
 // ════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════
-let MEMBERS       = [];
-let payments      = {};
-let otherIncome   = [];
-let selectedDate  = todayKey();
-let filter        = 'all';
-let search        = '';
-let editingPhone  = null;
+let MEMBERS = [];
+let payments = {};
+let otherIncome = [];
+let selectedDate = todayKey();
+let filter = 'all';
+let search = '';
+let editingPhone = null;
 let deletingPhone = null;
-let deletingName  = null;
-let activeYear    = null;
+let deletingName = null;
+let activeYear = null;
 let pwPendingAction = null;
-let thanksPhone   = null;
-let thanksName    = null;
+let thanksPhone = null;
+let thanksName = null;
 let pendingMarkAllState = null;
 
 // ════════════════════════════════════════════════
@@ -2874,8 +2874,8 @@ function pad(n) { return String(n).padStart(2,'0'); }
 
 function allDatesForYear(year) {
   const arr = [];
-  const sd  = new Date(START_DATE);
-  const ye  = new Date(year, 11, 31);
+  const sd = new Date(START_DATE);
+  const ye = new Date(year, 11, 31);
   for(let i=0; i<TOTAL_DAYS; i++){
     const d = new Date(sd); d.setDate(sd.getDate()+i);
     if(d.getFullYear() === year) arr.push(d);
@@ -2895,14 +2895,14 @@ function availableYears() {
 async function saveMembers() {
   try {
     await setDoc(doc(db,"tracker","members"),{list:MEMBERS});
-    setSyncStatus(true,'☁️ Synced');
+    setSyncStatus(true,'Synced');
     syncMemberNamesToMemberPins();
   }
-  catch(e){ setSyncStatus(false,'⚠️ Offline'); }
+  catch(e){ setSyncStatus(false,'Offline'); }
 }
 async function savePayments() {
-  try { await setDoc(doc(db,"tracker","payments"),payments); setSyncStatus(true,'☁️ Synced'); }
-  catch(e){ setSyncStatus(false,'⚠️ Offline'); }
+  try { await setDoc(doc(db,"tracker","payments"),payments); setSyncStatus(true,'Synced'); }
+  catch(e){ setSyncStatus(false,'Offline'); }
 }
 
 // Fire-and-forget push notification whenever a payment is marked PAID.
@@ -2914,15 +2914,15 @@ function notifyPaymentMade(memberName, dateStr) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      title: '✅ Payment Received',
+      title: 'Payment Received',
       body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`,
       url: '/'
     })
   }).catch(() => {}); // best-effort; ignore failures
 }
 async function saveIncome() {
-  try { await setDoc(doc(db,"tracker","income"),{list:otherIncome}); setSyncStatus(true,'☁️ Synced'); }
-  catch(e){ setSyncStatus(false,'⚠️ Offline'); }
+  try { await setDoc(doc(db,"tracker","income"),{list:otherIncome}); setSyncStatus(true,'Synced'); }
+  catch(e){ setSyncStatus(false,'Offline'); }
 }
 function loadIncome() {
   if (_incomeUnsub) { _incomeUnsub(); _incomeUnsub = null; }
@@ -2931,16 +2931,16 @@ function loadIncome() {
     renderIncome(); renderStats();
   }, ()=>{});
 }
-let _membersUnsub  = null;
-let _paymentsUnsub  = null;
-let _incomeUnsub    = null;
+let _membersUnsub = null;
+let _paymentsUnsub = null;
+let _incomeUnsub = null;
 
 function loadMembers() {
   MEMBERS = [];
   if (_membersUnsub) { _membersUnsub(); _membersUnsub = null; }
   _membersUnsub = onSnapshot(doc(db,"tracker","members"), (snap)=>{
     if(snap.exists()&&snap.data().list&&snap.data().list.length>0) MEMBERS=snap.data().list;
-    setSyncStatus(true,'☁️ Live');
+    setSyncStatus(true,'Live');
     renderAll();
     const mcEl = document.getElementById('pubMemberCount');
     if (mcEl) mcEl.textContent = MEMBERS.length || '—';
@@ -2949,7 +2949,7 @@ function loadMembers() {
       loadPayConfirmRequests();
       syncMemberNamesToMemberPins();
     }
-  }, ()=>setSyncStatus(false,'⚠️ Offline'));
+  }, ()=>setSyncStatus(false,'Offline'));
 }
 
 // Sync all member names into memberPins._meta_ so member profile pages
@@ -2957,7 +2957,7 @@ function loadMembers() {
 async function syncMemberNamesToMemberPins() {
   if (!MEMBERS.length) return;
   try {
-    const ref  = doc(db, "tracker", "memberPins");
+    const ref = doc(db, "tracker", "memberPins");
     const snap = await getDoc(ref);
     const pins = snap.exists() ? (snap.data() || {}) : {};
     let changed = false;
@@ -2976,9 +2976,9 @@ function loadPayments() {
   if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
   _paymentsUnsub = onSnapshot(doc(db,"tracker","payments"), (snap)=>{
     if(snap.exists()) payments=snap.data();
-    setSyncStatus(true,'☁️ Live');
+    setSyncStatus(true,'Live');
     renderAll();
-  }, ()=>setSyncStatus(false,'⚠️ Offline'));
+  }, ()=>setSyncStatus(false,'Offline'));
 }
 function isPaid(phone, dateStr) { return !!(payments[dateStr]&&payments[dateStr][phone]); }
 function isPastDate(dateStr){ return dateStr < todayKey(); }
@@ -3019,7 +3019,7 @@ function markAll(dateStr, state) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: '✅ Payments Received',
+          title: 'Payments Received',
           body: `${changed} member${changed>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
           url: '/'
         })
@@ -3038,7 +3038,7 @@ function markAll(dateStr, state) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: '✅ Payments Received',
+        title: 'Payments Received',
         body: `${newlyPaid} member${newlyPaid>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
         url: '/'
       })
@@ -3107,11 +3107,11 @@ function updateArc(paid, total) {
 }
 
 // ════════════════════════════════════════════════
-// CALENDAR PICKER  (replaces year nav + date strip)
+// CALENDAR PICKER (replaces year nav + date strip)
 // ════════════════════════════════════════════════
-let calViewYear  = null;   // year shown in popup
-let calViewMonth = null;   // month shown in popup (0-11)
-let calPending   = null;   // date key tentatively selected in popup
+let calViewYear = null; // year shown in popup
+let calViewMonth = null; // month shown in popup (0-11)
+let calPending = null; // date key tentatively selected in popup
 
 const MONTH_NAMES = ['January','February','March','April','May','June',
                      'July','August','September','October','November','December'];
@@ -3122,9 +3122,9 @@ function renderDateStrip(){ updateCalBar(); }
 
 /* Update the compact bar label */
 function updateCalBar(){
-  const today  = todayKey();
-  const btn    = document.getElementById('calPickerBtn');
-  const label  = document.getElementById('calBtnLabel');
+  const today = todayKey();
+  const btn = document.getElementById('calPickerBtn');
+  const label = document.getElementById('calBtnLabel');
   const todayB = document.getElementById('calTodayBtn');
   if(!label) return;
 
@@ -3144,16 +3144,16 @@ function updateCalBar(){
 /* Jump to today */
 function jumpToToday(){
   selectedDate = todayKey();
-  activeYear   = new Date().getFullYear();
+  activeYear = new Date().getFullYear();
   renderAll();
 }
 
 /* Open popup, init to the month of selectedDate */
 function openCalPopup(){
-  const d      = new Date(selectedDate+'T00:00:00');
-  calViewYear  = d.getFullYear();
+  const d = new Date(selectedDate+'T00:00:00');
+  calViewYear = d.getFullYear();
   calViewMonth = d.getMonth();
-  calPending   = selectedDate;
+  calPending = selectedDate;
   renderCalYearRow();
   renderCalGrid();
   document.getElementById('calOverlay').classList.add('open');
@@ -3173,7 +3173,7 @@ function applyCalDate(){
   if(!calPending) return;
   const d = new Date(calPending+'T00:00:00');
   selectedDate = calPending;
-  activeYear   = d.getFullYear();
+  activeYear = d.getFullYear();
   document.getElementById('calOverlay').classList.remove('open');
   document.body.style.overflow = '';
   renderAll();
@@ -3214,14 +3214,14 @@ function renderCalYearRow(){
 
 /* Render calendar grid for calViewYear/calViewMonth */
 function renderCalGrid(){
-  const grid  = document.getElementById('calGrid');
+  const grid = document.getElementById('calGrid');
   const label = document.getElementById('calNavMonth');
   grid.innerHTML = '';
   label.textContent = MONTH_NAMES[calViewMonth] + ' ' + calViewYear;
 
-  const today    = todayKey();
+  const today = todayKey();
   const firstDay = new Date(calViewYear, calViewMonth, 1);
-  const lastDay  = new Date(calViewYear, calViewMonth+1, 0);
+  const lastDay = new Date(calViewYear, calViewMonth+1, 0);
   const startDow = firstDay.getDay(); // 0=Sun
 
   // blank leading cells
@@ -3232,19 +3232,19 @@ function renderCalGrid(){
   }
 
   for(let d=1; d<=lastDay.getDate(); d++){
-    const dt  = new Date(calViewYear, calViewMonth, d);
+    const dt = new Date(calViewYear, calViewMonth, d);
     const key = dateKey(dt);
     const paid= countPaidOnDate(key);
     const isFuture = key > today;
 
     const cell = document.createElement('div');
     cell.className = 'cal-cell';
-    if(key === today)     cell.classList.add('is-today');
+    if(key === today) cell.classList.add('is-today');
     if(key === calPending) cell.classList.add('is-selected');
-    if(dt.getDay()===0)   cell.classList.add('is-sunday');
-    if(isFuture)          cell.classList.add('is-future');
+    if(dt.getDay()===0) cell.classList.add('is-sunday');
+    if(isFuture) cell.classList.add('is-future');
     if(paid===MEMBERS.length&&paid>0) cell.classList.add('has-full');
-    else if(paid>0)       cell.classList.add('has-partial');
+    else if(paid>0) cell.classList.add('has-partial');
 
     cell.innerHTML = `<div class="cal-cell-num">${d}</div><div class="cal-cell-dot"></div>`;
     if(!isFuture){
@@ -3266,11 +3266,11 @@ function renderMemberList(){
   const query=search.toLowerCase().trim();
   let filtered=MEMBERS.map((m,idx)=>({...m,idx}));
   if(query) filtered=filtered.filter(m=>m.name.toLowerCase().includes(query));
-  if(filter==='paid')   filtered=filtered.filter(m=>isPaid(m.phone,selectedDate));
+  if(filter==='paid') filtered=filtered.filter(m=>isPaid(m.phone,selectedDate));
   if(filter==='unpaid') filtered=filtered.filter(m=>!isPaid(m.phone,selectedDate));
 
   if(!filtered.length){
-    list.innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><p>No members found</p></div>`;
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon"></div><p>No members found</p></div>`;
     return;
   }
 
@@ -3286,30 +3286,30 @@ function renderMemberList(){
       <div class="member-info">
         <div class="member-name">${name}</div>
         <div class="member-phone">${phone}</div>
-        <div class="streak-badge-wrap">${getStreak(phone)>=2?`<div class="streak-badge">🔥 ${getStreak(phone)}-day streak</div>`:''}</div>
+        <div class="streak-badge-wrap">${getStreak(phone)>=2?`<div class="streak-badge"> ${getStreak(phone)}-day streak</div>`:''}</div>
         <div class="member-actions" onclick="event.stopPropagation()">
           <button class="wa-btn" title="WhatsApp" onclick="sendWADirect('${phone}','${name.split(' ')[0]}')">
             <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 4C9.4 4 4 9.4 4 16.04c0 2.42.7 4.68 1.92 6.6L4 28l5.52-1.84a11.9 11.9 0 0 0 6.52 1.92h.01c6.63 0 12.03-5.4 12.03-12.04C28.08 9.4 22.68 4 16.04 4zm0 21.94h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.75 1.25 1.26-3.66-.24-.38a9.9 9.9 0 0 1-1.52-5.32C6.38 10.5 10.6 6.27 16.04 6.27c2.62 0 5.08 1.02 6.93 2.88a9.74 9.74 0 0 1 2.87 6.9c0 5.44-4.42 9.9-9.8 9.9zm5.38-7.4c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.66.15-.2.3-.76.96-.93 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.04-.17-.3-.02-.46.13-.61.15-.15.34-.39.5-.58.17-.2.22-.34.34-.56.1-.22.05-.42-.05-.57-.1-.15-.6-1.44-.82-1.97-.22-.52-.44-.45-.6-.46h-.51c-.17 0-.45.06-.69.32-.24.27-.92.9-.92 2.2 0 1.3.95 2.55 1.08 2.72.13.18 1.84 2.8 4.47 3.83 2.62 1.03 2.62.69 3.1.65.47-.04 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.25-.16-.55-.31z"/></svg>
           </button>
-          ${hasRole('manageMembers') ? `<button class="edit-btn" onclick="openEditModal('${phone}')">EDIT<span class="lock-tag">🔒</span></button>
-          <button class="del-btn"  onclick="openDeleteModal('${phone}','${name}')">DEL<span class="lock-tag">🔒</span></button>` : ''}
+          ${hasRole('manageMembers') ? `<button class="edit-btn" onclick="openEditModal('${phone}')">EDIT<span class="lock-tag"></span></button>
+          <button class="del-btn" onclick="openDeleteModal('${phone}','${name}')">DEL<span class="lock-tag"></span></button>` : ''}
         </div>
       </div>
       <div class="member-status">
-        <div class="status-badge">${paid?'✓ Paid':'Unpaid'}</div>
+        <div class="status-badge">${paid?'Paid':'Unpaid'}</div>
         <div class="member-total">KSh ${(totalPaid*RATE).toLocaleString()}</div>
       </div>`;
     card.addEventListener('click',()=>{
-      if(!isAdmin){ showToast('🔐 Admin login required'); return; }
+      if(!isAdmin){ showToast('Admin login required'); return; }
       const result=togglePaid(phone,selectedDate);
       if(!result.ok){
         showToast(result.reason==='locked-paid'
-          ? `🔒 ${name.split(' ')[0]} already paid — locked`
-          : `🔒 ${name.split(' ')[0]} already updated for this date`);
+          ? ` ${name.split(' ')[0]} already paid — locked`
+          : ` ${name.split(' ')[0]} already updated for this date`);
         return;
       }
       const nowPaid=isPaid(phone,selectedDate);
-      showToast(nowPaid?`✓ ${name.split(' ')[0]} marked paid`:`${name.split(' ')[0]} unmarked`);
+      showToast(nowPaid?` ${name.split(' ')[0]} marked paid`:`${name.split(' ')[0]} unmarked`);
       if(nowPaid){ launchConfetti(card); }
       renderAll();
       if(nowPaid) openThanksModal(phone,name);
@@ -3345,8 +3345,8 @@ function renderStats(){
 
   const btn=document.getElementById('markAllBtn');
   if(btn){
-    btn.textContent = paid===MEMBERS.length ? '✕ Clear All' : '✓ Mark All Paid';
-    btn.className   = 'fab'+(paid===MEMBERS.length ? '' : ' green-fab')+' admin-only';
+    btn.textContent = paid===MEMBERS.length ? 'Clear All' : 'Mark All Paid';
+    btn.className = 'fab'+(paid===MEMBERS.length ? '' : ' green-fab')+' admin-only';
   }
 
   // This admin tracker also writes a small aggregate doc
@@ -3358,15 +3358,15 @@ function renderStats(){
   // otherwise fall back to the persisted snapshot so the bar never resets to 0.
   // NOTE: allKsh already includes otherIncome (see totalKshAllDays), so we
   // must NOT add totalOtherIncome() again — that would double-count it.
-  const _liveInc    = allKsh;
-  const _totalInc   = _liveInc > 0 ? _liveInc : _persistedIncome;
+  const _liveInc = allKsh;
+  const _totalInc = _liveInc > 0 ? _liveInc : _persistedIncome;
   const _totalSpent = _spendingLoaded ? totalSpending() : _persistedSpent;
-  const _balance    = _totalInc - _totalSpent;
+  const _balance = _totalInc - _totalSpent;
   const sbSpent = document.getElementById('sbSpent');
-  const sbBal  = document.getElementById('sbBalance');
+  const sbBal = document.getElementById('sbBalance');
   if (sbSpent) sbSpent.textContent = 'KSh ' + _totalSpent.toLocaleString();
   if (sbBal) {
-    sbBal.textContent = (_balance < 0 ? '-' : '') + 'KSh ' + Math.abs(_balance).toLocaleString() + (_balance < 0 ? ' ⚠️' : '');
+    sbBal.textContent = (_balance < 0 ? '-' : '') + 'KSh ' + Math.abs(_balance).toLocaleString() + (_balance < 0 ? ' ' : '');
     sbBal.style.color = _balance < 0 ? '#E05540' : 'var(--green2)';
   }
   const pill = document.getElementById('spendingTotalPill');
@@ -3375,7 +3375,7 @@ function renderStats(){
   // Admin running balance card
   const adminBal = document.getElementById('adminRunningBal');
   if(adminBal){
-    adminBal.textContent = (_balance < 0 ? '-' : '') + 'KSh ' + Math.abs(_balance).toLocaleString() + (_balance < 0 ? ' ⚠️' : '');
+    adminBal.textContent = (_balance < 0 ? '-' : '') + 'KSh ' + Math.abs(_balance).toLocaleString() + (_balance < 0 ? ' ' : '');
     adminBal.style.color = _balance < 0 ? '#E05540' : 'var(--green2)';
   }
   const adminBI = document.getElementById('adminBalIncome');
@@ -3396,7 +3396,7 @@ async function saveDashboardAggregate(paid, unpaid, ksh, allKsh) {
   }).sort((a,b) => b.days - a.days).slice(0, 3);
 
   const income = allKsh;
-  const spent  = totalSpending();
+  const spent = totalSpending();
   const balance = income - spent;
 
   try {
@@ -3443,7 +3443,7 @@ function renderMemberDashboard(){
   const bal = (dashboardAgg.kshAllDays||0) - (dashboardAgg.totalSpent||0);
   const vbBal = document.getElementById('vbRunningBal');
   if(vbBal){
-    vbBal.textContent = (bal < 0 ? '-' : '') + 'KSh ' + Math.abs(bal).toLocaleString() + (bal < 0 ? ' ⚠️' : '');
+    vbBal.textContent = (bal < 0 ? '-' : '') + 'KSh ' + Math.abs(bal).toLocaleString() + (bal < 0 ? ' ' : '');
     vbBal.style.color = bal < 0 ? '#E05540' : 'var(--green2)';
   }
   const vbBI = document.getElementById('vbBalIncome');
@@ -3454,19 +3454,19 @@ function renderMemberDashboard(){
   // Leaderboard ticker — with motivational messages
   const ticker = document.getElementById('vbTicker');
   if(ticker && dashboardAgg.leaderboard && dashboardAgg.leaderboard.length){
-    const medals = ['🥇','🥈','🥉'];
+    const medals = ['','',''];
     const paidN = dashboardAgg.paidToday||0;
     const totalN = dashboardAgg.memberCount||65;
     const unpaidN = totalN - paidN;
     const names = dashboardAgg.leaderboard.map((e,i) =>
       `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">${medals[i]} ${e.fullName||e.name} · ${e.days} days</span>`
     ).join('');
-    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">🏆 Most Consistent:</span>`;
-    const motive1 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">💪 ${paidN} member${paidN!==1?'s':''} contributed today!</span>`;
+    const title = `<span style="margin-right:40px;font-size:11px;font-weight:700;color:var(--amber2);">Most Consistent:</span>`;
+    const motive1 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);"> ${paidN} member${paidN!==1?'s':''} contributed today!</span>`;
     const motive2 = unpaidN>0
-      ? `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">📢 ${unpaidN} still to pay — every shilling counts!</span>`
-      : `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🎉 Full house today — amazing team!</span>`;
-    const motive3 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">🏍️ No Rider Left Behind · Paybill 544600 Acc 942540</span>`;
+      ? `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);"> ${unpaidN} still to pay — every shilling counts!</span>`
+      : `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">Full house today — amazing team!</span>`;
+    const motive3 = `<span style="margin-right:50px;font-size:11px;font-weight:600;color:var(--muted);">No Rider Left Behind · Paybill 544600 Acc 942540</span>`;
     const block = title + names + motive1 + motive2 + motive3;
     ticker.innerHTML = block + block;
   }
@@ -3499,17 +3499,17 @@ function fmtDateShort(d){ return d.toLocaleDateString('en-KE',{day:'numeric',mon
 function initials(name){ return name.split(' ').slice(0,2).map(w=>w[0]).join(''); }
 
 function markAllToday(){
-  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to mark payments'); return; }
+  if (isAdmin && !hasRole('markPayments')) { showToast('You do not have permission to mark payments'); return; }
   const paid=countPaidOnDate(selectedDate);
   const state=paid<MEMBERS.length;
-  if(isPastDate(selectedDate)&&!state){ showToast('🔒 Cannot clear payments for a past date'); return; }
+  if(isPastDate(selectedDate)&&!state){ showToast('Cannot clear payments for a past date'); return; }
   const result=markAll(selectedDate,state);
   if(isPastDate(selectedDate)){
-    if(result.changed>0&&result.blocked>0) showToast(`✓ ${result.changed} marked paid · ${result.blocked} locked`);
-    else if(result.changed>0) showToast(`✓ ${result.changed} member(s) marked paid`);
-    else showToast('🔒 All members already locked for this past date');
+    if(result.changed>0&&result.blocked>0) showToast(` ${result.changed} marked paid · ${result.blocked} locked`);
+    else if(result.changed>0) showToast(` ${result.changed} member(s) marked paid`);
+    else showToast('All members already locked for this past date');
   } else {
-    showToast(state?`✓ All ${MEMBERS.length} members marked paid`:'All payments cleared');
+    showToast(state?` All ${MEMBERS.length} members marked paid`:'All payments cleared');
   }
   renderAll();
 }
@@ -3563,7 +3563,7 @@ function updateNotifBadge(){
 // ════════════════════════════════════════════════
 function openMembersPanel(){
   if (isAdmin && !hasRole('viewMembers') && !hasRole('manageMembers')) {
-    showToast('⛔ You do not have permission to view members');
+    showToast('You do not have permission to view members');
     return;
   }
   document.getElementById('panelSearch').value='';
@@ -3575,11 +3575,11 @@ function openMembersPanel(){
 }
 async function saveDashboardPin(){
   const pin = document.getElementById('dashboardPinInput').value.trim();
-  if(!pin || pin.length<4){ showToast('⚠️ Use at least 4 digits'); return; }
+  if(!pin || pin.length<4){ showToast('Use at least 4 digits'); return; }
   try {
     await setDoc(doc(db,"tracker","settings"), { pin });
-    showToast('✓ Dashboard PIN saved');
-  } catch(e) { showToast('⚠️ Could not save PIN'); }
+    showToast('Dashboard PIN saved');
+  } catch(e) { showToast('Could not save PIN'); }
 }
 function closeMembersPanel(){ document.getElementById('membersModal').classList.remove('open'); renderAll(); }
 
@@ -3600,19 +3600,19 @@ function renderPanelList(){
         <div class="panel-item-name">${m.name}</div>
         <div class="panel-item-phone">${m.phone}</div>
       </div>
-      <button class="edit-btn" onclick="openSetMemberPinModal('${m.phone}','${m.name.split(' ')[0]}','${m.name}')" style="font-size:10px;background:var(--green2);color:#fff;">📱 PIN</button>`;
+      <button class="edit-btn" onclick="openSetMemberPinModal('${m.phone}','${m.name.split(' ')[0]}','${m.name}')" style="font-size:10px;background:var(--green2);color:#fff;">PIN</button>`;
     list.appendChild(item);
   });
 }
 
 function addMember(){
-  if (isAdmin && !hasRole('manageMembers')) { showToast('⛔ You do not have permission to manage members'); return; }
+  if (isAdmin && !hasRole('manageMembers')) { showToast('You do not have permission to manage members'); return; }
   const name=document.getElementById('addName').value.trim().toUpperCase();
   const rawP=document.getElementById('addPhone').value.trim();
   const phone=rawP.replace(/[\s\-().]/g,'').replace(/^\+/,'').replace(/^0/,'254');
-  if(!name){ showToast('⚠️ Enter a name'); return; }
-  if(!phone||phone.length<9){ showToast('⚠️ Enter a valid phone'); return; }
-  if(MEMBERS.find(m=>m.phone===phone)){ showToast('⚠️ Phone already exists'); return; }
+  if(!name){ showToast('Enter a name'); return; }
+  if(!phone||phone.length<9){ showToast('Enter a valid phone'); return; }
+  if(MEMBERS.find(m=>m.phone===phone)){ showToast('Phone already exists'); return; }
   MEMBERS.push({name,phone});
   saveMembers();
 
@@ -3620,7 +3620,7 @@ function addMember(){
   const defaultPin = phone.replace(/\D/g,'').slice(-4);
   (async () => {
     try {
-      const ref  = doc(db, 'tracker', 'memberPins');
+      const ref = doc(db, 'tracker', 'memberPins');
       const snap = await getDoc(ref);
       const pins = snap.exists() ? (snap.data() || {}) : {};
       if (!pins[phone]) {
@@ -3634,7 +3634,7 @@ function addMember(){
   document.getElementById('addName').value='';
   document.getElementById('addPhone').value='';
   renderPanelList();
-  showToast(`✓ ${name.split(' ')[0]} added — default PIN: ${defaultPin}`);
+  showToast(` ${name.split(' ')[0]} added — default PIN: ${defaultPin}`);
   logAdminAction('Added member', `${name} (${phone})`);
 }
 
@@ -3642,38 +3642,38 @@ function addMember(){
 // SACCO SETTINGS (Super Admin)
 // ════════════════════════════════════════════════
 async function openSaccoSettings() {
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin access required'); return; }
+  if (!isSuperAdminUser()) { showToast('Super-admin access required'); return; }
   document.getElementById('saccoSettingsErr').style.display = 'none';
   // Pre-fill from Firestore
   try {
     const snap = await getDoc(doc(db, 'tracker', 'saccoSettings'));
     const d = snap.exists() ? snap.data() : {};
-    document.getElementById('saccoName').value       = d.saccoName      || 'BOGONKO-NGELANI STAGE';
-    document.getElementById('saccoCounty').value     = d.saccoCounty    || '';
-    document.getElementById('saccoAuthority').value  = d.saccoAuthority || 'Boda Boda Welfare Group';
-    document.getElementById('saccoAdminPhone').value = d.adminPhone     || '';
+    document.getElementById('saccoName').value = d.saccoName || 'BOGONKO-NGELANI STAGE';
+    document.getElementById('saccoCounty').value = d.saccoCounty || '';
+    document.getElementById('saccoAuthority').value = d.saccoAuthority || 'Boda Boda Welfare Group';
+    document.getElementById('saccoAdminPhone').value = d.adminPhone || '';
   } catch(e) {}
   document.getElementById('saccoSettingsModal').classList.add('open');
 }
 function closeSaccoSettings() { document.getElementById('saccoSettingsModal').classList.remove('open'); }
 async function saveSaccoSettings() {
-  const saccoName      = document.getElementById('saccoName').value.trim().toUpperCase();
-  const saccoCounty    = document.getElementById('saccoCounty').value.trim();
+  const saccoName = document.getElementById('saccoName').value.trim().toUpperCase();
+  const saccoCounty = document.getElementById('saccoCounty').value.trim();
   const saccoAuthority = document.getElementById('saccoAuthority').value.trim();
   const errEl = document.getElementById('saccoSettingsErr');
-  if (!saccoName) { errEl.textContent = '⚠️ Sacco name is required.'; errEl.style.display='block'; return; }
+  if (!saccoName) { errEl.textContent = 'Sacco name is required.'; errEl.style.display='block'; return; }
   try {
     const adminPhone = document.getElementById('saccoAdminPhone').value.trim();
     await setDoc(doc(db, 'tracker', 'saccoSettings'), { saccoName, saccoCounty, saccoAuthority, adminPhone, updatedAt: Date.now() });
     closeSaccoSettings();
-    showToast('✓ Sacco settings saved');
+    showToast('Sacco settings saved');
     logAdminAction('Updated Sacco/ID card settings', saccoName);
-  } catch(e) { errEl.textContent = '⚠️ Failed to save. Try again.'; errEl.style.display='block'; }
+  } catch(e) { errEl.textContent = 'Failed to save. Try again.'; errEl.style.display='block'; }
 }
 
 
 function openDetailsModal(phone) {
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin access required'); return; }
+  if (!isSuperAdminUser()) { showToast('Super-admin access required'); return; }
   const m = MEMBERS.find(x => x.phone === phone);
   const content = document.getElementById('detailsContent');
   content.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);">Loading…</div>';
@@ -3697,17 +3697,17 @@ function openDetailsModal(phone) {
         <div><div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;">${m ? m.name : phone}</div>
         <div style="font-size:12px;color:var(--muted);">${phone}</div></div>
       </div>
-      ${secHdr('🪪 ID Card')}
-      ${row('🔢','Membership No.', d.memberNo)}
-      ${row('🪪','National ID No.', d.natId)}
-      ${row('📍','County', d.county)}
-      ${secHdr('🧑‍🤝‍🧑 Next of Kin')}
-      ${row('👤','Name', d.nokName)}
-      ${row('📞','Phone', d.nokPhone)}
-      ${secHdr('🏍️ Motorcycle')}
-      ${row('🔖','Reg No.', d.motoReg)}
-      ${row('📅','Year', d.motoYear)}
-      ${row('🏷️','Model', d.motoModel)}
+      ${secHdr('ID Card')}
+      ${row('','Membership No.', d.memberNo)}
+      ${row('','National ID No.', d.natId)}
+      ${row('','County', d.county)}
+      ${secHdr('Next of Kin')}
+      ${row('','Name', d.nokName)}
+      ${row('','Phone', d.nokPhone)}
+      ${secHdr('Motorcycle')}
+      ${row('','Reg No.', d.motoReg)}
+      ${row('','Year', d.motoYear)}
+      ${row('','Model', d.motoModel)}
     `;
   }).catch(() => {
     content.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);">Could not load details.</div>';
@@ -3732,7 +3732,7 @@ async function confirmPassword(){
   const pw=document.getElementById('pwInput').value;
   const errEl=document.getElementById('pwError');
   const btn=document.getElementById('pwConfirmBtn');
-  if(!email||!pw){ errEl.textContent='⚠️ Enter your email and password.'; errEl.classList.add('show'); return; }
+  if(!email||!pw){ errEl.textContent='Enter your email and password.'; errEl.classList.add('show'); return; }
   btn.textContent='Checking…'; btn.disabled=true;
   try {
     await signInWithEmailAndPassword(auth,email,pw);
@@ -3740,7 +3740,7 @@ async function confirmPassword(){
     const action=pwPendingAction; pwPendingAction=null;
     if(action) action();
   } catch(e) {
-    errEl.textContent='⚠️ Incorrect email or password.';
+    errEl.textContent='Incorrect email or password.';
     errEl.classList.add('show');
     document.getElementById('pwInput').value='';
     document.getElementById('pwInput').focus();
@@ -3759,7 +3759,7 @@ function applyTheme(theme){
   const isLight=theme==='light';
   document.body.classList.toggle('light',isLight);
   const btn=document.getElementById('themeToggle');
-  if(btn) btn.textContent=isLight?'🌙':'☀️';
+  if(btn) btn.textContent=isLight?'':'';
   const meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content', isLight?'#FFFFFF':'#0E1013');
 }
@@ -3788,13 +3788,13 @@ async function _openEditModal(phone){
     if (snap.exists()) {
       const all = snap.data() || {};
       const d = all[phone] || {};
-      document.getElementById('editMemberNo').value  = d.memberNo  || '';
-      document.getElementById('editNatId').value     = d.natId     || '';
-      document.getElementById('editCounty').value    = d.county    || '';
-      document.getElementById('editNokName').value   = d.nokName   || '';
-      document.getElementById('editNokPhone').value  = d.nokPhone  || '';
-      document.getElementById('editMotoReg').value   = d.motoReg   || '';
-      document.getElementById('editMotoYear').value  = d.motoYear  || '';
+      document.getElementById('editMemberNo').value = d.memberNo || '';
+      document.getElementById('editNatId').value = d.natId || '';
+      document.getElementById('editCounty').value = d.county || '';
+      document.getElementById('editNokName').value = d.nokName || '';
+      document.getElementById('editNokPhone').value = d.nokPhone || '';
+      document.getElementById('editMotoReg').value = d.motoReg || '';
+      document.getElementById('editMotoYear').value = d.motoYear || '';
       document.getElementById('editMotoModel').value = d.motoModel || '';
     }
   } catch(e) {}
@@ -3805,18 +3805,18 @@ async function saveEdit(){
   if(!editingPhone) return;
   const name=document.getElementById('editName').value.trim().toUpperCase();
   const phone=document.getElementById('editPhone').value.trim().replace(/\s/g,'');
-  if(!name||!phone){ showToast('⚠️ Fill all fields'); return; }
+  if(!name||!phone){ showToast('Fill all fields'); return; }
   const m=MEMBERS.find(x=>x.phone===editingPhone); if(!m) return;
 
-  const memberNo  = document.getElementById('editMemberNo').value.trim().toUpperCase();
-  const natId     = document.getElementById('editNatId').value.trim();
-  const county    = document.getElementById('editCounty').value.trim();
-  const nokName   = document.getElementById('editNokName').value.trim();
-  const nokPhone  = document.getElementById('editNokPhone').value.trim();
-  const motoReg   = document.getElementById('editMotoReg').value.trim().toUpperCase();
-  const motoYear  = document.getElementById('editMotoYear').value.trim();
+  const memberNo = document.getElementById('editMemberNo').value.trim().toUpperCase();
+  const natId = document.getElementById('editNatId').value.trim();
+  const county = document.getElementById('editCounty').value.trim();
+  const nokName = document.getElementById('editNokName').value.trim();
+  const nokPhone = document.getElementById('editNokPhone').value.trim();
+  const motoReg = document.getElementById('editMotoReg').value.trim().toUpperCase();
+  const motoYear = document.getElementById('editMotoYear').value.trim();
   const motoModel = document.getElementById('editMotoModel').value.trim();
-  const errEl     = document.getElementById('memberNoErr');
+  const errEl = document.getElementById('memberNoErr');
   errEl.style.display = 'none';
 
   // Duplicate membership number check
@@ -3829,7 +3829,7 @@ async function saveEdit(){
         if (conflict) {
           errEl.style.display = 'block';
           const conflictMember = MEMBERS.find(x => x.phone === conflict[0]);
-          errEl.textContent = `⚠️ "${memberNo}" is already assigned to ${conflictMember ? conflictMember.name : conflict[0]}.`;
+          errEl.textContent = ` "${memberNo}" is already assigned to ${conflictMember ? conflictMember.name : conflict[0]}.`;
           return;
         }
       }
@@ -3842,18 +3842,18 @@ async function saveEdit(){
   }
   m.name=name; m.phone=phone;
   try {
-    const ref  = doc(db,'tracker','memberDetails');
+    const ref = doc(db,'tracker','memberDetails');
     const snap = await getDoc(ref);
-    const all  = snap.exists() ? (snap.data() || {}) : {};
+    const all = snap.exists() ? (snap.data() || {}) : {};
     if (phone !== editingPhone && all[editingPhone]) {
       all[phone] = all[editingPhone];
       delete all[editingPhone];
     }
     all[phone] = { memberNo, natId, county, nokName, nokPhone, motoReg, motoYear, motoModel, updatedAt: Date.now() };
     await setDoc(ref, all);
-  } catch(e) { showToast('⚠️ Details save failed'); }
+  } catch(e) { showToast('Details save failed'); }
   saveMembers(); closeEditModal();
-  showToast('✓ Member updated'); renderAll();
+  showToast('Member updated'); renderAll();
   logAdminAction('Edited member', `${name} (${phone})`);
 }
 function openDeleteModal(phone,name){ requirePassword(()=>_openDeleteModal(phone,name),'Enter password to remove this member.'); }
@@ -3871,7 +3871,7 @@ function confirmDelete(){
   saveMembers();
   logAdminAction('Removed member', `${deletingName} (${deletingPhone})`);
   closeDeleteModal();
-  showToast(`🗑️ ${deletingName.split(' ')[0]} removed`); renderAll();
+  showToast(` ${deletingName.split(' ')[0]} removed`); renderAll();
 }
 
 // ════════════════════════════════════════════════
@@ -3880,7 +3880,7 @@ function confirmDelete(){
 function openThanksModal(phone,name){
   thanksPhone=phone; thanksName=name;
   const first=name.split(' ')[0];
-  document.getElementById('thanksTitle').textContent='Payment Recorded! 🎉';
+  document.getElementById('thanksTitle').textContent='Payment Recorded! ';
   document.getElementById('thanksSub').innerHTML=`Send <b>${first}</b> a thank-you on WhatsApp?`;
   document.getElementById('thanksModal').classList.add('open');
 }
@@ -3888,7 +3888,7 @@ function closeThanksModal(){ document.getElementById('thanksModal').classList.re
 function confirmThanksWA(){
   if(!thanksPhone){ closeThanksModal(); return; }
   const first=thanksName.split(' ')[0];
-  const msg=`Hello ${first}! 👋\n\nThank you so much for your contribution of KSh ${RATE} to the BOGONKO-NGELANI Welfare Kitty today. We truly appreciate your support! 🙏🎉`;
+  const msg=`Hello ${first}! \n\nThank you so much for your contribution of KSh ${RATE} to the BOGONKO-NGELANI Welfare Kitty today. We truly appreciate your support! `;
   openWAForPhone(thanksPhone,msg); closeThanksModal();
 }
 
@@ -3896,10 +3896,10 @@ function confirmThanksWA(){
 // WHATSAPP
 // ════════════════════════════════════════════════
 function defaultWAMessage(){
-  return `Hello! 👋\n\nThis is to remind you of pending payments to the BOGONKO-NGELANI Welfare Kitty of KSh ${RATE}.\n\nThank you. 🙏`;
+  return `Hello! \n\nThis is to remind you of pending payments to the BOGONKO-NGELANI Welfare Kitty of KSh ${RATE}.\n\nThank you. `;
 }
 function openWABlast(){
-  if (isAdmin && !hasRole('sendWhatsApp')) { showToast('⛔ You do not have permission to send WA Blast'); return; }
+  if (isAdmin && !hasRole('sendWhatsApp')) { showToast('You do not have permission to send WA Blast'); return; }
   document.getElementById('waMessage').value=defaultWAMessage();
   renderWAUnpaidList();
   document.getElementById('waModal').classList.add('open');
@@ -3909,7 +3909,7 @@ function renderWAUnpaidList(){
   const container=document.getElementById('waUnpaidList');
   const unpaid=MEMBERS.filter(m=>!isPaid(m.phone,selectedDate));
   container.innerHTML='';
-  if(!unpaid.length){ container.innerHTML='<div style="text-align:center;padding:16px;color:var(--green2);font-size:13px;font-weight:600;">🎉 Everyone has paid today!</div>'; return; }
+  if(!unpaid.length){ container.innerHTML='<div style="text-align:center;padding:16px;color:var(--green2);font-size:13px;font-weight:600;">Everyone has paid today!</div>'; return; }
   unpaid.forEach(m=>{
     const row=document.createElement('div'); row.className='wa-blast-member';
     row.innerHTML=`<input type="checkbox" id="wachk_${m.phone}" checked><label class="wa-member-label" for="wachk_${m.phone}">${m.name} · ${m.phone}</label>`;
@@ -3920,14 +3920,14 @@ function waSelectAll(state){ document.querySelectorAll('#waUnpaidList input[type
 function sendWAReminders(){
   const msg=document.getElementById('waMessage').value.trim();
   const checks=[...document.querySelectorAll('#waUnpaidList input[type=checkbox]')].filter(c=>c.checked);
-  if(!checks.length){ showToast('⚠️ Select at least one member'); return; }
+  if(!checks.length){ showToast('Select at least one member'); return; }
   closeWAModal();
   let delay=0;
   checks.forEach(c=>{ const phone=c.id.replace('wachk_',''); setTimeout(()=>{ openWAForPhone(phone,msg); },delay); delay+=1200; });
-  showToast(`📲 Opening WhatsApp for ${checks.length} member(s)…`);
+  showToast(` Opening WhatsApp for ${checks.length} member(s)…`);
 }
 function sendWADirect(phone,firstName){
-  const msg=`Hello ${firstName}! 👋\n\nThis is to remind you of pending payments to the BOGONKO-NGELANI Welfare Kitty of KSh ${RATE}.\n\nThank you. 🙏`;
+  const msg=`Hello ${firstName}! \n\nThis is to remind you of pending payments to the BOGONKO-NGELANI Welfare Kitty of KSh ${RATE}.\n\nThank you. `;
   openWAForPhone(phone,msg);
 }
 async function sendPinViaWhatsApp(phone,firstName){
@@ -3936,8 +3936,8 @@ async function sendPinViaWhatsApp(phone,firstName){
     const snap = await getDoc(doc(db,"tracker","settings"));
     pin = snap.exists() ? (snap.data().pin||'') : '';
   } catch(e) {}
-  if(!pin){ showToast('⚠️ Set a dashboard PIN first'); return; }
-  const msg=`Hello ${firstName}! 👋\n\nHere is the BOGONKO-NGELANI Welfare dashboard PIN: ${pin}\n\nUse it on the tracker site to view today's totals. Please keep it within the group. 🙏`;
+  if(!pin){ showToast('Set a dashboard PIN first'); return; }
+  const msg=`Hello ${firstName}! \n\nHere is the BOGONKO-NGELANI Welfare dashboard PIN: ${pin}\n\nUse it on the tracker site to view today's totals. Please keep it within the group. `;
   openWAForPhone(phone,msg);
 }
 function openWAForPhone(phone,msg){
@@ -3949,14 +3949,14 @@ function openWAForPhone(phone,msg){
 // ════════════════════════════════════════════════
 // SET PER-MEMBER PIN (ADMIN)
 // ════════════════════════════════════════════════
-let _setPinPhone    = '';
-let _setPinName     = '';
+let _setPinPhone = '';
+let _setPinName = '';
 let _setPinFullName = '';
 let _currentMemberPin = '';
 
 function openSetMemberPinModal(phone, firstName, fullName) {
-  _setPinPhone    = phone;
-  _setPinName     = firstName;
+  _setPinPhone = phone;
+  _setPinName = firstName;
   _setPinFullName = fullName || firstName;
   _currentMemberPin = '';
   document.getElementById('setPinMemberName').textContent = _setPinFullName;
@@ -3976,30 +3976,30 @@ function closeSetMemberPinModal() {
   document.getElementById('setMemberPinModal').classList.remove('open');
 }
 async function confirmSetMemberPin() {
-  const pin    = document.getElementById('setPinInput').value.trim();
-  const errEl  = document.getElementById('setPinError');
-  const btn    = document.getElementById('setPinSaveBtn');
+  const pin = document.getElementById('setPinInput').value.trim();
+  const errEl = document.getElementById('setPinError');
+  const btn = document.getElementById('setPinSaveBtn');
   if (!pin || pin.length < 4) { errEl.textContent='PIN must be at least 4 digits.'; errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
   btn.textContent='Saving…'; btn.disabled=true;
   try {
-    const ref  = doc(db,"tracker","memberPins");
+    const ref = doc(db,"tracker","memberPins");
     const snap = await getDoc(ref);
     const pins = snap.exists() ? (snap.data()||{}) : {};
     pins[_setPinPhone] = pin;
     pins['_meta_' + _setPinPhone] = { name: _setPinFullName, adminSet: true };
     await setDoc(ref, pins);
     _currentMemberPin = pin;
-    showToast('✓ PIN saved for ' + _setPinName);
+    showToast('PIN saved for ' + _setPinName);
     closeSetMemberPinModal();
     logAdminAction('Reset member PIN', `${_setPinFullName || _setPinName} (${_setPinPhone})`);
-  } catch(e) { errEl.textContent='⚠️ Could not save PIN.'; errEl.classList.add('show'); }
+  } catch(e) { errEl.textContent='Could not save PIN.'; errEl.classList.add('show'); }
   finally { btn.textContent='Save PIN'; btn.disabled=false; }
 }
 function sendMemberPinWA() {
   const pin = document.getElementById('setPinInput').value.trim() || _currentMemberPin;
-  if (!pin) { showToast('⚠️ Save a PIN first, then send'); return; }
-  const msg = `Hello ${_setPinName}! 👋\n\nYour BOGONKO-NGELANI personal profile PIN is: *${pin}*\n\nVisit the tracker and tap "My Profile" to view your contribution history and submit welfare applications.\n\nKeep this PIN private. 🔐`;
+  if (!pin) { showToast('Save a PIN first, then send'); return; }
+  const msg = `Hello ${_setPinName}! \n\nYour BOGONKO-NGELANI personal profile PIN is: *${pin}*\n\nVisit the tracker and tap "My Profile" to view your contribution history and submit welfare applications.\n\nKeep this PIN private. `;
   openWAForPhone(_setPinPhone, msg);
   closeSetMemberPinModal();
 }
@@ -4008,7 +4008,7 @@ function sendMemberPinWA() {
 // PDF EXPORT
 // ════════════════════════════════════════════════
 function exportPDF(){
-  if (isAdmin && !hasRole('exportPDFs')) { showToast('⛔ You do not have permission to export PDFs'); return; }
+  if (isAdmin && !hasRole('exportPDFs')) { showToast('You do not have permission to export PDFs'); return; }
   const selD=new Date(selectedDate+'T00:00:00');
   const dateLabel=fmtDateShort(selD);
   const isSun=isSunday(selD);
@@ -4020,17 +4020,17 @@ function exportPDF(){
   const rows=membersToShow.map((m,i)=>{
     const p=isPaid(m.phone,selectedDate);
     const totalP=Object.keys(payments).filter(dk=>isPaid(m.phone,dk)).length;
-    return `<tr><td>${i+1}</td><td>${m.name}</td><td style="text-align:center;color:${p?'#3D7A4F':'#C0392B'};font-weight:700;">${p?'✓ Paid':'Unpaid'}</td><td style="text-align:right;">KSh ${(totalP*RATE).toLocaleString()}</td></tr>`;
+    return `<tr><td>${i+1}</td><td>${m.name}</td><td style="text-align:center;color:${p?'#3D7A4F':'#C0392B'};font-weight:700;">${p?'Paid':'Unpaid'}</td><td style="text-align:right;">KSh ${(totalP*RATE).toLocaleString()}</td></tr>`;
   }).join('');
   const openingBalanceBlock=isSun?`<div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:11px;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:.5px;">Opening Balance (brought forward)</div><div style="font-size:10px;color:#6B7280;margin-top:2px;">Total collected before ${dateLabel}</div></div><div style="font-size:22px;font-weight:800;color:#1E40AF;">KSh ${openingBalance.toLocaleString()}</div></div>`:'';
   const tableTitle=isSun?`<div style="font-size:13px;font-weight:700;color:#3D7A4F;margin:4px 0 6px;">Contributing Members — ${paid.length} of ${MEMBERS.length}</div>`:'';
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${dateLabel}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;}.stat-val.green{color:#3D7A4F;}.stat-val.amber{color:#C4621D;}table{width:100%;border-collapse:collapse;margin-top:4px;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">${isSun?'Weekly Sunday Report':'Daily Report'} — ${dateLabel} &nbsp;|&nbsp; Rate: KSh ${RATE}/day &nbsp;|&nbsp; ${MEMBERS.length} Members</div>${openingBalanceBlock}<div class="stats"><div class="stat"><div class="stat-val green">${paid.length}</div><div class="stat-lbl">Paid</div></div><div class="stat"><div class="stat-val amber">${unpaid.length}</div><div class="stat-lbl">Unpaid</div></div><div class="stat"><div class="stat-val">${(paid.length*RATE).toLocaleString()}</div><div class="stat-lbl">KSh Today</div></div><div class="stat"><div class="stat-val">${allKsh.toLocaleString()}</div><div class="stat-lbl">KSh All Days</div></div></div>${tableTitle}<table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Status</th><th style="text-align:right;">Total Paid</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${dateLabel}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;color:#1A1A1A;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;}.stat-val.green{color:#3D7A4F;}.stat-val.amber{color:#C4621D;}table{width:100%;border-collapse:collapse;margin-top:4px;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>Bogonko Stage Welfare</h1><div class="sub">${isSun?'Weekly Sunday Report':'Daily Report'} — ${dateLabel} &nbsp;|&nbsp; Rate: KSh ${RATE}/day &nbsp;|&nbsp; ${MEMBERS.length} Members</div>${openingBalanceBlock}<div class="stats"><div class="stat"><div class="stat-val green">${paid.length}</div><div class="stat-lbl">Paid</div></div><div class="stat"><div class="stat-val amber">${unpaid.length}</div><div class="stat-lbl">Unpaid</div></div><div class="stat"><div class="stat-val">${(paid.length*RATE).toLocaleString()}</div><div class="stat-lbl">KSh Today</div></div><div class="stat"><div class="stat-val">${allKsh.toLocaleString()}</div><div class="stat-lbl">KSh All Days</div></div></div>${tableTitle}<table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Status</th><th style="text-align:right;">Total Paid</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
   const win=window.open('','_blank');
-  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported daily PDF report', dateLabel); } else showToast('⚠️ Allow pop-ups for PDF export');
+  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported daily PDF report', dateLabel); } else showToast('Allow pop-ups for PDF export');
 }
 
 // ════════════════════════════════════════════════
-// SUNDAY REPORT PDF  — always exports the most recent Sunday
+// SUNDAY REPORT PDF — always exports the most recent Sunday
 // ════════════════════════════════════════════════
 function exportSundayPDF(){
   // Find the most recent Sunday in the payments record; fall back to
@@ -4045,16 +4045,16 @@ function exportSundayPDF(){
     sunKey = t.toISOString().slice(0,10);
   }
   const prev = selectedDate;
-  selectedDate = sunKey;   // temporarily set so exportPDF reads the Sunday
+  selectedDate = sunKey; // temporarily set so exportPDF reads the Sunday
   exportPDF();
-  selectedDate = prev;     // restore
+  selectedDate = prev; // restore
 }
 
 // ════════════════════════════════════════════════
 // MONTHLY REPORT
 // ════════════════════════════════════════════════
 function openReportModal(){
-  if (isAdmin && !hasRole('viewReports')) { showToast('⛔ You do not have permission to view reports'); return; }
+  if (isAdmin && !hasRole('viewReports')) { showToast('You do not have permission to view reports'); return; }
   const monthSel=document.getElementById('reportMonth');
   const yearSel=document.getElementById('reportYear');
   if(!monthSel.options.length){
@@ -4095,9 +4095,9 @@ function printReport(){
   const perMember=MEMBERS.map(m=>{ const daysPaid=keys.filter(k=>isPaid(m.phone,k)).length; return {name:m.name,daysPaid,ksh:daysPaid*RATE}; }).sort((a,b)=>b.daysPaid-a.daysPaid);
   const totalKsh=perMember.reduce((s,m)=>s+m.ksh,0); const totalDaysActive=keys.length;
   const rows=perMember.map((m,i)=>`<tr><td>${i+1}</td><td>${m.name}</td><td style="text-align:center;">${m.daysPaid}</td><td style="text-align:right;">KSh ${m.ksh.toLocaleString()}</td></tr>`).join('');
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${monthName} ${year}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;}table{width:100%;border-collapse:collapse;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>🏍️ Bogonko Stage Welfare</h1><div class="sub">Monthly Report — ${monthName} ${year} | Rate: KSh ${RATE}/day | ${MEMBERS.length} Members</div><div class="stats"><div class="stat"><div class="stat-val">${totalDaysActive}</div><div class="stat-lbl">Days Active</div></div><div class="stat"><div class="stat-val">KSh ${totalKsh.toLocaleString()}</div><div class="stat-lbl">Total</div></div></div><table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Days Paid</th><th style="text-align:right;">KSh</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bogonko Stage — ${monthName} ${year}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:20px;font-size:12px;}h1{font-size:20px;color:#141414;margin-bottom:2px;}.sub{color:#6B7280;font-size:12px;margin-bottom:16px;}.stats{display:flex;gap:12px;margin-bottom:16px;}.stat{background:#F7F5F0;border-radius:8px;padding:8px 14px;flex:1;text-align:center;}.stat-val{font-size:20px;font-weight:800;color:#141414;}.stat-lbl{font-size:10px;color:#6B7280;text-transform:uppercase;}table{width:100%;border-collapse:collapse;}th{background:#141414;color:#fff;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}td{padding:7px 10px;border-bottom:1px solid #E5E2DC;font-size:12px;}tr:nth-child(even){background:#F7F5F0;}.footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}.prepared-by{margin-top:24px;font-size:11px;color:#141414;text-align:center;font-weight:700;border-top:1px solid #E5E2DC;padding-top:10px;}@media print{body{padding:10px;}}</style></head><body><h1>Bogonko Stage Welfare</h1><div class="sub">Monthly Report — ${monthName} ${year} | Rate: KSh ${RATE}/day | ${MEMBERS.length} Members</div><div class="stats"><div class="stat"><div class="stat-val">${totalDaysActive}</div><div class="stat-lbl">Days Active</div></div><div class="stat"><div class="stat-val">KSh ${totalKsh.toLocaleString()}</div><div class="stat-lbl">Total</div></div></div><table><thead><tr><th>#</th><th>Name</th><th style="text-align:center;">Days Paid</th><th style="text-align:right;">KSh</th></tr></thead><tbody>${rows}</tbody></table><div class="prepared-by">This report was prepared by BONIFACE ONDIEK TUNALI — Treasurer, BOGONKO-NGELANI STAGE</div><div class="footer">Generated ${new Date().toLocaleString('en-KE')} · Bogonko Stage Welfare Tracker</div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
   const win=window.open('','_blank');
-  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported monthly PDF report', `${monthName} ${year}`); } else showToast('⚠️ Allow pop-ups for PDF export');
+  if(win){ win.document.write(html); win.document.close(); logAdminAction('Exported monthly PDF report', `${monthName} ${year}`); } else showToast('Allow pop-ups for PDF export');
 }
 
 // ════════════════════════════════════════════════
@@ -4107,13 +4107,13 @@ function openMarkAllModal(state){ pendingMarkAllState=state; document.getElement
 function closeMarkAllModal(){ document.getElementById('markAllModal').classList.remove('open'); pendingMarkAllState=null; }
 function confirmMarkAll(){
   if(pendingMarkAllState===null) return;
-  if(isPastDate(selectedDate)&&!pendingMarkAllState){ showToast('🔒 Cannot clear payments for a past date'); closeMarkAllModal(); return; }
+  if(isPastDate(selectedDate)&&!pendingMarkAllState){ showToast('Cannot clear payments for a past date'); closeMarkAllModal(); return; }
   const result=markAll(selectedDate,pendingMarkAllState);
   if(isPastDate(selectedDate)){
-    if(result.changed>0&&result.blocked>0) showToast(`✓ ${result.changed} marked paid · ${result.blocked} locked`);
-    else if(result.changed>0) showToast(`✓ ${result.changed} member(s) marked paid`);
-    else showToast('🔒 All members already locked for this past date');
-  } else { showToast(pendingMarkAllState?`✓ All ${MEMBERS.length} members marked paid`:'All payments cleared'); }
+    if(result.changed>0&&result.blocked>0) showToast(` ${result.changed} marked paid · ${result.blocked} locked`);
+    else if(result.changed>0) showToast(` ${result.changed} member(s) marked paid`);
+    else showToast('All members already locked for this past date');
+  } else { showToast(pendingMarkAllState?` All ${MEMBERS.length} members marked paid`:'All payments cleared'); }
   closeMarkAllModal(); renderAll();
 }
 
@@ -4122,31 +4122,31 @@ function confirmMarkAll(){
 // ════════════════════════════════════════════════
 const SERVICES = {
   transport: {
-    icon: '🏍️', label: 'Rides', title: 'Passenger & Goods Transport',
+    icon: '', label: 'Rides', title: 'Passenger & Goods Transport',
     body: "At the heart of what Bonge Riders does is getting people and goods where they need to go, quickly and safely. Our riders provide point-to-point passenger transport and small parcel or goods delivery around Bogonko-Ngelani and the surrounding area — a reliable, everyday service the community can count on."
   },
   stage: {
-    icon: '🚦', label: 'Stage', title: 'Stage Membership & Order',
+    icon: '', label: 'Stage', title: 'Stage Membership & Order',
     body: "We organize our riders into a recognized, disciplined stage with a fair queue system. Customers know they're getting a vetted, accountable rider, and members get an orderly, fair turn at picking up fares instead of competing for customers."
   },
   savings: {
-    icon: '💵', label: 'Savings', title: 'Table Banking / Chama Savings',
+    icon: '', label: 'Savings', title: 'Table Banking / Chama Savings',
     body: "Beyond transport, Bonge Riders runs a table banking system — members contribute daily savings into a shared pool. Over time this builds group capital that can support members' financial goals and strengthen the stage as a whole."
   },
   welfare: {
-    icon: '🤲', label: 'Welfare', title: 'Welfare Fund',
+    icon: '', label: 'Welfare', title: 'Welfare Fund',
     body: "We maintain a welfare fund built from member contributions, so that when a rider or their family faces an emergency — an accident, a hospital bill, or a bereavement — there's a system in place to offer financial support during a difficult time."
   },
   vetting: {
-    icon: '📋', label: 'Vetting', title: 'Member Registration & Vetting',
+    icon: '', label: 'Vetting', title: 'Member Registration & Vetting',
     body: "Every rider who joins goes through a formal registration process — ID verification, motorcycle registration details, and next-of-kin records. This vetting builds trust with the community, supports accountability, and helps with compliance with local transport regulations."
   },
   leadership: {
-    icon: '⚖️', label: 'Leadership', title: 'Leadership & Dispute Resolution',
+    icon: '', label: 'Leadership', title: 'Leadership & Dispute Resolution',
     body: "Bonge Riders is governed by an elected chairperson and signatories who oversee the stage's affairs, resolve disagreements between riders or with customers, and represent the group when dealing with local authorities such as county offices or traffic police."
   },
   support: {
-    icon: '🛡️', label: 'Support', title: 'Rider Support & Solidarity',
+    icon: '', label: 'Support', title: 'Rider Support & Solidarity',
     body: "Membership means you're never riding alone. From mentorship for newcomers, to collective bargaining power with fuel and spares suppliers, to support in recovering a stolen motorcycle, Bonge Riders looks out for its own."
   }
 };
@@ -4189,7 +4189,7 @@ function renderIncome(){
     <div class="income-item">
       <div class="income-item-left"><div class="income-item-desc">${e.desc}</div><div class="income-item-date">${e.date}</div></div>
       <div class="income-item-amount">KSh ${Number(e.amount).toLocaleString()}</div>
-      ${e.regId ? `<span class="income-item-locked" title="Auto-recorded on member approval — cannot be deleted">🔒</span>` : `<button class="income-item-del" onclick="deleteIncomeEntry('${e.id}')" title="Delete">×</button>`}
+      ${e.regId ? `<span class="income-item-locked" title="Auto-recorded on member approval — cannot be deleted"></span>` : `<button class="income-item-del" onclick="deleteIncomeEntry('${e.id}')" title="Delete">×</button>`}
     </div>`).join('');
 }
 function openIncomeModal(){
@@ -4211,13 +4211,13 @@ async function saveIncomeEntry(){
   const entry={id:Date.now().toString(),desc,amount,date};
   otherIncome.push(entry);
   await saveIncome(); closeIncomeModal(); renderIncome(); renderStats();
-  showToast('✓ Income entry added');
+  showToast('Income entry added');
   logAdminAction('Added income entry', `${desc} — KSh ${amount} (${date})`);
 }
 async function deleteIncomeEntry(id){
   const target = otherIncome.find(e=>e.id===id);
   if (target && target.regId) {
-    showToast('🔒 This entry was auto-recorded from an approved member registration and cannot be deleted.', 4000);
+    showToast('This entry was auto-recorded from an approved member registration and cannot be deleted.', 4000);
     return;
   }
   otherIncome=otherIncome.filter(e=>e.id!==id);
@@ -4237,17 +4237,17 @@ let _spendingLoaded = false;
 async function saveSpending() {
   // NOTE: totalKshAllDays() already includes otherIncome, so use it directly.
   const _snapshotIncome = totalKshAllDays();
-  const _snapshotSpent  = spending.reduce((s,e)=>s+(Number(e.amount)||0),0);
+  const _snapshotSpent = spending.reduce((s,e)=>s+(Number(e.amount)||0),0);
   try {
     await setDoc(doc(db,"tracker","spending"),{
       list: spending,
-      snapshotIncome:  _snapshotIncome,
-      snapshotSpent:   _snapshotSpent,
+      snapshotIncome: _snapshotIncome,
+      snapshotSpent: _snapshotSpent,
       snapshotBalance: _snapshotIncome - _snapshotSpent,
       updatedAt: Date.now()
     });
-    setSyncStatus(true,'☁️ Synced');
-  } catch(e){ setSyncStatus(false,'⚠️ Offline'); }
+    setSyncStatus(true,'Synced');
+  } catch(e){ setSyncStatus(false,'Offline'); }
 }
 // Persisted snapshot values — updated every time a spending entry is saved.
 // These survive a refresh even before payments/income finish loading.
@@ -4265,8 +4265,8 @@ function _saveSpendCache(income, spent, balance) {
   try { localStorage.setItem(SPEND_CACHE_KEY, JSON.stringify({ income, spent, balance })); } catch(e) {}
 }
 const _spendCacheInit = _loadSpendCache();
-let _persistedIncome  = _spendCacheInit.income;
-let _persistedSpent   = _spendCacheInit.spent;
+let _persistedIncome = _spendCacheInit.income;
+let _persistedSpent = _spendCacheInit.spent;
 let _persistedBalance = _spendCacheInit.balance;
 
 function loadSpending() {
@@ -4275,14 +4275,14 @@ function loadSpending() {
   _spendingLoaded = false;
   _spendingUnsub = onSnapshot(doc(db,"tracker","spending"), (snap)=>{
     const data = snap.exists() ? snap.data() : {};
-    spending            = data.list          || [];
-    _spendingLoaded     = true;
-    _persistedIncome    = data.snapshotIncome  || 0;
-    _persistedSpent     = data.snapshotSpent   || 0;
-    _persistedBalance   = data.snapshotBalance !== undefined ? data.snapshotBalance : (_persistedIncome - _persistedSpent);
+    spending = data.list || [];
+    _spendingLoaded = true;
+    _persistedIncome = data.snapshotIncome || 0;
+    _persistedSpent = data.snapshotSpent || 0;
+    _persistedBalance = data.snapshotBalance !== undefined ? data.snapshotBalance : (_persistedIncome - _persistedSpent);
     _saveSpendCache(_persistedIncome, _persistedSpent, _persistedBalance);
     renderSpending(); renderStats();
-  }, (err)=>{ console.error('Spending listener error:', err); setSyncStatus(false,'⚠️ Offline'); });
+  }, (err)=>{ console.error('Spending listener error:', err); setSyncStatus(false,'Offline'); });
 }
 function totalSpending() {
   return spending.reduce((s,e)=>s+(Number(e.amount)||0), 0);
@@ -4292,13 +4292,13 @@ function renderSpending() {
   const total = totalSpending();
   const liveInc = totalKshAllDays();
   const totalInc = liveInc > 0 ? liveInc : _persistedIncome;
-  const balance  = totalInc - total;
+  const balance = totalInc - total;
   if (pill) pill.textContent = 'KSh ' + total.toLocaleString();
   const sbSpent = document.getElementById('sbSpent');
-  const sbBal   = document.getElementById('sbBalance');
+  const sbBal = document.getElementById('sbBalance');
   if (sbSpent) sbSpent.textContent = 'KSh ' + total.toLocaleString();
   if (sbBal) {
-    sbBal.textContent = (balance < 0 ? '-' : '') + 'KSh ' + Math.abs(balance).toLocaleString() + (balance < 0 ? ' ⚠️' : '');
+    sbBal.textContent = (balance < 0 ? '-' : '') + 'KSh ' + Math.abs(balance).toLocaleString() + (balance < 0 ? ' ' : '');
     sbBal.style.color = balance < 0 ? '#E05540' : 'var(--green2)';
   }
 }
@@ -4336,7 +4336,7 @@ async function saveSpendingEntry() {
     await saveSpending();
     closeAddSpendingModal();
     renderSpending();
-    showToast('✓ Spending entry updated');
+    showToast('Spending entry updated');
     logAdminAction('Edited spending entry', `${desc} — KSh ${amount} (${date})`);
   } else {
     // Add mode — create new entry
@@ -4345,7 +4345,7 @@ async function saveSpendingEntry() {
     await saveSpending();
     closeAddSpendingModal();
     renderSpending();
-    showToast('✓ Spending entry added');
+    showToast('Spending entry added');
     logAdminAction('Added spending entry', `${desc} — KSh ${amount} (${date})`);
   }
 }
@@ -4384,8 +4384,8 @@ function openSpendingModal() {
             <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#E05540;white-space:nowrap;">−KSh ${Number(e.amount).toLocaleString()}</div>
           </div>
           <div style="display:flex;gap:6px;margin-top:8px;">
-            <button onclick="openEditSpending('${e.id}')" style="flex:1;background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">✏️ Edit</button>
-            <button onclick="deleteSpendingEntryFromModal('${e.id}')" style="flex:1;background:none;border:1px solid rgba(220,38,38,.25);color:#EF4444;border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">🗑 Delete</button>
+            <button onclick="openEditSpending('${e.id}')" style="flex:1;background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">Edit</button>
+            <button onclick="deleteSpendingEntryFromModal('${e.id}')" style="flex:1;background:none;border:1px solid rgba(220,38,38,.25);color:#EF4444;border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">Delete</button>
           </div>
         </div>`).join('');
     }
@@ -4401,16 +4401,16 @@ function openEditSpending(id) {
   _editingSpendId = id;
   closeSpendingModal();
   // Prefill the existing add/edit modal
-  document.getElementById('spendDesc').value      = e.desc;
-  document.getElementById('spendAmount').value    = e.amount;
+  document.getElementById('spendDesc').value = e.desc;
+  document.getElementById('spendAmount').value = e.amount;
   document.getElementById('spendRecipient').value = e.recipient || '';
-  document.getElementById('spendDate').value      = e.date;
-  document.getElementById('spendCategory').value  = e.category || 'Welfare';
+  document.getElementById('spendDate').value = e.date;
+  document.getElementById('spendCategory').value = e.category || 'Welfare';
   document.getElementById('spendError').classList.remove('show');
   // Relabel the modal for editing
   const modal = document.getElementById('addSpendingModal');
   const title = modal.querySelector('.modal-title');
-  if (title) title.textContent = '✏️ Edit Spending Entry';
+  if (title) title.textContent = 'Edit Spending Entry';
   const saveBtn = modal.querySelector('.mbtn.danger');
   if (saveBtn) saveBtn.textContent = 'Save Changes';
   modal.classList.add('open');
@@ -4419,7 +4419,7 @@ function closeAddSpendingModal() {
   _editingSpendId = null;
   const modal = document.getElementById('addSpendingModal');
   const title = modal.querySelector('.modal-title');
-  if (title) title.textContent = '💸 Add Spending Entry';
+  if (title) title.textContent = 'Add Spending Entry';
   const saveBtn = modal.querySelector('.mbtn.danger');
   if (saveBtn) saveBtn.textContent = 'Add Entry';
   modal.classList.remove('open');
@@ -4483,12 +4483,12 @@ function exportSpendingPDF() {
 </style>
 </head><body>
 <div class="hdr">
-  <div class="org">🏍️ Bogonko–Ngelani Stage Welfare</div>
+  <div class="org">Bogonko–Ngelani Stage Welfare</div>
   <div class="org-sub">BOGONKO STAGE · Welfare Insurance Kitty</div>
   <div class="doc-title">Spending Catalog &amp; Expenditure Report</div>
   <div style="font-size:11px;color:#6B7280;margin-top:6px;">Printed: ${printDate} &nbsp;|&nbsp; KSh ${RATE}/day per member &nbsp;|&nbsp; ${MEMBERS.length} Members</div>
 </div>
-<div class="pb-note">💳 Paybill: <strong>544600</strong> &nbsp;|&nbsp; Account: <strong>942540</strong></div>
+<div class="pb-note">Paybill: <strong>544600</strong> &nbsp;|&nbsp; Account: <strong>942540</strong></div>
 <div class="grid4">
   <div class="sc"><div class="sv r">KSh ${total.toLocaleString()}</div><div class="sl">Total Spent</div></div>
 </div>
@@ -4500,7 +4500,7 @@ function exportSpendingPDF() {
   </tbody>
 </table>
 <div class="sig-section">
-  <div class="sig-hdr">✍️ Authorisation &amp; Verification Signatures</div>
+  <div class="sig-hdr">Authorisation &amp; Verification Signatures</div>
   <div class="sig-grid">
     <div>
       <div class="sig-role">Chairperson</div>
@@ -4521,7 +4521,7 @@ function exportSpendingPDF() {
 </body></html>`;
   const win = window.open('','_blank');
   if (win) { win.document.write(html); win.document.close(); logAdminAction('Exported spending PDF report'); }
-  else showToast('⚠️ Allow pop-ups for PDF export');
+  else showToast('Allow pop-ups for PDF export');
 }
 
 // ════════════════════════════════════════════════
@@ -4579,17 +4579,17 @@ setTimeout(()=>{
 
 // All available roles and their labels/icons
 const ALL_ROLES = [
-  { id: 'markPayments',   label: 'Mark Payments',   icon: '✅' },
-  { id: 'viewMembers',    label: 'View Members',     icon: '👁️' },
-  { id: 'manageMembers',  label: 'Manage Members',   icon: '👥' },
-  { id: 'viewReports',    label: 'View Reports',     icon: '📊' },
-  { id: 'exportPDFs',     label: 'Export PDFs',      icon: '📄' },
-  { id: 'manageIncome',   label: 'Income',           icon: '💰' },
-  { id: 'manageSpending', label: 'Spending',         icon: '💸' },
-  { id: 'sendWhatsApp',   label: 'WA Blast',         icon: '📲' },
-  { id: 'reviewWelfare',  label: 'Review Welfare',   icon: '🤝' },
-  { id: 'viewPayment',    label: 'Payment Page',     icon: '💳' },
-  { id: 'manageAdmins',   label: 'Manage Admins',    icon: '🛡️' },
+  { id: 'markPayments', label: 'Mark Payments', icon: '' },
+  { id: 'viewMembers', label: 'View Members', icon: '' },
+  { id: 'manageMembers', label: 'Manage Members', icon: '' },
+  { id: 'viewReports', label: 'View Reports', icon: '' },
+  { id: 'exportPDFs', label: 'Export PDFs', icon: '' },
+  { id: 'manageIncome', label: 'Income', icon: '' },
+  { id: 'manageSpending', label: 'Spending', icon: '' },
+  { id: 'sendWhatsApp', label: 'WA Blast', icon: '' },
+  { id: 'reviewWelfare', label: 'Review Welfare', icon: '' },
+  { id: 'viewPayment', label: 'Payment Page', icon: '' },
+  { id: 'manageAdmins', label: 'Manage Admins', icon: '' },
 ];
 
 // Cached list of admin records { email, name, roles[], isSuperAdmin }
@@ -4638,19 +4638,19 @@ async function logAdminAction(action, details) {
     if (!auth.currentUser || auth.currentUser.isAnonymous) return; // only real admin sessions are logged
     const rec = _adminList.find(a => a.email === _currentAdminEmail);
     await addDoc(collection(db, 'activityLog'), {
-      action:      action || '',
-      details:     details || '',
-      adminEmail:  _currentAdminEmail || (auth.currentUser.email || '').toLowerCase(),
-      adminName:   (rec && rec.name) ? rec.name : '',
-      timestamp:   serverTimestamp(),
-      clientTime:  new Date().toISOString(),
-      userAgent:   (navigator.userAgent || '').slice(0, 200)
+      action: action || '',
+      details: details || '',
+      adminEmail: _currentAdminEmail || (auth.currentUser.email || '').toLowerCase(),
+      adminName: (rec && rec.name) ? rec.name : '',
+      timestamp: serverTimestamp(),
+      clientTime: new Date().toISOString(),
+      userAgent: (navigator.userAgent || '').slice(0, 200)
     });
   } catch(e) {
     // Don't block the admin's actual action, but DO surface the failure
     // visibly (toast) so it's debuggable on mobile without devtools.
     console.error('[activityLog] failed to write entry:', action, e);
-    showToast('⚠️ Log write failed: ' + (e && e.code ? e.code : (e && e.message ? e.message : 'unknown error')), 5000);
+    showToast('Log write failed: ' + (e && e.code ? e.code : (e && e.message ? e.message : 'unknown error')), 5000);
   }
 }
 
@@ -4663,14 +4663,14 @@ async function loadActivityLog(force) {
     _activityLogLoaded = true;
   } catch(e) {
     console.error('[activityLog] failed to load:', e);
-    showToast('⚠️ Could not load activity log. Check connection/permissions.');
+    showToast('Could not load activity log. Check connection/permissions.');
   }
   return _activityLogCache;
 }
 
 function openActivityLog() {
-  if (!isAdmin) { showToast('🔐 Admin login required'); return; }
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin access required'); return; }
+  if (!isAdmin) { showToast('Admin login required'); return; }
+  if (!isSuperAdminUser()) { showToast('Super-admin access required'); return; }
   document.getElementById('activityLogModal').classList.add('open');
   document.getElementById('activityLogSearch').value = '';
   renderActivityLog(true);
@@ -4750,7 +4750,7 @@ function printActivityLog() {
     .footer{margin-top:20px;font-size:11px;color:#9CA3AF;text-align:center;}
     @media print{body{padding:10px;}}
   </style></head><body>
-  <h1>🏍️ Bogonko Stage — Admin Activity Log</h1>
+  <h1>Bogonko Stage — Admin Activity Log</h1>
   <div class="sub">${entries.length} entries &nbsp;|&nbsp; Generated ${new Date().toLocaleString('en-KE')}</div>
   <table><thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th><th>Email</th></tr></thead>
   <tbody>${rows}</tbody></table>
@@ -4784,8 +4784,8 @@ function isSuperAdminUser() {
 
 // ── Open/Close modal ──
 function openManageAdmins() {
-  if (!isAdmin) { showToast('🔐 Admin login required'); return; }
-  if (!isSuperAdminUser()) { showToast('⛔ Super-admin access required'); return; }
+  if (!isAdmin) { showToast('Admin login required'); return; }
+  if (!isSuperAdminUser()) { showToast('Super-admin access required'); return; }
   renderAdminMgmtModal();
   document.getElementById('manageAdminsModal').classList.add('open');
 }
@@ -4851,9 +4851,9 @@ async function saveAdminRow(idx) {
   _adminList[idx].roles = roles;
   try {
     await saveAdminRoles();
-    showToast('✓ Roles saved');
+    showToast('Roles saved');
     logAdminAction('Changed admin roles', `${_adminList[idx].email} → [${roles.join(', ')}]`);
-  } catch(e) { showToast('⚠️ Save failed'); }
+  } catch(e) { showToast('Save failed'); }
 }
 
 async function removeAdmin(idx) {
@@ -4865,14 +4865,14 @@ async function removeAdmin(idx) {
     renderAdminMgmtModal();
     showToast('Admin removed');
     logAdminAction('Removed admin', adm.email);
-  } catch(e) { showToast('⚠️ Remove failed'); }
+  } catch(e) { showToast('Remove failed'); }
 }
 
 async function saveNewAdmin() {
   const email = document.getElementById('newAdmEmail').value.trim().toLowerCase();
-  const name  = document.getElementById('newAdmName').value.trim();
+  const name = document.getElementById('newAdmName').value.trim();
   const errEl = document.getElementById('newAdmError');
-  const btn   = document.getElementById('newAdmBtn');
+  const btn = document.getElementById('newAdmBtn');
   if (!email || !email.includes('@')) {
     errEl.textContent = 'Enter a valid email address.';
     errEl.classList.add('show'); return;
@@ -4890,7 +4890,7 @@ async function saveNewAdmin() {
   try {
     await saveAdminRoles();
     renderAdminMgmtModal();
-    showToast(`✓ ${email} added as admin`);
+    showToast(` ${email} added as admin`);
     logAdminAction('Added admin', `${email}${isSuperAdmin ? ' (super admin)' : ''}`);
   } catch(e) {
     errEl.textContent = 'Failed to save. Check connection.';
@@ -5035,26 +5035,26 @@ document.addEventListener('cut', e=>{ if(!isFormField(e.target)) e.preventDefaul
 
 // ── COLLAPSIBLE SECTIONS ──────────────────────────────────────────────────
 function toggleSection(id) {
-  const body  = document.getElementById(id + 'Body');
+  const body = document.getElementById(id + 'Body');
   const caret = document.getElementById(id + 'CaretIcon');
-  const btn   = body ? body.closest('.spending-section, .income-section').querySelector('.section-toggle-btn') : null;
+  const btn = body ? body.closest('.spending-section, .income-section').querySelector('.section-toggle-btn') : null;
   if (!body) return;
   const isOpen = body.classList.toggle('open');
-  if (caret)  caret.classList.toggle('open', isOpen);
-  if (btn)    btn.setAttribute('aria-expanded', isOpen);
+  if (caret) caret.classList.toggle('open', isOpen);
+  if (btn) btn.setAttribute('aria-expanded', isOpen);
 }
 
 function toggleManual() {
-  const body  = document.getElementById('manualBody');
+  const body = document.getElementById('manualBody');
   const caret = document.getElementById('manualCaret');
-  const open  = body.style.display === 'none';
-  body.style.display  = open ? 'block' : 'none';
+  const open = body.style.display === 'none';
+  body.style.display = open ? 'block' : 'none';
   caret.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 
 function toggleFaq(btn) {
   const answer = btn.nextElementSibling;
-  const arrow  = btn.querySelector('.faq-arrow');
+  const arrow = btn.querySelector('.faq-arrow');
   const isOpen = answer.classList.toggle('open');
   arrow.classList.toggle('open', isOpen);
 }
@@ -5063,9 +5063,9 @@ function toggleFaq(btn) {
 // ════════════════════════════════════════════════
 // WELFARE ADMIN PANEL
 // ════════════════════════════════════════════════
-let _allWelfareApps  = [];   // { memberPhone, memberName, applications: [...] }[]
-let _welfareFilter   = 'all';
-let _welfareUnsubs   = [];   // list of onSnapshot unsub fns
+let _allWelfareApps = []; // { memberPhone, memberName, applications: [...] }[]
+let _welfareFilter = 'all';
+let _welfareUnsubs = []; // list of onSnapshot unsub fns
 
 // Called after admin signs in — listens to all welfare_XXXX docs
 function loadAllWelfareApps() {
@@ -5089,7 +5089,7 @@ function loadAllWelfareApps() {
         if (apps.length > 0) {
           _allWelfareApps.push({
             memberPhone: m.phone,
-            memberName:  m.name,
+            memberName: m.name,
             applications: apps
           });
         }
@@ -5122,12 +5122,12 @@ function renderWelfareSummaryPreview() {
   const preview = document.getElementById('welfareSummaryPreview');
   if (!badge || !preview) return;
 
-  const pending  = getAllAppsFlat().filter(a => (a.status||'pending') === 'pending');
+  const pending = getAllAppsFlat().filter(a => (a.status||'pending') === 'pending');
   const approved = getAllAppsFlat().filter(a => a.status === 'approved');
-  const total    = getAllAppsFlat().length;
+  const total = getAllAppsFlat().length;
 
   badge.textContent = pending.length + ' pending';
-  badge.className   = 'welfare-badge-count' + (pending.length > 0 ? '' : ' none');
+  badge.className = 'welfare-badge-count' + (pending.length > 0 ? '' : ' none');
 
   if (total === 0) {
     preview.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">No welfare applications yet.</div>';
@@ -5137,7 +5137,7 @@ function renderWelfareSummaryPreview() {
   // Show up to 2 most recent pending apps as a preview
   const toShow = pending.slice(0, 2);
   if (toShow.length === 0) {
-    preview.innerHTML = `<div style="text-align:center;color:var(--green2);font-size:13px;padding:8px 0;font-weight:600;">✓ All ${total} application(s) reviewed</div>`;
+    preview.innerHTML = `<div style="text-align:center;color:var(--green2);font-size:13px;padding:8px 0;font-weight:600;">All ${total} application(s) reviewed</div>`;
     return;
   }
 
@@ -5179,37 +5179,37 @@ function renderWelfareAdminList() {
           </div>
           <span class="welfare-status-badge ${status}">${capitalise(status)}</span>
         </div>
-        <div class="welfare-app-reason">📋 ${escHtml(app.reason || '—')}</div>
+        <div class="welfare-app-reason"> ${escHtml(app.reason || '—')}</div>
         ${app.desc ? `<div class="welfare-app-desc">${escHtml(app.desc)}</div>` : ''}
-        ${app.amount ? `<div class="welfare-app-amount">💰 KSh ${Number(app.amount).toLocaleString()} requested</div>` : ''}
+        ${app.amount ? `<div class="welfare-app-amount">KSh ${Number(app.amount).toLocaleString()} requested</div>` : ''}
         <div class="welfare-app-date">Submitted: ${dateStr}</div>
         <div class="welfare-action-btns">
-          ${status !== 'approved' ? `<button class="w-approve-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'approved')">✓ Approve</button>` : ''}
-          ${status !== 'declined' ? `<button class="w-decline-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'declined')">✕ Decline</button>` : ''}
-          ${status !== 'pending'  ? `<button class="w-pending-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'pending')">↩ Pending</button>` : ''}
-          <button class="w-wa-btn" onclick="notifyMemberWelfareWA('${app.memberPhone}','${app.memberName}','${escHtml(app.reason||'')}','${status}')">📲 Notify</button>
+          ${status !== 'approved' ? `<button class="w-approve-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'approved')">Approve</button>` : ''}
+          ${status !== 'declined' ? `<button class="w-decline-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'declined')">Decline</button>` : ''}
+          ${status !== 'pending' ? `<button class="w-pending-btn" onclick="updateWelfareStatus('${app.memberPhone}',${app.appIdx},'pending')">Pending</button>` : ''}
+          <button class="w-wa-btn" onclick="notifyMemberWelfareWA('${app.memberPhone}','${app.memberName}','${escHtml(app.reason||'')}','${status}')">Notify</button>
         </div>
       </div>`;
   }).join('');
 }
 
 async function updateWelfareStatus(phone, appIdx, newStatus) {
-  if (isAdmin && !hasRole('reviewWelfare')) { showToast('⛔ You do not have permission to review welfare applications'); return; }
+  if (isAdmin && !hasRole('reviewWelfare')) { showToast('You do not have permission to review welfare applications'); return; }
   const phoneDigits = phone.replace(/\D/g, '');
   const docRef = doc(db, 'tracker', 'welfare_' + phoneDigits);
   try {
     const snap = await getDoc(docRef);
-    if (!snap.exists()) { showToast('⚠️ Application not found'); return; }
+    if (!snap.exists()) { showToast('Application not found'); return; }
     const data = snap.data();
     const apps = data.applications || [];
-    if (!apps[appIdx]) { showToast('⚠️ Application index missing'); return; }
+    if (!apps[appIdx]) { showToast('Application index missing'); return; }
     apps[appIdx].status = newStatus;
     apps[appIdx].reviewedAt = Date.now();
     await setDoc(docRef, { ...data, applications: apps });
-    showToast(newStatus === 'approved' ? '✓ Application approved' : newStatus === 'declined' ? 'Application declined' : 'Set back to pending');
+    showToast(newStatus === 'approved' ? 'Application approved' : newStatus === 'declined' ? 'Application declined' : 'Set back to pending');
     logAdminAction('Welfare application ' + newStatus, `${phone} — application #${appIdx+1}`);
   } catch(e) {
-    showToast('⚠️ Could not update. Check connection.');
+    showToast('Could not update. Check connection.');
   }
 }
 
@@ -5217,11 +5217,11 @@ function notifyMemberWelfareWA(phone, name, reason, status) {
   const first = (name || phone).split(' ')[0];
   let msg = '';
   if (status === 'approved') {
-    msg = `Hello ${first}! 👋\n\nGreat news! Your welfare application for *${reason}* has been *APPROVED* by the BOGONKO-NGELANI Welfare Committee. 🎉\n\nPlease contact the treasurer to arrange disbursement.\n\nThank you for being part of our community. 🙏`;
+    msg = `Hello ${first}! \n\nGreat news! Your welfare application for *${reason}* has been *APPROVED* by the BOGONKO-NGELANI Welfare Committee. \n\nPlease contact the treasurer to arrange disbursement.\n\nThank you for being part of our community. `;
   } else if (status === 'declined') {
-    msg = `Hello ${first}! 👋\n\nRegarding your welfare application for *${reason}* — unfortunately, it has been *declined* by the BOGONKO-NGELANI Welfare Committee at this time.\n\nIf you have questions, please reach out to the committee directly. 🙏`;
+    msg = `Hello ${first}! \n\nRegarding your welfare application for *${reason}* — unfortunately, it has been *declined* by the BOGONKO-NGELANI Welfare Committee at this time.\n\nIf you have questions, please reach out to the committee directly. `;
   } else {
-    msg = `Hello ${first}! 👋\n\nYour welfare application for *${reason}* has been received and is currently *under review* by the BOGONKO-NGELANI Welfare Committee.\n\nWe will update you once a decision has been made. 🙏`;
+    msg = `Hello ${first}! \n\nYour welfare application for *${reason}* has been received and is currently *under review* by the BOGONKO-NGELANI Welfare Committee.\n\nWe will update you once a decision has been made. `;
   }
   openWAForPhone(phone, msg);
 }
@@ -5234,7 +5234,7 @@ function setWelfareFilter(filter, el) {
 }
 
 function openWelfareAdminPanel() {
-  if (isAdmin && !hasRole('reviewWelfare')) { showToast('⛔ You do not have permission to review welfare applications'); return; }
+  if (isAdmin && !hasRole('reviewWelfare')) { showToast('You do not have permission to review welfare applications'); return; }
   renderWelfareAdminList();
   document.getElementById('welfareAdminModal').classList.add('open');
 }
@@ -5247,8 +5247,8 @@ function closeWelfareAdminPanel() {
 // Shared doc: tracker/payment_confirmations → { requests: [{ id, memberPhone, memberName, dateKey, mpesaCode, status, timestamp, reviewedAt }] }
 // ════════════════════════════════════════════════
 let _allPayConfirmRequests = [];
-let _payConfirmFilter      = 'pending';
-let _payConfirmUnsub       = null;
+let _payConfirmFilter = 'pending';
+let _payConfirmUnsub = null;
 
 function loadPayConfirmRequests() {
   if (_payConfirmUnsub) { _payConfirmUnsub(); _payConfirmUnsub = null; }
@@ -5265,16 +5265,16 @@ function payConfirmPendingCount() {
 }
 
 function renderPayConfirmSummaryPreview() {
-  const badge    = document.getElementById('payConfirmPendingBadge');
+  const badge = document.getElementById('payConfirmPendingBadge');
   const menuBadge= document.getElementById('payConfirmMenuBadge');
-  const preview  = document.getElementById('payConfirmSummaryPreview');
+  const preview = document.getElementById('payConfirmSummaryPreview');
   if (!badge || !preview) return;
 
   const pending = _allPayConfirmRequests.filter(r => (r.status||'pending') === 'pending');
-  const total   = _allPayConfirmRequests.length;
+  const total = _allPayConfirmRequests.length;
 
   badge.textContent = pending.length + ' pending';
-  badge.className   = 'welfare-badge-count' + (pending.length > 0 ? '' : ' none');
+  badge.className = 'welfare-badge-count' + (pending.length > 0 ? '' : ' none');
 
   if (menuBadge) {
     if (pending.length > 0) { menuBadge.textContent = pending.length; menuBadge.style.display = ''; }
@@ -5288,7 +5288,7 @@ function renderPayConfirmSummaryPreview() {
 
   const toShow = pending.slice(0, 2);
   if (toShow.length === 0) {
-    preview.innerHTML = `<div style="text-align:center;color:var(--green2);font-size:13px;padding:8px 0;font-weight:600;">✓ All ${total} request(s) reviewed</div>`;
+    preview.innerHTML = `<div style="text-align:center;color:var(--green2);font-size:13px;padding:8px 0;font-weight:600;">All ${total} request(s) reviewed</div>`;
     return;
   }
 
@@ -5318,9 +5318,9 @@ function renderPayConfirmAdminList() {
   }
 
   list.innerHTML = reqs.map(r => {
-    const status   = r.status || 'pending';
-    const dateStr  = fmtDateShort(new Date(r.dateKey + 'T00:00:00'));
-    const subStr   = r.timestamp ? new Date(r.timestamp).toLocaleString('en-KE', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}) : '—';
+    const status = r.status || 'pending';
+    const dateStr = fmtDateShort(new Date(r.dateKey + 'T00:00:00'));
+    const subStr = r.timestamp ? new Date(r.timestamp).toLocaleString('en-KE', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}) : '—';
     return `
       <div class="welfare-app-card ${status === 'approved' ? 'approved' : status === 'invalid' ? 'declined' : 'pending'}">
         <div class="welfare-app-top">
@@ -5330,21 +5330,21 @@ function renderPayConfirmAdminList() {
           </div>
           <span class="welfare-status-badge ${status === 'approved' ? 'approved' : status === 'invalid' ? 'invalid' : 'pending'}">${status === 'invalid' ? 'Invalid' : capitalise(status)}</span>
         </div>
-        <div class="welfare-app-reason">💳 Daily Contribution — ${dateStr}</div>
+        <div class="welfare-app-reason">Daily Contribution — ${dateStr}</div>
         <div class="paycode-box"><span>M-Pesa Confirmation Code</span>${escHtml(r.mpesaCode || '—')}</div>
         <div class="welfare-app-date">Submitted: ${subStr}</div>
         <div class="welfare-action-btns">
-          ${status !== 'approved' ? `<button class="w-approve-btn" onclick="approvePayConfirm('${r.id}')">✓ Approve</button>` : ''}
-          ${status !== 'invalid'  ? `<button class="w-decline-btn" onclick="invalidatePayConfirm('${r.id}')">✕ Invalid Code</button>` : ''}
+          ${status !== 'approved' ? `<button class="w-approve-btn" onclick="approvePayConfirm('${r.id}')">Approve</button>` : ''}
+          ${status !== 'invalid' ? `<button class="w-decline-btn" onclick="invalidatePayConfirm('${r.id}')">Invalid Code</button>` : ''}
         </div>
       </div>`;
   }).join('');
 }
 
 async function approvePayConfirm(reqId) {
-  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to mark payments'); return; }
+  if (isAdmin && !hasRole('markPayments')) { showToast('You do not have permission to mark payments'); return; }
   const req = _allPayConfirmRequests.find(r => r.id === reqId);
-  if (!req) { showToast('⚠️ Request not found'); return; }
+  if (!req) { showToast('Request not found'); return; }
 
   try {
     // Mark the day paid for this member directly (verified via M-Pesa code)
@@ -5359,18 +5359,18 @@ async function approvePayConfirm(reqId) {
       _allPayConfirmRequests[idx] = { ..._allPayConfirmRequests[idx], status: 'approved', reviewedAt: Date.now() };
     }
     await setDoc(docRef, { requests: _allPayConfirmRequests });
-    showToast('✓ Payment approved for ' + (req.memberName || req.memberPhone));
+    showToast('Payment approved for ' + (req.memberName || req.memberPhone));
     logAdminAction('Approved payment confirmation', `${req.memberName || req.memberPhone} — ${req.dateKey}`);
     renderAll();
   } catch(e) {
-    showToast('⚠️ Could not approve. Check connection.');
+    showToast('Could not approve. Check connection.');
   }
 }
 
 async function invalidatePayConfirm(reqId) {
-  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to mark payments'); return; }
+  if (isAdmin && !hasRole('markPayments')) { showToast('You do not have permission to mark payments'); return; }
   const req = _allPayConfirmRequests.find(r => r.id === reqId);
-  if (!req) { showToast('⚠️ Request not found'); return; }
+  if (!req) { showToast('Request not found'); return; }
 
   try {
     const docRef = doc(db, 'tracker', 'payment_confirmations');
@@ -5379,10 +5379,10 @@ async function invalidatePayConfirm(reqId) {
       _allPayConfirmRequests[idx] = { ..._allPayConfirmRequests[idx], status: 'invalid', reviewedAt: Date.now() };
     }
     await setDoc(docRef, { requests: _allPayConfirmRequests });
-    showToast('✕ Marked invalid — member will be notified');
+    showToast('Marked invalid — member will be notified');
     logAdminAction('Invalidated payment confirmation', `${req.memberName || req.memberPhone} — ${req.dateKey}`);
   } catch(e) {
-    showToast('⚠️ Could not update. Check connection.');
+    showToast('Could not update. Check connection.');
   }
 }
 
@@ -5394,7 +5394,7 @@ function setPayConfirmFilter(filter, el) {
 }
 
 function openPayConfirmPanel() {
-  if (isAdmin && !hasRole('markPayments')) { showToast('⛔ You do not have permission to review payment confirmations'); return; }
+  if (isAdmin && !hasRole('markPayments')) { showToast('You do not have permission to review payment confirmations'); return; }
   renderPayConfirmAdminList();
   document.getElementById('payConfirmModal').classList.add('open');
 }
@@ -5413,20 +5413,20 @@ function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 // ENTERTAINMENT UPGRADES
 // ════════════════════════════════════════════════
 
-// 🎬 Splash tagline rotation
+// Splash tagline rotation
 (function(){
-  const tags=['Stronger Together 💪','Your Stage, Your Family 🏍️','No Rider Left Behind 🤝','Umoja ni nguvu 🇰🇪','Contributing today, covered tomorrow 🙏'];
+  const tags=['Stronger Together ','Your Stage, Your Family ','No Rider Left Behind ','Umoja ni nguvu ','Contributing today, covered tomorrow '];
   const el=document.getElementById('splashTagline');
   if(el) el.textContent=tags[Math.floor(Math.random()*tags.length)];
 })();
 
-// 🎉 Confetti + ✅ check flash
+// Confetti + check flash
 function launchConfetti(sourceCard) {
   // Check flash on card
   if(sourceCard){
     sourceCard.style.position='relative';
     const chk=document.createElement('span');
-    chk.className='check-flash'; chk.textContent='✅';
+    chk.className='check-flash'; chk.textContent='';
     sourceCard.appendChild(chk);
     setTimeout(()=>chk.remove(), 800);
   }
@@ -5462,7 +5462,7 @@ function launchConfetti(sourceCard) {
   draw();
 }
 
-// 🔥 Streak counter
+// Streak counter
 function getStreak(phone) {
   const today=todayKey();
   const past=Object.keys(payments).filter(dk=>dk<today).sort().reverse();
@@ -5471,10 +5471,10 @@ function getStreak(phone) {
   return s;
 }
 
-// 🏆 Podium card
+// Podium card
 function renderPodium() {
   const el=document.getElementById('podiumRows'); if(!el) return;
-  const medals=['🥇','🥈','🥉'];
+  const medals=['','',''];
   let top3;
   if(dashboardAgg&&dashboardAgg.leaderboard&&dashboardAgg.leaderboard.length){
     top3=dashboardAgg.leaderboard.slice(0,3);
@@ -5489,7 +5489,7 @@ function renderPodium() {
   ).join('');
 }
 
-// 📊 7-day sparkline
+// 7-day sparkline
 function renderSparkline() {
   const canvas=document.getElementById('sparklineCanvas');
   const labelsEl=document.getElementById('sparklineLabels');
@@ -5543,11 +5543,11 @@ function renderNudgeBanner() {
   }
 }
 
-// 📲 Enhanced WhatsApp reminder message
+// Enhanced WhatsApp reminder message
 function buildReminderMsg(firstName, rate) {
   const day=new Date().getDay(); const left=6-day;
   const deadline=left===0?'TODAY':`in ${left} day${left>1?'s':''}`;
-  return `Hello ${firstName}! 👋\n\nFriendly reminder: your *KSh ${rate}* weekly contribution to *BOGONKO-NGELANI Welfare* is due *${deadline}*.\n\n💳 Paybill: *544600* · Account: *942540*\n\nAsante sana! 🙏🏍️`;
+  return `Hello ${firstName}! \n\nFriendly reminder: your *KSh ${rate}* weekly contribution to *BOGONKO-NGELANI Welfare* is due *${deadline}*.\n\n Paybill: *544600* · Account: *942540*\n\nAsante sana! `;
 }
 
 // Override defaultWAMessage globally
@@ -5605,11 +5605,11 @@ Object.assign(window,{
   if (!container) return;
 
   function getSlides() { return container.querySelectorAll('.pub-slide'); }
-  function getDots()   { return container.querySelectorAll('.pub-dot'); }
+  function getDots() { return container.querySelectorAll('.pub-dot'); }
 
   function goTo(idx) {
     const slides = getSlides();
-    const dots   = getDots();
+    const dots = getDots();
     if (!slides.length) return;
     slides[current].classList.remove('active');
     slides[current].classList.add('zoom-out');
@@ -5650,7 +5650,7 @@ Object.assign(window,{
   const reminderEl = document.getElementById('pubReminderText');
   if (reminderEl) {
     if (daysLeft === 0) {
-      reminderEl.innerHTML = '\u26a0\ufe0f <b>Last day of the month!</b> Don\'t miss today\'s KSh 50 contribution.';
+      reminderEl.innerHTML = '\u26a0\ufe0f <b>Last day of the month!</b>Don\'t miss today\'s KSh 50 contribution.';
     } else if (daysLeft <= 3) {
       reminderEl.innerHTML = 'Only <b>' + daysLeft + ' day' + (daysLeft>1?'s':'') + ' left</b> this month. Stay up to date — <b>KSh 50/day</b>.';
     } else {
@@ -5669,9 +5669,9 @@ async function openPubInfoEditor() {
   try {
     const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
     const d = snap.exists() ? snap.data() : {};
-    document.getElementById('piAbout').value   = d.about   || '';
+    document.getElementById('piAbout').value = d.about || '';
     document.getElementById('piWelfare').value = d.welfare || '';
-    document.getElementById('piNotice').value  = d.notice  || '';
+    document.getElementById('piNotice').value = d.notice || '';
   } catch(e) {}
   document.getElementById('pubInfoModal').classList.add('open');
 }
@@ -5680,16 +5680,16 @@ function closePubInfoEditor() { document.getElementById('pubInfoModal').classLis
 
 async function savePubInfo() {
   if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
-  const about   = document.getElementById('piAbout').value.trim();
+  const about = document.getElementById('piAbout').value.trim();
   const welfare = document.getElementById('piWelfare').value.trim();
-  const notice  = document.getElementById('piNotice').value.trim();
+  const notice = document.getElementById('piNotice').value.trim();
   const piError = document.getElementById('piError');
   try {
     await setDoc(doc(db, 'tracker', 'publicInfo'), { about, welfare, notice, updatedAt: Date.now() });
     closePubInfoEditor();
     showToast('\u2713 Public info updated');
     logAdminAction('Updated public view info', 'about/welfare/notice text');
-    if (about)   document.getElementById('pubAboutText').textContent   = about;
+    if (about) document.getElementById('pubAboutText').textContent = about;
     if (welfare) document.getElementById('pubWelfareText').textContent = welfare;
     document.getElementById('pubNoticeText').textContent = notice || 'No current notices. Check back soon.';
   } catch(e) {
@@ -5703,9 +5703,9 @@ async function savePubInfo() {
     const snap = await getDoc(doc(db, 'tracker', 'publicInfo'));
     if (!snap.exists()) return;
     const d = snap.data();
-    if (d.about)   document.getElementById('pubAboutText').textContent   = d.about;
+    if (d.about) document.getElementById('pubAboutText').textContent = d.about;
     if (d.welfare) document.getElementById('pubWelfareText').textContent = d.welfare;
-    if (d.notice)  document.getElementById('pubNoticeText').textContent  = d.notice;
+    if (d.notice) document.getElementById('pubNoticeText').textContent = d.notice;
   } catch(e) {}
 })();
 

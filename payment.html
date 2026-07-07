@@ -15,46 +15,46 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 body.light {
-  --bg:       #F0F2F7;
-  --bg2:      #E6E9F0;
-  --card:     #FFFFFF;
-  --card2:    #F0F2F7;
-  --border:   #D0D5E8;
-  --text:     #0F1117;
-  --muted:    #5A6380;
-  --dim:      #A0AACC;
-  --amber:    #1D4ED8;
-  --amber2:   #2563EB;
+  --bg: #F0F2F7;
+  --bg2: #E6E9F0;
+  --card: #FFFFFF;
+  --card2: #F0F2F7;
+  --border: #D0D5E8;
+  --text: #0F1117;
+  --muted: #5A6380;
+  --dim: #A0AACC;
+  --amber: #1D4ED8;
+  --amber2: #2563EB;
   --amber-bg: rgba(29,78,216,0.08);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #B91C1C;
-  --red2:     #EF4444;
-  --red-bg:   rgba(185,28,28,0.08);
-  --radius:   8px;
+  --red: #B91C1C;
+  --red2: #EF4444;
+  --red-bg: rgba(185,28,28,0.08);
+  --radius: 8px;
   --radius-lg:12px;
 }
 html, body { min-height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; -webkit-tap-highlight-color:transparent; transition:background .2s,color .2s; padding-bottom:40px; }
@@ -97,7 +97,7 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 /* MARK ALL — lives inside pay-btn area */
 .mark-all-row { display:flex; gap:6px; }
 .mark-btn { flex:1; padding:7px 10px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; border:none; cursor:pointer; }
-.mark-btn.all-paid   { background:var(--green-bg); color:var(--green2); border:1px solid rgba(61,122,79,.3); }
+.mark-btn.all-paid { background:var(--green-bg); color:var(--green2); border:1px solid rgba(61,122,79,.3); }
 .mark-btn.all-unpaid { background:var(--amber-bg); color:var(--amber2); border:1px solid rgba(37,99,235,.3); }
 
 /* MEMBER LIST */
@@ -107,7 +107,7 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 .stage-no { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:800; color:var(--amber2); background:var(--amber-bg); border-radius:6px; padding:3px 6px; min-width:30px; text-align:center; flex-shrink:0; }
 .member-name { flex:1; font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
 .pay-btn { padding:7px 14px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; border:none; cursor:pointer; flex-shrink:0; transition:all .15s; }
-.pay-btn.paid   { background:var(--green2); color:#fff; }
+.pay-btn.paid { background:var(--green2); color:#fff; }
 .pay-btn.unpaid { background:var(--card2); color:var(--muted); border:1px solid var(--border); }
 .pay-btn:active { opacity:.75; transform:scale(.96); }
 
@@ -127,11 +127,11 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
   <div class="header-left">
     <a href="index.html" class="back-btn">←</a>
     <div>
-      <div class="header-title">💳 Payment</div>
+      <div class="header-title">Payment</div>
       <div class="header-sub" id="headerSub">Bogonko-Ngelani Stage</div>
     </div>
   </div>
-  <button class="icon-btn" onclick="toggleTheme()" id="themeToggle">🌙</button>
+  <button class="icon-btn" onclick="toggleTheme()" id="themeToggle"></button>
 </div>
 
 <!-- Login gate (disabled) -->
@@ -170,33 +170,33 @@ html, body { min-height:100%; background:var(--bg); color:var(--text); font-fami
 
   <!-- Member rows -->
   <div class="member-list" id="memberList">
-    <div class="spinner"><span class="spin">⏳</span> Loading…</div>
+    <div class="spinner"><span class="spin">⏳</span>Loading…</div>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script type="module">
-import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { initializeFirestore, persistentLocalCache, doc, setDoc, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
-  measurementId:     "G-VWL91EJW1H"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
 };
-const app  = initializeApp(firebaseConfig);
-const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
 
-let MEMBERS  = [];
+let MEMBERS = [];
 let payments = {};
 let selectedDate = todayKey();
 
@@ -213,7 +213,7 @@ function fmtDate(key) {
   return isToday ? `Today — ${d} ${names[+m-1]} ${y}` : `${d} ${names[+m-1]} ${y}`;
 }
 function isPaid(phone) { return !!(payments[selectedDate]&&payments[selectedDate][phone]); }
-function isPastDate()  { return selectedDate < todayKey(); }
+function isPastDate() { return selectedDate < todayKey(); }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -224,7 +224,7 @@ function showToast(msg) {
 
 async function savePayments() {
   try { await setDoc(doc(db,'tracker','payments'), payments); }
-  catch(e) { showToast('⚠️ Save failed'); }
+  catch(e) { showToast('Save failed'); }
 }
 
 function notifyPaymentMade(memberName, dateStr) {
@@ -232,7 +232,7 @@ function notifyPaymentMade(memberName, dateStr) {
   fetch('/api/notify-payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: '✅ Payment Received', body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`, url: '/' })
+    body: JSON.stringify({ title: 'Payment Received', body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`, url: '/' })
   }).catch(() => {});
 }
 function notifyBulkPaid(count, dateStr) {
@@ -241,14 +241,14 @@ function notifyBulkPaid(count, dateStr) {
   fetch('/api/notify-payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: '✅ Payments Received', body: `${count} member${count>1?'s':''} marked paid — ${niceDate}`, url: '/' })
+    body: JSON.stringify({ title: 'Payments Received', body: `${count} member${count>1?'s':''} marked paid — ${niceDate}`, url: '/' })
   }).catch(() => {});
 }
 
 // ── auth ─────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   if (user) {
-    document.getElementById('loginGate').style.display   = 'none';
+    document.getElementById('loginGate').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     // init date picker to today
     const dp = document.getElementById('datePicker');
@@ -256,14 +256,14 @@ onAuthStateChanged(auth, user => {
     document.getElementById('dateLabel').textContent = fmtDate(selectedDate);
     loadData();
   } else {
-    document.getElementById('loginGate').style.display   = 'block';
+    document.getElementById('loginGate').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
   }
 });
 
 window.doLogin = async function() {
   const email = document.getElementById('loginEmail').value.trim();
-  const pw    = document.getElementById('loginPw').value;
+  const pw = document.getElementById('loginPw').value;
   const errEl = document.getElementById('loginErr');
   errEl.style.display = 'none';
   try {
@@ -297,7 +297,7 @@ window.markAll = function(state) {
   let newlyPaid = 0;
   if (isPastDate()) {
     // past: only mark unpaid → paid, never reverse
-    if (!state) { showToast('⚠️ Cannot unmark past-date payments'); return; }
+    if (!state) { showToast('Cannot unmark past-date payments'); return; }
     MEMBERS.forEach(m => {
       if (!payments[selectedDate]) payments[selectedDate] = {};
       if (!payments[selectedDate][m.phone]) {
@@ -323,15 +323,15 @@ window.markAll = function(state) {
   savePayments();
   render();
   if (state) notifyBulkPaid(newlyPaid, selectedDate);
-  showToast(state ? '✅ All marked paid' : '✗ All marked unpaid');
+  showToast(state ? 'All marked paid' : 'All marked unpaid');
 };
 
 // ── toggle single ─────────────────────────────────
 window.toggleMember = function(phone) {
   const wasPaid = isPaid(phone);
   if (isPastDate()) {
-    if (wasPaid) { showToast('⚠️ Past payment locked'); return; }
-    if (payments[selectedDate]?.__locked?.[phone]) { showToast('⚠️ Already locked'); return; }
+    if (wasPaid) { showToast('Past payment locked'); return; }
+    if (payments[selectedDate]?.__locked?.[phone]) { showToast('Already locked'); return; }
     if (!payments[selectedDate]) payments[selectedDate] = {};
     payments[selectedDate][phone] = true;
     if (!payments[selectedDate].__locked) payments[selectedDate].__locked = {};
@@ -360,31 +360,31 @@ window.toggleMember = function(phone) {
 // ── render ────────────────────────────────────────
 function render() {
   if (!MEMBERS.length) return;
-  const paidCount   = MEMBERS.filter(m => isPaid(m.phone)).length;
+  const paidCount = MEMBERS.filter(m => isPaid(m.phone)).length;
   const unpaidCount = MEMBERS.length - paidCount;
 
-  document.getElementById('sumPaid').textContent   = paidCount;
+  document.getElementById('sumPaid').textContent = paidCount;
   document.getElementById('sumUnpaid').textContent = unpaidCount;
-  document.getElementById('sumTotal').textContent  = MEMBERS.length;
+  document.getElementById('sumTotal').textContent = MEMBERS.length;
 
   const markAllRow = `
     <div class="member-row" style="background:transparent;border-color:transparent;padding:4px 12px 6px;">
       <div style="flex:1;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Members</div>
       <div class="mark-all-row">
-        <button class="mark-btn all-paid"   onclick="markAll(true)">✅ All Paid</button>
-        <button class="mark-btn all-unpaid" onclick="markAll(false)">✗ All Unpaid</button>
+        <button class="mark-btn all-paid" onclick="markAll(true)">All Paid</button>
+        <button class="mark-btn all-unpaid" onclick="markAll(false)">All Unpaid</button>
       </div>
     </div>`;
 
   document.getElementById('memberList').innerHTML = markAllRow + MEMBERS.map((m, i) => {
-    const paid     = isPaid(m.phone);
-    const stageNo  = i + 1;
+    const paid = isPaid(m.phone);
+    const stageNo = i + 1;
     return `
       <div class="member-row ${paid ? 'is-paid' : ''}">
         <div class="stage-no">#${stageNo}</div>
         <div class="member-name">${m.name}</div>
         <button class="pay-btn ${paid ? 'paid' : 'unpaid'}" onclick="toggleMember('${m.phone}')">
-          ${paid ? '✅ Paid' : 'Unpaid'}
+          ${paid ? 'Paid' : 'Unpaid'}
         </button>
       </div>`;
   }).join('');
@@ -395,11 +395,11 @@ const THEME_KEY = 'bonge-theme';
 window.toggleTheme = function() {
   const isLight = document.body.classList.toggle('light');
   localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
-  document.getElementById('themeToggle').textContent = isLight ? '🌞' : '🌙';
+  document.getElementById('themeToggle').textContent = isLight ? '' : '';
 };
 if (localStorage.getItem(THEME_KEY) === 'light') {
   document.body.classList.add('light');
-  document.getElementById('themeToggle').textContent = '🌞';
+  document.getElementById('themeToggle').textContent = '';
 }
 </script>
 <script>

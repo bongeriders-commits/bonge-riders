@@ -17,47 +17,47 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 
 body.light {
-  --bg:       #F0F2F7;
-  --bg2:      #E6E9F0;
-  --card:     #FFFFFF;
-  --card2:    #F0F2F7;
-  --border:   #D0D5E8;
-  --text:     #0F1117;
-  --muted:    #5A6380;
-  --dim:      #A0AACC;
-  --amber:    #1D4ED8;
-  --amber2:   #2563EB;
+  --bg: #F0F2F7;
+  --bg2: #E6E9F0;
+  --card: #FFFFFF;
+  --card2: #F0F2F7;
+  --border: #D0D5E8;
+  --text: #0F1117;
+  --muted: #5A6380;
+  --dim: #A0AACC;
+  --amber: #1D4ED8;
+  --amber2: #2563EB;
   --amber-bg: rgba(29,78,216,0.08);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #B91C1C;
-  --red2:     #EF4444;
-  --red-bg:   rgba(185,28,28,0.08);
-  --radius:   8px;
+  --red: #B91C1C;
+  --red2: #EF4444;
+  --red-bg: rgba(185,28,28,0.08);
+  --radius: 8px;
   --radius-lg:12px;
 }
 
@@ -152,7 +152,7 @@ html, body {
   flex-shrink: 0; transition: all .2s;
 }
 .step-dot.active { background: var(--amber); border-color: var(--amber); color: #fff; }
-.step-dot.done   { background: var(--green); border-color: var(--green); color: #fff; }
+.step-dot.done { background: var(--green); border-color: var(--green); color: #fff; }
 .step-line {
   flex: 1; height: 2px;
   background: var(--border); max-width: 40px;
@@ -255,8 +255,8 @@ html, body {
   animation: popIn .4s ease;
 }
 @keyframes popIn {
-  0%   { transform: scale(.5); opacity: 0; }
-  70%  { transform: scale(1.1); }
+  0% { transform: scale(.5); opacity: 0; }
+  70% { transform: scale(1.1); }
   100% { transform: scale(1); opacity: 1; }
 }
 .success-screen h2 {
@@ -463,7 +463,7 @@ html, body {
       <div class="logo-sub">Member Registration</div>
     </div>
   </div>
-  <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"></button>
 </div>
 
 <!-- HERO -->
@@ -501,14 +501,14 @@ html, body {
     <div class="section-label">Stage Contribution Fee</div>
 
     <div class="info-box">
-      💰 Membership requires a one-time mandatory stage contribution of <strong>KSh 10,000</strong>, paid via M-Pesa Paybill <strong>544600</strong>, Account <strong>942540</strong>.
+       Membership requires a one-time mandatory stage contribution of <strong>KSh 10,000</strong>, paid via M-Pesa Paybill <strong>544600</strong>, Account <strong>942540</strong>.
     </div>
 
     <div class="field">
       <label>Have you already paid the KSh 10,000 stage contribution? <span class="req">*</span></label>
       <div class="fee-toggle">
-        <button type="button" class="fee-btn" id="feeYesBtn" onclick="selectFeePaid(true)">✅ Yes, I've Paid</button>
-        <button type="button" class="fee-btn" id="feeNoBtn" onclick="selectFeePaid(false)">✗ Not Yet</button>
+        <button type="button" class="fee-btn" id="feeYesBtn" onclick="selectFeePaid(true)">Yes, I've Paid</button>
+        <button type="button" class="fee-btn" id="feeNoBtn" onclick="selectFeePaid(false)">Not Yet</button>
       </div>
     </div>
 
@@ -597,7 +597,7 @@ html, body {
     </div>
 
     <div class="info-box">
-      🏍️ Your motorcycle details help us verify your membership at the stage. Make sure the registration plate matches your logbook.
+       Your motorcycle details help us verify your membership at the stage. Make sure the registration plate matches your logbook.
     </div>
 
     <button class="btn-primary" onclick="goStep4()">Next — Review & Submit →</button>
@@ -613,7 +613,7 @@ html, body {
     </div>
 
     <div class="info-box">
-      📱 After submitting, the Chairperson will review your application and you'll receive an SMS confirmation on your phone number.
+       After submitting, the Chairperson will review your application and you'll receive an SMS confirmation on your phone number.
     </div>
 
     <!-- TERMS & CONDITIONS CHECKBOX -->
@@ -643,7 +643,7 @@ html, body {
 <!-- MANDATORY FEE MODAL -->
 <div class="modal-overlay" id="payFeeModal">
   <div class="modal-box">
-    <div class="modal-icon">🚫</div>
+    <div class="modal-icon"></div>
     <h3>Stage Contribution Required</h3>
     <p>You must pay the mandatory KSh 10,000 stage contribution before you can register. Please pay using the details below, then come back and enter your M-Pesa code.</p>
     <div class="pay-details">
@@ -657,7 +657,7 @@ html, body {
 
 <!-- SUCCESS SCREEN -->
 <div class="success-screen" id="successScreen">
-  <div class="success-icon">🎉</div>
+  <div class="success-icon"></div>
   <h2>Application Submitted!</h2>
   <p>Your registration has been received. Keep your reference number safe — you may need it if you contact the Chairperson.</p>
 
@@ -665,7 +665,7 @@ html, body {
     Reference Number
     <strong id="refNumber">—</strong>
     <button onclick="copyRef()" id="copyRefBtn" style="display:block;margin:10px auto 0;background:var(--amber-bg);border:1px solid rgba(37,99,235,.3);color:var(--amber2);border-radius:7px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">
-      📋 Copy Reference
+       Copy Reference
     </button>
   </div>
 
@@ -691,7 +691,7 @@ html, body {
 
   <!-- Daily contribution reminder -->
   <div style="background:var(--amber-bg);border:1px solid rgba(37,99,235,.25);border-radius:var(--radius);padding:12px 16px;width:100%;max-width:340px;text-align:left;margin-bottom:20px;">
-    <div style="font-size:12px;font-weight:700;color:var(--amber2);margin-bottom:4px;">📅 Daily Contribution</div>
+    <div style="font-size:12px;font-weight:700;color:var(--amber2);margin-bottom:4px;">Daily Contribution</div>
     <div style="font-size:12px;color:var(--muted);line-height:1.5;">
       Once approved, contribute <strong style="color:var(--text);">KSh 50/day</strong> via M-Pesa:<br>
       Paybill <strong style="color:var(--text);">544600</strong> · Account <strong style="color:var(--text);">942540</strong>
@@ -775,7 +775,7 @@ function selectFeePaid(paid) {
   document.getElementById('feeYesBtn').classList.toggle('selected', paid === true);
   document.getElementById('feeNoBtn').classList.toggle('selected', paid === false);
   const codeField = document.getElementById('f-mpesacode');
-  const nextBtn   = document.getElementById('feeNextBtn');
+  const nextBtn = document.getElementById('feeNextBtn');
 
   if (paid) {
     codeField.style.display = '';
@@ -790,7 +790,7 @@ function selectFeePaid(paid) {
 
 function goStep2() {
   if (feePaid === null) {
-    showToast('⚠️ Please tell us if you have paid the stage contribution');
+    showToast('Please tell us if you have paid the stage contribution');
     return;
   }
 
@@ -803,7 +803,7 @@ function goStep2() {
   const code = document.getElementById('inp-mpesacode').value.trim();
   if (!validateMpesaCode(code)) {
     setError('f-mpesacode', true);
-    showToast('⚠️ Enter a valid M-Pesa confirmation code');
+    showToast('Enter a valid M-Pesa confirmation code');
     return;
   }
   setError('f-mpesacode', false);
@@ -815,46 +815,46 @@ function closePayFeeModal() {
 }
 
 function goStep3() {
-  const name    = document.getElementById('inp-name').value.trim();
-  const phone   = document.getElementById('inp-phone').value.trim();
-  const natid   = document.getElementById('inp-natid').value.trim();
+  const name = document.getElementById('inp-name').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  const natid = document.getElementById('inp-natid').value.trim();
   const nokname = document.getElementById('inp-nokname').value.trim();
   const nokphone= document.getElementById('inp-nokphone').value.trim();
 
   let err = false;
-  if (!name)              err = setError('f-name', true) || err;    else setError('f-name', false);
+  if (!name) err = setError('f-name', true) || err; else setError('f-name', false);
   if (!validatePhone(phone)) err = setError('f-phone', true) || err; else setError('f-phone', false);
-  if (!natid)             err = setError('f-natid', true) || err;   else setError('f-natid', false);
-  if (!nokname)           err = setError('f-nokname', true) || err; else setError('f-nokname', false);
+  if (!natid) err = setError('f-natid', true) || err; else setError('f-natid', false);
+  if (!nokname) err = setError('f-nokname', true) || err; else setError('f-nokname', false);
   if (!validatePhone(nokphone)) err = setError('f-nokphone', true) || err; else setError('f-nokphone', false);
 
-  if (err) { showToast('⚠️ Please fill in all required fields'); return; }
+  if (err) { showToast('Please fill in all required fields'); return; }
   goStep(3);
 }
 
 function goStep4() {
-  const motoreg   = document.getElementById('inp-motoreg').value.trim().toUpperCase();
+  const motoreg = document.getElementById('inp-motoreg').value.trim().toUpperCase();
   const motomodel = document.getElementById('inp-motomodel').value.trim();
 
   let err = false;
-  if (!motoreg)   err = setError('f-motoreg', true) || err;   else setError('f-motoreg', false);
+  if (!motoreg) err = setError('f-motoreg', true) || err; else setError('f-motoreg', false);
   if (!motomodel) err = setError('f-motomodel', true) || err; else setError('f-motomodel', false);
 
-  if (err) { showToast('⚠️ Please fill in motorcycle details'); return; }
+  if (err) { showToast('Please fill in motorcycle details'); return; }
 
   // Build summary
   const rows = [
-    { lbl: 'Stage Contribution', val: feePaid ? 'KSh 10,000 — Paid ✅' : 'Not Yet Paid ⚠️' },
-    { lbl: 'M-Pesa Code',   val: feePaid ? document.getElementById('inp-mpesacode').value.trim().toUpperCase() : '—' },
-    { lbl: 'Full Name',     val: document.getElementById('inp-name').value.trim().toUpperCase() },
-    { lbl: 'Phone',         val: document.getElementById('inp-phone').value.trim() },
-    { lbl: 'National ID',   val: document.getElementById('inp-natid').value.trim() },
-    { lbl: 'County',        val: document.getElementById('inp-county').value },
-    { lbl: 'Next of Kin',   val: document.getElementById('inp-nokname').value.trim().toUpperCase() },
-    { lbl: 'NoK Phone',     val: document.getElementById('inp-nokphone').value.trim() },
-    { lbl: 'Moto Plate',    val: motoreg },
-    { lbl: 'Make / Model',  val: motomodel },
-    { lbl: 'Year',          val: document.getElementById('inp-motoyear').value.trim() || '—' },
+    { lbl: 'Stage Contribution', val: feePaid ? 'KSh 10,000 — Paid ' : 'Not Yet Paid ' },
+    { lbl: 'M-Pesa Code', val: feePaid ? document.getElementById('inp-mpesacode').value.trim().toUpperCase() : '—' },
+    { lbl: 'Full Name', val: document.getElementById('inp-name').value.trim().toUpperCase() },
+    { lbl: 'Phone', val: document.getElementById('inp-phone').value.trim() },
+    { lbl: 'National ID', val: document.getElementById('inp-natid').value.trim() },
+    { lbl: 'County', val: document.getElementById('inp-county').value },
+    { lbl: 'Next of Kin', val: document.getElementById('inp-nokname').value.trim().toUpperCase() },
+    { lbl: 'NoK Phone', val: document.getElementById('inp-nokphone').value.trim() },
+    { lbl: 'Moto Plate', val: motoreg },
+    { lbl: 'Make / Model', val: motomodel },
+    { lbl: 'Year', val: document.getElementById('inp-motoyear').value.trim() || '—' },
   ];
 
   document.getElementById('summaryCard').innerHTML = rows.map(r =>
@@ -867,9 +867,9 @@ function goStep4() {
 
 // ── TERMS & CONDITIONS ──
 function onTcChange() {
-  const cb   = document.getElementById('tcCheckbox');
+  const cb = document.getElementById('tcCheckbox');
   const wrap = document.getElementById('tcWrap');
-  const err  = document.getElementById('tcError');
+  const err = document.getElementById('tcError');
   wrap.classList.toggle('checked', cb.checked);
   if (cb.checked) err.classList.remove('show');
 }
@@ -892,20 +892,20 @@ async function submitRegistration() {
 
   const payload = {
     stageFeePaid: true,
-    mpesaCode:  document.getElementById('inp-mpesacode').value.trim().toUpperCase(),
-    name:       document.getElementById('inp-name').value.trim(),
-    phone:      document.getElementById('inp-phone').value.trim(),
-    natId:      document.getElementById('inp-natid').value.trim(),
-    county:     document.getElementById('inp-county').value,
-    nokName:    document.getElementById('inp-nokname').value.trim(),
-    nokPhone:   document.getElementById('inp-nokphone').value.trim(),
-    motoReg:    document.getElementById('inp-motoreg').value.trim().toUpperCase(),
-    motoModel:  document.getElementById('inp-motomodel').value.trim(),
-    motoYear:   document.getElementById('inp-motoyear').value.trim(),
+    mpesaCode: document.getElementById('inp-mpesacode').value.trim().toUpperCase(),
+    name: document.getElementById('inp-name').value.trim(),
+    phone: document.getElementById('inp-phone').value.trim(),
+    natId: document.getElementById('inp-natid').value.trim(),
+    county: document.getElementById('inp-county').value,
+    nokName: document.getElementById('inp-nokname').value.trim(),
+    nokPhone: document.getElementById('inp-nokphone').value.trim(),
+    motoReg: document.getElementById('inp-motoreg').value.trim().toUpperCase(),
+    motoModel: document.getElementById('inp-motomodel').value.trim(),
+    motoYear: document.getElementById('inp-motoyear').value.trim(),
   };
 
   try {
-    const res  = await fetch(SERVER + '/api/register', {
+    const res = await fetch(SERVER + '/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -923,12 +923,12 @@ async function submitRegistration() {
       document.getElementById('successScreen').classList.add('show');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      showToast('⚠️ ' + (data.error || 'Submission failed. Try again.'), 4000);
+      showToast(' ' + (data.error || 'Submission failed. Try again.'), 4000);
       btn.disabled = false;
       btn.innerHTML = 'Submit Application';
     }
   } catch(e) {
-    showToast('❌ Could not reach server. Check your internet.', 4000);
+    showToast('Could not reach server. Check your internet.', 4000);
     btn.disabled = false;
     btn.innerHTML = 'Submit Application';
   }
@@ -939,8 +939,8 @@ function copyRef() {
   if (!ref || ref === '—') return;
   navigator.clipboard.writeText(ref).then(() => {
     const btn = document.getElementById('copyRefBtn');
-    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy Reference'; }, 2000); }
-    showToast('✓ Reference number copied');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy Reference'; }, 2000); }
+    showToast('Reference number copied');
   }).catch(() => showToast('Could not copy — write it down manually'));
 }
 

@@ -16,46 +16,46 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 body.light {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #CC1818;
-  --red2:     #E02020;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 
@@ -207,7 +207,7 @@ html, body {
   border-radius: var(--radius-lg); padding: 14px; margin-bottom: 12px;
   position: relative; overflow: hidden;
 }
-.app-card.pending  { border-left: 3px solid var(--amber2); }
+.app-card.pending { border-left: 3px solid var(--amber2); }
 .app-card.approved { border-left: 3px solid var(--green2); }
 .app-card.declined { border-left: 3px solid var(--red2); }
 .app-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
@@ -217,7 +217,7 @@ html, body {
   font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
   letter-spacing: .4px; text-transform: uppercase; flex-shrink: 0;
 }
-.status-badge.pending  { background: var(--amber-bg); color: var(--amber2); }
+.status-badge.pending { background: var(--amber-bg); color: var(--amber2); }
 .status-badge.approved { background: var(--green-bg); color: var(--green2); }
 .status-badge.declined { background: var(--red-bg); color: var(--red2); }
 .app-details { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-bottom: 12px; }
@@ -295,7 +295,7 @@ html, body {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 14px; margin-bottom: 12px;
 }
-.welfare-card.pending  { border-left: 3px solid var(--amber2); }
+.welfare-card.pending { border-left: 3px solid var(--amber2); }
 .welfare-card.approved { border-left: 3px solid var(--green2); }
 .welfare-card.declined { border-left: 3px solid var(--red2); }
 .welfare-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
@@ -316,7 +316,7 @@ html, body {
 .w-approve { background: var(--green); color: #fff; }
 .w-decline { background: transparent; border: 1px solid var(--red) !important; color: var(--red2); }
 .w-pending { background: var(--card2); border: 1px solid var(--border) !important; color: var(--muted); }
-.w-notify  { background: var(--card2); border: 1px solid var(--border) !important; color: var(--text); }
+.w-notify { background: var(--card2); border: 1px solid var(--border) !important; color: var(--text); }
 
 /* ── EMPTY / LOADING ── */
 .empty-state { text-align: center; padding: 40px 16px; color: var(--muted); font-size: 14px; }
@@ -394,13 +394,13 @@ html, body {
     </div>
   </div>
   <div class="header-right">
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"></button>
   </div>
 </div>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="login-icon">🔐</div>
+  <div class="login-icon"></div>
   <h2>Chairperson Access</h2>
   <p>Enter your secret key to access the panel</p>
   <div class="login-box">
@@ -416,11 +416,11 @@ html, body {
 
   <!-- NAV TABS -->
   <div class="nav-tabs">
-    <div class="nav-tab active" onclick="switchTab('registrations',this)">👥 Registrations <span class="badge" id="regBadge" style="display:none"></span></div>
-    <div class="nav-tab" onclick="switchTab('welfare',this)">🏥 Welfare <span class="badge" id="welfareBadge" style="display:none"></span></div>
-    <div class="nav-tab" onclick="switchTab('members',this)">📋 Members</div>
-    <div class="nav-tab" onclick="switchTab('spending',this)">💸 Spending</div>
-    <div class="nav-tab" onclick="switchTab('income',this)">💰 Income</div>
+    <div class="nav-tab active" onclick="switchTab('registrations',this)">Registrations <span class="badge" id="regBadge" style="display:none"></span></div>
+    <div class="nav-tab" onclick="switchTab('welfare',this)">Welfare <span class="badge" id="welfareBadge" style="display:none"></span></div>
+    <div class="nav-tab" onclick="switchTab('members',this)">Members</div>
+    <div class="nav-tab" onclick="switchTab('spending',this)">Spending</div>
+    <div class="nav-tab" onclick="switchTab('income',this)">Income</div>
   </div>
 
   <!-- ══ TAB: REGISTRATIONS ══ -->
@@ -437,8 +437,8 @@ html, body {
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
       <button class="filter-tab" onclick="setFilter('pending',this)">⏳ Pending</button>
-      <button class="filter-tab" onclick="setFilter('approved',this)">✓ Approved</button>
-      <button class="filter-tab" onclick="setFilter('declined',this)">✕ Declined</button>
+      <button class="filter-tab" onclick="setFilter('approved',this)">Approved</button>
+      <button class="filter-tab" onclick="setFilter('declined',this)">Declined</button>
     </div>
     <div id="appList"><div class="loading-state">Loading applications…</div></div>
   </div>
@@ -457,8 +457,8 @@ html, body {
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="setWelfareFilter('all',this)">All</button>
       <button class="filter-tab" onclick="setWelfareFilter('pending',this)">⏳ Pending</button>
-      <button class="filter-tab" onclick="setWelfareFilter('approved',this)">✓ Approved</button>
-      <button class="filter-tab" onclick="setWelfareFilter('declined',this)">✕ Declined</button>
+      <button class="filter-tab" onclick="setWelfareFilter('approved',this)">Approved</button>
+      <button class="filter-tab" onclick="setWelfareFilter('declined',this)">Declined</button>
     </div>
     <div id="welfareList"><div class="loading-state">Loading welfare applications…</div></div>
   </div>
@@ -471,7 +471,7 @@ html, body {
       <div class="stat-card s-approved"><div class="num" id="mStatAvg" style="font-size:13px;">KSh 0</div><div class="lbl">Avg/Member</div></div>
     </div>
     <div class="search-wrap">
-      <span class="search-ico">🔍</span>
+      <span class="search-ico"></span>
       <input type="text" id="memberSearch" placeholder="Search name or phone…" oninput="renderMembers()">
     </div>
     <div class="section-label">Members & Contributions</div>
@@ -539,39 +539,39 @@ import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, onSnaps
 const SERVER = 'https://bonge-riders-server.onrender.com';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca"
 };
 
 const fbApp = initializeApp(firebaseConfig);
-const db    = initializeFirestore(fbApp, { localCache: persistentLocalCache() });
+const db = initializeFirestore(fbApp, { localCache: persistentLocalCache() });
 
 // ── STATE ──
-let chairKey      = '';
-let allApps       = [];
-let curFilter     = 'all';
+let chairKey = '';
+let allApps = [];
+let curFilter = 'all';
 let pendingAction = null;
 
-let MEMBERS       = [];
-let payments      = {};
-let spendingList  = [];
-let incomeList    = [];
+let MEMBERS = [];
+let payments = {};
+let spendingList = [];
+let incomeList = [];
 
-let allWelfareApps  = [];  // flat list
-let welfareFilter   = 'all';
-let wPendingAction  = null;
+let allWelfareApps = []; // flat list
+let welfareFilter = 'all';
+let wPendingAction = null;
 
-let _membersUnsub  = null;
+let _membersUnsub = null;
 let _paymentsUnsub = null;
 let _spendingUnsub = null;
-let _incomeUnsub   = null;
+let _incomeUnsub = null;
 let _welfareUnsubs = [];
 
-const RATE       = 50;
+const RATE = 50;
 const START_DATE = new Date(2026, 5, 22);
 
 // ── THEME ──
@@ -611,9 +611,9 @@ const LOGO_B64 = 'iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAEAAElEQVR42qT9d6
 
 // ── GENERATE MEMBER APPLICATION PDF ──
 window.generateMemberPdf = function(app) {
-  const phone    = formatPhone(app.phone || '');
+  const phone = formatPhone(app.phone || '');
   const nokPhone = app.nokPhone ? formatPhone(app.nokPhone) : '—';
-  const today    = new Date().toLocaleDateString('en-KE', { day:'numeric', month:'long', year:'numeric' });
+  const today = new Date().toLocaleDateString('en-KE', { day:'numeric', month:'long', year:'numeric' });
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(app.name||'Member')} — Application Form</title>
 <style>
@@ -674,11 +674,11 @@ window.generateMemberPdf = function(app) {
   </div>
 
   <div class="fee-box">
-    💰 <strong>Stage Contribution:</strong> KSh 10,000 — Paid via M-Pesa &nbsp;|&nbsp;
+     <strong>Stage Contribution:</strong>KSh 10,000 — Paid via M-Pesa &nbsp;|&nbsp;
     <strong>Confirmation Code:</strong> ${esc(app.mpesaCode||'—')}
   </div>
 
-  <div class="status-stamp">✓ APPROVED MEMBER</div>
+  <div class="status-stamp">APPROVED MEMBER</div>
 
   <div class="sig-section">
     <div class="sig-grid">
@@ -732,7 +732,7 @@ window.doLogin = async function() {
     });
     if (res.status === 403) {
       document.getElementById('keyInput').classList.add('err');
-      showToast('❌ Incorrect key. Try again.');
+      showToast('Incorrect key. Try again.');
       chairKey = '';
       btn.innerHTML = 'Sign In'; btn.disabled = false;
       return;
@@ -745,7 +745,7 @@ window.doLogin = async function() {
     renderApps();
     loadFirebaseData();
   } catch(e) {
-    showToast('❌ Could not connect to server.');
+    showToast('Could not connect to server.');
     chairKey = '';
     btn.innerHTML = 'Sign In'; btn.disabled = false;
   }
@@ -829,15 +829,15 @@ window.loadWelfareData = function() {
 window.loadApplications = async function() {
   document.getElementById('appList').innerHTML = '<div class="loading-state">Loading…</div>';
   try {
-    const res  = await fetch(SERVER + '/api/register/pending', {
+    const res = await fetch(SERVER + '/api/register/pending', {
       headers: { 'x-chairperson-key': chairKey }
     });
     const data = await res.json();
     allApps = data.list || [];
     renderApps();
-    showToast('✓ Refreshed');
+    showToast('Refreshed');
   } catch(e) {
-    showToast('❌ Could not load applications');
+    showToast('Could not load applications');
   }
 };
 
@@ -851,11 +851,11 @@ window.setFilter = function(f, el) {
 
 // ── RENDER APPLICATIONS ──
 function renderApps() {
-  const pending  = allApps.filter(a => a.status === 'pending');
+  const pending = allApps.filter(a => a.status === 'pending');
   const approved = allApps.filter(a => a.status === 'approved');
   const declined = allApps.filter(a => a.status === 'declined');
 
-  document.getElementById('statPending').textContent  = pending.length;
+  document.getElementById('statPending').textContent = pending.length;
   document.getElementById('statApproved').textContent = approved.length;
   document.getElementById('statDeclined').textContent = declined.length;
 
@@ -874,13 +874,13 @@ function renderApps() {
 
   const el = document.getElementById('appList');
   if (list.length === 0) {
-    el.innerHTML = `<div class="empty-state"><div class="ico">${curFilter === 'pending' ? '🎉' : '📭'}</div>${curFilter === 'pending' ? 'No pending applications!' : 'No applications found.'}</div>`;
+    el.innerHTML = `<div class="empty-state"><div class="ico">${curFilter === 'pending' ? '' : ''}</div>${curFilter === 'pending' ? 'No pending applications!' : 'No applications found.'}</div>`;
     return;
   }
 
   el.innerHTML = list.map(app => {
     const status = app.status || 'pending';
-    const phone  = formatPhone(app.phone || '');
+    const phone = formatPhone(app.phone || '');
     return `
     <div class="app-card ${status}" id="card-${app.id}">
       <div class="app-top">
@@ -901,11 +901,11 @@ function renderApps() {
       </div>
       <div class="app-date">Submitted: ${fmtDate(app.submittedAt)} · Ref: ${app.id}</div>
       <div class="action-row">
-        ${status !== 'approved' ? `<button class="btn-approve" onclick="confirmRegAction('${app.id}','approve','${esc(app.name)}')">✓ Approve</button>` : ''}
-        ${(status !== 'declined' && status !== 'approved') ? `<button class="btn-decline" onclick="confirmRegAction('${app.id}','decline','${esc(app.name)}')">✕ Decline</button>` : ''}
-        ${status === 'approved' ? `<span class="locked-badge" title="Approved registrations cannot be declined">🔒 Approved — Locked</span>` : ''}
-        ${status === 'approved' ? `<button class="btn-pdf" onclick='generateMemberPdf(${JSON.stringify(app).replace(/'/g,"&#39;")})' title="Generate Application PDF">📄 PDF</button>` : ''}
-        <button class="btn-wa" onclick="whatsappApplicant('${phone}','${esc(app.name)}','${status}')" title="WhatsApp">📲</button>
+        ${status !== 'approved' ? `<button class="btn-approve" onclick="confirmRegAction('${app.id}','approve','${esc(app.name)}')">Approve</button>` : ''}
+        ${(status !== 'declined' && status !== 'approved') ? `<button class="btn-decline" onclick="confirmRegAction('${app.id}','decline','${esc(app.name)}')">Decline</button>` : ''}
+        ${status === 'approved' ? `<span class="locked-badge" title="Approved registrations cannot be declined">Approved — Locked</span>` : ''}
+        ${status === 'approved' ? `<button class="btn-pdf" onclick='generateMemberPdf(${JSON.stringify(app).replace(/'/g,"&#39;")})' title="Generate Application PDF">PDF</button>` : ''}
+        <button class="btn-wa" onclick="whatsappApplicant('${phone}','${esc(app.name)}','${status}')" title="WhatsApp"></button>
       </div>
     </div>`;
   }).join('');
@@ -916,11 +916,11 @@ window.confirmRegAction = function(id, action, name) {
   pendingAction = { id, action };
   const isApprove = action === 'approve';
   document.getElementById('modalTitle').textContent = isApprove ? 'Approve Member?' : 'Decline Application?';
-  document.getElementById('modalBody').textContent  = isApprove
+  document.getElementById('modalBody').textContent = isApprove
     ? `Approve ${name} as a member of Bogonko-Ngelani Stage? They will receive an SMS with their PIN.`
     : `Decline ${name}'s registration? They will receive an SMS notification.`;
   const btn = document.getElementById('modalConfirmBtn');
-  btn.textContent = isApprove ? '✓ Yes, Approve' : '✕ Yes, Decline';
+  btn.textContent = isApprove ? 'Yes, Approve' : 'Yes, Decline';
   btn.className = isApprove ? 'modal-confirm-approve' : 'modal-confirm-decline';
   document.getElementById('confirmModal').classList.add('open');
 };
@@ -937,7 +937,7 @@ window.doConfirm = async function() {
   const existing = allApps.find(a => a.id === id);
   if (existing && existing.status === 'approved' && action === 'decline') {
     closeModal();
-    showToast('🔒 This member is already approved and can no longer be declined.', 4000);
+    showToast('This member is already approved and can no longer be declined.', 4000);
     renderApps();
     return;
   }
@@ -946,14 +946,14 @@ window.doConfirm = async function() {
   const card = document.getElementById('card-' + id);
   if (card) card.style.opacity = '.5';
   try {
-    const res  = await fetch(SERVER + '/api/register/review', {
+    const res = await fetch(SERVER + '/api/register/review', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, action, chairpersonKey: chairKey })
     });
     const data = await res.json();
     if (data.ok) {
-      showToast(action === 'approve' ? '✅ Member approved! SMS sent.' : '✕ Application declined. SMS sent.');
+      showToast(action === 'approve' ? 'Member approved! SMS sent.' : 'Application declined. SMS sent.');
       const idx = allApps.findIndex(a => a.id === id);
       if (idx >= 0) allApps[idx].status = action === 'approve' ? 'approved' : 'declined';
       if (action === 'approve' && idx >= 0) {
@@ -961,11 +961,11 @@ window.doConfirm = async function() {
       }
       renderApps();
     } else {
-      showToast('⚠️ ' + (data.error || 'Action failed'), 4000);
+      showToast(' ' + (data.error || 'Action failed'), 4000);
       if (card) card.style.opacity = '1';
     }
   } catch(e) {
-    showToast('❌ Could not reach server', 4000);
+    showToast('Could not reach server', 4000);
     if (card) card.style.opacity = '1';
   }
 };
@@ -995,7 +995,7 @@ async function recordStageFeeIncome(app) {
     // Income recording should never block the approval itself — the member is
     // already approved at this point. Surface a toast so the chairperson knows
     // to add it manually if the write failed.
-    showToast('⚠️ Approved, but could not auto-record the KSh 10,000 fee in Other Income. Add it manually.', 5000);
+    showToast('Approved, but could not auto-record the KSh 10,000 fee in Other Income. Add it manually.', 5000);
   }
 }
 
@@ -1004,11 +1004,11 @@ window.whatsappApplicant = function(phone, name, status) {
   const first = (name || '').split(' ')[0];
   let msg = '';
   if (status === 'approved') {
-    msg = `Hello ${first}! 🎉 Your BOGONKO-NGELANI Stage membership has been APPROVED. Check your SMS for your PIN. Welcome aboard! 🏍️`;
+    msg = `Hello ${first}! Your BOGONKO-NGELANI Stage membership has been APPROVED. Check your SMS for your PIN. Welcome aboard! `;
   } else if (status === 'declined') {
     msg = `Hello ${first}, your BOGONKO-NGELANI registration was not approved. Please contact the Chairperson for more details.`;
   } else {
-    msg = `Hello ${first}! 👋 Your BOGONKO-NGELANI registration is under review. We will notify you via SMS once a decision is made. 🏍️`;
+    msg = `Hello ${first}! Your BOGONKO-NGELANI registration is under review. We will notify you via SMS once a decision is made. `;
   }
   const clean = phone.replace(/\D/g, '');
   window.open('https://wa.me/' + clean + '?text=' + encodeURIComponent(msg), '_blank');
@@ -1038,9 +1038,9 @@ function renderMembers() {
   const totalContrib = MEMBERS.reduce((s, m) => s + memberTotalPaid(m.phone), 0);
   const avg = MEMBERS.length ? Math.round(totalContrib / MEMBERS.length) : 0;
 
-  document.getElementById('mStatTotal').textContent  = MEMBERS.length;
+  document.getElementById('mStatTotal').textContent = MEMBERS.length;
   document.getElementById('mStatTotal2').textContent = 'KSh ' + totalContrib.toLocaleString();
-  document.getElementById('mStatAvg').textContent    = 'KSh ' + avg.toLocaleString();
+  document.getElementById('mStatAvg').textContent = 'KSh ' + avg.toLocaleString();
 
   const el = document.getElementById('memberList');
   if (!MEMBERS.length) {
@@ -1048,7 +1048,7 @@ function renderMembers() {
     return;
   }
   if (!list.length) {
-    el.innerHTML = '<div class="empty-state"><div class="ico">🔍</div>No members match your search.</div>';
+    el.innerHTML = '<div class="empty-state"><div class="ico"></div>No members match your search.</div>';
     return;
   }
 
@@ -1079,20 +1079,20 @@ function renderSpending() {
   const total = spendingList.reduce((s, x) => s + Number(x.amount||0), 0);
   const latest = list[0];
 
-  document.getElementById('sStatCount').textContent  = spendingList.length;
-  document.getElementById('sStatTotal').textContent  = 'KSh ' + total.toLocaleString();
+  document.getElementById('sStatCount').textContent = spendingList.length;
+  document.getElementById('sStatTotal').textContent = 'KSh ' + total.toLocaleString();
   document.getElementById('sStatLatest').textContent = latest ? fmtDate(latest.addedAt || null) || latest.date || '—' : '—';
 
   const el = document.getElementById('spendingList');
   if (!list.length) {
-    el.innerHTML = '<div class="empty-state"><div class="ico">💸</div>No spending records yet.</div>';
+    el.innerHTML = '<div class="empty-state"><div class="ico"></div>No spending records yet.</div>';
     return;
   }
   el.innerHTML = list.map((s, i) => {
     const dateLabel = s.date || fmtDate(s.addedAt);
     return `
     <div class="spend-card">
-      <div class="spend-icon">💸</div>
+      <div class="spend-icon"></div>
       <div class="spend-info">
         <div class="spend-desc">${esc(s.desc || s.description || '—')}</div>
         <div class="spend-meta">${dateLabel}${s.addedBy ? ' · ' + esc(s.addedBy) : ''}</div>
@@ -1108,18 +1108,18 @@ function renderIncome() {
   const total = incomeList.reduce((s, x) => s + Number(x.amount||0), 0);
   const latest = list[0];
 
-  document.getElementById('iStatCount').textContent  = incomeList.length;
-  document.getElementById('iStatTotal').textContent  = 'KSh ' + total.toLocaleString();
+  document.getElementById('iStatCount').textContent = incomeList.length;
+  document.getElementById('iStatTotal').textContent = 'KSh ' + total.toLocaleString();
   document.getElementById('iStatLatest').textContent = latest ? fmtDate(latest.addedAt) : '—';
 
   const el = document.getElementById('incomeList');
   if (!list.length) {
-    el.innerHTML = '<div class="empty-state"><div class="ico">💰</div>No income records yet.</div>';
+    el.innerHTML = '<div class="empty-state"><div class="ico"></div>No income records yet.</div>';
     return;
   }
   el.innerHTML = list.map(x => `
     <div class="spend-card">
-      <div class="spend-icon">💰</div>
+      <div class="spend-icon"></div>
       <div class="spend-info">
         <div class="spend-desc">${esc(x.desc || x.description || '—')}</div>
         <div class="spend-meta">${fmtDate(x.addedAt)}${x.addedBy ? ' · ' + esc(x.addedBy) : ''}</div>
@@ -1137,11 +1137,11 @@ window.setWelfareFilter = function(f, el) {
 };
 
 function renderWelfare() {
-  const pending  = allWelfareApps.filter(a => (a.status||'pending') === 'pending');
+  const pending = allWelfareApps.filter(a => (a.status||'pending') === 'pending');
   const approved = allWelfareApps.filter(a => a.status === 'approved');
   const declined = allWelfareApps.filter(a => a.status === 'declined');
 
-  document.getElementById('wStatPending').textContent  = pending.length;
+  document.getElementById('wStatPending').textContent = pending.length;
   document.getElementById('wStatApproved').textContent = approved.length;
   document.getElementById('wStatDeclined').textContent = declined.length;
 
@@ -1154,13 +1154,13 @@ function renderWelfare() {
 
   const el = document.getElementById('welfareList');
   if (!list.length) {
-    el.innerHTML = `<div class="empty-state"><div class="ico">${welfareFilter === 'pending' ? '🎉' : '🏥'}</div>${welfareFilter === 'pending' ? 'No pending welfare applications!' : 'No applications found.'}</div>`;
+    el.innerHTML = `<div class="empty-state"><div class="ico">${welfareFilter === 'pending' ? '' : ''}</div>${welfareFilter === 'pending' ? 'No pending welfare applications!' : 'No applications found.'}</div>`;
     return;
   }
 
   el.innerHTML = list.map(app => {
     const status = app.status || 'pending';
-    const phone  = formatPhone(app.memberPhone || '');
+    const phone = formatPhone(app.memberPhone || '');
     return `
     <div class="welfare-card ${status}" id="wcard-${app.memberPhone}-${app.appIdx}">
       <div class="welfare-top">
@@ -1170,15 +1170,15 @@ function renderWelfare() {
         </div>
         <span class="status-badge ${status}">${status}</span>
       </div>
-      <div class="welfare-reason">📋 ${esc(app.reason || '—')}</div>
+      <div class="welfare-reason"> ${esc(app.reason || '—')}</div>
       ${app.desc ? `<div class="welfare-desc">${esc(app.desc)}</div>` : ''}
-      ${app.amount ? `<div class="welfare-amount">💰 ${ksh(app.amount)} requested</div>` : ''}
+      ${app.amount ? `<div class="welfare-amount"> ${ksh(app.amount)} requested</div>` : ''}
       <div class="welfare-date">Submitted: ${fmtDate(app.timestamp)}</div>
       <div class="welfare-actions">
-        ${status !== 'approved' ? `<button class="w-btn w-approve" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'approved','${esc(app.memberName||'')}','${esc(app.reason||'')}')">✓ Approve</button>` : ''}
-        ${status !== 'declined' ? `<button class="w-btn w-decline" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'declined','${esc(app.memberName||'')}','${esc(app.reason||'')}')">✕ Decline</button>` : ''}
-        ${status !== 'pending'  ? `<button class="w-btn w-pending" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'pending','${esc(app.memberName||'')}','${esc(app.reason||'')}')">↩ Pending</button>` : ''}
-        <button class="w-btn w-notify" onclick="notifyWelfareWA('${app.memberPhone}','${esc(app.memberName||'')}','${esc(app.reason||'')}','${status}')">📲 Notify</button>
+        ${status !== 'approved' ? `<button class="w-btn w-approve" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'approved','${esc(app.memberName||'')}','${esc(app.reason||'')}')">Approve</button>` : ''}
+        ${status !== 'declined' ? `<button class="w-btn w-decline" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'declined','${esc(app.memberName||'')}','${esc(app.reason||'')}')">Decline</button>` : ''}
+        ${status !== 'pending' ? `<button class="w-btn w-pending" onclick="confirmWelfare('${app.memberPhone}',${app.appIdx},'pending','${esc(app.memberName||'')}','${esc(app.reason||'')}')">Pending</button>` : ''}
+        <button class="w-btn w-notify" onclick="notifyWelfareWA('${app.memberPhone}','${esc(app.memberName||'')}','${esc(app.reason||'')}','${status}')">Notify</button>
       </div>
     </div>`;
   }).join('');
@@ -1190,14 +1190,14 @@ window.confirmWelfare = function(phone, appIdx, newStatus, name, reason) {
   const isApprove = newStatus === 'approved';
   const isPending = newStatus === 'pending';
   document.getElementById('wModalTitle').textContent = isApprove ? 'Approve Welfare?' : isPending ? 'Reset to Pending?' : 'Decline Welfare?';
-  document.getElementById('wModalBody').textContent  = isApprove
+  document.getElementById('wModalBody').textContent = isApprove
     ? `Approve welfare application for "${reason}" by ${name}?`
     : isPending
     ? `Reset this application back to pending?`
     : `Decline welfare application for "${reason}" by ${name}?`;
   const btn = document.getElementById('wModalConfirmBtn');
-  btn.textContent  = isApprove ? '✓ Yes, Approve' : isPending ? '↩ Set Pending' : '✕ Yes, Decline';
-  btn.className    = isApprove ? 'modal-confirm-approve' : 'modal-confirm-decline';
+  btn.textContent = isApprove ? 'Yes, Approve' : isPending ? 'Set Pending' : 'Yes, Decline';
+  btn.className = isApprove ? 'modal-confirm-approve' : 'modal-confirm-decline';
   document.getElementById('welfareModal').classList.add('open');
 };
 window.closeWelfareModal = function() {
@@ -1213,16 +1213,16 @@ window.doWelfareConfirm = async function() {
   const docRef = doc(db, 'tracker', 'welfare_' + phoneDigits);
   try {
     const snap = await getDoc(docRef);
-    if (!snap.exists()) { showToast('⚠️ Application not found'); return; }
+    if (!snap.exists()) { showToast('Application not found'); return; }
     const data = snap.data();
     const apps = data.applications || [];
-    if (!apps[appIdx]) { showToast('⚠️ Application index missing'); return; }
-    apps[appIdx].status     = newStatus;
+    if (!apps[appIdx]) { showToast('Application index missing'); return; }
+    apps[appIdx].status = newStatus;
     apps[appIdx].reviewedAt = Date.now();
     await setDoc(docRef, { ...data, applications: apps });
-    showToast(newStatus === 'approved' ? '✅ Welfare approved' : newStatus === 'declined' ? '✕ Welfare declined' : '↩ Reset to pending');
+    showToast(newStatus === 'approved' ? 'Welfare approved' : newStatus === 'declined' ? 'Welfare declined' : 'Reset to pending');
   } catch(e) {
-    showToast('⚠️ Could not update. Check connection.');
+    showToast('Could not update. Check connection.');
   }
 };
 
@@ -1231,11 +1231,11 @@ window.notifyWelfareWA = function(phone, name, reason, status) {
   const first = (name || phone).split(' ')[0];
   let msg = '';
   if (status === 'approved') {
-    msg = `Hello ${first}! 👋\n\nGreat news! Your welfare application for *${reason}* has been *APPROVED* by the Chairperson. 🎉\n\nPlease contact the treasurer to arrange disbursement. 🙏`;
+    msg = `Hello ${first}! \n\nGreat news! Your welfare application for *${reason}* has been *APPROVED* by the Chairperson. \n\nPlease contact the treasurer to arrange disbursement. `;
   } else if (status === 'declined') {
-    msg = `Hello ${first}! 👋\n\nRegarding your welfare application for *${reason}* — it has been *declined* by the Chairperson at this time.\n\nIf you have questions, please reach out to the committee directly. 🙏`;
+    msg = `Hello ${first}! \n\nRegarding your welfare application for *${reason}* — it has been *declined* by the Chairperson at this time.\n\nIf you have questions, please reach out to the committee directly. `;
   } else {
-    msg = `Hello ${first}! 👋\n\nYour welfare application for *${reason}* has been received and is currently *under review*.\n\nWe will update you once a decision has been made. 🙏`;
+    msg = `Hello ${first}! \n\nYour welfare application for *${reason}* has been received and is currently *under review*.\n\nWe will update you once a decision has been made. `;
   }
   const clean = phone.replace(/\D/g, '');
   window.open('https://wa.me/' + clean + '?text=' + encodeURIComponent(msg), '_blank');

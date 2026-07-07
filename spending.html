@@ -7,25 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -95,14 +95,14 @@
 <div class="topbar">
   <div style="display:flex;align-items:center;gap:10px;">
     <button class="back-btn" onclick="history.back()">← Back</button>
-    <div class="page-title">💸 Spending</div>
+    <div class="page-title">Spending</div>
   </div>
-  <button class="pdf-btn" id="pdfBtn">🖨️ PDF</button>
+  <button class="pdf-btn" id="pdfBtn">PDF</button>
 </div>
 
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-icon">🔐</div>
+    <div class="login-icon"></div>
     <div class="login-title">Admin Login</div>
     <div class="login-sub">Sign in to manage spending</div>
     <div class="field">
@@ -141,7 +141,7 @@
 <div class="modal-backdrop" id="entryModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modalTitle">💸 Add Spending Entry</div>
+    <div class="modal-title" id="modalTitle">Add Spending Entry</div>
     <div class="mfield">
       <label>Description / Purpose</label>
       <input type="text" id="fDesc" placeholder="e.g. Funeral transport, Medical support">
@@ -182,21 +182,21 @@
 const RATE = 50; // KSh per member per day — must match main app
 
 firebase.initializeApp({
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca"
 });
 
-const db   = firebase.firestore();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
-let spending    = [];
-let editingId   = null;
-let payTotal    = 0;
-let otherTotal  = 0;
+let spending = [];
+let editingId = null;
+let payTotal = 0;
+let otherTotal = 0;
 let membersCount = 0;
 let listenersStarted = false;
 
@@ -214,7 +214,7 @@ auth.onAuthStateChanged(user => {
 
 document.getElementById('loginBtn').onclick = async function() {
   const email = document.getElementById('loginEmail').value.trim();
-  const pw    = document.getElementById('loginPw').value;
+  const pw = document.getElementById('loginPw').value;
   const errEl = document.getElementById('loginErr');
   errEl.classList.remove('show');
   this.textContent = 'Signing in…';
@@ -238,7 +238,7 @@ function startListeners() {
     render();
   }, err => {
     console.error('spending error:', err);
-    document.getElementById('loadingMsg').textContent = '⚠️ Could not load data. Check connection.';
+    document.getElementById('loadingMsg').textContent = 'Could not load data. Check connection.';
   });
 
   // 2. Members list (to count members for payment calculation)
@@ -286,13 +286,13 @@ function recalcIncome() {
 // ── RENDER ──
 function render() {
   const totalIncome = payTotal + otherTotal;
-  const totalSpent  = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
-  const balance     = totalIncome - totalSpent;
+  const totalSpent = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+  const balance = totalIncome - totalSpent;
 
   document.getElementById('incomeVal').textContent = 'KSh ' + totalIncome.toLocaleString();
-  document.getElementById('spentVal').textContent  = 'KSh ' + totalSpent.toLocaleString();
+  document.getElementById('spentVal').textContent = 'KSh ' + totalSpent.toLocaleString();
   const balEl = document.getElementById('balVal');
-  balEl.textContent = 'KSh ' + Math.abs(balance).toLocaleString() + (balance < 0 ? ' ⚠️' : '');
+  balEl.textContent = 'KSh ' + Math.abs(balance).toLocaleString() + (balance < 0 ? ' ' : '');
   balEl.style.color = balance < 0 ? 'var(--red)' : 'var(--green2)';
 
   const list = document.getElementById('spendList');
@@ -312,8 +312,8 @@ function render() {
         <div class="spend-amount">−KSh ${Number(e.amount).toLocaleString()}</div>
       </div>
       <div class="spend-actions">
-        <button class="act-btn edit" data-id="${e.id}">✏️ Edit</button>
-        <button class="act-btn del"  data-id="${e.id}">🗑 Delete</button>
+        <button class="act-btn edit" data-id="${e.id}">Edit</button>
+        <button class="act-btn del" data-id="${e.id}">Delete</button>
       </div>
     </div>`).join('');
 
@@ -336,13 +336,13 @@ document.getElementById('saveBtn').addEventListener('click', saveEntry);
 
 function openAdd() {
   editingId = null;
-  document.getElementById('modalTitle').textContent = '💸 Add Spending Entry';
-  document.getElementById('saveBtn').textContent    = 'Add Entry';
-  document.getElementById('fDesc').value      = '';
-  document.getElementById('fAmount').value    = '';
+  document.getElementById('modalTitle').textContent = 'Add Spending Entry';
+  document.getElementById('saveBtn').textContent = 'Add Entry';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fAmount').value = '';
   document.getElementById('fRecipient').value = '';
-  document.getElementById('fDate').value      = todayKey();
-  document.getElementById('fCategory').value  = 'Welfare';
+  document.getElementById('fDate').value = todayKey();
+  document.getElementById('fCategory').value = 'Welfare';
   document.getElementById('modalErr').classList.remove('show');
   document.getElementById('entryModal').classList.add('open');
   setTimeout(() => document.getElementById('fDesc').focus(), 300);
@@ -352,13 +352,13 @@ function openEdit(id) {
   const e = spending.find(x => x.id === id);
   if (!e) return;
   editingId = id;
-  document.getElementById('modalTitle').textContent = '✏️ Edit Spending Entry';
-  document.getElementById('saveBtn').textContent    = 'Save Changes';
-  document.getElementById('fDesc').value      = e.desc;
-  document.getElementById('fAmount').value    = e.amount;
+  document.getElementById('modalTitle').textContent = 'Edit Spending Entry';
+  document.getElementById('saveBtn').textContent = 'Save Changes';
+  document.getElementById('fDesc').value = e.desc;
+  document.getElementById('fAmount').value = e.amount;
   document.getElementById('fRecipient').value = e.recipient || '';
-  document.getElementById('fDate').value      = e.date;
-  document.getElementById('fCategory').value  = e.category;
+  document.getElementById('fDate').value = e.date;
+  document.getElementById('fCategory').value = e.category;
   document.getElementById('modalErr').classList.remove('show');
   document.getElementById('entryModal').classList.add('open');
   setTimeout(() => document.getElementById('fDesc').focus(), 300);
@@ -369,13 +369,13 @@ function closeModal() {
 }
 
 async function saveEntry() {
-  const desc      = document.getElementById('fDesc').value.trim();
-  const amount    = parseFloat(document.getElementById('fAmount').value);
-  const date      = document.getElementById('fDate').value;
-  const category  = document.getElementById('fCategory').value;
+  const desc = document.getElementById('fDesc').value.trim();
+  const amount = parseFloat(document.getElementById('fAmount').value);
+  const date = document.getElementById('fDate').value;
+  const category = document.getElementById('fCategory').value;
   const recipient = document.getElementById('fRecipient').value.trim();
-  const errEl     = document.getElementById('modalErr');
-  const saveBtn   = document.getElementById('saveBtn');
+  const errEl = document.getElementById('modalErr');
+  const saveBtn = document.getElementById('saveBtn');
 
   if (!desc || !amount || amount <= 0 || !date) {
     errEl.classList.add('show'); return;
@@ -392,10 +392,10 @@ async function saveEntry() {
     await db.doc('tracker/spending').set({ list: newList });
     // spending will update via the onSnapshot listener
     closeModal();
-    toast(editingId ? '✓ Entry updated' : '✓ Entry added');
+    toast(editingId ? 'Entry updated' : 'Entry added');
   } catch(err) {
     console.error('Save error:', err.code, err.message);
-    toast('⚠️ Save failed: ' + (err.code || err.message));
+    toast('Save failed: ' + (err.code || err.message));
   }
   saveBtn.textContent = editingId ? 'Save Changes' : 'Add Entry';
   saveBtn.disabled = false;
@@ -408,21 +408,21 @@ async function deleteEntry(id) {
     await db.doc('tracker/spending').set({ list: newList });
     toast('Entry deleted');
   } catch(err) {
-    toast('⚠️ Delete failed');
+    toast('Delete failed');
   }
 }
 
 // ── PDF ──
 document.getElementById('pdfBtn').addEventListener('click', function() {
   const totalIncome = payTotal + otherTotal;
-  const total   = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+  const total = spending.reduce((s, e) => s + (Number(e.amount) || 0), 0);
   const balance = totalIncome - total;
   const dateStr = new Date().toLocaleDateString('en-KE', {day:'numeric', month:'long', year:'numeric'});
   const rows = [...spending].sort((a,b) => a.date.localeCompare(b.date)).map((e,i) => `
     <tr><td>${i+1}</td><td>${e.date}</td><td>${e.desc}</td><td>${e.category}</td>
     <td>${e.recipient||'—'}</td><td style="text-align:right;font-weight:700;color:#C0392B;">KSh ${Number(e.amount).toLocaleString()}</td></tr>`).join('');
   const w = window.open('','_blank');
-  if (!w) { toast('⚠️ Allow popups to print PDF'); return; }
+  if (!w) { toast('Allow popups to print PDF'); return; }
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Spending Report</title>
   <style>body{font-family:Arial,sans-serif;font-size:12px;padding:28px 32px;color:#1A1A1A;}
   .hdr{border-bottom:3px solid #141414;padding-bottom:14px;margin-bottom:18px;}

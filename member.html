@@ -19,47 +19,47 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 
 body.light {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.08);
-  --red:      #CC1818;
-  --red2:     #E02020;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 
@@ -222,7 +222,7 @@ html, body {
 }
 .stat-val.green { color: var(--green2); }
 .stat-val.amber { color: var(--amber2); }
-.stat-val.red   { color: #E05540; }
+.stat-val.red { color: #E05540; }
 .stat-lbl { font-size: 9px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; text-align: center; }
 
 /* ── SECTION CARDS ── */
@@ -253,12 +253,12 @@ html, body {
 }
 .history-item:last-child { border-bottom: none; }
 .history-date { font-size: 13px; font-weight: 600; color: var(--text); }
-.history-day  { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.history-day { font-size: 10px; color: var(--muted); margin-top: 1px; }
 .history-badge {
   font-size: 11px; font-weight: 700; padding: 3px 10px;
   border-radius: 20px; flex-shrink: 0;
 }
-.history-badge.paid   { background: var(--green-bg); color: var(--green2); }
+.history-badge.paid { background: var(--green-bg); color: var(--green2); }
 .history-badge.unpaid { background: var(--amber-bg); color: var(--amber2); }
 .history-badge.review { background: rgba(204,24,24,0.10); color: #CC1818; }
 .history-badge.invalid { background: rgba(220,38,38,.12); color: #EF4444; }
@@ -302,9 +302,9 @@ html, body {
   transition: transform .12s;
 }
 .contrib-day:hover { transform: scale(1.35); }
-.contrib-day.lvl-empty  { background: transparent; }
+.contrib-day.lvl-empty { background: transparent; }
 .contrib-day.lvl-unpaid { background: var(--amber-bg); border: 1px solid rgba(204,24,24,0.25); }
-.contrib-day.lvl-paid   { background: var(--green2); }
+.contrib-day.lvl-paid { background: var(--green2); }
 .contrib-day.lvl-future { background: var(--card2); border: 1px solid var(--border); opacity: .5; }
 .contrib-cal-legend {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -342,11 +342,11 @@ html, body {
 /* ── ANIMATED STREAK ── */
 @keyframes streakPulse {
   0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.18); }
+  50% { transform: scale(1.18); }
 }
 @keyframes streakFlicker {
   0%, 100% { opacity: 1; }
-  50%      { opacity: .75; }
+  50% { opacity: .75; }
 }
 .stat-val.fire {
   animation: streakPulse 1s ease-in-out infinite;
@@ -410,7 +410,7 @@ html, body {
 }
 @keyframes dustPuff {
   0%, 100% { opacity: .25; transform: translateX(0) scale(.85); }
-  50%      { opacity: .8;  transform: translateX(-3px) scale(1); }
+  50% { opacity: .8; transform: translateX(-3px) scale(1); }
 }
 
 /* ── MONTHLY CHALLENGE ── */
@@ -506,7 +506,7 @@ html, body {
   font-size: 10px; font-weight: 700; padding: 3px 9px;
   border-radius: 20px; flex-shrink: 0; white-space: nowrap;
 }
-.welfare-status.pending  { background: var(--amber-bg); color: var(--amber2); }
+.welfare-status.pending { background: var(--amber-bg); color: var(--amber2); }
 .welfare-status.approved { background: var(--green-bg); color: var(--green2); }
 .welfare-status.declined { background: rgba(192,57,43,.1); color: #E05540; }
 .welfare-meta { font-size: 11px; color: var(--muted); }
@@ -808,13 +808,13 @@ body.light .ws-name { color: #141414; }
   animation: wsFadeUp .4s ease .35s both;
 }
 @keyframes wsPop {
-  0%   { transform: scale(.6); opacity: 0; }
-  65%  { transform: scale(1.08); opacity: 1; }
+  0% { transform: scale(.6); opacity: 0; }
+  65% { transform: scale(1.08); opacity: 1; }
   100% { transform: scale(1); }
 }
 @keyframes wsFadeUp {
   from { transform: translateY(14px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  to { transform: translateY(0); opacity: 1; }
 }
 </style>
 </head>
@@ -842,7 +842,7 @@ body.light .ws-name { color: #141414; }
       <span id="syncStatus" class="sync-pill err">⏳</span>
       <span id="lastSynced" style="font-size:9px;color:var(--muted);display:none;"></span>
     </div>
-    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">🌙</button>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle theme"></button>
   </div>
 </div>
 
@@ -851,7 +851,7 @@ body.light .ws-name { color: #141414; }
   <div class="gate-logo">BOGONKO<em>-NGELANI</em></div>
   <div class="gate-subtitle">Member Self-Service Portal</div>
   <div class="gate-card">
-    <h2>🔐 Sign In</h2>
+    <h2>Sign In</h2>
     <p>Enter your phone number and your personal PIN to access your profile and contribution history.</p>
     <div class="field-wrap">
       <div class="field-label">Phone Number</div>
@@ -876,20 +876,20 @@ body.light .ws-name { color: #141414; }
   <div class="avatar-section">
     <div class="avatar-circle" id="avatarCircle" onclick="document.getElementById('avatarFileInput').click()">
       ??
-      <div class="avatar-edit-badge">📷</div>
+      <div class="avatar-edit-badge"></div>
     </div>
     <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(event)">
     <div class="avatar-info">
       <h1 id="memberName" style="font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.1;">—</h1>
       <div class="phone-row" id="memberPhone" style="font-size:13px;margin-top:3px;margin-bottom:6px;">—</div>
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <span id="pinBadge" class="pin-badge">🔐 PIN Active</span>
-        <span id="memberSinceBadge" class="member-since-badge">🏁 Member since —</span>
+        <span id="pinBadge" class="pin-badge">PIN Active</span>
+        <span id="memberSinceBadge" class="member-since-badge">Member since —</span>
       </div>
     </div>
   </div>
   <div style="padding:0 16px 4px;">
-    <span id="riderRankPill" class="rider-rank-pill">🏍️ Loading rider status…</span>
+    <span id="riderRankPill" class="rider-rank-pill">Loading rider status…</span>
   </div>
 
   <!-- ── APP PURPOSE NOTICE ── -->
@@ -905,7 +905,7 @@ body.light .ws-name { color: #141414; }
     color: #374151;
   ">
     <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#065F46;margin-bottom:6px;">
-      🏦 About Your Group Funds
+       About Your Group Funds
     </div>
     <p style="margin:0 0 8px;">
       This app is a <strong style="color:#065F46;">record-keeping &amp; transparency tool</strong> — it does not hold, store, or control any group money.
@@ -924,10 +924,10 @@ body.light .ws-name { color: #141414; }
       letter-spacing:.01em;
       margin-bottom:8px;
     ">
-      📱 Paybill: <span style="font-size:15px;">544600</span> &nbsp;|&nbsp; 🔢 Account: <span style="font-size:15px;">942540</span>
+       Paybill: <span style="font-size:15px;">544600</span> &nbsp;|&nbsp; Account: <span style="font-size:15px;">942540</span>
     </div>
     <p style="margin:0;color:#6B7280;">
-      ⚠️ <strong>Withdrawals cannot be made through this app.</strong> Funds can only be withdrawn by <strong>registered UNAITAS signatories</strong> through the official SACCO process.
+       <strong>Withdrawals cannot be made through this app.</strong>Funds can only be withdrawn by <strong>registered UNAITAS signatories</strong> through the official SACCO process.
     </p>
   </div>
 
@@ -947,21 +947,21 @@ body.light .ws-name { color: #141414; }
     </div>
     <div class="stat-cell">
       <div class="stat-val" id="statStreak" style="color:#FFA000;">—</div>
-      <div class="stat-lbl">🔥 Streak</div>
+      <div class="stat-lbl">Streak</div>
     </div>
   </div>
 
   <!-- Contribution progress -->
   <div class="section">
     <div class="section-header">
-      <div class="section-title">📊 Contribution Rate</div>
+      <div class="section-title">Contribution Rate</div>
       <div class="section-pill" id="rateLabel">—</div>
     </div>
     <div class="road-track" id="roadTrack">
       <div class="road-dashes"></div>
       <div class="road-fill" id="roadFill" style="width:0%"></div>
-      <div class="road-finish">🏁</div>
-      <div class="road-rider" id="roadRider" style="left:0%;">🏍️<span class="road-dust">💨</span></div>
+      <div class="road-finish"></div>
+      <div class="road-rider" id="roadRider" style="left:0%;"><span class="road-dust"></span></div>
     </div>
     <div style="font-size:10px;color:var(--muted);margin-top:5px;" id="progressSub"></div>
   </div>
@@ -969,7 +969,7 @@ body.light .ws-name { color: #141414; }
   <!-- Contribution Calendar -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">🗓️ Contribution Calendar</div>
+      <div class="section-title">Contribution Calendar</div>
       <div class="section-pill" id="calRangeLabel">—</div>
     </div>
     <div class="contrib-cal-wrap">
@@ -979,16 +979,16 @@ body.light .ws-name { color: #141414; }
       </div>
     </div>
     <div class="contrib-cal-legend">
-      <span class="cal-leg-item"><span class="contrib-day lvl-unpaid" style="display:inline-block;"></span> Unpaid</span>
-      <span class="cal-leg-item"><span class="contrib-day lvl-paid" style="display:inline-block;"></span> Paid</span>
-      <span class="cal-leg-item"><span class="contrib-day lvl-future" style="display:inline-block;"></span> Upcoming</span>
+      <span class="cal-leg-item"><span class="contrib-day lvl-unpaid" style="display:inline-block;"></span>Unpaid</span>
+      <span class="cal-leg-item"><span class="contrib-day lvl-paid" style="display:inline-block;"></span>Paid</span>
+      <span class="cal-leg-item"><span class="contrib-day lvl-future" style="display:inline-block;"></span>Upcoming</span>
     </div>
   </div>
 
   <!-- Monthly Contributions Chart -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">📊 Monthly Contributions</div>
+      <div class="section-title">Monthly Contributions</div>
       <div class="section-pill" id="monthChartTotal">KSh 0</div>
     </div>
     <div class="month-chart-wrap" id="monthChartWrap"></div>
@@ -997,12 +997,12 @@ body.light .ws-name { color: #141414; }
   <!-- Monthly Challenge -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">🎯 Monthly Challenge</div>
+      <div class="section-title">Monthly Challenge</div>
     </div>
     <div class="challenge-card" id="challengeCard">
       <div class="challenge-top">
         <div class="challenge-name" id="challengeName">Pay every day this month</div>
-        <div class="challenge-star locked" id="challengeStar">⭐</div>
+        <div class="challenge-star locked" id="challengeStar"></div>
       </div>
       <div class="challenge-bar-wrap">
         <div class="challenge-bar-fill" id="challengeBarFill" style="width:0%"></div>
@@ -1014,7 +1014,7 @@ body.light .ws-name { color: #141414; }
   <!-- Badges & Achievements -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">🏅 Badges &amp; Achievements</div>
+      <div class="section-title">Badges &amp; Achievements</div>
       <div class="section-pill" id="badgeCount">0 earned</div>
     </div>
     <div class="badge-grid" id="badgeGrid"></div>
@@ -1023,7 +1023,7 @@ body.light .ws-name { color: #141414; }
   <!-- Leaderboard -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">📈 Leaderboard</div>
+      <div class="section-title">Leaderboard</div>
       <div class="section-pill">Most consistent</div>
     </div>
     <div class="leaderboard-list" id="leaderboardList">
@@ -1034,18 +1034,18 @@ body.light .ws-name { color: #141414; }
   <!-- Contribution history -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">📅 Contribution History</div>
+      <div class="section-title">Contribution History</div>
       <div class="section-pill" id="historyCount">0 days</div>
     </div>
     <div class="history-list" id="historyList">
-      <div class="spinner"><span class="spin">⏳</span> Loading…</div>
+      <div class="spinner"><span class="spin">⏳</span>Loading…</div>
     </div>
   </div>
 
   <!-- Welfare Applications -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
-      <div class="section-title">🏥 Welfare Applications</div>
+      <div class="section-title">Welfare Applications</div>
       <div class="section-pill" id="welfareCount">0</div>
     </div>
     <button class="welfare-apply-btn" onclick="openWelfareModal()">＋ Submit New Application</button>
@@ -1057,17 +1057,17 @@ body.light .ws-name { color: #141414; }
   <!-- Virtual ID Card -->
   <div class="id-card-section">
     <div class="section-header">
-      <div class="section-title">🪪 My Virtual ID Card</div>
+      <div class="section-title">My Virtual ID Card</div>
     </div>
     <div id="idCardArea">
-      <div class="spinner"><span class="spin">⏳</span> Loading card…</div>
+      <div class="spinner"><span class="spin">⏳</span>Loading card…</div>
     </div>
   </div>
 
   <!-- My Details dropdown -->
   <div class="section" style="margin-top:16px;">
     <button class="details-toggle" id="detailsToggle" onclick="toggleDetails()">
-      <span>📋 My Details</span>
+      <span>My Details</span>
       <span class="dt-caret">▾</span>
     </button>
     <div class="details-body" id="detailsBody">
@@ -1076,16 +1076,16 @@ body.light .ws-name { color: #141414; }
     </div>
   </div>
 
-  <button class="change-pin-btn" onclick="openChangePinModal()">🔑 Change PIN</button>
-  <button class="logout-btn" onclick="doLogout()">🔒 Sign Out</button>
+  <button class="change-pin-btn" onclick="openChangePinModal()">Change PIN</button>
+  <button class="logout-btn" onclick="doLogout()">Sign Out</button>
 </div>
 
 <!-- ═══ WELFARE MODAL ═══ -->
 <div class="modal-backdrop" id="welfareModal">
   <div class="modal-box">
     <div class="modal-title">
-      🏥 Welfare Application
-      <button class="modal-close" onclick="closeWelfareModal()">✕</button>
+       Welfare Application
+      <button class="modal-close" onclick="closeWelfareModal()"></button>
     </div>
     <div class="field-wrap">
       <div class="field-label">Reason / Type of Welfare</div>
@@ -1110,8 +1110,8 @@ body.light .ws-name { color: #141414; }
 <div class="modal-backdrop" id="confirmPayModal">
   <div class="modal-box">
     <div class="modal-title">
-      💳 Confirm Daily Contribution
-      <button class="modal-close" onclick="closeConfirmPayModal()">✕</button>
+       Confirm Daily Contribution
+      <button class="modal-close" onclick="closeConfirmPayModal()"></button>
     </div>
     <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5;">
       Paid your KSh <strong id="cpRateLabel" style="color:var(--text);">50</strong> contribution for <strong id="cpDateLabel" style="color:var(--text);">—</strong>? Paste your M-Pesa confirmation code below and a payment officer will verify and approve it.
@@ -1128,10 +1128,10 @@ body.light .ws-name { color: #141414; }
 <!-- ═══ CHANGE PIN MODAL ═══ -->
 <div class="modal-backdrop" id="changePinModal" style="align-items:center;">
   <div class="modal-card" style="max-width:340px;width:92%;">
-    <div class="modal-title" id="changePinTitle">🔑 Change Your PIN</div>
+    <div class="modal-title" id="changePinTitle">Change Your PIN</div>
     <div class="modal-body">
       <div id="changePinForceMsg" style="display:none;background:rgba(255,165,0,.12);border:1px solid rgba(255,165,0,.35);border-radius:8px;padding:10px 12px;font-size:12px;color:#d4860a;margin-bottom:14px;line-height:1.5;">
-        ⚠️ Your PIN was set by an admin. Please create a new personal PIN before continuing.
+         Your PIN was set by an admin. Please create a new personal PIN before continuing.
       </div>
       <div class="field-wrap" id="oldPinWrap">
         <div class="field-label">Current PIN</div>
@@ -1160,7 +1160,7 @@ body.light .ws-name { color: #141414; }
 <!-- ═══ PIN RECOVERY MODAL ═══ -->
 <div class="modal-backdrop" id="pinRecoveryModal" style="align-items:center;">
   <div class="modal-card" style="max-width:340px;width:92%;">
-    <div class="modal-title">🆘 PIN Reset Request</div>
+    <div class="modal-title">PIN Reset Request</div>
     <div class="modal-body">
       <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">
         We'll open WhatsApp with a pre-filled message to your group admin. They will reset your PIN and send you a new one.
@@ -1172,7 +1172,7 @@ body.light .ws-name { color: #141414; }
       <p id="recoveryErr" class="err-msg"></p>
     </div>
     <div class="modal-actions">
-      <button class="btn-primary" onclick="sendPinRecoveryWA()">📲 Request via WhatsApp</button>
+      <button class="btn-primary" onclick="sendPinRecoveryWA()">Request via WhatsApp</button>
       <button class="btn-secondary" onclick="closePinRecoveryModal()">Cancel</button>
     </div>
   </div>
@@ -1185,7 +1185,7 @@ body.light .ws-name { color: #141414; }
 <div class="copyright-bar">© Bogonko-Ngelani Stage</div>
 
 <script type="module">
-import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { initializeFirestore, persistentLocalCache, doc, getDoc, onSnapshot, setDoc, collection, addDoc, query, where, getDocs, orderBy }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged }
@@ -1194,17 +1194,17 @@ import { getMessaging, getToken, isSupported as messagingIsSupported }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
-  authDomain:        "bonge-96f37.firebaseapp.com",
-  projectId:         "bonge-96f37",
-  storageBucket:     "bonge-96f37.firebasestorage.app",
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
   messagingSenderId: "641310472447",
-  appId:             "1:641310472447:web:2bd335fd022c5aedb2b4ca",
-  measurementId:     "G-VWL91EJW1H"
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
 };
 
-const app  = initializeApp(firebaseConfig);
-const db   = initializeFirestore(app, { localCache: persistentLocalCache() });
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
 const auth = getAuth(app);
 
 // ── PUSH NOTIFICATIONS (Firebase Cloud Messaging) ──
@@ -1227,19 +1227,19 @@ async function setupPushNotifications() {
 window.addEventListener('load', () => setTimeout(setupPushNotifications, 1500));
 
 // ── CONSTANTS ──
-const RATE       = 50;
+const RATE = 50;
 const START_DATE = new Date(2026, 5, 22);
 const SHOW_FIRST = 20; // initial rows shown in history
 
 // ── STATE ──
 let currentMember = null; // { name, phone }
-let payments      = {};
-let allDates      = [];
-let welfareApps   = [];
+let payments = {};
+let allDates = [];
+let welfareApps = [];
 let paymentRequests = []; // this member's payment confirmation requests
 let historyExpanded = false;
 let _paymentsUnsub = null;
-let _welfareUnsub  = null;
+let _welfareUnsub = null;
 let _memberDetailsUnsub = null;
 let _payReqUnsub = null;
 let pendingConfirmDate = null; // date key currently being confirmed in the modal
@@ -1248,13 +1248,13 @@ let pendingConfirmDate = null; // date key currently being confirmed in the moda
 function toggleTheme() {
   document.body.classList.toggle('light');
   localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
-  document.getElementById('themeToggle').textContent = document.body.classList.contains('light') ? '🌙' : '☀️';
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('light') ? '' : '';
 }
 if (localStorage.getItem('theme') === 'light') {
   document.body.classList.add('light');
-  document.getElementById('themeToggle').textContent = '🌙';
+  document.getElementById('themeToggle').textContent = '';
 } else {
-  document.getElementById('themeToggle').textContent = '☀️';
+  document.getElementById('themeToggle').textContent = '';
 }
 
 // ── SYNC STATUS ──
@@ -1304,9 +1304,9 @@ function initials(name) {
   return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
 }
 function normalisePhone(p) {
-  return p.replace(/[\s\-().]/g,'')  // strip spaces, dashes, brackets, dots
-           .replace(/^\+/, '')        // strip leading +
-           .replace(/^0/, '254');     // 07xx → 25407xx
+  return p.replace(/[\s\-().]/g,'') // strip spaces, dashes, brackets, dots
+           .replace(/^\+/, '') // strip leading +
+           .replace(/^0/, '254'); // 07xx → 25407xx
 }
 function isPaid(phone, dk) {
   return !!(payments[dk] && payments[dk][phone]);
@@ -1329,9 +1329,9 @@ function buildAllDates() {
 // ── LOGIN ──
 async function doLogin() {
   const rawPhone = document.getElementById('loginPhone').value.trim();
-  const pin      = document.getElementById('loginPin').value.trim();
-  const errEl    = document.getElementById('loginErr');
-  const btn      = document.getElementById('loginBtn');
+  const pin = document.getElementById('loginPin').value.trim();
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
 
   if (!rawPhone || !pin) {
     errEl.textContent = 'Enter your phone number and PIN.';
@@ -1406,7 +1406,7 @@ async function doLogin() {
     // Success
     currentMember = { name: memberName, phone: matchedPhone };
     sessionStorage.setItem('memberPhone', matchedPhone);
-    sessionStorage.setItem('memberName',  memberName);
+    sessionStorage.setItem('memberName', memberName);
     await loadProfile();
 
     // If PIN was set by admin (adminSet flag), force member to change it now
@@ -1432,10 +1432,10 @@ async function loadProfile() {
   const inits = initials(m.name);
   const splash = document.getElementById('welcomeSplash');
   const wsAvatar = document.getElementById('wsAvatar');
-  const wsName   = document.getElementById('wsName');
+  const wsName = document.getElementById('wsName');
   if (splash && wsAvatar && wsName) {
     wsAvatar.textContent = inits;
-    wsName.textContent   = m.name;
+    wsName.textContent = m.name;
     splash.style.display = 'flex';
     // Hide login gate while splash is showing
     document.getElementById('loginGate').style.display = 'none';
@@ -1526,7 +1526,7 @@ function renderInvalidAlert() {
   }).join(', ');
   banner.innerHTML = `
     <div style="display:flex;align-items:flex-start;gap:10px;">
-      <span style="font-size:20px;flex-shrink:0;line-height:1;">⚠️</span>
+      <span style="font-size:20px;flex-shrink:0;line-height:1;"></span>
       <div style="flex:1;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#EF4444;margin-bottom:3px;">
           M-Pesa Code${invalidReqs.length > 1 ? 's' : ''} Rejected
@@ -1561,13 +1561,13 @@ function setAvatarDisplay(photoUrl) {
   circle.innerHTML = photoUrl
     ? `<img src="${photoUrl}" alt="Profile photo">`
     : inits;
-  circle.appendChild((() => { const b = document.createElement('div'); b.className = 'avatar-edit-badge'; b.textContent = '📷'; return b; })());
+  circle.appendChild((() => { const b = document.createElement('div'); b.className = 'avatar-edit-badge'; b.textContent = ''; return b; })());
 }
 
 async function loadMemberPhoto(phone) {
   try {
     const snap = await getDoc(doc(db, 'tracker', 'memberPhotos'));
-    const all  = snap.exists() ? (snap.data() || {}) : {};
+    const all = snap.exists() ? (snap.data() || {}) : {};
     return all[phone] || null;
   } catch(e) {
     return null;
@@ -1601,7 +1601,7 @@ async function handleAvatarFileSelect(event) {
   const file = event.target.files && event.target.files[0];
   event.target.value = '';
   if (!file) return;
-  if (!file.type.startsWith('image/')) { showToast('⚠️ Please choose an image file.'); return; }
+  if (!file.type.startsWith('image/')) { showToast('Please choose an image file.'); return; }
   if (!currentMember) return;
 
   showToast('⏳ Uploading photo…');
@@ -1613,16 +1613,16 @@ async function handleAvatarFileSelect(event) {
       if (quality > 0.4) quality -= 0.15; else dim -= 40;
       dataUrl = await resizeImageFile(file, dim, quality);
     }
-    if (dataUrl.length > 700000) { showToast('⚠️ Image too large, try a smaller photo.'); return; }
+    if (dataUrl.length > 700000) { showToast('Image too large, try a smaller photo.'); return; }
 
     const phone = currentMember.phone;
     await setDoc(doc(db, 'tracker', 'memberPhotos'), { [phone]: dataUrl }, { merge: true });
 
     setAvatarDisplay(dataUrl);
     updateIdCardAvatarImage(dataUrl);
-    showToast('✓ Profile photo updated');
+    showToast('Profile photo updated');
   } catch(e) {
-    showToast('⚠️ Could not upload photo. Try again.');
+    showToast('Could not upload photo. Try again.');
   }
 }
 
@@ -1634,14 +1634,14 @@ function updateIdCardAvatarImage(photoUrl) {
 
 function renderProfileMeta() {
   const m = currentMember;
-  document.getElementById('memberName').textContent   = m.name;
-  document.getElementById('memberPhone').textContent  = m.phone;
+  document.getElementById('memberName').textContent = m.name;
+  document.getElementById('memberPhone').textContent = m.phone;
   setAvatarDisplay(null);
   loadMemberPhoto(m.phone).then(photoUrl => { if (photoUrl) setAvatarDisplay(photoUrl); });
 
   // Check PIN badge — we already know PIN exists since login succeeded
-  document.getElementById('pinBadge').textContent = '🔐 PIN Active';
-  document.getElementById('pinBadge').className   = 'pin-badge';
+  document.getElementById('pinBadge').textContent = 'PIN Active';
+  document.getElementById('pinBadge').className = 'pin-badge';
 }
 
 function startPaymentsListener() {
@@ -1652,7 +1652,7 @@ function startPaymentsListener() {
   const _armOffline = () => {
     if (_offlineTimer) return;
     _offlineTimer = setTimeout(() => {
-      setSyncStatus(false, '⚠️ Offline');
+      setSyncStatus(false, 'Offline');
       renderHistory();
       renderStats();
     }, 6000);
@@ -1661,12 +1661,12 @@ function startPaymentsListener() {
   _paymentsUnsub = onSnapshot(doc(db, "tracker", "payments"), (snap) => {
     clearTimeout(_offlineTimer); _offlineTimer = null;
     payments = snap.exists() ? snap.data() : {};
-    setSyncStatus(true, '🟢 Live');
+    setSyncStatus(true, 'Live');
     renderHistory();
     renderStats();
   }, () => {
     clearTimeout(_offlineTimer); _offlineTimer = null;
-    setSyncStatus(false, '⚠️ Offline');
+    setSyncStatus(false, 'Offline');
     renderHistory();
     renderStats();
   });
@@ -1688,24 +1688,24 @@ function startWelfareListener() {
 // ── STATS ──
 function renderStats() {
   const phone = currentMember.phone;
-  const daysPaid   = allDates.filter(dk => isPaid(phone, dk)).length;
+  const daysPaid = allDates.filter(dk => isPaid(phone, dk)).length;
   const daysUnpaid = allDates.length - daysPaid;
-  const totalKsh   = daysPaid * RATE;
+  const totalKsh = daysPaid * RATE;
   const pct = allDates.length > 0 ? Math.round(daysPaid / allDates.length * 100) : 0;
 
-  // 🔥 Streak: consecutive paid days going backwards from yesterday
+  // Streak: consecutive paid days going backwards from yesterday
   const today = todayKey();
   const past = [...allDates].filter(dk => dk < today).sort().reverse();
   let streak = 0;
   for (const dk of past) { if (isPaid(phone, dk)) streak++; else break; }
 
-  document.getElementById('statDaysPaid').textContent   = daysPaid;
+  document.getElementById('statDaysPaid').textContent = daysPaid;
   document.getElementById('statDaysUnpaid').textContent = daysUnpaid;
-  document.getElementById('statTotalKsh').textContent   = totalKsh.toLocaleString();
+  document.getElementById('statTotalKsh').textContent = totalKsh.toLocaleString();
   const sEl = document.getElementById('statStreak');
   if (sEl) {
     if (streak >= 1) {
-      sEl.innerHTML = streak >= 3 ? `${streak}<span class="flame-emoji">🔥</span>` : String(streak);
+      sEl.innerHTML = streak >= 3 ? `${streak}<span class="flame-emoji"></span>` : String(streak);
       sEl.classList.toggle('fire', streak >= 3);
     } else {
       sEl.textContent = '—';
@@ -1714,7 +1714,7 @@ function renderStats() {
   }
 
   document.getElementById('rateLabel').textContent = pct + '%';
-  const roadFill  = document.getElementById('roadFill');
+  const roadFill = document.getElementById('roadFill');
   const roadRider = document.getElementById('roadRider');
   if (roadFill && roadRider) {
     roadFill.style.width = pct + '%';
@@ -1724,7 +1724,7 @@ function renderStats() {
   }
   document.getElementById('progressSub').textContent =
     `${daysPaid} of ${allDates.length} days paid · KSh ${totalKsh.toLocaleString()} total` +
-    (streak >= 3 ? ` · 🔥 ${streak}-day streak!` : '');
+    (streak >= 3 ? ` · ${streak}-day streak!` : '');
 
   renderGamification();
   renderContribCalendar();
@@ -1745,9 +1745,9 @@ function renderMemberSinceBadge() {
     }
   });
   if (!earliest && allDates.length) earliest = allDates[0];
-  if (!earliest) { el.textContent = '🏁 Member since —'; return; }
+  if (!earliest) { el.textContent = 'Member since —'; return; }
   const d = new Date(earliest + 'T00:00:00');
-  el.textContent = '🏁 Member since ' + d.toLocaleDateString('en-KE', { month: 'short', year: 'numeric' });
+  el.textContent = 'Member since ' + d.toLocaleDateString('en-KE', { month: 'short', year: 'numeric' });
 }
 
 // ── BODA RIDER RANK (fun, boda-themed status tag) ──
@@ -1755,23 +1755,23 @@ function renderRiderRank(pct, streak) {
   const el = document.getElementById('riderRankPill');
   if (!el) return;
   let icon, label;
-  if (streak >= 30)      { icon = '👑'; label = 'Road Captain'; }
-  else if (streak >= 7)   { icon = '🛵'; label = 'Highway Cruiser'; }
-  else if (pct >= 80)     { icon = '⚡'; label = 'Steady Rider'; }
-  else if (pct >= 50)     { icon = '🛣️'; label = 'On the Move'; }
-  else if (pct > 0)       { icon = '🐢'; label = 'Slow Starter'; }
-  else                    { icon = '🅿️'; label = 'Parked Up'; }
+  if (streak >= 30) { icon = ''; label = 'Road Captain'; }
+  else if (streak >= 7) { icon = ''; label = 'Highway Cruiser'; }
+  else if (pct >= 80) { icon = ''; label = 'Steady Rider'; }
+  else if (pct >= 50) { icon = ''; label = 'On the Move'; }
+  else if (pct > 0) { icon = ''; label = 'Slow Starter'; }
+  else { icon = ''; label = 'Parked Up'; }
   el.innerHTML = `${icon} <span>${label}</span>`;
 }
 
 // ── CONTRIBUTION CALENDAR (GitHub-style heatmap) ──
 function renderContribCalendar() {
-  const calGrid   = document.getElementById('contribCalGrid');
+  const calGrid = document.getElementById('contribCalGrid');
   const calMonths = document.getElementById('contribCalMonths');
-  const rangeEl   = document.getElementById('calRangeLabel');
+  const rangeEl = document.getElementById('calRangeLabel');
   if (!calGrid || !allDates.length) return;
 
-  const phone   = currentMember.phone;
+  const phone = currentMember.phone;
   const todayDk = todayKey();
 
   // Pad the front so the grid starts on a Sunday (GitHub-style columns = weeks)
@@ -1799,8 +1799,8 @@ function renderContribCalendar() {
     const daysHtml = week.map(dk => {
       if (!dk) return `<div class="contrib-day lvl-empty"></div>`;
       const future = dk > todayDk;
-      const paid   = isPaid(phone, dk);
-      const cls    = future ? 'lvl-future' : (paid ? 'lvl-paid' : 'lvl-unpaid');
+      const paid = isPaid(phone, dk);
+      const cls = future ? 'lvl-future' : (paid ? 'lvl-paid' : 'lvl-unpaid');
       const status = future ? 'Upcoming' : (paid ? `Paid · KSh ${RATE}` : 'Unpaid');
       return `<div class="contrib-day ${cls}" title="${fmtDate(dk)} — ${status}"></div>`;
     }).join('');
@@ -1823,7 +1823,7 @@ function renderMonthlyChart() {
   if (!wrap) return;
 
   const phone = currentMember.phone;
-  const totals = {}; // "YYYY-MM" -> KSh
+  const totals = {}; // "YYYY-MM" ->KSh
   allDates.forEach(dk => {
     if (isPaid(phone, dk)) {
       const ym = dk.slice(0, 7);
@@ -1961,10 +1961,10 @@ function renderMonthlyChallenge() {
 
   const subEl = document.getElementById('challengeSub');
   if (perfect) {
-    subEl.innerHTML = `🌟 Perfect so far — ${paidThisMonth}/${totalSoFar} days paid in ${monthName}. Keep it up to earn this month's star!`;
+    subEl.innerHTML = ` Perfect so far — ${paidThisMonth}/${totalSoFar} days paid in ${monthName}. Keep it up to earn this month's star!`;
   } else {
     const missed = totalSoFar - paidThisMonth;
-    subEl.textContent = `${paidThisMonth}/${totalSoFar} days paid this month — ${missed} missed. Pay every remaining day to earn the star ⭐`;
+    subEl.textContent = `${paidThisMonth}/${totalSoFar} days paid this month — ${missed} missed. Pay every remaining day to earn the star `;
   }
 }
 
@@ -1975,15 +1975,15 @@ function computeBadges(myStats, leaderboardRows) {
   const minHistoryForPerfect = 7; // need a meaningful history before "Never Missed" counts
 
   return [
-    { id:'streak3',  icon:'🔥', name:'3-Day Warrior',   req:'3-day streak',          earned: streak >= 3 },
-    { id:'streak7',  icon:'🔥', name:'7-Day Warrior',   req:'7-day streak',          earned: streak >= 7 },
-    { id:'streak30', icon:'🚀', name:'30-Day Warrior',  req:'30-day streak',         earned: streak >= 30 },
-    { id:'never',    icon:'🎯', name:'Never Missed',    req:'100% record',           earned: allDates.length >= minHistoryForPerfect && pct === 100 },
-    { id:'century',  icon:'💯', name:'Century Club',    req:'100 days paid',         earned: daysPaid >= 100 },
-    { id:'star90',   icon:'🌟', name:'Consistency Star',req:'90%+ rate',             earned: pct >= 90 },
-    { id:'top3',     icon:'🏆', name:'Top Contributor', req:'Top 3 on leaderboard',  earned: myRank >= 1 && myRank <= 3 },
-    { id:'top10',    icon:'⭐', name:'Top 10',          req:'Top 10 on leaderboard', earned: myRank >= 1 && myRank <= 10 },
-    { id:'first',    icon:'🌱', name:'First Payment',   req:'Made 1 contribution',   earned: daysPaid >= 1 },
+    { id:'streak3', icon:'', name:'3-Day Warrior', req:'3-day streak', earned: streak >= 3 },
+    { id:'streak7', icon:'', name:'7-Day Warrior', req:'7-day streak', earned: streak >= 7 },
+    { id:'streak30', icon:'', name:'30-Day Warrior', req:'30-day streak', earned: streak >= 30 },
+    { id:'never', icon:'', name:'Never Missed', req:'100% record', earned: allDates.length >= minHistoryForPerfect && pct === 100 },
+    { id:'century', icon:'', name:'Century Club', req:'100 days paid', earned: daysPaid >= 100 },
+    { id:'star90', icon:'', name:'Consistency Star',req:'90%+ rate', earned: pct >= 90 },
+    { id:'top3', icon:'', name:'Top Contributor', req:'Top 3 on leaderboard', earned: myRank >= 1 && myRank <= 3 },
+    { id:'top10', icon:'', name:'Top 10', req:'Top 10 on leaderboard', earned: myRank >= 1 && myRank <= 10 },
+    { id:'first', icon:'', name:'First Payment', req:'Made 1 contribution', earned: daysPaid >= 1 },
   ];
 }
 
@@ -2014,8 +2014,8 @@ function renderGamification() {
 
 // ── HISTORY ──
 function renderHistory() {
-  const phone    = currentMember.phone;
-  const todayDk  = todayKey();
+  const phone = currentMember.phone;
+  const todayDk = todayKey();
 
   // All dates in reverse (newest first), each with paid status + any confirmation request
   const rows = [...allDates].reverse().map(dk => ({
@@ -2030,27 +2030,27 @@ function renderHistory() {
 
   if (rows.length === 0) {
     const offlineMsg = document.getElementById('syncStatus')?.classList.contains('err')
-      ? '<div class="history-empty">⚠️ Could not load history — you appear to be offline.<br><span style="font-size:11px;color:var(--dim);">Connect to the internet and refresh.</span></div>'
+      ? '<div class="history-empty">Could not load history — you appear to be offline.<br><span style="font-size:11px;color:var(--dim);">Connect to the internet and refresh.</span></div>'
       : '<div class="history-empty">No contribution records yet.</div>';
     list.innerHTML = offlineMsg;
     return;
   }
 
   const visible = historyExpanded ? rows : rows.slice(0, SHOW_FIRST);
-  const showMoreBtn = (!historyExpanded && rows.length > SHOW_FIRST)
+  const showMoreBtn = (!historyExpanded && rows.length >SHOW_FIRST)
     ? `<button class="history-show-more" id="showMoreBtn">Show all ${rows.length} days ▾</button>`
-    : (historyExpanded && rows.length > SHOW_FIRST)
+    : (historyExpanded && rows.length >SHOW_FIRST)
     ? `<button class="history-show-more" id="showMoreBtn">Show less ▴</button>`
     : '';
 
   list.innerHTML = visible.map(({dk, paid, request}) => {
     let badge, rightExtra = '';
     if (paid) {
-      badge = `<span class="history-badge paid">✓ Paid</span>`;
+      badge = `<span class="history-badge paid">Paid</span>`;
     } else if (request && request.status === 'pending') {
       badge = `<span class="history-badge review">⏳ Under Review</span>`;
     } else if (request && request.status === 'invalid') {
-      badge = `<span class="history-badge invalid">✕ Code Invalid</span>`;
+      badge = `<span class="history-badge invalid">Code Invalid</span>`;
       rightExtra = `<button class="confirm-pay-link" onclick="openConfirmPayModal('${dk}')">Try again</button>`;
     } else {
       badge = `<span class="history-badge unpaid">Unpaid</span>`;
@@ -2105,9 +2105,9 @@ function capitalise(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 // ── WELFARE MODAL ──
 function openWelfareModal() {
-  document.getElementById('wReason').value  = '';
-  document.getElementById('wDesc').value    = '';
-  document.getElementById('wAmount').value  = '';
+  document.getElementById('wReason').value = '';
+  document.getElementById('wDesc').value = '';
+  document.getElementById('wAmount').value = '';
   document.getElementById('wErr').classList.remove('show');
   document.getElementById('welfareModal').classList.add('open');
   setTimeout(() => document.getElementById('wReason').focus(), 250);
@@ -2117,10 +2117,10 @@ function closeWelfareModal() {
 }
 async function submitWelfare() {
   const reason = document.getElementById('wReason').value.trim();
-  const desc   = document.getElementById('wDesc').value.trim();
+  const desc = document.getElementById('wDesc').value.trim();
   const amount = document.getElementById('wAmount').value.trim();
-  const errEl  = document.getElementById('wErr');
-  const btn    = document.getElementById('wSubmitBtn');
+  const errEl = document.getElementById('wErr');
+  const btn = document.getElementById('wSubmitBtn');
 
   if (!reason) { errEl.textContent = 'Please enter a reason.'; errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
@@ -2133,17 +2133,17 @@ async function submitWelfare() {
     apps.push({
       reason, desc, amount,
       status: 'pending',
-      memberName:  currentMember.name,
+      memberName: currentMember.name,
       memberPhone: currentMember.phone,
       timestamp: Date.now()
     });
     await setDoc(docRef, { applications: apps, memberName: currentMember.name, memberPhone: currentMember.phone });
     closeWelfareModal();
-    showToast('✓ Application submitted');
+    showToast('Application submitted');
     welfareApps = apps;
     renderWelfare();
   } catch(e) {
-    errEl.textContent = '⚠️ Failed to submit. Try again.';
+    errEl.textContent = 'Failed to submit. Try again.';
     errEl.classList.add('show');
   } finally {
     btn.textContent = 'Submit Application'; btn.disabled = false;
@@ -2159,7 +2159,7 @@ function validateMpesaCode(c) {
 function openConfirmPayModal(dk) {
   pendingConfirmDate = dk;
   document.getElementById('cpDateLabel').textContent = fmtDate(dk) + (dk === todayKey() ? ' (Today)' : '');
-  document.getElementById('cpRateLabel').textContent  = RATE;
+  document.getElementById('cpRateLabel').textContent = RATE;
   document.getElementById('cpCode').value = '';
   document.getElementById('cpErr').classList.remove('show');
   document.getElementById('confirmPayModal').classList.add('open');
@@ -2171,10 +2171,10 @@ function closeConfirmPayModal() {
 }
 
 async function submitPaymentConfirmation() {
-  const dk     = pendingConfirmDate;
-  const code   = document.getElementById('cpCode').value.trim().toUpperCase();
-  const errEl  = document.getElementById('cpErr');
-  const btn    = document.getElementById('cpSubmitBtn');
+  const dk = pendingConfirmDate;
+  const code = document.getElementById('cpCode').value.trim().toUpperCase();
+  const errEl = document.getElementById('cpErr');
+  const btn = document.getElementById('cpSubmitBtn');
 
   if (!dk) { closeConfirmPayModal(); return; }
   if (!validateMpesaCode(code)) {
@@ -2195,7 +2195,7 @@ async function submitPaymentConfirmation() {
     filtered.push({
       id: 'PCR-' + Date.now().toString(36).toUpperCase(),
       memberPhone: currentMember.phone,
-      memberName:  currentMember.name,
+      memberName: currentMember.name,
       dateKey: dk,
       mpesaCode: code,
       status: 'pending',
@@ -2204,9 +2204,9 @@ async function submitPaymentConfirmation() {
 
     await setDoc(docRef, { requests: filtered });
     closeConfirmPayModal();
-    showToast('✓ Sent for verification');
+    showToast('Sent for verification');
   } catch(e) {
-    errEl.textContent = '⚠️ Failed to submit. Try again.';
+    errEl.textContent = 'Failed to submit. Try again.';
     errEl.classList.add('show');
   } finally {
     btn.textContent = 'Submit for Verification'; btn.disabled = false;
@@ -2221,7 +2221,7 @@ async function fetchMemberDetails(phone) {
   if (_memberDetailsCache !== null) return _memberDetailsCache;
   try {
     const snap = await getDoc(doc(db, 'tracker', 'memberDetails'));
-    const all  = snap.exists() ? (snap.data() || {}) : {};
+    const all = snap.exists() ? (snap.data() || {}) : {};
     _memberDetailsCache = all[phone] || {};
   } catch(e) {
     // Don't cache on error — leave null so the next call retries
@@ -2243,14 +2243,14 @@ async function renderIdCard() {
   try {
     const ss = await getDoc(doc(db, 'tracker', 'saccoSettings'));
     if (ss.exists()) {
-      saccoName      = ss.data().saccoName      || saccoName;
+      saccoName = ss.data().saccoName || saccoName;
       saccoAuthority = ss.data().saccoAuthority || saccoAuthority;
-      saccoCounty    = d.county || ss.data().saccoCounty || saccoCounty;
+      saccoCounty = d.county || ss.data().saccoCounty || saccoCounty;
     }
   } catch(e) {}
 
   if (!d.memberNo) {
-    area.innerHTML = `<div class="id-not-ready">🪪 Your ID card is not ready yet.<br><span style="font-size:12px;">Ask an admin to assign your membership number.</span></div>`;
+    area.innerHTML = `<div class="id-not-ready">Your ID card is not ready yet.<br><span style="font-size:12px;">Ask an admin to assign your membership number.</span></div>`;
     return;
   }
 
@@ -2294,7 +2294,7 @@ async function renderIdCard() {
         <div class="id-card-bottom-bar"></div>
         <div class="id-card-disclaimer">This is a virtual card and cannot be used for any legal transactions.</div>
       </div>
-      <button class="id-download-btn" id="downloadIdBtn" onclick="downloadIdCard()">⬇ Download ID Card (PDF)</button>
+      <button class="id-download-btn" id="downloadIdBtn" onclick="downloadIdCard()">Download ID Card (PDF)</button>
     </div>`;
 
   // Generate QR code
@@ -2328,18 +2328,18 @@ async function downloadIdCard() {
     pdf.addImage(imgData, 'JPEG', 0, 0, 85.6, 54);
     const safeName = (currentMember.name || 'member').replace(/\s+/g, '_').toLowerCase();
     pdf.save(`${safeName}_id_card.pdf`);
-    showToast('✓ ID Card downloaded');
+    showToast('ID Card downloaded');
   } catch(e) {
-    showToast('⚠️ Download failed. Try again.');
+    showToast('Download failed. Try again.');
   } finally {
-    btn.textContent = '⬇ Download ID Card (PDF)'; btn.disabled = false;
+    btn.textContent = 'Download ID Card (PDF)'; btn.disabled = false;
   }
 }
 
 
 function toggleDetails() {
   const toggle = document.getElementById('detailsToggle');
-  const body   = document.getElementById('detailsBody');
+  const body = document.getElementById('detailsBody');
   const isOpen = body.classList.toggle('open');
   toggle.classList.toggle('open', isOpen);
   if (isOpen && !_detailsLoaded) loadMemberDetails();
@@ -2361,17 +2361,17 @@ async function loadMemberDetails() {
     const inner = document.getElementById('detailsInner');
     inner.style.display = '';
     inner.innerHTML = `
-      <div class="det-section-hdr">🧑‍🤝‍🧑 Next of Kin</div>
-      ${row('👤', 'Name', d.nokName)}
-      ${row('📞', 'Phone', d.nokPhone)}
-      <div class="det-section-hdr">🏍️ Motorcycle</div>
-      ${row('🔖', 'Reg. No.', d.motoReg)}
-      ${row('📅', 'Year of Manufacture', d.motoYear)}
-      ${row('🏷️', 'Model', d.motoModel)}
+      <div class="det-section-hdr">Next of Kin</div>
+      ${row('', 'Name', d.nokName)}
+      ${row('', 'Phone', d.nokPhone)}
+      <div class="det-section-hdr">Motorcycle</div>
+      ${row('', 'Reg. No.', d.motoReg)}
+      ${row('', 'Year of Manufacture', d.motoYear)}
+      ${row('', 'Model', d.motoModel)}
     `;
     _detailsLoaded = true;
   } catch(e) {
-    document.getElementById('detailsLoading').textContent = '⚠️ Could not load details.';
+    document.getElementById('detailsLoading').textContent = 'Could not load details.';
   }
 }
 
@@ -2380,7 +2380,7 @@ function doLogout() {
   sessionStorage.removeItem('memberPhone');
   sessionStorage.removeItem('memberName');
   if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
-  if (_welfareUnsub)  { _welfareUnsub();  _welfareUnsub  = null; }
+  if (_welfareUnsub) { _welfareUnsub(); _welfareUnsub = null; }
   if (_memberDetailsUnsub) { _memberDetailsUnsub(); _memberDetailsUnsub = null; }
   currentMember = null;
   payments = {};
@@ -2389,7 +2389,7 @@ function doLogout() {
   _memberDetailsCache = null;
   // Reset ID card area
   const idArea = document.getElementById('idCardArea');
-  if (idArea) idArea.innerHTML = '<div class="spinner"><span class="spin">⏳</span> Loading card…</div>';
+  if (idArea) idArea.innerHTML = '<div class="spinner"><span class="spin">⏳</span>Loading card…</div>';
   // Reset details dropdown
   const detBody = document.getElementById('detailsBody');
   const detToggle = document.getElementById('detailsToggle');
@@ -2409,7 +2409,7 @@ function doLogout() {
   gate.style.display = 'flex';
   // Clear form
   document.getElementById('loginPhone').value = '';
-  document.getElementById('loginPin').value   = '';
+  document.getElementById('loginPin').value = '';
   document.getElementById('loginErr').classList.remove('show');
   showToast('Signed out');
 }
@@ -2417,7 +2417,7 @@ function doLogout() {
 // ── SESSION RESTORE ──
 async function tryRestoreSession() {
   const phone = sessionStorage.getItem('memberPhone');
-  let   name  = sessionStorage.getItem('memberName');
+  let name = sessionStorage.getItem('memberName');
   if (!phone) return;
   try {
     if (!auth.currentUser) await signInAnonymously(auth);
@@ -2453,23 +2453,23 @@ async function tryRestoreSession() {
 }
 
 // ── EXPOSE GLOBALS ──
-window.doLogin               = doLogin;
-window.doLogout              = doLogout;
-window.toggleTheme           = toggleTheme;
-window.openWelfareModal      = openWelfareModal;
-window.closeWelfareModal     = closeWelfareModal;
-window.submitWelfare         = submitWelfare;
-window.openConfirmPayModal      = openConfirmPayModal;
-window.closeConfirmPayModal     = closeConfirmPayModal;
+window.doLogin = doLogin;
+window.doLogout = doLogout;
+window.toggleTheme = toggleTheme;
+window.openWelfareModal = openWelfareModal;
+window.closeWelfareModal = closeWelfareModal;
+window.submitWelfare = submitWelfare;
+window.openConfirmPayModal = openConfirmPayModal;
+window.closeConfirmPayModal = closeConfirmPayModal;
 window.submitPaymentConfirmation = submitPaymentConfirmation;
-window.toggleDetails         = toggleDetails;
-window.downloadIdCard        = downloadIdCard;
-window.openChangePinModal    = openChangePinModal;
-window.closeChangePinModal   = closeChangePinModal;
-window.doChangePin           = doChangePin;
-window.openPinRecoveryModal  = openPinRecoveryModal;
+window.toggleDetails = toggleDetails;
+window.downloadIdCard = downloadIdCard;
+window.openChangePinModal = openChangePinModal;
+window.closeChangePinModal = closeChangePinModal;
+window.doChangePin = doChangePin;
+window.openPinRecoveryModal = openPinRecoveryModal;
 window.closePinRecoveryModal = closePinRecoveryModal;
-window.sendPinRecoveryWA     = sendPinRecoveryWA;
+window.sendPinRecoveryWA = sendPinRecoveryWA;
 window.handleAvatarFileSelect = handleAvatarFileSelect;
 
 // ── BOOT ──
@@ -2482,23 +2482,23 @@ let _changePinForced = false;
 
 function openChangePinModal(forced = false) {
   _changePinForced = forced;
-  const title     = document.getElementById('changePinTitle');
-  const forceMsg  = document.getElementById('changePinForceMsg');
-  const oldWrap   = document.getElementById('oldPinWrap');
+  const title = document.getElementById('changePinTitle');
+  const forceMsg = document.getElementById('changePinForceMsg');
+  const oldWrap = document.getElementById('oldPinWrap');
   const cancelBtn = document.getElementById('changePinCancelBtn');
   if (forced) {
-    title.textContent       = '🔑 Set Your Personal PIN';
-    forceMsg.style.display  = 'block';
-    oldWrap.style.display   = 'none';
+    title.textContent = 'Set Your Personal PIN';
+    forceMsg.style.display = 'block';
+    oldWrap.style.display = 'none';
     cancelBtn.style.display = 'none';
   } else {
-    title.textContent       = '🔑 Change Your PIN';
-    forceMsg.style.display  = 'none';
-    oldWrap.style.display   = 'block';
+    title.textContent = 'Change Your PIN';
+    forceMsg.style.display = 'none';
+    oldWrap.style.display = 'block';
     cancelBtn.style.display = 'inline-block';
   }
-  document.getElementById('cpOldPin').value     = '';
-  document.getElementById('cpNewPin').value     = '';
+  document.getElementById('cpOldPin').value = '';
+  document.getElementById('cpNewPin').value = '';
   document.getElementById('cpConfirmPin').value = '';
   document.getElementById('changePinErr').classList.remove('show');
   document.getElementById('changePinModal').classList.add('open');
@@ -2516,17 +2516,17 @@ function closeChangePinModal() {
 }
 
 async function doChangePin() {
-  const errEl   = document.getElementById('changePinErr');
+  const errEl = document.getElementById('changePinErr');
   const saveBtn = document.getElementById('changePinSaveBtn');
-  const newPin  = document.getElementById('cpNewPin').value.trim();
+  const newPin = document.getElementById('cpNewPin').value.trim();
   const confirm = document.getElementById('cpConfirmPin').value.trim();
   errEl.classList.remove('show');
 
   if (!_changePinForced) {
     const oldPin = document.getElementById('cpOldPin').value.trim();
     try {
-      const snap   = await getDoc(doc(db, 'tracker', 'memberPins'));
-      const pins   = snap.exists() ? (snap.data() || {}) : {};
+      const snap = await getDoc(doc(db, 'tracker', 'memberPins'));
+      const pins = snap.exists() ? (snap.data() || {}) : {};
       const stored = String(pins[currentMember.phone] || '');
       if (oldPin !== stored) {
         errEl.textContent = 'Current PIN is incorrect.';
@@ -2562,7 +2562,7 @@ async function doChangePin() {
 
   saveBtn.textContent = 'Saving…'; saveBtn.disabled = true;
   try {
-    const ref  = doc(db, 'tracker', 'memberPins');
+    const ref = doc(db, 'tracker', 'memberPins');
     const snap = await getDoc(ref);
     const pins = snap.exists() ? (snap.data() || {}) : {};
     pins[currentMember.phone] = newPin;
@@ -2572,7 +2572,7 @@ async function doChangePin() {
     await setDoc(ref, pins);
     document.getElementById('changePinModal').classList.remove('open');
     _changePinForced = false;
-    showToast('✅ PIN changed successfully!');
+    showToast('PIN changed successfully!');
   } catch(e) {
     if (e && e.code === 'permission-denied') {
       errEl.textContent = 'Permission denied. Ask your admin to update Firestore rules to allow member PIN changes.';
@@ -2617,7 +2617,7 @@ async function sendPinRecoveryWA() {
     if (snap.exists()) adminPhone = snap.data().adminPhone || snap.data().contactPhone || '';
   } catch(e) {}
 
-  const msg = `Hello Admin 👋\n\nI need a PIN reset for the BOGONKO-NGELANI Member Portal.\n\nMy phone number: *${phone}*\n\nPlease reset my PIN and send me the new one. Thank you 🙏`;
+  const msg = `Hello Admin \n\nI need a PIN reset for the BOGONKO-NGELANI Member Portal.\n\nMy phone number: *${phone}*\n\nPlease reset my PIN and send me the new one. Thank you `;
   let waNumber = adminPhone.replace(/\D/g,'');
   if (waNumber.startsWith('0')) waNumber = '254' + waNumber.slice(1);
 
@@ -2627,7 +2627,7 @@ async function sendPinRecoveryWA() {
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
   }
   closePinRecoveryModal();
-  showToast('📲 WhatsApp opened — send the message to your admin');
+  showToast('WhatsApp opened — send the message to your admin');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

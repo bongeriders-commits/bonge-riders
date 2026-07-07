@@ -13,25 +13,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F8FA;
-  --bg2:      #FFFFFF;
-  --card:     #FFFFFF;
-  --card2:    #F2F3F6;
-  --border:   #E2E5EC;
-  --text:     #111827;
-  --muted:    #6B7280;
-  --dim:      #9CA3AF;
-  --amber:    #CC1818;
-  --amber2:   #E02020;
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
   --amber-bg: rgba(204,24,24,0.10);
-  --green:    #065F46;
-  --green2:   #059669;
+  --green: #065F46;
+  --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red:      #CC1818;
-  --red2:     #E02020;
+  --red: #CC1818;
+  --red2: #E02020;
   --red-dark: #A01212;
-  --red-bg:   rgba(204,24,24,0.10);
-  --radius:   10px;
+  --red-bg: rgba(204,24,24,0.10);
+  --radius: 10px;
   --radius-lg:14px;
 }
 
@@ -316,7 +316,7 @@ body {
       <span class="faq-icon">▾</span>
     </button>
     <div class="faq-answer">
-      <b>No.</b> This app does not hold, store, or control any funds. It is a <b>record-keeping and transparency tool</b> only. All financial transactions and balances exist outside the app. The app simply records and displays contribution data so every member can track their own standing and the group's activity.
+      <b>No.</b>This app does not hold, store, or control any funds. It is a <b>record-keeping and transparency tool</b> only. All financial transactions and balances exist outside the app. The app simply records and displays contribution data so every member can track their own standing and the group's activity.
     </div>
   </div>
 
@@ -327,8 +327,8 @@ body {
     </button>
     <div class="faq-answer">
       All group funds are deposited and held with <b>UNAITAS SACCO</b>. To send money to the group account, use:<br><br>
-      📱 <b>Paybill:</b> 544600<br>
-      🔢 <b>Account:</b> 942540<br><br>
+       <b>Paybill:</b> 544600<br>
+       <b>Account:</b> 942540<br><br>
       Always keep your M-Pesa confirmation code after sending — you will need it to confirm your payment in the app.
     </div>
   </div>
@@ -339,7 +339,7 @@ body {
       <span class="faq-icon">▾</span>
     </button>
     <div class="faq-answer">
-      <b>No.</b> Withdrawals cannot be initiated or processed through this app under any circumstances. The app is for records and visibility only — it has no payment or disbursement functionality.<br><br>
+      <b>No.</b>Withdrawals cannot be initiated or processed through this app under any circumstances. The app is for records and visibility only — it has no payment or disbursement functionality.<br><br>
       All withdrawals from the UNAITAS SACCO account must be requested through the group's official process and can <b>only be executed by registered signatories</b>.
     </div>
   </div>
@@ -361,11 +361,11 @@ body {
     </button>
     <div class="faq-answer">
       This app provides <b>transparency and accountability</b> for every member. It allows you to:<br><br>
-      ✅ View your personal contribution history at any time<br>
-      ✅ See your current payment standing<br>
-      ✅ Track your welfare applications<br>
-      ✅ Monitor group-level payment activity<br>
-      ✅ Receive instant notifications when payments are recorded<br><br>
+       View your personal contribution history at any time<br>
+       See your current payment standing<br>
+       Track your welfare applications<br>
+       Monitor group-level payment activity<br>
+       Receive instant notifications when payments are recorded<br><br>
       Think of it as your personal <b>passbook</b> — a clear, always-available record of your participation in the group.
     </div>
   </div>
@@ -399,7 +399,7 @@ body {
 <script>
 function toggleFaq(btn) {
   const answer = btn.nextElementSibling;
-  const icon   = btn.querySelector('.faq-icon');
+  const icon = btn.querySelector('.faq-icon');
   const isOpen = answer.classList.toggle('open');
   icon.classList.toggle('open', isOpen);
 }
