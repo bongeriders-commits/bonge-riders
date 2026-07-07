@@ -401,6 +401,19 @@ img {
 .adm-item-danger { background: var(--card); color: var(--muted); border-color: var(--border); }
 .adm-item-danger:hover, .adm-item-danger:active { background: rgba(220,38,38,.12); border-color: rgba(220,38,38,.35); color: #EF4444; }
 
+/* ── HERO WEATHER BADGE ── */
+.hero-weather-badge {
+  position: absolute; top: 14px; left: 14px; z-index: 50;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(20,22,30,0.55); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 20px; padding: 7px 12px 7px 9px;
+  color: #fff; font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; font-weight: 700;
+}
+.hero-weather-badge svg { flex-shrink: 0; }
+.hero-weather-badge .hwb-loc { font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: .4px; margin-left: 2px; }
+
 /* ── PUBLIC HAMBURGER MENU (viewer board hero) ── */
 .pub-menu-wrap { position: absolute; top: 14px; right: 14px; z-index: 50; }
 .pub-menu-btn {
@@ -773,7 +786,7 @@ img {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  height: 55mm;
+  height: 64mm;
   display: flex;
   flex-direction: column;
   padding-bottom: 34px; /* room for dots */
@@ -1638,6 +1651,7 @@ body.viewer .toast {
         <button class="adm-item" id="saccoSettingsBtn" onclick="openSaccoSettings();closeAdmMenu()">ID CARD SETTINGS</button>
         <button class="adm-item" id="activityLogBtn" onclick="openActivityLog();closeAdmMenu()">ACTIVITY LOG</button>
         <button class="adm-item" id="pubInfoMenuBtn" onclick="openPubInfoEditor();closeAdmMenu()" style="display:none;">PUBLIC VIEW EDITOR</button>
+        <button class="adm-item" id="fuelPricesMenuBtn" onclick="openFuelPricesEditor();closeAdmMenu()" style="display:none;">FUEL PRICES EDITOR</button>
         <button class="adm-item" id="paymentMenuBtn" onclick="window.open('payment.html','_blank');closeAdmMenu()">PAYMENT</button>
         <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">CHAIRPERSON VIEW</button>
         <div class="adm-divider"></div>
@@ -1721,6 +1735,11 @@ body.viewer .toast {
 
     <!-- ── LOGO HERO (sunset background, no overlay panel) ── -->
     <div style="position:relative;margin:-20px -16px 14px;min-height:300px;border-radius:0 0 26px 26px;overflow:hidden;background-image:url('hero-sunset.jpg');background-size:cover;background-position:center 78%;display:flex;align-items:flex-end;">
+      <div class="hero-weather-badge" id="heroWeatherBadge">
+        <svg id="heroWeatherIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFB347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <span id="heroWeatherTemp">&#8212;&deg;</span>
+        <span class="hwb-loc">Katani</span>
+      </div>
       <div style="width:100%;padding:20px 18px 22px;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0) 100%);text-align:left;">
         <img src="icon-512.png" alt="Bonge Riders Logo"
              style="width:112px;height:112px;object-fit:contain;border-radius:50%;box-shadow:0 6px 24px rgba(0,0,0,0.5);background:rgba(255,255,255,0.95);margin-bottom:12px;">
@@ -1794,6 +1813,29 @@ body.viewer .toast {
         <div class="pub-slide-body" id="pubNoticeText">No current notices. Check back soon.</div>
       </div>
 
+      <!-- Slide 7: Fuel Prices -->
+      <div class="pub-slide" id="pubSlide6">
+        <img src="icon-512.png" class="pub-slide-logo" alt="Bogonko-Ngelani Logo">
+        <div class="pub-slide-title">Fuel Prices (EPRA)</div>
+        <div class="pub-slide-body">
+          Petrol: <b id="pubFuelPetrol">&#8212;</b>/L<br>
+          Diesel: <b id="pubFuelDiesel">&#8212;</b>/L<br>
+          Kerosene: <b id="pubFuelKerosene">&#8212;</b>/L<br>
+          <span style="font-size:10.5px;color:var(--muted);display:block;margin-top:6px;">Updated: <span id="pubFuelUpdated">&#8212;</span></span>
+        </div>
+      </div>
+
+      <!-- Slide 8: World Cup Highlights -->
+      <div class="pub-slide" id="pubSlide7">
+        <div class="pub-slide-title" style="margin-bottom:8px;">&#9917; World Cup Highlights</div>
+        <div class="pub-slide-body" style="width:100%;padding:0;">
+          <div style="position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;">
+            <iframe src="https://www.youtube.com/embed/videoseries?list=PLBRLtDhTHh5o" title="FIFA World Cup 2026 Highlights" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <a href="https://www.youtube.com/@fifa/videos" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--amber2);text-decoration:none;">Watch more on FIFA's channel &rarr;</a>
+        </div>
+      </div>
+
       <!-- Dots -->
       <div class="pub-dots" id="pubDots">
         <div class="pub-dot active" data-idx="0"></div>
@@ -1802,6 +1844,8 @@ body.viewer .toast {
         <div class="pub-dot" data-idx="3"></div>
         <div class="pub-dot" data-idx="4"></div>
         <div class="pub-dot" data-idx="5"></div>
+        <div class="pub-dot" data-idx="6"></div>
+        <div class="pub-dot" data-idx="7"></div>
       </div>
     </div>
   </div>
@@ -1986,6 +2030,32 @@ body.viewer .toast {
         </div>
         <div id="piError" class="pw-error"></div>
         <button class="modal-btn" onclick="savePubInfo()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FUEL PRICES EDITOR MODAL (admin only) ── -->
+  <div class="modal-backdrop admin-only" id="fuelPricesModal">
+    <div class="modal-box" style="max-width:380px;">
+      <div class="modal-header">
+        <span class="modal-title">Edit Fuel Prices</span>
+        <button class="modal-close" onclick="closeFuelPricesEditor()"></button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+        <div class="modal-field">
+          <label>Petrol (KSh/L)</label>
+          <input type="number" step="0.01" id="fpPetrol" class="modal-input">
+        </div>
+        <div class="modal-field">
+          <label>Diesel (KSh/L)</label>
+          <input type="number" step="0.01" id="fpDiesel" class="modal-input">
+        </div>
+        <div class="modal-field">
+          <label>Kerosene (KSh/L)</label>
+          <input type="number" step="0.01" id="fpKerosene" class="modal-input">
+        </div>
+        <div id="fpError" class="pw-error"></div>
+        <button class="modal-btn" onclick="saveFuelPrices()">Save Changes</button>
       </div>
     </div>
   </div>
@@ -5622,6 +5692,7 @@ Object.assign(window,{
   openDetailsModal, closeDetailsModal,
   openSaccoSettings, closeSaccoSettings, saveSaccoSettings,
   openPubInfoEditor, closePubInfoEditor, savePubInfo, copyAccNo,
+  openFuelPricesEditor, closeFuelPricesEditor, saveFuelPrices,
   openDeleteModal, closeDeleteModal, confirmDelete,
   openWABlast, closeWAModal, waSelectAll, sendWAReminders, sendWADirect,
   exportPDF, exportSundayPDF, openReportModal, closeReportModal, renderMonthlyReport, printReport,
@@ -5644,7 +5715,7 @@ Object.assign(window,{
 
 // ── PUBLIC SLIDESHOW ─────────────────────────────────────────────────────
 (function() {
-  const TOTAL = 6;
+  const TOTAL = 8;
   let current = 0;
   let timer = null;
   const container = document.getElementById('pubSlideshow');
@@ -5758,7 +5829,95 @@ async function savePubInfo() {
 function refreshPubEditBtn() {
   const btn = document.getElementById('pubInfoMenuBtn');
   if (btn) btn.style.display = isSuperAdminUser() ? '' : 'none';
+  const fpBtn = document.getElementById('fuelPricesMenuBtn');
+  if (fpBtn) fpBtn.style.display = isSuperAdminUser() ? '' : 'none';
 }
+
+// ── FUEL PRICES (public slide, admin-editable) ──────────────────────────
+async function openFuelPricesEditor() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  document.getElementById('fpError').style.display = 'none';
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'fuelPrices'));
+    const d = snap.exists() ? snap.data() : {};
+    document.getElementById('fpPetrol').value = d.petrol ?? '';
+    document.getElementById('fpDiesel').value = d.diesel ?? '';
+    document.getElementById('fpKerosene').value = d.kerosene ?? '';
+  } catch(e) {}
+  document.getElementById('fuelPricesModal').classList.add('open');
+}
+
+function closeFuelPricesEditor() { document.getElementById('fuelPricesModal').classList.remove('open'); }
+
+async function saveFuelPrices() {
+  if (!isSuperAdminUser()) { showToast('\u26d4 Super-admin only'); return; }
+  const petrol = parseFloat(document.getElementById('fpPetrol').value);
+  const diesel = parseFloat(document.getElementById('fpDiesel').value);
+  const kerosene = parseFloat(document.getElementById('fpKerosene').value);
+  const fpError = document.getElementById('fpError');
+  if (isNaN(petrol) || isNaN(diesel) || isNaN(kerosene)) {
+    fpError.textContent = '\u26a0\ufe0f Enter valid numbers for all three prices.';
+    fpError.style.display = 'block';
+    return;
+  }
+  try {
+    await setDoc(doc(db, 'tracker', 'fuelPrices'), { petrol, diesel, kerosene, updatedAt: Date.now() });
+    closeFuelPricesEditor();
+    showToast('\u2713 Fuel prices updated');
+    logAdminAction('Updated fuel prices', `Petrol ${petrol}, Diesel ${diesel}, Kerosene ${kerosene}`);
+    renderFuelPrices({ petrol, diesel, kerosene, updatedAt: Date.now() });
+  } catch(e) {
+    fpError.textContent = '\u26a0\ufe0f Failed to save. Try again.';
+    fpError.style.display = 'block';
+  }
+}
+
+function renderFuelPrices(d) {
+  const fmt = (n) => 'KSh ' + Number(n).toFixed(2);
+  const petrolEl = document.getElementById('pubFuelPetrol');
+  const dieselEl = document.getElementById('pubFuelDiesel');
+  const kerosineEl = document.getElementById('pubFuelKerosene');
+  const updEl = document.getElementById('pubFuelUpdated');
+  if (petrolEl && d.petrol != null) petrolEl.textContent = fmt(d.petrol);
+  if (dieselEl && d.diesel != null) dieselEl.textContent = fmt(d.diesel);
+  if (kerosineEl && d.kerosene != null) kerosineEl.textContent = fmt(d.kerosene);
+  if (updEl && d.updatedAt) updEl.textContent = new Date(d.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+(async function loadFuelPrices() {
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'fuelPrices'));
+    if (!snap.exists()) return;
+    renderFuelPrices(snap.data());
+  } catch(e) {}
+})();
+
+// ── HERO CURRENT TEMPERATURE (Open-Meteo, no key required) ──────────────
+(async function loadHeroWeather() {
+  const tempEl = document.getElementById('heroWeatherTemp');
+  const iconEl = document.getElementById('heroWeatherIcon');
+  if (!tempEl) return;
+  // Bogonko-Ngelani Stage, Katani, Machakos
+  const LAT = -1.37388, LON = 36.933027;
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&timezone=Africa%2FNairobi`);
+    const data = await res.json();
+    const cw = data.current_weather;
+    if (cw && typeof cw.temperature === 'number') {
+      tempEl.textContent = Math.round(cw.temperature) + '\u00b0C';
+      // Swap icon to a simple rain/cloud glyph for wet weather codes
+      const rainy = [51,53,55,61,63,65,80,81,82,95,96,99].includes(cw.weathercode);
+      const cloudy = [1,2,3,45,48].includes(cw.weathercode);
+      if (rainy && iconEl) {
+        iconEl.innerHTML = '<path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/>';
+      } else if (cloudy && iconEl) {
+        iconEl.innerHTML = '<path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/>';
+      }
+    }
+  } catch(e) {
+    tempEl.textContent = '\u2014\u00b0';
+  }
+})();
 </script>
 <div class="copyright-bar">
   <span>© Bogonko-Ngelani Stage</span>
