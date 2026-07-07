@@ -4,20 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>News — Bonge Riders</title>
-<link rel="icon" href="icon-32.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0E1013;
-  --bg2: #171A20;
-  --card: #1B1E25;
-  --card2: #242832;
-  --border: #333844;
-  --text: #F3F4F6;
-  --muted: #9CA3AF;
-  --dim: #6B7280;
-  --amber: #E02020;
-  --amber2: #FF4747;
-  --amber-bg: rgba(224,32,32,0.18);
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
   --radius: 10px;
   --radius-lg:14px;
 }
@@ -38,6 +42,9 @@ header {
   justify-content:center; font-size:18px; cursor:pointer; flex-shrink:0;
 }
 .back-btn:active { background:var(--amber-bg); }
+.topbar-logo {
+  width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0;
+}
 h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans-serif; }
 .refresh-btn {
   margin-left:auto; background:none; border:none; color:var(--amber);
@@ -114,6 +121,7 @@ h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans
 
 <header>
   <button class="back-btn" onclick="goBack()">‹</button>
+  <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
   <h1>News</h1>
   <button class="refresh-btn" id="refreshBtn" onclick="loadAll(true)" aria-label="Refresh">⟳</button>
 </header>
