@@ -155,8 +155,8 @@ const SOURCES = [
 
 // Proxies tried in order until one works for a given feed
 const PROXIES = [
+  u => `https://proxy.corsfix.com/?${u}`,
   u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
   u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
 ];
 
@@ -202,9 +202,13 @@ async function fetchFeed(source){
   sourceStatus[source.id] = 'loading';
   for (const buildProxyUrl of PROXIES){
     try{
-      const res = await fetch(buildProxyUrl(source.url), { cache:'no-store' });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 9000);
+      const res = await fetch(buildProxyUrl(source.url), { cache:'no-store', signal: controller.signal });
+      clearTimeout(timeout);
       if (!res.ok) continue;
       const text = await res.text();
+      if (!text || text.length < 20) continue;
       const xml = new DOMParser().parseFromString(text, 'text/xml');
       if (xml.querySelector('parsererror')) continue;
       const items = [...xml.querySelectorAll('item')].slice(0, 12);
