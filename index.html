@@ -881,14 +881,14 @@ body:not(.viewer) .public-only { display: none !important; }
 body.memberview .public-only  { display: none !important; }
 
 /* ── PUBLIC BOTTOM NAV: account (left) · + (middle) · home (right) ── */
-:root { --pub-nav-h: 82px; --pub-copyright-h: 28px; }
+:root { --pub-nav-h: 82px; --pub-copyright-h: 14px; }
 .pub-bottom-nav { display: none; }
-/* Reserve space for both the fixed toolbar AND the copyright bar that sits above it,
+/* Reserve space for both the fixed toolbar AND the copyright bar that sits below it,
    so scrolled page content never ends up underneath either one. */
 body.viewer { padding-bottom: calc(var(--pub-nav-h) + var(--pub-copyright-h)); }
 body.viewer .pub-bottom-nav {
   display: flex; align-items: center; justify-content: space-between;
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 500;
+  position: fixed; left: 0; right: 0; bottom: var(--pub-copyright-h); z-index: 500;
   padding: 10px 28px calc(10px + env(safe-area-inset-bottom, 0px));
   background: var(--card);
   border-top: 1px solid var(--border);
@@ -1151,21 +1151,22 @@ body.memberview .vb-unlocked { display: block; }
 /* ── COPYRIGHT BAR ── */
 .copyright-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 28px; z-index: 150;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
+  height: var(--pub-copyright-h, 14px); z-index: 150;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
   background: var(--card2);
   border-top: 1px solid var(--border);
-  font-size: 10px; font-weight: 600;
+  font-size: 8px; font-weight: 600;
+  line-height: 1;
   color: var(--sub);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   pointer-events: auto;
   user-select: none;
 }
-/* In public/viewer mode the bottom toolbar occupies the very bottom of the
-   screen, so lift the copyright/privacy/terms bar to sit directly above it
-   instead of being covered by it. */
+/* In public/viewer mode the bottom toolbar now sits above this bar (see
+   body.viewer .pub-bottom-nav), so the copyright/privacy/terms bar stays
+   pinned at the very bottom of the screen, below the toolbar. */
 body.viewer .copyright-bar {
-  bottom: var(--pub-nav-h);
+  bottom: 0;
 }
 .copyright-bar a {
   color: var(--sub);
@@ -1210,7 +1211,7 @@ body.viewer .copyright-bar {
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 /* Clear the public toolbar + copyright bar so toasts never render underneath them */
 body.viewer .toast {
-  bottom: calc(104px + var(--pub-nav-h) + var(--pub-copyright-h) - 28px);
+  bottom: calc(104px + var(--pub-nav-h) + var(--pub-copyright-h));
 }
 
 /* ── UPDATE BANNER ── */
