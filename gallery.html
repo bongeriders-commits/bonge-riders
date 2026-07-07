@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gallery — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green: #065F46;
+  --green2: #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-dark: #A01212;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:100px;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:13px 16px;gap:10px;}
+.tb-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.back-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;text-decoration:none;flex-shrink:0;cursor:pointer;}
+.tb-title-wrap{min-width:0;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.page-sub{font-size:10.5px;color:var(--muted);font-weight:500;}
+.admin-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 12px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;flex-shrink:0;}
+.admin-pill.on{color:var(--green2);border-color:rgba(5,150,105,.35);background:var(--green-bg);}
+.admin-pill svg{width:14px;height:14px;flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{padding:20px 16px 4px;text-align:center;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber2);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:23px;line-height:1.2;margin:6px 0 6px;}
+.hero .sub{color:var(--muted);font-size:13px;line-height:1.5;max-width:420px;margin:0 auto;}
+
+/* ── GRID ── */
+.gallery-wrap{padding:18px 16px 0;}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g-card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;}
+.g-thumb-wrap{position:relative;width:100%;aspect-ratio:1/1;background:#111;overflow:hidden;}
+.g-thumb-wrap img, .g-thumb-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+.g-play-badge{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}
+.g-play-badge svg{width:12px;height:12px;fill:#fff;margin-left:1px;}
+.g-info{padding:9px 10px 11px;}
+.g-title{font-size:12.5px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
+.g-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.g-empty-desc{color:var(--dim);font-style:italic;}
+.g-admin-actions{position:absolute;top:8px;left:8px;display:flex;gap:6px;z-index:2;}
+.g-admin-btn{width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.g-admin-btn svg{width:13px;height:13px;stroke:#fff;}
+
+.empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:60px 20px;line-height:1.8;}
+.empty-msg .big{font-size:34px;display:block;margin-bottom:8px;}
+.loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:50px 0;}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);max-width:600px;width:calc(100% - 32px);z-index:60;display:none;}
+.fab.show{display:block;}
+.fab-btn{width:100%;padding:14px;background:var(--red-dark);color:#fff;border:none;border-radius:14px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;box-shadow:0 8px 24px rgba(160,18,18,.35);}
+
+/* ── MODALS ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px 32px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;text-align:center;}
+.mfield{margin-bottom:14px;}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.mfield input, .mfield textarea{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.mfield input:focus, .mfield textarea:focus{border-color:var(--amber);}
+.mfield textarea{resize:vertical;min-height:70px;}
+.mfield .hint{font-size:10.5px;color:var(--dim);margin-top:5px;line-height:1.4;}
+.seg{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:3px;margin-bottom:16px;}
+.seg button{flex:1;padding:9px 0;border:none;background:none;border-radius:7px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;}
+.seg button.active{background:var(--red-dark);color:#fff;}
+.file-btn{width:100%;padding:12px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;}
+.file-preview{width:100%;max-height:220px;object-fit:contain;border-radius:var(--radius);margin-top:10px;display:none;background:#111;}
+.file-preview.show{display:block;}
+.upload-progress-wrap{margin-top:10px;}
+.upload-progress-bar{width:100%;height:6px;background:var(--card2);border-radius:4px;overflow:hidden;}
+.upload-progress-fill{height:100%;width:0%;background:var(--red-dark);transition:width .2s ease;}
+.merr{color:var(--red);font-size:12px;font-weight:600;display:none;margin-bottom:10px;}
+.merr.show{display:block;}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.mbtn.save{background:var(--red-dark);color:#fff;}
+.mbtn.danger{background:none;color:var(--red);border:1px solid rgba(204,24,24,.35);}
+
+/* ── LIGHTBOX ── */
+.lb-backdrop{display:none;position:fixed;inset:0;background:#000;z-index:300;flex-direction:column;}
+.lb-backdrop.open{display:flex;}
+.lb-top{display:flex;justify-content:flex-end;padding:12px 14px;flex-shrink:0;}
+.lb-close{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:18px;cursor:pointer;}
+.lb-media-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0 6px;min-height:0;}
+.lb-media-wrap img{max-width:100%;max-height:100%;object-fit:contain;}
+.lb-video-frame{position:relative;width:100%;padding-top:56.25%;background:#000;}
+.lb-video-frame iframe, .lb-video-frame video{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+.lb-info{background:var(--bg2);padding:16px 18px 26px;flex-shrink:0;max-height:34vh;overflow-y:auto;}
+.lb-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.lb-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+.lb-admin-row{display:flex;gap:10px;margin-top:14px;}
+.lb-admin-row button{flex:1;padding:10px;border-radius:var(--radius);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:1px solid var(--border);background:var(--card2);color:var(--text);}
+.lb-admin-row button.del{color:var(--red);border-color:rgba(204,24,24,.3);}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:#fff;border:1px solid #333;border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <div class="tb-title-wrap">
+      <div class="page-title">Gallery</div>
+      <div class="page-sub">Bonge Riders — Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span id="adminPillLabel">Admin</span>
+  </button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Photos &amp; Videos</div>
+  <h1>Moments from the Stage</h1>
+  <p class="sub">A look at Bonge Riders — meetings, events, and life at Bogonko-Ngelani Stage.</p>
+</div>
+
+<div class="gallery-wrap">
+  <div class="loading-msg" id="loadingMsg">Loading gallery&hellip;</div>
+  <div class="gallery-grid" id="galleryGrid" style="display:none;"></div>
+  <div class="empty-msg" id="emptyMsg" style="display:none;">
+    <span class="big">&#128247;</span>
+    Nothing in the gallery yet.<br>Check back soon.
+  </div>
+</div>
+
+<div class="fab" id="fab">
+  <button class="fab-btn" onclick="openItemModal()">&#65291; Add to Gallery</button>
+</div>
+
+<!-- ═══ ADD / EDIT ITEM MODAL ═══ -->
+<div class="modal-backdrop" id="itemModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="itemModalTitle">Add to Gallery</div>
+
+    <div class="seg" id="typeSeg">
+      <button type="button" class="active" id="segImageBtn" onclick="setItemType('image')">&#128247; Photo</button>
+      <button type="button" id="segVideoBtn" onclick="setItemType('video')">&#127916; Video</button>
+    </div>
+
+    <div id="imageFields">
+      <div class="mfield">
+        <label>Photo</label>
+        <input type="file" id="itemFileInput" accept="image/*" style="display:none;" onchange="handleItemFileSelect(event)">
+        <button type="button" class="file-btn" onclick="document.getElementById('itemFileInput').click()" id="fileBtnLabel">Choose a photo from your phone</button>
+        <img id="filePreview" class="file-preview" alt="Preview">
+      </div>
+    </div>
+
+    <div id="videoFields" style="display:none;">
+      <div class="seg" id="videoModeSeg" style="margin-bottom:14px;">
+        <button type="button" class="active" id="segUploadBtn" onclick="setVideoMode('upload')">Upload Video</button>
+        <button type="button" id="segLinkBtn" onclick="setVideoMode('link')">Paste Link</button>
+      </div>
+      <div id="videoUploadMode">
+        <div class="mfield">
+          <label>Video file</label>
+          <input type="file" id="itemVideoFileInput" accept="video/*" style="display:none;" onchange="handleItemVideoFileSelect(event)">
+          <button type="button" class="file-btn" onclick="document.getElementById('itemVideoFileInput').click()" id="videoFileBtnLabel">Choose a video from your phone</button>
+          <video id="videoFilePreview" class="file-preview" controls></video>
+          <div class="hint" id="videoUploadHint"></div>
+          <div class="upload-progress-wrap" id="uploadProgressWrap" style="display:none;">
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="uploadProgressFill"></div></div>
+            <div class="hint" id="uploadProgressText">Uploading… 0%</div>
+          </div>
+        </div>
+      </div>
+      <div id="videoLinkMode" style="display:none;">
+        <div class="mfield">
+          <label>Video link</label>
+          <input type="text" id="itemVideoUrl" placeholder="Paste a YouTube, TikTok, Vimeo, or direct video link">
+          <div class="hint">Works with YouTube, TikTok, and Vimeo links, or a direct link to a video file. Other links will show a "Watch original" button instead of playing inline.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mfield">
+      <label>Title (optional)</label>
+      <input type="text" id="itemTitle" placeholder="e.g. AGM 2026, Kelvin's send-off">
+    </div>
+    <div class="mfield">
+      <label>Description (optional)</label>
+      <textarea id="itemDesc" placeholder="Say a little about this photo or video&hellip;"></textarea>
+    </div>
+
+    <p class="merr" id="itemErr"></p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeItemModal()">Cancel</button>
+      <button class="mbtn save" id="itemSaveBtn" onclick="saveItem()">Add to Gallery</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Admin Login</div>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
+    </div>
+    <p class="merr" id="loginErr">Incorrect email or password.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lb-backdrop" id="lightbox">
+  <div class="lb-top"><button class="lb-close" onclick="closeLightbox()">&#10005;</button></div>
+  <div class="lb-media-wrap" id="lbMediaWrap"></div>
+  <div class="lb-info">
+    <div class="lb-title" id="lbTitle"></div>
+    <div class="lb-desc" id="lbDesc"></div>
+    <div class="lb-admin-row" id="lbAdminRow" style="display:none;">
+      <button onclick="editCurrentItem()">Edit</button>
+      <button class="del" onclick="deleteCurrentItem()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, collection, addDoc,
+         updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+let ITEMS = [];
+let isSuperAdmin = false;
+let _adminList = [];
+let editingId = null;
+let pendingPhotoDataUrl = null; // newly-chosen photo, base64
+let currentType = 'image';
+let videoMode = 'upload'; // 'upload' or 'link'
+let pendingVideoUpload = null; // { mediaUrl, storagePath } once a phone video finishes uploading
+let isUploadingVideo = false;
+let currentLightboxId = null;
+let galleryUnsub = null;
+
+// ── Ensure the public visitor is (at least) anonymously signed in,
+// which Firestore rules require in order to read tracker/app data. ──
+onAuthStateChanged(auth, async (user) => {
+  if (user && !user.isAnonymous) {
+    // A real admin email/password session.
+    try {
+      const snap = await getDoc(doc(db, 'tracker', 'admins'));
+      _adminList = (snap.exists() && snap.data().list) ? snap.data().list : [];
+    } catch(e) { _adminList = []; }
+    const email = (user.email || '').toLowerCase();
+    const rec = _adminList.find(a => a.email === email);
+    isSuperAdmin = _adminList.length === 0 || (!!rec && rec.isSuperAdmin);
+    if (isSuperAdmin) {
+      setAdminUI(true);
+      showToast('Signed in as ' + user.email);
+    } else {
+      showToast('Super-admin access required for Gallery uploads');
+      await signOut(auth);
+    }
+  } else if (user && user.isAnonymous) {
+    setAdminUI(false);
+  } else {
+    try { await signInAnonymously(auth); } catch(e) { console.error(e); }
+  }
+});
+
+function setAdminUI(on) {
+  isSuperAdmin = on;
+  document.getElementById('adminPill').classList.toggle('on', on);
+  document.getElementById('adminPillLabel').textContent = on ? 'Admin' : 'Admin';
+  document.getElementById('fab').classList.toggle('show', on);
+  renderGrid();
+}
+
+window.handleAdminPillClick = function() {
+  if (isSuperAdmin) {
+    if (confirm('Sign out of admin mode?')) { signOut(auth); }
+  } else {
+    openLoginModal();
+  }
+};
+
+window.openLoginModal = function() {
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPw').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginModal').classList.add('open');
+  setTimeout(() => document.getElementById('loginEmail').focus(), 250);
+};
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('open');
+};
+window.confirmLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+    closeLoginModal();
+  } catch(e) {
+    errEl.textContent = 'Incorrect email or password.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+};
+
+// ── LOAD GALLERY ──
+function startGalleryListener() {
+  if (galleryUnsub) return;
+  const q = query(collection(db, 'galleryItems'), orderBy('createdAt', 'desc'));
+  galleryUnsub = onSnapshot(q, (snap) => {
+    ITEMS = [];
+    snap.forEach(d => ITEMS.push({ id: d.id, ...d.data() }));
+    document.getElementById('loadingMsg').style.display = 'none';
+    renderGrid();
+  }, (err) => {
+    console.error('gallery load error:', err);
+    document.getElementById('loadingMsg').textContent = 'Could not load gallery. Check your connection.';
+  });
+}
+startGalleryListener();
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderGrid() {
+  const grid = document.getElementById('galleryGrid');
+  const empty = document.getElementById('emptyMsg');
+  if (!ITEMS.length) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.style.display = 'grid';
+  grid.innerHTML = ITEMS.map(item => {
+    let thumbMarkup;
+    if (item.type === 'video' && item.videoKind === 'youtube') {
+      thumbMarkup = `<img src="https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg" alt="${escHtml(item.title)}" loading="lazy">`;
+    } else if (item.type === 'video' && (item.videoKind === 'direct' || item.videoKind === 'uploaded')) {
+      thumbMarkup = `<video src="${item.mediaUrl}" muted preload="metadata"></video>`;
+    } else if (item.type === 'video') {
+      // tiktok, vimeo, external — no reliable thumbnail without extra API calls
+      thumbMarkup = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#8A8F98;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;">${escHtml(item.videoKind || 'video')}</div>`;
+    } else {
+      thumbMarkup = `<img src="${item.mediaUrl}" alt="${escHtml(item.title)}" loading="lazy">`;
+    }
+    const adminActions = isSuperAdmin ? `
+      <div class="g-admin-actions">
+        <button class="g-admin-btn" onclick="event.stopPropagation();quickEdit('${item.id}')" aria-label="Edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+        </button>
+        <button class="g-admin-btn" onclick="event.stopPropagation();quickDelete('${item.id}')" aria-label="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </div>` : '';
+    return `
+    <div class="g-card" onclick="openLightbox('${item.id}')">
+      ${adminActions}
+      <div class="g-thumb-wrap">
+        ${thumbMarkup}
+        ${item.type === 'video' ? `<div class="g-play-badge"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>` : ''}
+      </div>
+      <div class="g-info">
+        <div class="g-title">${escHtml(item.title) || (item.type === 'video' ? 'Video' : 'Photo')}</div>
+        <div class="g-desc ${item.description ? '' : 'g-empty-desc'}">${escHtml(item.description) || 'No description'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ADD / EDIT MODAL ──
+window.openItemModal = function(prefill) {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  editingId = prefill ? prefill.id : null;
+  pendingPhotoDataUrl = null;
+  pendingVideoUpload = null;
+  isUploadingVideo = false;
+  document.getElementById('itemModalTitle').textContent = editingId ? 'Edit Gallery Item' : 'Add to Gallery';
+  document.getElementById('itemSaveBtn').textContent = editingId ? 'Save Changes' : 'Add to Gallery';
+  document.getElementById('itemSaveBtn').disabled = false;
+  document.getElementById('itemErr').classList.remove('show');
+  document.getElementById('itemTitle').value = prefill ? (prefill.title || '') : '';
+  document.getElementById('itemDesc').value = prefill ? (prefill.description || '') : '';
+
+  const isEditingLinkVideo = prefill && prefill.type === 'video' && prefill.videoKind !== 'uploaded';
+  document.getElementById('itemVideoUrl').value = isEditingLinkVideo ? (prefill.sourceUrl || '') : '';
+
+  const videoPreview = document.getElementById('videoFilePreview');
+  document.getElementById('uploadProgressWrap').style.display = 'none';
+  document.getElementById('videoUploadHint').textContent = '';
+  document.getElementById('videoFileBtnLabel').textContent = 'Choose a video from your phone';
+  if (prefill && prefill.type === 'video' && prefill.videoKind === 'uploaded') {
+    videoPreview.src = prefill.mediaUrl;
+    videoPreview.classList.add('show');
+    pendingVideoUpload = { mediaUrl: prefill.mediaUrl, storagePath: prefill.storagePath || null };
+    setVideoMode('upload');
+  } else {
+    videoPreview.src = '';
+    videoPreview.classList.remove('show');
+    setVideoMode(isEditingLinkVideo ? 'link' : 'upload');
+  }
+
+  const preview = document.getElementById('filePreview');
+  if (prefill && prefill.type === 'image') {
+    preview.src = prefill.mediaUrl;
+    preview.classList.add('show');
+    pendingPhotoDataUrl = prefill.mediaUrl; // keep existing unless replaced
+  } else {
+    preview.src = '';
+    preview.classList.remove('show');
+  }
+  setItemType(prefill ? prefill.type : 'image');
+  document.getElementById('itemModal').classList.add('open');
+};
+window.closeItemModal = function() {
+  document.getElementById('itemModal').classList.remove('open');
+  editingId = null;
+  pendingPhotoDataUrl = null;
+};
+
+window.setItemType = function(type) {
+  currentType = type;
+  document.getElementById('segImageBtn').classList.toggle('active', type === 'image');
+  document.getElementById('segVideoBtn').classList.toggle('active', type === 'video');
+  document.getElementById('imageFields').style.display = type === 'image' ? 'block' : 'none';
+  document.getElementById('videoFields').style.display = type === 'video' ? 'block' : 'none';
+};
+
+window.setVideoMode = function(mode) {
+  videoMode = mode;
+  document.getElementById('segUploadBtn').classList.toggle('active', mode === 'upload');
+  document.getElementById('segLinkBtn').classList.toggle('active', mode === 'link');
+  document.getElementById('videoUploadMode').style.display = mode === 'upload' ? 'block' : 'none';
+  document.getElementById('videoLinkMode').style.display = mode === 'link' ? 'block' : 'none';
+};
+
+function resizeImageFile(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Invalid image'));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+        else if (height > maxDim) { width = Math.round(width * (maxDim / height)); height = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.handleItemFileSelect = async function(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { showToast('Please choose an image file.'); return; }
+  document.getElementById('fileBtnLabel').textContent = 'Processing photo…';
+  try {
+    let dataUrl = await resizeImageFile(file, 1000, 0.78);
+    let quality = 0.78, dim = 1000;
+    while (dataUrl.length > 680000 && (quality > 0.35 || dim > 500)) {
+      if (quality > 0.35) quality -= 0.12; else dim -= 100;
+      dataUrl = await resizeImageFile(file, dim, quality);
+    }
+    if (dataUrl.length > 720000) { showToast('That photo is too large — try a different one.'); document.getElementById('fileBtnLabel').textContent = 'Choose a photo from your phone'; return; }
+    pendingPhotoDataUrl = dataUrl;
+    const preview = document.getElementById('filePreview');
+    preview.src = dataUrl;
+    preview.classList.add('show');
+    document.getElementById('fileBtnLabel').textContent = 'Change photo';
+  } catch(e) {
+    showToast('Could not process that photo.');
+    document.getElementById('fileBtnLabel').textContent = 'Choose a photo from your phone';
+  }
+};
+
+const MAX_VIDEO_BYTES = 250 * 1024 * 1024; // 250MB safety cap for phone-uploaded videos
+
+window.handleItemVideoFileSelect = function(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('video/')) { showToast('Please choose a video file.'); return; }
+  if (file.size > MAX_VIDEO_BYTES) {
+    showToast('That video is too large (max 250MB). Try a shorter clip or paste a link instead.');
+    return;
+  }
+
+  pendingVideoUpload = null;
+  const hintEl = document.getElementById('videoUploadHint');
+  const wrap = document.getElementById('uploadProgressWrap');
+  const fill = document.getElementById('uploadProgressFill');
+  const text = document.getElementById('uploadProgressText');
+  const preview = document.getElementById('videoFilePreview');
+  const saveBtn = document.getElementById('itemSaveBtn');
+
+  const localUrl = URL.createObjectURL(file);
+  preview.src = localUrl;
+  preview.classList.add('show');
+  hintEl.textContent = '';
+
+  const ext = (file.name.split('.').pop() || 'mp4').toLowerCase().replace(/[^a-z0-9]/g, '') || 'mp4';
+  const storagePath = 'galleryVideos/' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+  const storageRef = ref(storage, storagePath);
+  const task = uploadBytesResumable(storageRef, file, { contentType: file.type });
+
+  isUploadingVideo = true;
+  saveBtn.disabled = true;
+  wrap.style.display = 'block';
+  fill.style.width = '0%';
+  text.textContent = 'Uploading… 0%';
+  document.getElementById('videoFileBtnLabel').textContent = 'Uploading…';
+
+  task.on('state_changed', (snap) => {
+    const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+    fill.style.width = pct + '%';
+    text.textContent = 'Uploading… ' + pct + '%';
+  }, (err) => {
+    console.error('video upload error:', err);
+    isUploadingVideo = false;
+    saveBtn.disabled = false;
+    wrap.style.display = 'none';
+    document.getElementById('videoFileBtnLabel').textContent = 'Choose a video from your phone';
+    showToast('Upload failed. Check your connection and try again.');
+  }, async () => {
+    const downloadUrl = await getDownloadURL(task.snapshot.ref);
+    pendingVideoUpload = { mediaUrl: downloadUrl, storagePath };
+    isUploadingVideo = false;
+    saveBtn.disabled = false;
+    text.textContent = 'Upload complete';
+    document.getElementById('videoFileBtnLabel').textContent = 'Change video';
+  });
+};
+
+function extractYouTubeId(input) {
+  input = (input || '').trim();
+  if (/^[\w-]{11}$/.test(input)) return input;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{11})/
+  ];
+  for (const re of patterns) {
+    const m = input.match(re);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+function extractTikTokId(input) {
+  input = (input || '').trim();
+  const m = input.match(/tiktok\.com\/@[\w.-]+\/video\/(\d+)/) || input.match(/tiktok\.com\/.*?[?&]item_id=(\d+)/);
+  return m ? m[1] : null;
+}
+
+function extractVimeoId(input) {
+  input = (input || '').trim();
+  const m = input.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return m ? m[1] : null;
+}
+
+function isDirectVideoUrl(input) {
+  return /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test((input || '').trim());
+}
+
+window.saveItem = async function() {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  if (isUploadingVideo) { showToast('Please wait for the video to finish uploading.'); return; }
+  const title = document.getElementById('itemTitle').value.trim();
+  const description = document.getElementById('itemDesc').value.trim();
+  const errEl = document.getElementById('itemErr');
+  const btn = document.getElementById('itemSaveBtn');
+  errEl.classList.remove('show');
+
+  let payload = { title, description, updatedAt: Date.now() };
+
+  if (currentType === 'image') {
+    if (!pendingPhotoDataUrl) {
+      errEl.textContent = 'Choose a photo to upload.'; errEl.classList.add('show'); return;
+    }
+    payload.type = 'image';
+    payload.mediaUrl = pendingPhotoDataUrl;
+  } else if (videoMode === 'upload') {
+    if (!pendingVideoUpload) {
+      errEl.textContent = 'Choose a video from your phone.'; errEl.classList.add('show'); return;
+    }
+    payload.type = 'video';
+    payload.videoKind = 'uploaded';
+    payload.mediaUrl = pendingVideoUpload.mediaUrl;
+    payload.storagePath = pendingVideoUpload.storagePath;
+  } else {
+    const raw = document.getElementById('itemVideoUrl').value.trim();
+    if (!raw) { errEl.textContent = 'Paste a video link.'; errEl.classList.add('show'); return; }
+    payload.type = 'video';
+    payload.sourceUrl = raw;
+    const ytId = extractYouTubeId(raw);
+    const ttId = extractTikTokId(raw);
+    const vmId = extractVimeoId(raw);
+    if (ytId) {
+      payload.videoKind = 'youtube';
+      payload.youtubeId = ytId;
+      payload.mediaUrl = 'https://www.youtube.com/embed/' + ytId;
+    } else if (ttId) {
+      payload.videoKind = 'tiktok';
+      payload.tiktokId = ttId;
+      payload.mediaUrl = raw;
+    } else if (vmId) {
+      payload.videoKind = 'vimeo';
+      payload.vimeoId = vmId;
+      payload.mediaUrl = 'https://player.vimeo.com/video/' + vmId;
+    } else if (isDirectVideoUrl(raw)) {
+      payload.videoKind = 'direct';
+      payload.mediaUrl = raw;
+    } else {
+      payload.videoKind = 'external';
+      payload.mediaUrl = raw;
+    }
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'galleryItems', editingId), payload);
+      showToast('Gallery item updated');
+    } else {
+      payload.createdAt = serverTimestamp();
+      payload.createdBy = auth.currentUser && auth.currentUser.email ? auth.currentUser.email : 'admin';
+      await addDoc(collection(db, 'galleryItems'), payload);
+      showToast('Added to gallery');
+    }
+    closeItemModal();
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Could not save. Check your connection and try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingId ? 'Save Changes' : 'Add to Gallery';
+  }
+};
+
+window.quickEdit = function(id) {
+  const item = ITEMS.find(i => i.id === id);
+  if (item) openItemModal(item);
+};
+window.quickDelete = async function(id) {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  if (!confirm('Remove this from the gallery? This cannot be undone.')) return;
+  const item = ITEMS.find(i => i.id === id);
+  try {
+    await deleteDoc(doc(db, 'galleryItems', id));
+    showToast('Removed from gallery');
+    if (item && item.type === 'video' && item.videoKind === 'uploaded' && item.storagePath) {
+      deleteObject(ref(storage, item.storagePath)).catch(() => {}); // best-effort cleanup
+    }
+  } catch(e) {
+    showToast('Could not delete. Try again.');
+  }
+};
+
+// ── LIGHTBOX ──
+window.openLightbox = function(id) {
+  const item = ITEMS.find(i => i.id === id);
+  if (!item) return;
+  currentLightboxId = id;
+  const wrap = document.getElementById('lbMediaWrap');
+  if (item.type === 'image') {
+    wrap.innerHTML = `<img src="${item.mediaUrl}" alt="${escHtml(item.title)}">`;
+  } else if (item.videoKind === 'youtube') {
+    wrap.innerHTML = `<div class="lb-video-frame"><iframe src="https://www.youtube.com/embed/${item.youtubeId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+  } else if (item.videoKind === 'tiktok') {
+    wrap.innerHTML = `<div class="lb-video-frame" style="padding-top:177%;max-width:340px;margin:0 auto;"><iframe src="https://www.tiktok.com/embed/v2/${item.tiktokId}" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+  } else if (item.videoKind === 'vimeo') {
+    wrap.innerHTML = `<div class="lb-video-frame"><iframe src="https://player.vimeo.com/video/${item.vimeoId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+  } else if (item.videoKind === 'direct' || item.videoKind === 'uploaded') {
+    wrap.innerHTML = `<div class="lb-video-frame"><video src="${item.mediaUrl}" controls autoplay playsinline></video></div>`;
+  } else {
+    // external — can't be embedded reliably, so link out instead
+    wrap.innerHTML = `<div style="text-align:center;color:#fff;padding:40px 20px;">
+      <div style="font-size:40px;margin-bottom:14px;">&#127916;</div>
+      <a href="${item.mediaUrl}" target="_blank" rel="noopener" style="display:inline-block;background:var(--red-dark);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;">Watch Original &rarr;</a>
+    </div>`;
+  }
+  document.getElementById('lbTitle').textContent = item.title || (item.type === 'video' ? 'Video' : 'Photo');
+  document.getElementById('lbDesc').textContent = item.description || '';
+  document.getElementById('lbAdminRow').style.display = isSuperAdmin ? 'flex' : 'none';
+  document.getElementById('lightbox').classList.add('open');
+};
+window.closeLightbox = function() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbMediaWrap').innerHTML = '';
+  currentLightboxId = null;
+};
+window.editCurrentItem = function() {
+  const id = currentLightboxId;
+  closeLightbox();
+  if (id) window.quickEdit(id);
+};
+window.deleteCurrentItem = function() {
+  const id = currentLightboxId;
+  closeLightbox();
+  if (id) window.quickDelete(id);
+};
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+window.showToast = showToast;
+</script>
+
+<script>
+// Keep the focused field visible above the on-screen keyboard on mobile
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if (el.matches && el.matches('input, textarea')) {
+    setTimeout(function(){ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300);
+  }
+});
+</script>
+</body>
+</html>
