@@ -776,8 +776,9 @@ textarea.field-input {
   display: flex; align-items: center; justify-content: center;
   padding: 40px; color: var(--muted); font-size: 13px; gap: 8px;
 }
-.spin { display: inline-block; animation: spin .8s linear infinite; }
+.spin { display: inline-block; width:16px; height:16px; border:2.5px solid var(--border); border-top-color:var(--amber2); border-radius:50%; animation: spin .7s linear infinite; font-size:0; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.det-loading::before, .lb-empty.is-loading::before { content:''; display:block; width:22px; height:22px; margin:0 auto 10px; border:2.5px solid var(--border); border-top-color:var(--amber2); border-radius:50%; animation: spin .7s linear infinite; }
 
 /* ── PROGRESS BAR ── */
 .progress-wrap { background: var(--border); border-radius: 20px; height: 6px; margin-top: 6px; }
@@ -857,13 +858,7 @@ body.light .ws-name { color: #141414; }
       <span id="syncStatus" class="sync-pill err">⏳</span>
       <span id="lastSynced" style="font-size:9px;color:var(--muted);display:none;"></span>
     </div>
-    <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
-      <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
-      <span class="ttp-knob">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
-      </span>
-    </button>
+
   </div>
 </div>
 
@@ -1048,7 +1043,7 @@ body.light .ws-name { color: #141414; }
       <div class="section-pill">Most consistent</div>
     </div>
     <div class="leaderboard-list" id="leaderboardList">
-      <div class="lb-empty">Loading…</div>
+      <div class="lb-empty is-loading">Loading…</div>
     </div>
   </div>
 
@@ -1265,24 +1260,10 @@ let _memberDetailsUnsub = null;
 let _payReqUnsub = null;
 let pendingConfirmDate = null; // date key currently being confirmed in the modal
 
-// ── THEME ──
-function syncThemeUI() {
-  const isLight = document.body.classList.contains('light');
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  btn.classList.toggle('dark', !isLight);
-  const label = document.getElementById('themeToggleLabel');
-  if (label) label.textContent = isLight ? 'Day Mode' : 'Night Mode';
-}
-function toggleTheme() {
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
-  syncThemeUI();
-}
-if (localStorage.getItem('theme') === 'light') {
+// ── THEME (switch lives on the public Home page, applies here automatically) ──
+if (localStorage.getItem('bonge_theme_v1') === 'light') {
   document.body.classList.add('light');
 }
-syncThemeUI();
 
 // ── SYNC STATUS ──
 function setSyncStatus(ok, msg) {
@@ -2483,7 +2464,6 @@ async function tryRestoreSession() {
 // ── EXPOSE GLOBALS ──
 window.doLogin = doLogin;
 window.doLogout = doLogout;
-window.toggleTheme = toggleTheme;
 window.openWelfareModal = openWelfareModal;
 window.closeWelfareModal = closeWelfareModal;
 window.submitWelfare = submitWelfare;

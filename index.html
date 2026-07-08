@@ -97,6 +97,11 @@ img {
   pointer-events: none; /* blocks long-press "save image" on iOS Safari */
 }
 
+/* ── UNIFIED LOADER (same spinner everywhere in the app) ── */
+@keyframes brandspin { to { transform: rotate(360deg); } }
+.brand-spinner { display:inline-block; width:16px; height:16px; border:2.5px solid var(--border); border-top-color:var(--amber2); border-radius:50%; animation:brandspin .7s linear infinite; vertical-align:middle; margin-right:8px; }
+.brand-spinner-lg { display:block; width:26px; height:26px; border:3px solid var(--border); border-top-color:var(--amber2); border-radius:50%; animation:brandspin .7s linear infinite; margin:0 auto 10px; }
+
 /* ── SPLASH ── */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@800&display=swap');
 
@@ -1566,7 +1571,7 @@ body.viewer .toast {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--amber2);color:#fff;font-size:9px;font-weight:800;line-height:1;border-radius:999px;min-width:15px;height:15px;padding:0 3px;display:flex;align-items:center;justify-content:center;border:2px solid var(--card);"></span>
       </button>
-      <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
+      <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeToggle" title="Toggle theme (applies to the whole app)">
         <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
         <span class="ttp-knob">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -1904,7 +1909,7 @@ body.viewer .toast {
     <div style="overflow:hidden;background:rgba(204,24,24,0.07);border:1px solid rgba(204,24,24,0.18);border-radius:8px;padding:5px 0;margin-top:12px;position:relative;">
       <div style="overflow:hidden;">
         <div id="vbTicker" style="display:inline-flex;white-space:nowrap;animation:tickerScroll 30s linear infinite;padding-left:100%;">
-          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);">Loading…</span>
+          <span style="font-size:11px;font-weight:700;color:var(--amber2);">🏆 Leaderboard — Top Contributing Members:&nbsp;&nbsp;&nbsp;</span><span style="font-size:11px;font-weight:600;color:var(--muted);"><span class="brand-spinner" style="width:11px;height:11px;border-width:2px;margin-right:5px;"></span>Loading…</span>
         </div>
       </div>
     </div>
@@ -1912,7 +1917,7 @@ body.viewer .toast {
     <!-- 🏆 Podium -->
     <div id="podiumCard">
       <div class="podium-title">🏆 Most Consistent Members</div>
-      <div id="podiumRows"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
+      <div id="podiumRows"><div style="text-align:center;color:var(--muted);font-size:12px;padding:10px 0;"><span class="brand-spinner-lg"></span>Loading…</div></div>
     </div>
 
     <!-- 7-day sparkline -->
@@ -2099,7 +2104,7 @@ body.viewer .toast {
       </div>
     </div>
     <div id="welfareSummaryPreview" style="padding:10px 14px;">
-      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">Loading…</div>
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;"><span class="brand-spinner" style="width:13px;height:13px;border-width:2px;"></span>Loading…</div>
     </div>
   </div>
 </div>
@@ -2115,7 +2120,7 @@ body.viewer .toast {
       </div>
     </div>
     <div id="payConfirmSummaryPreview" style="padding:10px 14px;">
-      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;">Loading…</div>
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px 0;"><span class="brand-spinner" style="width:13px;height:13px;border-width:2px;"></span>Loading…</div>
     </div>
   </div>
 </div>
@@ -2206,7 +2211,7 @@ body.viewer .toast {
     <div class="modal-handle"></div>
     <div class="modal-title">Member Details</div>
     <div id="detailsContent" style="font-size:14px;color:var(--text);">
-      <div style="text-align:center;padding:24px;color:var(--muted);">Loading…</div>
+      <div style="text-align:center;padding:24px;color:var(--muted);"><span class="brand-spinner-lg"></span>Loading…</div>
     </div>
     <div class="modal-btns" style="margin-top:14px;">
       <button class="mbtn cancel" onclick="closeDetailsModal()">Close</button>
@@ -2411,7 +2416,7 @@ body.viewer .toast {
       Each admin signs in with their own email &amp; password on Firebase. Assign roles to control what each admin can do.
     </p>
     <div id="admMgmtList" class="adm-mgmt-list">
-      <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Loading admins…</div>
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;"><span class="brand-spinner-lg"></span>Loading admins…</div>
     </div>
     <div class="adm-add-section">
       <div class="adm-add-title">Add New Admin</div>
@@ -2696,7 +2701,7 @@ function setSyncStatus(ok, msg) {
 const RATE = 50;
 const START_DATE = new Date(2026, 5, 22);
 const TOTAL_DAYS = 365 * 20;
-const THEME_KEY = 'bogonko_theme_v1';
+const THEME_KEY = 'bonge_theme_v1'; // shared across all pages
 
 // ════════════════════════════════════════════════
 // ADMIN
@@ -3727,7 +3732,8 @@ function openDetailsModal(phone) {
   if (!isSuperAdminUser()) { showToast('Super-admin access required'); return; }
   const m = MEMBERS.find(x => x.phone === phone);
   const content = document.getElementById('detailsContent');
-  content.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);">Loading…</div>';
+  content.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);"><span class="brand-spinner-lg"></span>Loading…</div>';
+
   document.getElementById('detailsModal').classList.add('open');
   getDoc(doc(db, 'tracker', 'memberDetails')).then(snap => {
     const all = snap.exists() ? (snap.data() || {}) : {};
@@ -4734,7 +4740,8 @@ function closeActivityLog() { document.getElementById('activityLogModal').classL
 
 async function renderActivityLog(refresh) {
   const listEl = document.getElementById('activityLogList');
-  listEl.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">Loading…</div>`;
+  listEl.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;"><span class="brand-spinner-lg"></span>Loading…</div>`;
+
   const entries = await loadActivityLog(!!refresh);
   _renderActivityLogRows(entries);
 }

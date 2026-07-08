@@ -142,6 +142,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .partial-btns .p-save{background:var(--red-dark);color:#fff;}
 .empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
 .loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
 
 /* ── ADMIN TOGGLE ── */
 .admin-toggle{text-align:center;margin-top:26px;padding:0 16px;}
@@ -187,13 +189,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
-    <button class="theme-toggle-pill" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
-      <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
-      <span class="ttp-knob">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
-      </span>
-    </button>
+
     <button class="pdf-btn" id="pdfBtn" style="display:none;">PDF</button>
   </div>
 </div>
@@ -249,7 +245,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 <div class="search-row">
   <input type="text" id="searchInput" class="search-input" placeholder="Search by name…">
 </div>
-<div class="loading-msg" id="loadingMsg">Loading…</div>
+<div class="loading-msg" id="loadingMsg"><span class="brand-spinner-lg"></span>Loading…</div>
 <div class="pledge-list" id="pledgeList"></div>
 
 <button class="add-btn" id="adminAddPledgeBtn" style="display:none;margin:0 16px 16px;width:calc(100% - 32px);">＋ Add Pledge (on someone's behalf)</button>
@@ -344,24 +340,10 @@ const AUTOPAY_COL = db.collection("tracker/kelvinBikeFund/autoPayments");
 
 const el = (id) => document.getElementById(id);
 
-// ── THEME ── (defaults to light on this page; 'theme' key is shared across the app)
-if (localStorage.getItem('theme') === 'dark') {
+// ── THEME (switch lives on the public Home page, applies here automatically; defaults to light) ──
+if (localStorage.getItem('bonge_theme_v1') === 'dark') {
   document.body.classList.add('dark');
 }
-function syncThemeUI() {
-  const isDark = document.body.classList.contains('dark');
-  const btn = el("themeToggle");
-  if (!btn) return;
-  btn.classList.toggle('dark', isDark);
-  const label = el("themeToggleLabel");
-  if (label) label.textContent = isDark ? 'Night Mode' : 'Day Mode';
-}
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  syncThemeUI();
-}
-syncThemeUI();
 
 let isAdmin = false;
 let pledgesCache = [];

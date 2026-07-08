@@ -121,6 +121,8 @@ h1 { font-size:18px; font-weight:800; margin:0; font-family:'Space Grotesk',sans
 .state-msg {
   text-align:center; color:var(--muted); font-size:13px; padding:40px 20px; line-height:1.6;
 }
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
 .skeleton {
   display:flex; gap:12px; background:var(--card); border:1px solid var(--border);
   border-radius:var(--radius-lg); padding:12px;
@@ -262,7 +264,9 @@ function renderFeed(){
 
   if (!list.length){
     const anyLoading = Object.values(sourceStatus).some(v=>v==='loading');
-    feedEl.innerHTML = `<div class="state-msg">${anyLoading ? 'Loading headlines…' : 'No headlines available right now.<br>Pull to refresh or check back shortly.'}</div>`;
+    feedEl.innerHTML = anyLoading
+      ? `<div class="state-msg"><span class="brand-spinner-lg"></span>Loading headlines…</div>`
+      : `<div class="state-msg">No headlines available right now.<br>Pull to refresh or check back shortly.</div>`;
     return;
   }
 

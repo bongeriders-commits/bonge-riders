@@ -472,13 +472,7 @@ html, body {
       <div class="logo-sub">Member Registration</div>
     </div>
   </div>
-  <button class="theme-toggle-pill" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
-    <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
-    <span class="ttp-knob">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
-    </span>
-  </button>
+
 </div>
 
 <!-- HERO -->
@@ -727,23 +721,9 @@ html, body {
 <script>
 const SERVER = 'https://bonge-riders-server.onrender.com';
 
-// ── THEME ──
-const savedTheme = localStorage.getItem('theme') || 'dark';
+// ── THEME (switch lives on the public Home page, applies here automatically) ──
+const savedTheme = localStorage.getItem('bonge_theme_v1') || 'dark';
 if (savedTheme === 'light') document.body.classList.add('light');
-function syncThemeUI() {
-  const isLight = document.body.classList.contains('light');
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  btn.classList.toggle('dark', !isLight);
-  const label = document.getElementById('themeToggleLabel');
-  if (label) label.textContent = isLight ? 'Day Mode' : 'Night Mode';
-}
-function toggleTheme() {
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
-  syncThemeUI();
-}
-syncThemeUI();
 
 // ── TOAST ──
 function showToast(msg, dur = 3000) {

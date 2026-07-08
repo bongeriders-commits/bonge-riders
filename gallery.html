@@ -70,6 +70,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:60px 20px;line-height:1.8;}
 .empty-msg .big{font-size:34px;display:block;margin-bottom:8px;}
 .loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:50px 0;}
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
 
 /* ── FAB ── */
 .fab{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);max-width:600px;width:calc(100% - 32px);z-index:60;display:none;}
@@ -148,7 +150,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 </div>
 
 <div class="gallery-wrap">
-  <div class="loading-msg" id="loadingMsg">Loading gallery&hellip;</div>
+  <div class="loading-msg" id="loadingMsg"><span class="brand-spinner-lg"></span>Loading gallery&hellip;</div>
   <div class="gallery-grid" id="galleryGrid" style="display:none;"></div>
   <div class="empty-msg" id="emptyMsg" style="display:none;">
     <span class="big">&#128247;</span>

@@ -118,7 +118,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
 
 /* SPINNER / EMPTY */
 .spinner { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
-.spin { display:inline-block; animation:spin 1s linear infinite; }
+.spin { display:inline-block; width:16px; height:16px; border:2.5px solid var(--border); border-top-color:var(--amber2); border-radius:50%; animation:spin .7s linear infinite; font-size:0; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .empty-state { text-align:center; padding:40px 16px; font-size:13px; color:var(--muted); }
 
@@ -163,13 +163,7 @@ html,body { min-height:100%; background:var(--bg); color:var(--text); font-famil
     </div>
   </div>
   <div class="header-right">
-    <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
-      <span class="ttp-label" id="themeToggleLabel">Day Mode</span>
-      <span class="ttp-knob">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
-      </span>
-    </button>
+
   </div>
 </div>
 
@@ -597,25 +591,10 @@ window.doAddMember = async function() {
   renderList();
 };
 
-// ── THEME ────────────────────────────────────────
-const THEME_KEY = 'bonge-theme';
-function syncThemeUI() {
-  const isLight = document.body.classList.contains('light');
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  btn.classList.toggle('dark', !isLight);
-  const label = document.getElementById('themeToggleLabel');
-  if (label) label.textContent = isLight ? 'Day Mode' : 'Night Mode';
-}
-window.toggleTheme = function() {
-  const isLight = document.body.classList.toggle('light');
-  localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
-  syncThemeUI();
-};
-if (localStorage.getItem(THEME_KEY) === 'light') {
+// ── THEME (switch lives on the public Home page, applies here automatically) ──
+if (localStorage.getItem('bonge_theme_v1') === 'light') {
   document.body.classList.add('light');
 }
-syncThemeUI();
 </script>
 <script>
 // Keep the focused field visible above the on-screen keyboard on mobile

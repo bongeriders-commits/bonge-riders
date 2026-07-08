@@ -116,6 +116,8 @@ body {
 .notif-time { font-size: 11px; color: var(--dim); margin-top: 6px; font-weight: 500; }
 
 .loading { text-align: center; padding: 40px; color: var(--muted); font-size: 13px; }
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
 </style>
 </head>
 <body>
@@ -134,7 +136,7 @@ body {
 </div>
 
 <div class="feed" id="feed">
-  <div class="loading">Loading notifications…</div>
+  <div class="loading"><span class="brand-spinner-lg"></span>Loading notifications…</div>
 </div>
 
 <script type="module">
@@ -160,7 +162,7 @@ const auth = getAuth(app);
 
 const RATE = 50;
 const READ_KEY = 'bonge_notif_read_ids';
-const THEME_KEY = 'bonge_theme';
+const THEME_KEY = 'bonge_theme_v1'; // shared across all pages; switch lives on the public Home page
 
 // theme
 try {
