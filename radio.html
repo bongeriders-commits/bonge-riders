@@ -236,7 +236,7 @@
 
   /* ---------- Kenya Online Radio panel ---------- */
   .kenya-embed-wrap{
-    padding:16px 18px 0;
+    padding:16px 18px 40px;
   }
   .kenya-embed{
     width:100%; height:400px; border:1px solid var(--panel-line);
@@ -244,7 +244,7 @@
   }
   .kenya-embed-fallback{
     font-family:var(--mono); font-size:11px; color:var(--paper-dim);
-    line-height:1.5; padding:8px 2px 0;
+    line-height:1.5; padding:8px 2px 0; display:none;
   }
   .kenya-embed-fallback a{ color:var(--brass-bright); }
   .kenya-list{ padding:16px 18px 0; display:flex; flex-direction:column; gap:10px; }
@@ -479,7 +479,6 @@
 
 <div class="dial-header">
   <h1 class="wordmark">Bonge <span>Radio</span></h1>
-  <div class="freq-line" id="freqLine">88.5 FM &middot; the stage, on demand</div>
 </div>
 
 <div class="source-tabs">
@@ -504,13 +503,13 @@
       </div>
       <button class="player-btn main" id="ytAudioPlay">&#9654;</button>
     </div>
-    <button class="yt-mode-toggle" id="ytModeToggle">&#127911; Audio mode</button>
+    <button class="yt-mode-toggle" id="ytModeToggle">Audio mode</button>
   </div>
 
   <div class="yt-search-row">
     <input type="text" id="ytSearchInput" placeholder="Search YouTube — e.g. boda boda safety kenya">
     <button class="btn btn-primary btn-tight" id="ytSearchBtn">Search</button>
-    <button class="btn btn-tight" id="ytShuffleBtn" title="Show a fresh set of random videos">&#128256; Shuffle</button>
+    <button class="btn btn-tight" id="ytShuffleBtn" title="Load a fresh set of videos">&#8635; Refresh</button>
   </div>
 
   <div class="grid" id="ytGrid">
@@ -535,28 +534,8 @@
       Player didn't load in-page &mdash; some stations block embedding. <a href="https://www.radiolive.ke/" target="_blank" rel="noopener">Open RadioLive.ke directly &rarr;</a>
     </div>
   </div>
-  <div class="kenya-list">
-    <a class="kenya-station is-default" href="https://www.radiolive.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 03</span>
-      <span class="kenya-name">RadioLive.ke — Classic 105, Jambo, NRG, Kass, Citizen <span class="kenya-default-badge">DEFAULT</span></span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
-    <a class="kenya-station" href="https://radio.co.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 01</span>
-      <span class="kenya-name">Radio.co.ke — full Kenyan station directory</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
-    <a class="kenya-station" href="https://radio.or.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 02</span>
-      <span class="kenya-name">Radio.or.ke — all major stations</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
-  </div>
-  <div class="kenya-note">DIR 03 loads above automatically. DIR 01 &amp; DIR 02 open the station's own live player in a new tab &mdash; direct stream links change often, so linking straight to the source is more reliable than embedding for those.</div>
-  <div class="kenya-bottom-row">
-    <a class="kenya-bottom-btn" href="https://www.radiolive.ke/" target="_blank" rel="noopener">Listen</a>
-  </div>
 </div>
+
 
 <!-- ===== Source panel: BONGE Podcast (your uploaded content) ===== -->
 <div class="source-panel" id="panel-podcast">
@@ -675,6 +654,32 @@ let currentIndex = -1;
 let currentFilter = "all";
 let activeSource = "youtube";
 
+// Kenya Online Radio embed: fallback message stays hidden unless the iframe
+// fails to load within a few seconds (network error) or throws an error event.
+// Note: sites that block embedding via X-Frame-Options/CSP frame-ancestors
+// often still fire a "load" event (the response arrives, it just refuses to
+// render) — cross-origin restrictions mean we can't peek inside the iframe to
+// confirm real content rendered, so this catches outright load failures but
+// can't perfectly detect a silent frame-ancestors block.
+(function initKenyaEmbedFallback() {
+  const frame = document.getElementById("kenyaEmbedFrame");
+  const fallback = document.getElementById("kenyaEmbedFallback");
+  if (!frame || !fallback) return;
+  let loaded = false;
+  const failTimer = setTimeout(() => {
+    if (!loaded) fallback.style.display = "block";
+  }, 6000);
+  frame.addEventListener("load", () => {
+    loaded = true;
+    clearTimeout(failTimer);
+    fallback.style.display = "none";
+  });
+  frame.addEventListener("error", () => {
+    clearTimeout(failTimer);
+    fallback.style.display = "block";
+  });
+})();
+
 // ---------------- Auth: anonymous for public listeners, admin if ----------------
 // already signed in with the same email/password admin account used
 // elsewhere in the app (Firebase keeps that session across pages).
@@ -791,7 +796,7 @@ const ytModeToggle = document.getElementById("ytModeToggle");
 ytModeToggle.addEventListener("click", () => {
   audioModeOn = !audioModeOn;
   ytModeToggle.classList.toggle("on", audioModeOn);
-  ytModeToggle.innerHTML = audioModeOn ? "&#128250; Show video" : "&#127911; Audio mode";
+  ytModeToggle.innerHTML = audioModeOn ? "Show video" : "Audio mode";
   document.getElementById("ytNow").classList.toggle("audio-mode", audioModeOn);
   document.getElementById("ytAudioBar").classList.toggle("show", audioModeOn);
 });
@@ -982,7 +987,7 @@ function renderGrid() {
     return `
       <div class="preset ${globalIndex === currentIndex ? 'playing' : ''}" data-index="${globalIndex}">
         <div class="ch">CH ${chNum}</div>
-        <div class="cover" style="${t.coverUrl ? `background-image:url('${t.coverUrl}')` : ''}">${t.coverUrl ? '' : (t.type === 'podcast' ? '&#127908;' : '&#9834;')}</div>
+        <div class="cover" style="${t.coverUrl ? `background-image:url('${t.coverUrl}')` : ''}">${t.coverUrl ? '' : '&#9834;'}</div>
         <div class="title">${escapeHtml(t.title || "Untitled")}</div>
         <div class="meta">
           <span class="${t.type === 'podcast' ? 'tag-podcast' : 'tag-music'}">${(t.type || 'music').toUpperCase()}</span>
