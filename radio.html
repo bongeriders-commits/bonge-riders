@@ -83,6 +83,48 @@
   .tb-title-wrap{ min-width:0; }
   .page-title{ font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; }
   .page-sub{ font-size:10.5px; color:var(--muted); font-weight:500; }
+  .admin-pill{
+    display:flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:7px 12px; font-size:11.5px; font-weight:700;
+    color:var(--muted); cursor:pointer; flex-shrink:0;
+  }
+  .admin-pill.on{ color:var(--green2); border-color:rgba(5,150,105,.35); background:var(--green-bg); }
+  .admin-pill svg{ width:14px; height:14px; flex-shrink:0; }
+  .modal-backdrop{
+    position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.45);
+    display:none; align-items:flex-end; justify-content:center;
+  }
+  .modal-backdrop.open{ display:flex; }
+  .modal-backdrop .modal{
+    width:100%; max-width:420px; background:var(--bg2);
+    border-radius:16px 16px 0 0; padding:20px 20px 26px;
+    box-sizing:border-box;
+  }
+  @media (min-width:480px){
+    .modal-backdrop{ align-items:center; }
+    .modal-backdrop .modal{ border-radius:16px; }
+  }
+  .modal-handle{ width:36px; height:4px; border-radius:2px; background:var(--border); margin:0 auto 14px; }
+  .modal-title{ font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; margin-bottom:16px; }
+  .mfield{ margin-bottom:12px; }
+  .mfield label{ display:block; font-size:11.5px; font-weight:700; color:var(--muted); margin-bottom:5px; }
+  .mfield input{
+    width:100%; box-sizing:border-box; padding:11px 12px; border-radius:8px;
+    border:1px solid var(--border); background:var(--card); color:var(--text);
+    font-family:var(--body); font-size:14px;
+  }
+  .mfield input:focus{ outline:none; border-color:var(--amber2); }
+  .merr{ display:none; color:var(--red); font-size:12px; margin:0 0 10px; }
+  .merr.show{ display:block; }
+  .modal-btns{ display:flex; gap:10px; margin-top:4px; }
+  .modal-btns .mbtn{
+    flex:1; padding:12px; border-radius:8px; border:none;
+    font-family:var(--body); font-weight:600; font-size:14px; cursor:pointer;
+  }
+  .modal-btns .cancel{ background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .modal-btns .save{ background:var(--amber2); color:#fff; }
+  .modal-btns .save:disabled{ opacity:.6; }
 
   /* ---------- Dial header ---------- */
   .dial-header{
@@ -516,6 +558,10 @@
       <div class="page-sub">Music, podcast &amp; live stations</div>
     </div>
   </div>
+  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span id="adminPillLabel">Admin</span>
+  </button>
 </div>
 
 <div class="source-tabs">
@@ -661,6 +707,27 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Admin Login</div>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
+    </div>
+    <p class="merr" id="loginErr">Incorrect email or password.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -669,7 +736,7 @@ import {
   query, orderBy, serverTimestamp, increment, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
-  getAuth, onAuthStateChanged, signInAnonymously
+  getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // ---------------- FIREBASE CONFIG ----------------
@@ -743,7 +810,50 @@ onAuthStateChanged(auth, async (user) => {
   isAdmin = user.isAnonymous ? false : await isSuperAdmin(user.email);
   document.getElementById("ytAdminBox").style.display = isAdmin ? "block" : "none";
   refreshAdminFab();
+  setAdminPillUI(isAdmin, user.isAnonymous ? null : user.email);
 });
+
+function setAdminPillUI(on, email) {
+  document.getElementById("adminPill").classList.toggle("on", on);
+  document.getElementById("adminPillLabel").textContent = "Admin";
+}
+
+window.handleAdminPillClick = function() {
+  if (isAdmin) {
+    if (confirm("Sign out of admin mode?")) { signOut(auth); }
+  } else {
+    openLoginModal();
+  }
+};
+
+window.openLoginModal = function() {
+  document.getElementById("loginEmail").value = "";
+  document.getElementById("loginPw").value = "";
+  document.getElementById("loginErr").classList.remove("show");
+  document.getElementById("loginModal").classList.add("open");
+  setTimeout(() => document.getElementById("loginEmail").focus(), 250);
+};
+window.closeLoginModal = function() {
+  document.getElementById("loginModal").classList.remove("open");
+};
+window.confirmLogin = async function() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pw = document.getElementById("loginPw").value;
+  const errEl = document.getElementById("loginErr");
+  const btn = document.getElementById("loginBtn");
+  if (!email || !pw) { errEl.textContent = "Enter your email and password."; errEl.classList.add("show"); return; }
+  btn.textContent = "Signing in…"; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+    closeLoginModal();
+    showToast("Signed in as " + email);
+  } catch (e) {
+    errEl.textContent = "Incorrect email or password.";
+    errEl.classList.add("show");
+  } finally {
+    btn.textContent = "Sign In"; btn.disabled = false;
+  }
+};
 
 function refreshAdminFab() {
   document.getElementById("adminFab").classList.toggle("show", isAdmin && activeSource === "podcast");
