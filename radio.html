@@ -235,6 +235,18 @@
   .btn-tight{ flex:none; padding:9px 16px; font-size:13px; }
 
   /* ---------- Kenya Online Radio panel ---------- */
+  .kenya-embed-wrap{
+    padding:16px 18px 0;
+  }
+  .kenya-embed{
+    width:100%; height:400px; border:1px solid var(--panel-line);
+    border-radius:10px; background:#000;
+  }
+  .kenya-embed-fallback{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+    line-height:1.5; padding:8px 2px 0;
+  }
+  .kenya-embed-fallback a{ color:var(--brass-bright); }
   .kenya-list{ padding:16px 18px 0; display:flex; flex-direction:column; gap:10px; }
   .kenya-station{
     display:flex; align-items:center; gap:12px;
@@ -250,8 +262,25 @@
     font-family:var(--mono); font-size:11.5px; color:var(--brass-bright); flex-shrink:0;
   }
   .kenya-note{
-    padding:14px 18px 40px; font-family:var(--mono); font-size:11.5px;
+    padding:14px 18px 16px; font-family:var(--mono); font-size:11.5px;
     color:var(--paper-dim); line-height:1.5;
+  }
+  .kenya-station.is-default{
+    border-color:var(--brass); background:var(--panel-hi, var(--panel));
+  }
+  .kenya-default-badge{
+    font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.05em;
+    color:#0b0b0b; background:var(--brass-bright); border-radius:4px;
+    padding:2px 6px; margin-left:6px; vertical-align:middle;
+  }
+  .kenya-bottom-row{
+    display:flex; justify-content:center; padding:0 18px 40px;
+  }
+  .kenya-bottom-btn{
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    color:#0b0b0b; background:var(--brass-bright);
+    border-radius:20px; padding:8px 22px;
+    text-decoration:none; letter-spacing:.03em;
   }
 
   /* ---------- Category chips ---------- */
@@ -481,10 +510,11 @@
   <div class="yt-search-row">
     <input type="text" id="ytSearchInput" placeholder="Search YouTube — e.g. boda boda safety kenya">
     <button class="btn btn-primary btn-tight" id="ytSearchBtn">Search</button>
+    <button class="btn btn-tight" id="ytShuffleBtn" title="Show a fresh set of random videos">&#128256; Shuffle</button>
   </div>
 
   <div class="grid" id="ytGrid">
-    <div class="empty">Search above to pull in videos.</div>
+    <div class="empty">Loading videos&hellip;</div>
   </div>
 
   <div class="admin-inline" id="ytAdminBox" style="display:none;">
@@ -499,7 +529,18 @@
 
 <!-- ===== Source panel: Kenya Online Radio ===== -->
 <div class="source-panel" id="panel-kenya">
+  <div class="kenya-embed-wrap">
+    <iframe class="kenya-embed" id="kenyaEmbedFrame" src="https://www.radiolive.ke/" loading="eager" title="RadioLive.ke player" allow="autoplay"></iframe>
+    <div class="kenya-embed-fallback" id="kenyaEmbedFallback">
+      Player didn't load in-page &mdash; some stations block embedding. <a href="https://www.radiolive.ke/" target="_blank" rel="noopener">Open RadioLive.ke directly &rarr;</a>
+    </div>
+  </div>
   <div class="kenya-list">
+    <a class="kenya-station is-default" href="https://www.radiolive.ke/" target="_blank" rel="noopener">
+      <span class="ch">DIR 03</span>
+      <span class="kenya-name">RadioLive.ke — Classic 105, Jambo, NRG, Kass, Citizen <span class="kenya-default-badge">DEFAULT</span></span>
+      <span class="kenya-go">Open &rarr;</span>
+    </a>
     <a class="kenya-station" href="https://radio.co.ke/" target="_blank" rel="noopener">
       <span class="ch">DIR 01</span>
       <span class="kenya-name">Radio.co.ke — full Kenyan station directory</span>
@@ -510,13 +551,11 @@
       <span class="kenya-name">Radio.or.ke — all major stations</span>
       <span class="kenya-go">Open &rarr;</span>
     </a>
-    <a class="kenya-station" href="https://www.radiolive.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 03</span>
-      <span class="kenya-name">RadioLive.ke — Classic 105, Jambo, NRG, Kass, Citizen</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
   </div>
-  <div class="kenya-note">These open the station's own live player in a new tab — direct stream links change often, so linking straight to the source is more reliable than embedding here.</div>
+  <div class="kenya-note">DIR 03 loads above automatically. DIR 01 &amp; DIR 02 open the station's own live player in a new tab &mdash; direct stream links change often, so linking straight to the source is more reliable than embedding for those.</div>
+  <div class="kenya-bottom-row">
+    <a class="kenya-bottom-btn" href="https://www.radiolive.ke/" target="_blank" rel="noopener">Listen</a>
+  </div>
 </div>
 
 <!-- ===== Source panel: BONGE Podcast (your uploaded content) ===== -->
@@ -776,13 +815,13 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
 }
 
-async function searchYouTube(queryText) {
+async function searchYouTube(queryText, isRandom) {
   const grid = document.getElementById("ytGrid");
   if (YOUTUBE_API_KEY === "PASTE_ME") {
     grid.innerHTML = `<div class="empty">Add a YouTube Data API key in the script before this tab can pull videos.</div>`;
     return;
   }
-  grid.innerHTML = `<div class="empty">Searching&hellip;</div>`;
+  grid.innerHTML = `<div class="empty">${isRandom ? "Loading videos for you&hellip;" : "Searching&hellip;"}</div>`;
   try {
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=24&q=${encodeURIComponent(queryText)}&key=${YOUTUBE_API_KEY}`;
     const res = await fetch(url);
@@ -790,6 +829,8 @@ async function searchYouTube(queryText) {
     if (!res.ok) throw new Error(data.error?.message || "YouTube API error");
 
     if (!data.items || data.items.length === 0) {
+      // Random topic came back empty — silently try another one instead of showing "no results".
+      if (isRandom) { searchYouTube(pickRandomQuery(), true); return; }
       grid.innerHTML = `<div class="empty">No results for "${escapeHtml(queryText)}"</div>`;
       return;
     }
@@ -823,6 +864,10 @@ document.getElementById("ytSearchBtn").addEventListener("click", () => {
 document.getElementById("ytSearchInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") document.getElementById("ytSearchBtn").click();
 });
+document.getElementById("ytShuffleBtn").addEventListener("click", () => {
+  document.getElementById("ytSearchInput").value = "";
+  searchYouTube(pickRandomQuery(), true);
+});
 
 document.getElementById("ytDefaultSetBtn").addEventListener("click", async () => {
   const q = document.getElementById("ytDefaultInput").value.trim();
@@ -836,6 +881,27 @@ document.getElementById("ytDefaultSetBtn").addEventListener("click", async () =>
   }
 });
 
+// Fallback topics shown automatically when no admin default search is set,
+// so the tab never opens blank. A random pick is made on every page load.
+const RANDOM_YT_QUERIES = [
+  "boda boda safety kenya",
+  "kenyan news today",
+  "matatu culture kenya",
+  "afrobeats hits 2026",
+  "gengetone mix kenya",
+  "kenya sports highlights",
+  "sacco welfare group kenya",
+  "nairobi vlog",
+  "kenyan comedy skits",
+  "motorcycle riding tips",
+  "kenya business news",
+  "bongo flava hits"
+];
+
+function pickRandomQuery() {
+  return RANDOM_YT_QUERIES[Math.floor(Math.random() * RANDOM_YT_QUERIES.length)];
+}
+
 async function loadYouTubeDefault() {
   try {
     const snap = await getDoc(doc(db, "tracker", "radioSettings"));
@@ -844,9 +910,15 @@ async function loadYouTubeDefault() {
       document.getElementById("ytSearchInput").value = defaultQuery;
       document.getElementById("ytDefaultInput").value = defaultQuery;
       searchYouTube(defaultQuery);
+    } else {
+      // No admin default set — load a random topic so the grid isn't empty.
+      const randomQuery = pickRandomQuery();
+      document.getElementById("ytDefaultInput").value = "";
+      searchYouTube(randomQuery, true);
     }
   } catch (e) {
     console.warn("Couldn't load default YouTube search", e);
+    searchYouTube(pickRandomQuery(), true);
   }
 }
 
