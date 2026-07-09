@@ -151,6 +151,79 @@ body { transition: background .3s ease, color .3s ease; }
   animation: shimmer 1.4s ease infinite;
 }
 </style>
+<style id="gb-glassy-theme">
+/* ===== Bonge Riders: Glassy Blue Theme (global override) ===== */
+:root{
+  --gb-blue:#2563eb;
+  --gb-blue-2:#3b82f6;
+  --gb-blue-dark:#0f2a5c;
+  --gb-blue-darker:#0a1d40;
+  --gb-red:#e02020;
+  --gb-red-dark:#b91414;
+}
+
+/* Base page wash - replaces plain white page backgrounds with a soft blue */
+html, body{
+  background:linear-gradient(160deg,#eaf2ff 0%,#dce8ff 45%,#cfe0ff 100%) !important;
+}
+
+/* Glass effect for white cards/panels/containers/modals */
+.card, .panel, .modal, .modal-content, .modal-body, .box, .section,
+.container, .content-box, .white-card, .glass, .sheet, .tile,
+[style*="background: #fff"], [style*="background:#fff"],
+[style*="background: #ffffff"], [style*="background:#ffffff"],
+[style*="background-color: #fff"], [style*="background-color:#fff"],
+[style*="background-color: #ffffff"], [style*="background-color:#ffffff"],
+[style*="background: white"], [style*="background:white"],
+[style*="background-color: white"], [style*="background-color:white"]{
+  background:rgba(255,255,255,.35) !important;
+  backdrop-filter:blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(160%) !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  box-shadow:0 8px 32px rgba(15,42,92,.15) !important;
+}
+
+/* Dropdowns / menus: dark blue */
+select, .dropdown, .dropdown-menu, .dropdown-content, .menu-dropdown,
+.adm-dropdown, .pub-menu-dropdown, [class*="dropdown"], .menu, details{
+  background:var(--gb-blue-dark) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+}
+select option,
+.dropdown a, .dropdown-menu a, .dropdown-content a,
+.menu-dropdown a, .adm-dropdown a, .pub-menu-dropdown a,
+[class*="dropdown"] a, [class*="dropdown"] button{
+  background:var(--gb-blue-dark) !important;
+  color:#fff !important;
+}
+.dropdown a:hover, .dropdown-menu a:hover, .dropdown-content a:hover,
+.menu-dropdown a:hover, .adm-dropdown a:hover, .pub-menu-dropdown a:hover,
+[class*="dropdown"] a:hover, [class*="dropdown"] button:hover{
+  background:var(--gb-blue) !important;
+}
+
+/* Selected / active / special buttons -> red */
+.btn.active, .btn.selected, button.active, button.selected,
+.tab.active, .nav-item.active, .selected, .is-active, .is-selected,
+[aria-selected="true"], [aria-current="true"], .current-tab{
+  background:var(--gb-red) !important;
+  border-color:var(--gb-red) !important;
+  color:#fff !important;
+}
+.btn.active:hover, .btn.selected:hover, button.active:hover, button.selected:hover,
+.tab.active:hover, .nav-item.active:hover, .selected:hover,
+[aria-selected="true"]:hover, [aria-current="true"]:hover{
+  background:var(--gb-red-dark) !important;
+}
+
+/* Remove dark-mode toggle everywhere */
+.theme-toggle-pill, .theme-toggle, #themeToggle, #theme-toggle,
+[data-theme-toggle], .dark-mode-toggle{
+  display:none !important;
+}
+</style>
+
 </head>
 <body>
 
