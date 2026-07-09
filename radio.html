@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Bonge Radio — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+  BONGE RADIO
+  Drop-in page for the Bonge Riders PWA (bonge-96f37).
+  Firestore for track metadata, isSuperAdmin() gate for adding tracks.
+  Does NOT use Firebase Storage (project is on the free Spark plan) —
+  admins paste a direct link to audio hosted elsewhere instead of
+  uploading a file.
+  Styled to match the rest of the app (light theme, red accent).
+============================================================ -->
+
+<style>
+  :root{
+    --bg: #F7F8FA;
+    --bg2: #FFFFFF;
+    --card: #FFFFFF;
+    --card2: #F2F3F6;
+    --border: #E2E5EC;
+    --text: #111827;
+    --muted: #6B7280;
+    --dim: #9CA3AF;
+    --amber: #CC1818;
+    --amber2: #E02020;
+    --amber-bg: rgba(204,24,24,0.10);
+    --green: #065F46;
+    --green2: #059669;
+    --green-bg: rgba(5,150,105,0.10);
+    --red: #CC1818;
+    --radius: 10px;
+    --radius-lg:14px;
+
+    /* legacy aliases used throughout this file */
+    --ink: var(--bg);
+    --panel: var(--card);
+    --panel-line: var(--border);
+    --paper: var(--text);
+    --paper-dim: var(--muted);
+    --brass: var(--amber);
+    --brass-bright: var(--amber2);
+    --podcast: var(--green2);
+    --danger: var(--amber);
+
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'SFMono-Regular', Consolas, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg); color:var(--text);
+    font-family:var(--body);
+    -webkit-tap-highlight-color:transparent;
+  }
+  body{ max-width:600px; margin:0 auto; }
+
+  /* ---------- Top bar (matches rest of app) ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:100;
+    background:var(--bg2); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:13px 16px; gap:10px;
+  }
+  .tb-left{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .back-btn{
+    display:flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:8px;
+    background:var(--card); border:1px solid var(--border);
+    color:var(--text); font-size:18px; text-decoration:none;
+    flex-shrink:0; cursor:pointer;
+  }
+  .tb-title-wrap{ min-width:0; }
+  .page-title{ font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; }
+  .page-sub{ font-size:10.5px; color:var(--muted); font-weight:500; }
+
+  /* ---------- Dial header ---------- */
+  .dial-header{
+    position:relative;
+    padding:22px 18px 16px;
+    background:var(--bg2);
+    border-bottom:1px solid var(--border);
+    overflow:hidden;
+  }
+  .dial-header::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--amber2), transparent);
+    animation:scan 3.2s ease-in-out infinite;
+  }
+  @keyframes scan{
+    0%,100%{ transform:translateX(-30%); opacity:.3; }
+    50%{ transform:translateX(30%); opacity:1; }
+  }
+  .wordmark{
+    font-family:var(--display);
+    font-weight:800;
+    letter-spacing:.02em;
+    font-size:26px;
+    text-transform:uppercase;
+    color:var(--text);
+    margin:0;
+  }
+  .wordmark span{ color:var(--amber2); }
+  .freq-line{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    margin-top:4px;
+    letter-spacing:.04em;
+  }
+
+  /* ---------- Source tabs (YouTube / Kenya Radio / BONGE Podcast) ---------- */
+  .source-tabs{
+    display:flex;
+    border-bottom:1px solid var(--panel-line);
+    background:var(--ink);
+    position:sticky; top:0; z-index:30;
+  }
+  .source-tab{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-bottom:2px solid transparent;
+    color:var(--paper-dim);
+    font-family:var(--display);
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    font-size:12.5px;
+    padding:13px 6px;
+    cursor:pointer;
+  }
+  .source-tab.active{
+    color:var(--brass-bright);
+    border-bottom-color:var(--brass);
+  }
+  .source-panel{ display:none; }
+  .source-panel.show{ display:block; }
+
+  /* ---------- YouTube panel ---------- */
+  .yt-mode-row{ position:relative; }
+  .yt-now{ padding:16px 18px 0; }
+  .yt-now:empty{ display:none; }
+  .yt-now.audio-mode{
+    position:absolute; width:2px; height:2px;
+    overflow:hidden; padding:0; opacity:.01; pointer-events:none;
+  }
+  .yt-frame{
+    position:relative; width:100%; padding-top:56.25%;
+    background:#000; border-radius:10px; overflow:hidden;
+    border:1px solid var(--panel-line);
+  }
+  .yt-frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
+  .yt-mode-toggle{
+    display:block; margin:10px 18px 0;
+    background:transparent; border:1px solid var(--panel-line);
+    color:var(--paper-dim); font-family:var(--mono); font-size:11.5px;
+    padding:7px 12px; border-radius:999px; cursor:pointer;
+  }
+  .yt-mode-toggle.on{ border-color:var(--brass); color:var(--brass-bright); }
+
+  .yt-audio-bar{
+    display:none; align-items:center; gap:12px;
+    margin:16px 18px 0; padding:10px 12px;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+  }
+  .yt-audio-bar.show{ display:flex; }
+  .yt-audio-thumb{
+    width:48px; height:48px; border-radius:6px; flex-shrink:0;
+    background:var(--card2) center/cover no-repeat;
+  }
+  .yt-audio-info{ flex:1; min-width:0; }
+  .yt-audio-title{
+    font-size:13px; font-weight:600; color:var(--paper);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .yt-audio-progress-wrap{
+    margin-top:7px; height:3px; border-radius:2px;
+    background:var(--panel-line); position:relative; cursor:pointer;
+  }
+  .yt-audio-progress-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--brass); border-radius:2px; width:0%;
+  }
+  .yt-search-row{
+    display:flex; gap:8px; padding:14px 18px 4px;
+  }
+  .yt-search-row input{
+    flex:1; padding:10px 12px; border-radius:8px;
+    border:1px solid var(--panel-line); background:var(--panel); color:var(--paper);
+    font-size:13.5px;
+  }
+  .yt-card{
+    background:var(--panel); border:1px solid var(--panel-line);
+    border-radius:10px; overflow:hidden; cursor:pointer;
+  }
+  .yt-card .thumb{
+    width:100%; aspect-ratio:16/9; background:#000 center/cover no-repeat;
+  }
+  .yt-card .yt-card-body{ padding:9px 10px; }
+  .yt-card .title{
+    font-size:12.5px; font-weight:600; color:var(--paper);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    overflow:hidden; line-height:1.3;
+  }
+  .yt-card .channel{
+    font-family:var(--mono); font-size:10.5px; color:var(--paper-dim); margin-top:5px;
+  }
+  .admin-inline{
+    margin:14px 18px 30px;
+    padding:12px; border:1px dashed var(--panel-line); border-radius:10px;
+  }
+  .admin-inline label{
+    display:block; font-family:var(--mono); font-size:11px;
+    color:var(--paper-dim); margin-bottom:8px;
+  }
+  .admin-inline-row{ display:flex; gap:8px; }
+  .admin-inline-row input{
+    flex:1; padding:9px 10px; border-radius:8px;
+    border:1px solid var(--panel-line); background:var(--panel); color:var(--paper);
+    font-size:13px;
+  }
+  .btn-tight{ flex:none; padding:9px 16px; font-size:13px; }
+
+  /* ---------- Kenya Online Radio panel ---------- */
+  .kenya-list{ padding:16px 18px 0; display:flex; flex-direction:column; gap:10px; }
+  .kenya-station{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel); border:1px solid var(--panel-line);
+    border-radius:10px; padding:13px 14px;
+    text-decoration:none; color:var(--paper);
+  }
+  .kenya-station .ch{
+    font-family:var(--mono); font-size:11px; color:var(--brass); flex-shrink:0;
+  }
+  .kenya-name{ flex:1; font-size:13.5px; font-weight:600; }
+  .kenya-go{
+    font-family:var(--mono); font-size:11.5px; color:var(--brass-bright); flex-shrink:0;
+  }
+  .kenya-note{
+    padding:14px 18px 40px; font-family:var(--mono); font-size:11.5px;
+    color:var(--paper-dim); line-height:1.5;
+  }
+
+  /* ---------- Category chips ---------- */
+  .chips{
+    display:flex; gap:8px; padding:14px 18px 4px;
+    overflow-x:auto;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.03em;
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--panel-line);
+    background:var(--panel);
+    color:var(--paper-dim);
+    white-space:nowrap;
+    cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  .chip.active{
+    border-color:var(--brass);
+    color:var(--brass-bright);
+  }
+
+  /* ---------- Track grid (preset style) ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:12px;
+    padding:16px 18px 110px;
+  }
+  .preset{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:10px;
+    padding:10px;
+    cursor:pointer;
+    position:relative;
+    transition:transform .12s, border-color .12s;
+  }
+  .preset:active{ transform:scale(.97); }
+  .preset.playing{ border-color:var(--brass); }
+  .preset .ch{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--brass);
+    letter-spacing:.05em;
+  }
+  .preset .cover{
+    width:100%; aspect-ratio:1;
+    border-radius:6px;
+    background:var(--card2) center/cover no-repeat;
+    margin:6px 0 8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; color:var(--panel-line);
+  }
+  .preset .title{
+    font-size:13.5px; font-weight:600;
+    line-height:1.25;
+    color:var(--paper);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .preset .meta{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--paper-dim);
+    margin-top:4px;
+    display:flex; justify-content:space-between;
+  }
+  .tag-podcast{ color:var(--podcast); }
+  .tag-music{ color:var(--brass-bright); }
+
+  .empty{
+    grid-column:1/-1;
+    text-align:center;
+    color:var(--paper-dim);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:40px 10px;
+  }
+
+  /* ---------- Persistent player (faceplate) ---------- */
+  .player{
+    position:fixed; left:0; right:0; bottom:0;
+    background:var(--panel);
+    border-top:1px solid var(--panel-line);
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    display:none;
+    z-index:40;
+  }
+  .player.show{ display:block; }
+  .player-row{ display:flex; align-items:center; gap:12px; }
+  .player-cover{
+    width:44px; height:44px; border-radius:6px;
+    background:var(--card2) center/cover no-repeat;
+    flex-shrink:0;
+  }
+  .player-info{ flex:1; min-width:0; }
+  .player-title{
+    font-size:13px; font-weight:600; color:var(--paper);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .player-sub{
+    font-family:var(--mono); font-size:10.5px; color:var(--paper-dim);
+  }
+  .player-btn{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--brass);
+    background:transparent; color:var(--brass-bright);
+    font-size:15px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; flex-shrink:0;
+  }
+  .player-btn.main{
+    width:44px; height:44px;
+    background:var(--amber2); color:#fff; border:none;
+  }
+  .progress-wrap{
+    margin-top:8px; height:3px; border-radius:2px;
+    background:var(--panel-line); position:relative; cursor:pointer;
+  }
+  .progress-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--brass); border-radius:2px; width:0%;
+  }
+
+  /* ---------- Admin upload panel ---------- */
+  .admin-fab{
+    position:fixed; right:16px; bottom:96px; z-index:41;
+    width:50px; height:50px; border-radius:50%;
+    background:var(--amber2); color:#fff;
+    border:none; font-size:22px; font-weight:700;
+    display:none; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(204,24,24,.35);
+  }
+  .admin-fab.show{ display:flex; }
+
+  .sheet-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55);
+    display:none; z-index:50;
+  }
+  .sheet-backdrop.show{ display:block; }
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:51;
+    background:var(--bg2); border-top:1px solid var(--panel-line); box-shadow:0 -4px 20px rgba(0,0,0,.08);
+    border-radius:16px 16px 0 0;
+    padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+    transform:translateY(100%); transition:transform .2s ease;
+  }
+  .sheet.show{ transform:translateY(0); }
+  .sheet h3{
+    font-family:var(--display); text-transform:uppercase;
+    letter-spacing:.04em; margin:0 0 14px; color:var(--brass-bright);
+  }
+  .field{ margin-bottom:12px; }
+  .field label{
+    display:block; font-family:var(--mono); font-size:11px;
+    color:var(--paper-dim); margin-bottom:5px;
+  }
+  .field input[type=text], .field select{
+    width:100%; padding:10px; border-radius:8px;
+    border:1px solid var(--panel-line); background:var(--panel);
+    color:var(--paper); font-size:14px;
+  }
+  .field input[type=file]{ color:var(--paper-dim); font-size:13px; }
+  .field-hint{ font-size:11px; color:var(--paper-dim); margin-top:5px; line-height:1.4; }
+  .sheet-actions{ display:flex; gap:10px; margin-top:6px; }
+  .btn{
+    flex:1; padding:12px; border-radius:8px; border:none;
+    font-family:var(--body); font-weight:600; font-size:14px; cursor:pointer;
+  }
+  .btn-primary{ background:var(--amber2); color:#fff; }
+  .btn-ghost{ background:transparent; color:var(--paper-dim); border:1px solid var(--panel-line); }
+
+  .toast{
+    position:fixed; left:50%; bottom:100px; transform:translateX(-50%);
+    background:var(--panel); border:1px solid var(--panel-line);
+    color:var(--paper); font-size:13px; padding:10px 16px; border-radius:8px;
+    z-index:60; opacity:0; transition:opacity .2s; pointer-events:none;
+  }
+  .toast.show{ opacity:1; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <div class="tb-title-wrap">
+      <div class="page-title">Bonge Radio</div>
+      <div class="page-sub">Music, podcast &amp; live stations</div>
+    </div>
+  </div>
+</div>
+
+<div class="dial-header">
+  <h1 class="wordmark">Bonge <span>Radio</span></h1>
+  <div class="freq-line" id="freqLine">88.5 FM &middot; the stage, on demand</div>
+</div>
+
+<div class="source-tabs">
+  <button class="source-tab active" data-source="youtube">YouTube</button>
+  <button class="source-tab" data-source="kenya">Kenya Online Radio</button>
+  <button class="source-tab" data-source="podcast">BONGE Podcast</button>
+</div>
+
+<!-- ===== Source panel: YouTube ===== -->
+<div class="source-panel show" id="panel-youtube">
+  <div class="yt-mode-row">
+    <div class="yt-now" id="ytNow">
+      <div class="yt-frame"><div id="ytPlayerHost"></div></div>
+    </div>
+    <div class="yt-audio-bar" id="ytAudioBar">
+      <div class="yt-audio-thumb" id="ytAudioThumb"></div>
+      <div class="yt-audio-info">
+        <div class="yt-audio-title" id="ytAudioTitle">&mdash;</div>
+        <div class="yt-audio-progress-wrap" id="ytAudioProgressWrap">
+          <div class="yt-audio-progress-fill" id="ytAudioProgressFill"></div>
+        </div>
+      </div>
+      <button class="player-btn main" id="ytAudioPlay">&#9654;</button>
+    </div>
+    <button class="yt-mode-toggle" id="ytModeToggle">&#127911; Audio mode</button>
+  </div>
+
+  <div class="yt-search-row">
+    <input type="text" id="ytSearchInput" placeholder="Search YouTube — e.g. boda boda safety kenya">
+    <button class="btn btn-primary btn-tight" id="ytSearchBtn">Search</button>
+  </div>
+
+  <div class="grid" id="ytGrid">
+    <div class="empty">Search above to pull in videos.</div>
+  </div>
+
+  <div class="admin-inline" id="ytAdminBox" style="display:none;">
+    <label>Default search when the tab opens</label>
+    <div class="admin-inline-row">
+      <input type="text" id="ytDefaultInput" placeholder="e.g. matatu culture kenya">
+
+      <button class="btn btn-primary btn-tight" id="ytDefaultSetBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Source panel: Kenya Online Radio ===== -->
+<div class="source-panel" id="panel-kenya">
+  <div class="kenya-list">
+    <a class="kenya-station" href="https://radio.co.ke/" target="_blank" rel="noopener">
+      <span class="ch">DIR 01</span>
+      <span class="kenya-name">Radio.co.ke — full Kenyan station directory</span>
+      <span class="kenya-go">Open &rarr;</span>
+    </a>
+    <a class="kenya-station" href="https://radio.or.ke/" target="_blank" rel="noopener">
+      <span class="ch">DIR 02</span>
+      <span class="kenya-name">Radio.or.ke — all major stations</span>
+      <span class="kenya-go">Open &rarr;</span>
+    </a>
+    <a class="kenya-station" href="https://www.radiolive.ke/" target="_blank" rel="noopener">
+      <span class="ch">DIR 03</span>
+      <span class="kenya-name">RadioLive.ke — Classic 105, Jambo, NRG, Kass, Citizen</span>
+      <span class="kenya-go">Open &rarr;</span>
+    </a>
+  </div>
+  <div class="kenya-note">These open the station's own live player in a new tab — direct stream links change often, so linking straight to the source is more reliable than embedding here.</div>
+</div>
+
+<!-- ===== Source panel: BONGE Podcast (your uploaded content) ===== -->
+<div class="source-panel" id="panel-podcast">
+  <div class="chips">
+    <div class="chip active" data-filter="all">ALL</div>
+    <div class="chip" data-filter="music">MUSIC</div>
+    <div class="chip" data-filter="podcast">PODCAST</div>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="empty">Tuning in&hellip;</div>
+  </div>
+</div>
+
+<!-- Persistent player -->
+<div class="player" id="player">
+  <div class="player-row">
+    <div class="player-cover" id="pCover"></div>
+    <div class="player-info">
+      <div class="player-title" id="pTitle">&mdash;</div>
+      <div class="player-sub" id="pSub">&mdash;</div>
+    </div>
+    <button class="player-btn" id="pPrev">&#9664;&#9664;</button>
+    <button class="player-btn main" id="pPlay">&#9654;</button>
+    <button class="player-btn" id="pNext">&#9654;&#9654;</button>
+  </div>
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<audio id="audioEl" preload="metadata"></audio>
+
+<!-- YouTube IFrame Player API — needed for real play/pause + progress control (audio-mode mini bar) -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<!-- Admin upload trigger -->
+<button class="admin-fab" id="adminFab">+</button>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet">
+  <h3>Add to Bonge Radio</h3>
+  <div class="field">
+    <label>Type</label>
+    <select id="fType">
+      <option value="music">Music</option>
+      <option value="podcast">Podcast</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Title</label>
+    <input type="text" id="fTitle" placeholder="e.g. Stage Safety Talk — Ep. 3">
+  </div>
+  <div class="field">
+    <label>Category</label>
+    <input type="text" id="fCategory" placeholder="e.g. gospel, safety, matatu beats">
+  </div>
+  <div class="field">
+    <label>Audio link (direct .mp3/.m4a URL)</label>
+    <input type="text" id="fAudioUrl" placeholder="https://...">
+    <div class="field-hint">Paste a direct audio link — e.g. a Google Drive "direct download" link, Dropbox raw link, or any file host. Must end up playing the file, not a webpage.</div>
+  </div>
+  <div class="field">
+    <label>Cover image link (optional)</label>
+    <input type="text" id="fCoverUrl" placeholder="https://...">
+  </div>
+  <div class="sheet-actions">
+    <button class="btn btn-ghost" id="sheetCancel">Cancel</button>
+    <button class="btn btn-primary" id="sheetSubmit">Add track</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc,
+  query, orderBy, serverTimestamp, increment, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signInAnonymously
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// ---------------- FIREBASE CONFIG ----------------
+// Same project/config used throughout Bonge Riders (bonge-96f37).
+// NOTE: Bonge Radio does NOT use Firebase Storage — the project is on the
+// free Spark plan, which doesn't include Storage. Instead, admins paste a
+// direct link to an already-hosted audio file (see sheetSubmit below).
+const firebaseConfig = {
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// TODO: get a key from Google Cloud Console → APIs & Services → Credentials,
+// with the "YouTube Data API v3" enabled on that project. Restrict the key
+// to your app's domain (HTTP referrers) before shipping — it's used
+// client-side. Each search costs 100 of your 10,000 free daily quota units,
+// so plan for roughly ~100 searches/day on the free tier.
+const YOUTUBE_API_KEY = "AIzaSyB3jkk-496q6BHDKeBl3dVePhNwYDn1bZ0";
+
+let currentUser = null;
+let isAdmin = false;
+let tracks = [];
+let currentIndex = -1;
+let currentFilter = "all";
+let activeSource = "youtube";
+
+// ---------------- Auth: anonymous for public listeners, admin if ----------------
+// already signed in with the same email/password admin account used
+// elsewhere in the app (Firebase keeps that session across pages).
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    await signInAnonymously(auth);
+    return;
+  }
+  currentUser = user;
+  isAdmin = user.isAnonymous ? false : await isSuperAdmin(user.email);
+  document.getElementById("ytAdminBox").style.display = isAdmin ? "block" : "none";
+  refreshAdminFab();
+});
+
+function refreshAdminFab() {
+  document.getElementById("adminFab").classList.toggle("show", isAdmin && activeSource === "podcast");
+}
+
+// ---------------- Source tab switching ----------------
+document.querySelectorAll(".source-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".source-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".source-panel").forEach(p => p.classList.remove("show"));
+    tab.classList.add("active");
+    activeSource = tab.dataset.source;
+    document.getElementById(`panel-${activeSource}`).classList.add("show");
+    refreshAdminFab();
+
+    // Pause whichever source isn't active so two things don't play at once.
+    if (activeSource !== "podcast" && !audioEl.paused) audioEl.pause();
+    if (activeSource !== "youtube" && ytPlayer && ytPlayerReady && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+      ytPlayer.pauseVideo();
+    }
+  });
+});
+
+// ---------------- YouTube panel: search-driven video grid ----------------
+// Firestore doc: tracker/radioSettings { youtubeDefaultQuery: string }
+let ytPlayer = null;
+let ytPlayerReady = false;
+let ytPendingVideoId = null;
+let audioModeOn = false;
+let ytProgressInterval = null;
+
+window.onYouTubeIframeAPIReady = function () {
+  ytPlayer = new YT.Player("ytPlayerHost", {
+    height: "100%",
+    width: "100%",
+    playerVars: { playsinline: 1 },
+    events: {
+      onReady: () => {
+        ytPlayerReady = true;
+        if (ytPendingVideoId) {
+          ytPlayer.loadVideoById(ytPendingVideoId);
+          ytPendingVideoId = null;
+        }
+      },
+      onStateChange: onYtStateChange
+    }
+  });
+};
+
+function onYtStateChange(e) {
+  const playBtn = document.getElementById("ytAudioPlay");
+  if (e.data === YT.PlayerState.PLAYING) {
+    playBtn.innerHTML = "&#10073;&#10073;";
+    startYtProgressPolling();
+  } else {
+    playBtn.innerHTML = "&#9654;";
+    if (e.data === YT.PlayerState.ENDED) stopYtProgressPolling();
+  }
+}
+
+function startYtProgressPolling() {
+  stopYtProgressPolling();
+  ytProgressInterval = setInterval(() => {
+    if (!ytPlayer || !ytPlayer.getDuration) return;
+    const duration = ytPlayer.getDuration();
+    const current = ytPlayer.getCurrentTime();
+    if (duration > 0) {
+      document.getElementById("ytAudioProgressFill").style.width = `${(current / duration) * 100}%`;
+    }
+  }, 500);
+}
+function stopYtProgressPolling() {
+  if (ytProgressInterval) clearInterval(ytProgressInterval);
+}
+
+function playYouTubeVideo(videoId, title, thumbUrl) {
+  if (ytPlayerReady) {
+    ytPlayer.loadVideoById(videoId);
+  } else {
+    ytPendingVideoId = videoId;
+  }
+  document.getElementById("ytAudioTitle").textContent = title || "Untitled";
+  document.getElementById("ytAudioThumb").style.backgroundImage = thumbUrl ? `url('${thumbUrl}')` : "none";
+}
+
+// ---------------- Audio-mode toggle ----------------
+const ytModeToggle = document.getElementById("ytModeToggle");
+ytModeToggle.addEventListener("click", () => {
+  audioModeOn = !audioModeOn;
+  ytModeToggle.classList.toggle("on", audioModeOn);
+  ytModeToggle.innerHTML = audioModeOn ? "&#128250; Show video" : "&#127911; Audio mode";
+  document.getElementById("ytNow").classList.toggle("audio-mode", audioModeOn);
+  document.getElementById("ytAudioBar").classList.toggle("show", audioModeOn);
+});
+
+document.getElementById("ytAudioPlay").addEventListener("click", () => {
+  if (!ytPlayer || !ytPlayerReady) return;
+  const state = ytPlayer.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+  else ytPlayer.playVideo();
+});
+
+document.getElementById("ytAudioProgressWrap").addEventListener("click", (e) => {
+  if (!ytPlayer || !ytPlayerReady) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  const duration = ytPlayer.getDuration();
+  if (duration > 0) ytPlayer.seekTo(pct * duration, true);
+});
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
+
+async function searchYouTube(queryText) {
+  const grid = document.getElementById("ytGrid");
+  if (YOUTUBE_API_KEY === "PASTE_ME") {
+    grid.innerHTML = `<div class="empty">Add a YouTube Data API key in the script before this tab can pull videos.</div>`;
+    return;
+  }
+  grid.innerHTML = `<div class="empty">Searching&hellip;</div>`;
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=24&q=${encodeURIComponent(queryText)}&key=${YOUTUBE_API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || "YouTube API error");
+
+    if (!data.items || data.items.length === 0) {
+      grid.innerHTML = `<div class="empty">No results for "${escapeHtml(queryText)}"</div>`;
+      return;
+    }
+
+    grid.innerHTML = data.items.map(item => `
+      <div class="yt-card" data-id="${item.id.videoId}" data-title="${escapeHtml(item.snippet.title)}" data-thumb="${item.snippet.thumbnails.medium.url}">
+        <div class="thumb" style="background-image:url('${item.snippet.thumbnails.medium.url}')"></div>
+        <div class="yt-card-body">
+          <div class="title">${escapeHtml(item.snippet.title)}</div>
+          <div class="channel">${escapeHtml(item.snippet.channelTitle)}</div>
+        </div>
+      </div>
+    `).join("");
+
+    grid.querySelectorAll(".yt-card").forEach(card => {
+      card.addEventListener("click", () => {
+        playYouTubeVideo(card.dataset.id, card.dataset.title, card.dataset.thumb);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+  } catch (e) {
+    console.error(e);
+    grid.innerHTML = `<div class="empty">Couldn't reach YouTube — check the API key and quota.</div>`;
+  }
+}
+
+document.getElementById("ytSearchBtn").addEventListener("click", () => {
+  const q = document.getElementById("ytSearchInput").value.trim();
+  if (q) searchYouTube(q);
+});
+document.getElementById("ytSearchInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") document.getElementById("ytSearchBtn").click();
+});
+
+document.getElementById("ytDefaultSetBtn").addEventListener("click", async () => {
+  const q = document.getElementById("ytDefaultInput").value.trim();
+  if (!q) return;
+  try {
+    await setDoc(doc(db, "tracker", "radioSettings"), { youtubeDefaultQuery: q }, { merge: true });
+    showToast("Default search saved");
+  } catch (e) {
+    console.error(e);
+    showToast("Couldn't save — check Firestore rules for tracker/radioSettings");
+  }
+});
+
+async function loadYouTubeDefault() {
+  try {
+    const snap = await getDoc(doc(db, "tracker", "radioSettings"));
+    const defaultQuery = snap.exists() ? snap.data().youtubeDefaultQuery : null;
+    if (defaultQuery) {
+      document.getElementById("ytSearchInput").value = defaultQuery;
+      document.getElementById("ytDefaultInput").value = defaultQuery;
+      searchYouTube(defaultQuery);
+    }
+  } catch (e) {
+    console.warn("Couldn't load default YouTube search", e);
+  }
+}
+
+loadYouTubeDefault();
+
+// Matches the REAL enforcement in firestore.rules' isSuperAdmin():
+// a caller is a super admin if their email is listed in
+// tracker/superAdmins.emails, OR if tracker/admins.list is empty/missing
+// (first-time setup bootstrap). This must stay in sync with the rules —
+// it only controls whether the UI shows the upload button; the rules are
+// what actually allow or reject the write.
+async function isSuperAdmin(email) {
+  if (!email) return false;
+  try {
+    const adminsSnap = await getDoc(doc(db, "tracker", "admins"));
+    const list = (adminsSnap.exists() && adminsSnap.data().list) ? adminsSnap.data().list : [];
+    if (list.length === 0) return true; // no admins configured yet
+
+    const superSnap = await getDoc(doc(db, "tracker", "superAdmins"));
+    const emails = (superSnap.exists() && superSnap.data().emails) ? superSnap.data().emails : [];
+    return emails.map(e => (e || "").toLowerCase()).includes(email.toLowerCase());
+  } catch (e) {
+    console.warn("isSuperAdmin check failed", e);
+  }
+  return false;
+}
+
+// ---------------- Firestore schema ----------------
+// Collection: radioTracks
+//   title: string
+//   type: "music" | "podcast"
+//   category: string
+//   storageUrl: string
+//   coverUrl: string | null
+//   uploaderName: string
+//   playCount: number
+//   createdAt: serverTimestamp
+async function loadTracks() {
+  const grid = document.getElementById("grid");
+  try {
+    const q = query(collection(db, "radioTracks"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+    tracks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderGrid();
+  } catch (e) {
+    grid.innerHTML = `<div class="empty">Couldn't load tracks. Check Firestore rules / config.</div>`;
+    console.error(e);
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  const filtered = tracks.filter(t => currentFilter === "all" || t.type === currentFilter);
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty">No ${currentFilter === "all" ? "" : currentFilter} tracks yet. Be the first to add one.</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map((t, i) => {
+    const globalIndex = tracks.indexOf(t);
+    const chNum = String(i + 1).padStart(2, "0");
+    return `
+      <div class="preset ${globalIndex === currentIndex ? 'playing' : ''}" data-index="${globalIndex}">
+        <div class="ch">CH ${chNum}</div>
+        <div class="cover" style="${t.coverUrl ? `background-image:url('${t.coverUrl}')` : ''}">${t.coverUrl ? '' : (t.type === 'podcast' ? '&#127908;' : '&#9834;')}</div>
+        <div class="title">${escapeHtml(t.title || "Untitled")}</div>
+        <div class="meta">
+          <span class="${t.type === 'podcast' ? 'tag-podcast' : 'tag-music'}">${(t.type || 'music').toUpperCase()}</span>
+          <span>${escapeHtml(t.category || '')}</span>
+        </div>
+      </div>`;
+  }).join("");
+
+  grid.querySelectorAll(".preset").forEach(el => {
+    el.addEventListener("click", () => playTrack(parseInt(el.dataset.index, 10)));
+  });
+}
+
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentFilter = chip.dataset.filter;
+    renderGrid();
+  });
+});
+
+// ---------------- Persistent player + Media Session ----------------
+const audioEl = document.getElementById("audioEl");
+const playerEl = document.getElementById("player");
+const pTitle = document.getElementById("pTitle");
+const pSub = document.getElementById("pSub");
+const pCover = document.getElementById("pCover");
+const pPlay = document.getElementById("pPlay");
+const progressFill = document.getElementById("progressFill");
+const progressWrap = document.getElementById("progressWrap");
+
+function playTrack(index) {
+  const t = tracks[index];
+  if (!t) return;
+  currentIndex = index;
+  audioEl.src = t.storageUrl;
+  audioEl.play().catch(err => console.warn("Playback blocked until user gesture:", err));
+
+  pTitle.textContent = t.title || "Untitled";
+  pSub.textContent = `${(t.type || 'music').toUpperCase()} · ${t.category || ''}`;
+  pCover.style.backgroundImage = t.coverUrl ? `url('${t.coverUrl}')` : "none";
+  playerEl.classList.add("show");
+  renderGrid();
+
+  updateDoc(doc(db, "radioTracks", t.id), { playCount: increment(1) }).catch(() => {});
+
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: t.title || "Untitled",
+      artist: "Bonge Radio",
+      album: t.category || "",
+      artwork: t.coverUrl ? [{ src: t.coverUrl, sizes: "512x512", type: "image/png" }] : []
+    });
+    navigator.mediaSession.setActionHandler("play", () => audioEl.play());
+    navigator.mediaSession.setActionHandler("pause", () => audioEl.pause());
+    navigator.mediaSession.setActionHandler("previoustrack", playPrev);
+    navigator.mediaSession.setActionHandler("nexttrack", playNext);
+  }
+}
+
+function playPrev() {
+  const filtered = tracks.filter(t => currentFilter === "all" || t.type === currentFilter);
+  const currIdxInFiltered = filtered.findIndex(t => t.id === tracks[currentIndex]?.id);
+  const prev = filtered[currIdxInFiltered - 1] || filtered[filtered.length - 1];
+  if (prev) playTrack(tracks.indexOf(prev));
+}
+function playNext() {
+  const filtered = tracks.filter(t => currentFilter === "all" || t.type === currentFilter);
+  const currIdxInFiltered = filtered.findIndex(t => t.id === tracks[currentIndex]?.id);
+  const next = filtered[currIdxInFiltered + 1] || filtered[0];
+  if (next) playTrack(tracks.indexOf(next));
+}
+
+document.getElementById("pPrev").addEventListener("click", playPrev);
+document.getElementById("pNext").addEventListener("click", playNext);
+pPlay.addEventListener("click", () => {
+  if (audioEl.paused) audioEl.play(); else audioEl.pause();
+});
+audioEl.addEventListener("play", () => { pPlay.innerHTML = "&#10073;&#10073;"; if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; });
+audioEl.addEventListener("pause", () => { pPlay.innerHTML = "&#9654;"; if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused"; });
+audioEl.addEventListener("ended", playNext);
+audioEl.addEventListener("timeupdate", () => {
+  if (!audioEl.duration) return;
+  progressFill.style.width = `${(audioEl.currentTime / audioEl.duration) * 100}%`;
+});
+progressWrap.addEventListener("click", (e) => {
+  const rect = progressWrap.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  if (audioEl.duration) audioEl.currentTime = pct * audioEl.duration;
+});
+
+// ---------------- Admin upload sheet ----------------
+const adminFab = document.getElementById("adminFab");
+const sheet = document.getElementById("sheet");
+const sheetBackdrop = document.getElementById("sheetBackdrop");
+
+adminFab.addEventListener("click", () => {
+  sheet.classList.add("show");
+  sheetBackdrop.classList.add("show");
+});
+function closeSheet() {
+  sheet.classList.remove("show");
+  sheetBackdrop.classList.remove("show");
+}
+document.getElementById("sheetCancel").addEventListener("click", closeSheet);
+sheetBackdrop.addEventListener("click", closeSheet);
+
+document.getElementById("sheetSubmit").addEventListener("click", async () => {
+  const title = document.getElementById("fTitle").value.trim();
+  const type = document.getElementById("fType").value;
+  const category = document.getElementById("fCategory").value.trim();
+  const storageUrl = document.getElementById("fAudioUrl").value.trim();
+  const coverUrl = document.getElementById("fCoverUrl").value.trim() || null;
+
+  if (!title || !storageUrl) {
+    showToast("Title and an audio link are required");
+    return;
+  }
+  if (!/^https?:\/\//i.test(storageUrl)) {
+    showToast("Audio link must start with http:// or https://");
+    return;
+  }
+
+  const submitBtn = document.getElementById("sheetSubmit");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Adding\u2026";
+
+  try {
+    await addDoc(collection(db, "radioTracks"), {
+      title, type, category, storageUrl, coverUrl,
+      uploaderName: "Super Admin",
+      playCount: 0,
+      createdAt: serverTimestamp()
+    });
+
+    showToast("Track added to Bonge Radio");
+    closeSheet();
+    document.getElementById("fTitle").value = "";
+    document.getElementById("fCategory").value = "";
+    document.getElementById("fAudioUrl").value = "";
+    document.getElementById("fCoverUrl").value = "";
+    loadTracks();
+  } catch (e) {
+    console.error(e);
+    showToast("Couldn't add track — check Firestore rules");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Add track";
+  }
+});
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+
+loadTracks();
+</script>
+
+<!--
+Firestore rules for Bonge Radio are already applied in firestore.rules
+(radioTracks, tracker/radioSettings) — they use the same isSuperAdmin() /
+isAdmin() helpers as the rest of the app (email/password admin account,
+checked against tracker/superAdmins.emails).
+
+This page does NOT use Firebase Storage, so the radio/ block in
+storage.rules isn't needed (fine to leave it in if it's already there —
+it's just unused).
+-->
+
+</body>
+</html>
