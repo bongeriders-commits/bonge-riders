@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Contact — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green: #065F46;
+  --green2: #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-dark: #A01212;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:60px;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:13px 16px;gap:10px;}
+.tb-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.back-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;text-decoration:none;flex-shrink:0;cursor:pointer;}
+.tb-title-wrap{min-width:0;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.page-sub{font-size:10.5px;color:var(--muted);font-weight:500;}
+.admin-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 12px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;flex-shrink:0;}
+.admin-pill.on{color:var(--green2);border-color:rgba(5,150,105,.35);background:var(--green-bg);}
+.admin-pill svg{width:14px;height:14px;flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{padding:20px 16px 4px;text-align:center;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber2);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:23px;line-height:1.2;margin:6px 0 6px;}
+.hero .sub{color:var(--muted);font-size:13px;line-height:1.5;max-width:420px;margin:0 auto;}
+
+.edit-row{padding:14px 16px 0;display:none;}
+.edit-row.show{display:block;}
+.edit-btn{width:100%;padding:11px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ── SECTIONS ── */
+.section{padding:18px 16px 0;}
+.section-heading{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:4px;}
+
+/* leadership rows */
+.leader-row{display:flex;align-items:center;gap:12px;padding:12px 10px;border-bottom:1px solid var(--border);}
+.leader-row:last-child{border-bottom:none;}
+.leader-avatar{width:38px;height:38px;border-radius:50%;background:var(--amber-bg);color:var(--amber2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.leader-info{flex:1;min-width:0;}
+.leader-name{font-size:14px;font-weight:700;}
+.leader-role{font-size:11.5px;color:var(--muted);}
+.leader-actions{display:flex;gap:8px;flex-shrink:0;}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;}
+.icon-btn.call{background:var(--green-bg);color:var(--green2);}
+.icon-btn.wa{background:rgba(37,211,102,.12);color:#22b356;}
+.icon-btn svg{width:17px;height:17px;}
+
+/* generic info row */
+.info-row{display:flex;align-items:center;gap:12px;padding:13px 10px;}
+.info-row + .info-row{border-top:1px solid var(--border);}
+.info-icon{width:38px;height:38px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--amber2);}
+.info-icon svg{width:18px;height:18px;}
+.info-body{flex:1;min-width:0;}
+.info-label{font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.info-value{font-size:13.5px;font-weight:600;margin-top:1px;line-height:1.4;}
+.info-action{flex-shrink:0;padding:8px 14px;background:var(--card2);border:1px solid var(--border);border-radius:20px;font-size:11.5px;font-weight:700;color:var(--text);cursor:pointer;text-decoration:none;white-space:nowrap;}
+
+/* social row */
+.social-row{display:flex;gap:12px;padding:6px 4px;}
+.social-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);text-decoration:none;color:var(--text);font-size:11.5px;font-weight:700;}
+.social-btn svg{width:22px;height:22px;}
+
+/* ── FORM ── */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.mfield{margin-bottom:14px;}
+.mfield:last-child{margin-bottom:0;}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.mfield input, .mfield textarea{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.mfield input:focus, .mfield textarea:focus{border-color:var(--amber);}
+.mfield textarea{resize:vertical;min-height:80px;}
+.merr{color:var(--red);font-size:12px;font-weight:600;display:none;margin-top:10px;}
+.merr.show{display:block;}
+.msuccess{color:var(--green2);font-size:12px;font-weight:600;display:none;margin-top:10px;}
+.msuccess.show{display:block;}
+.form-submit{width:100%;padding:13px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:4px;}
+.form-submit:disabled{opacity:.55;}
+
+/* ── MODAL (admin edit) ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px 32px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;text-align:center;}
+.modal-sub{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin:18px 0 10px;}
+.modal-sub:first-of-type{margin-top:0;}
+.leader-edit-row{display:flex;gap:8px;margin-bottom:10px;align-items:center;}
+.leader-edit-row input{flex:1;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12.5px;font-family:'Inter',sans-serif;outline:none;min-width:0;}
+.leader-edit-row input:focus{border-color:var(--amber);}
+.leader-remove-btn{width:30px;height:30px;border-radius:50%;border:none;background:var(--amber-bg);color:var(--amber2);font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0;}
+.add-leader-btn{width:100%;padding:10px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:4px;}
+.modal-btns{display:flex;gap:10px;margin-top:18px;}
+.mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.mbtn.save{background:var(--red-dark);color:#fff;}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:#fff;border:1px solid #333;border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+.loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:50px 0;}
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <div class="tb-title-wrap">
+      <div class="page-title">Contact</div>
+      <div class="page-sub">Bonge Riders — Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span id="adminPillLabel">Admin</span>
+  </button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Get In Touch</div>
+  <h1>Talk to Bonge Riders</h1>
+  <p class="sub">Reach the stage leadership, find us, or send a message directly.</p>
+</div>
+
+<div class="edit-row" id="editRow">
+  <button class="edit-btn" onclick="openEditModal()">&#9998; Edit Contact Details</button>
+</div>
+
+<div class="loading-msg" id="loadingMsg"><span class="brand-spinner-lg"></span>Loading contact info&hellip;</div>
+
+<div id="content" style="display:none;">
+
+  <div class="section">
+    <div class="section-heading">Stage Leadership</div>
+    <div class="card" id="leadershipCard"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">Reach Us</div>
+    <div class="card">
+      <div class="info-row" id="waRow" style="display:none;">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.78 14.02c-.24.68-1.4 1.3-1.93 1.35-.49.05-.98.24-3.32-.69-2.83-1.13-4.63-4-4.77-4.19-.14-.19-1.14-1.52-1.14-2.9s.72-2.06.98-2.34c.26-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.24.58.8 2 .87 2.14.07.14.11.3.02.48-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.35Z"/></svg></div>
+        <div class="info-body"><div class="info-label">WhatsApp</div><div class="info-value">Chat with the stage</div></div>
+        <a class="info-action" id="waLink" href="#" target="_blank" rel="noopener">Open</a>
+      </div>
+      <div class="info-row">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="info-body"><div class="info-label">Paybill</div><div class="info-value" id="paybillValue">544600 · Acc 942540</div></div>
+        <button class="info-action" onclick="copyPaybill()">Copy</button>
+      </div>
+      <div class="info-row">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="info-body"><div class="info-label">Location</div><div class="info-value" id="locationValue">Kwa Bogonko Stage, Katani</div></div>
+        <a class="info-action" id="mapsLink" href="#" target="_blank" rel="noopener">Map</a>
+      </div>
+      <div class="info-row">
+        <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="info-body"><div class="info-label">Hours</div><div class="info-value" id="hoursValue">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">Find Us</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div id="mapEmbedWrap" style="width:100%;aspect-ratio:16/10;background:var(--card2);"></div>
+      <a class="info-action" id="mapsLink2" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin:12px;text-decoration:none;">Open in Google Maps</a>
+    </div>
+  </div>
+
+  <div class="section" id="socialSection" style="display:none;">
+    <div class="section-heading">Follow Us</div>
+    <div class="social-row" id="socialRow"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">Send a Message</div>
+    <div class="form-card">
+      <div class="mfield">
+        <label>Your Name</label>
+        <input type="text" id="msgName" placeholder="e.g. James Mwangi">
+      </div>
+      <div class="mfield">
+        <label>Phone Number</label>
+        <input type="tel" id="msgPhone" placeholder="e.g. 0712345678">
+      </div>
+      <div class="mfield">
+        <label>Message</label>
+        <textarea id="msgText" placeholder="How can we help?" maxlength="800"></textarea>
+      </div>
+      <p class="merr" id="msgErr"></p>
+      <p class="msuccess" id="msgSuccess">Message sent — the stage leadership will get back to you.</p>
+      <button class="form-submit" id="msgSubmitBtn" onclick="sendMessage()">Send Message</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Admin Login</div>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
+    </div>
+    <p class="merr" id="loginErr">Incorrect email or password.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN EDIT MODAL ═══ -->
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Edit Contact Details</div>
+
+    <div class="modal-sub">Stage Leadership</div>
+    <div id="leaderEditList"></div>
+    <button type="button" class="add-leader-btn" onclick="addLeaderRow()">&#65291; Add Leader</button>
+
+    <div class="modal-sub">Reach Us</div>
+    <div class="mfield"><label>WhatsApp Link</label><input type="text" id="editWhatsapp" placeholder="https://wa.me/2547XXXXXXXX"></div>
+    <div class="mfield"><label>Paybill Number</label><input type="text" id="editPaybillNumber" placeholder="544600"></div>
+    <div class="mfield"><label>Paybill Account</label><input type="text" id="editPaybillAccount" placeholder="942540"></div>
+    <div class="mfield"><label>Location Text</label><input type="text" id="editLocationText" placeholder="Kwa Bogonko Stage, Katani"></div>
+    <div class="mfield"><label>Google Maps Link</label><input type="text" id="editMapsUrl" placeholder="https://maps.google.com/..."></div>
+    <div class="mfield"><label>Operating Hours</label><input type="text" id="editHours" placeholder="e.g. 6:00 AM – 9:00 PM daily"></div>
+
+    <div class="modal-sub">Social Links (optional)</div>
+    <div class="mfield"><label>TikTok</label><input type="text" id="editTiktok" placeholder="https://tiktok.com/@..."></div>
+    <div class="mfield"><label>Facebook</label><input type="text" id="editFacebook" placeholder="https://facebook.com/..."></div>
+    <div class="mfield"><label>Instagram</label><input type="text" id="editInstagram" placeholder="https://instagram.com/..."></div>
+
+    <p class="merr" id="editErr"></p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="mbtn save" id="editSaveBtn" onclick="saveContactInfo()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+let isSuperAdmin = false;
+let _adminList = [];
+let CONTACT = null;
+
+const DEFAULT_CONTACT = {
+  leadership: [
+    { name: '', role: 'Chairperson', phone: '0725672771' }
+  ],
+  whatsapp: '',
+  paybillNumber: '544600',
+  paybillAccount: '942540',
+  locationText: 'MX3J+8MW Kwa Bogonko Stage, Unnamed Road, Pridelands',
+  mapsUrl: 'https://maps.google.com/?q=MX3J%2B8MW+Kwa+Bogonko+Stage,+Unnamed+Road,+Pridelands',
+  hours: '',
+  tiktok: '', facebook: '', instagram: ''
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (user && !user.isAnonymous) {
+    try {
+      const snap = await getDoc(doc(db, 'tracker', 'admins'));
+      _adminList = (snap.exists() && snap.data().list) ? snap.data().list : [];
+    } catch(e) { _adminList = []; }
+    const email = (user.email || '').toLowerCase();
+    const rec = _adminList.find(a => a.email === email);
+    isSuperAdmin = _adminList.length === 0 || (!!rec && rec.isSuperAdmin);
+    if (isSuperAdmin) {
+      setAdminUI(true);
+      showToast('Signed in as ' + user.email);
+    } else {
+      showToast('Super-admin access required to edit contact details');
+      await signOut(auth);
+    }
+  } else if (user && user.isAnonymous) {
+    setAdminUI(false);
+  } else {
+    try { await signInAnonymously(auth); } catch(e) { console.error(e); }
+  }
+});
+
+function setAdminUI(on) {
+  isSuperAdmin = on;
+  document.getElementById('adminPill').classList.toggle('on', on);
+  document.getElementById('editRow').classList.toggle('show', on);
+}
+
+window.handleAdminPillClick = function() {
+  if (isSuperAdmin) {
+    if (confirm('Sign out of admin mode?')) { signOut(auth); }
+  } else {
+    openLoginModal();
+  }
+};
+window.openLoginModal = function() {
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPw').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginModal').classList.add('open');
+  setTimeout(() => document.getElementById('loginEmail').focus(), 250);
+};
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('open');
+};
+window.confirmLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+    closeLoginModal();
+  } catch(e) {
+    errEl.textContent = 'Incorrect email or password.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+};
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function initials(name) {
+  const parts = String(name || '?').trim().split(/\s+/);
+  return ((parts[0][0] || '?') + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+function telHref(phone) {
+  return 'tel:' + String(phone || '').replace(/[^\d+]/g, '');
+}
+function waHref(phone) {
+  let p = String(phone || '').replace(/[^\d]/g, '');
+  if (p.startsWith('0')) p = '254' + p.slice(1);
+  return 'https://wa.me/' + p;
+}
+
+// ── LOAD CONTACT INFO ──
+async function loadContactInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'tracker', 'contactInfo'));
+    CONTACT = snap.exists() ? { ...DEFAULT_CONTACT, ...snap.data() } : { ...DEFAULT_CONTACT };
+  } catch(e) {
+    console.error(e);
+    CONTACT = { ...DEFAULT_CONTACT };
+  }
+  renderContact();
+  document.getElementById('loadingMsg').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+}
+
+function renderContact() {
+  // Leadership
+  const leaders = (CONTACT.leadership || []).filter(l => l && (l.name || l.phone));
+  const lc = document.getElementById('leadershipCard');
+  lc.innerHTML = leaders.length ? leaders.map(l => `
+    <div class="leader-row">
+      <div class="leader-avatar">${escHtml(initials(l.name))}</div>
+      <div class="leader-info">
+        <div class="leader-name">${escHtml(l.name) || 'Unnamed'}</div>
+        <div class="leader-role">${escHtml(l.role) || ''}</div>
+      </div>
+      <div class="leader-actions">
+        ${l.phone ? `<a class="icon-btn call" href="${telHref(l.phone)}" aria-label="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>` : ''}
+        ${l.phone ? `<a class="icon-btn wa" href="${waHref(l.phone)}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.78 14.02c-.24.68-1.4 1.3-1.93 1.35-.49.05-.98.24-3.32-.69-2.83-1.13-4.63-4-4.77-4.19-.14-.19-1.14-1.52-1.14-2.9s.72-2.06.98-2.34c.26-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.24.58.8 2 .87 2.14.07.14.11.3.02.48-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.35Z"/></svg></a>` : ''}
+      </div>
+    </div>`).join('') : `<div class="leader-row"><div class="leader-info"><div class="leader-role">No leadership contacts added yet.</div></div></div>`;
+
+  // WhatsApp group row
+  if (CONTACT.whatsapp) {
+    document.getElementById('waRow').style.display = 'flex';
+    document.getElementById('waLink').href = CONTACT.whatsapp;
+  } else {
+    document.getElementById('waRow').style.display = 'none';
+  }
+
+  document.getElementById('paybillValue').textContent = `${CONTACT.paybillNumber || '—'} · Acc ${CONTACT.paybillAccount || '—'}`;
+  document.getElementById('locationValue').textContent = CONTACT.locationText || '—';
+  document.getElementById('mapsLink').href = CONTACT.mapsUrl || '#';
+  document.getElementById('hoursValue').textContent = CONTACT.hours || 'Not specified';
+
+  // Embedded map viewer (no API key needed — public Google Maps embed)
+  const mapQuery = encodeURIComponent(CONTACT.locationText || CONTACT.mapsUrl || 'Katani, Kenya');
+  document.getElementById('mapEmbedWrap').innerHTML =
+    `<iframe src="https://www.google.com/maps?q=${mapQuery}&output=embed" width="100%" height="100%" style="border:0;display:block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Stage location map"></iframe>`;
+  document.getElementById('mapsLink2').href = CONTACT.mapsUrl || `https://maps.google.com/?q=${mapQuery}`;
+
+  // Social
+  const socials = [
+    { key: 'tiktok', label: 'TikTok', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48Z"/></svg>' },
+    { key: 'facebook', label: 'Facebook', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8.5H16l.5-3.5h-3V7.7c0-1 .3-1.7 1.8-1.7H16.6V2.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V13h2.5v9h3.6Z"/></svg>' },
+    { key: 'instagram', label: 'Instagram', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>' }
+  ];
+  const activeSocials = socials.filter(s => CONTACT[s.key]);
+  const socialSection = document.getElementById('socialSection');
+  if (activeSocials.length) {
+    socialSection.style.display = 'block';
+    document.getElementById('socialRow').innerHTML = activeSocials.map(s => `
+      <a class="social-btn" href="${CONTACT[s.key]}" target="_blank" rel="noopener">${s.icon}${s.label}</a>
+    `).join('');
+  } else {
+    socialSection.style.display = 'none';
+  }
+}
+loadContactInfo();
+
+window.copyPaybill = function() {
+  const text = `Paybill: ${CONTACT.paybillNumber || ''}\nAccount: ${CONTACT.paybillAccount || ''}`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast('Paybill details copied')).catch(() => showToast('Could not copy'));
+  } else {
+    showToast('Copy not supported on this device');
+  }
+};
+
+// ── MESSAGE FORM ──
+window.sendMessage = async function() {
+  const errEl = document.getElementById('msgErr');
+  const okEl = document.getElementById('msgSuccess');
+  errEl.classList.remove('show');
+  okEl.classList.remove('show');
+  const name = document.getElementById('msgName').value.trim();
+  const phone = document.getElementById('msgPhone').value.trim();
+  const message = document.getElementById('msgText').value.trim();
+  if (!message) { errEl.textContent = 'Please write a message.'; errEl.classList.add('show'); return; }
+  if (!phone) { errEl.textContent = 'Please add a phone number so we can respond.'; errEl.classList.add('show'); return; }
+
+  const btn = document.getElementById('msgSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await addDoc(collection(db, 'contactMessages'), {
+      name: name || 'Anonymous',
+      phone,
+      message,
+      createdAt: serverTimestamp(),
+      uid: auth.currentUser ? auth.currentUser.uid : null
+    });
+    document.getElementById('msgName').value = '';
+    document.getElementById('msgPhone').value = '';
+    document.getElementById('msgText').value = '';
+    okEl.classList.add('show');
+    showToast('Message sent');
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Could not send. Check your connection and try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send Message';
+  }
+};
+
+// ── ADMIN EDIT MODAL ──
+window.addLeaderRow = function(prefill) {
+  const list = document.getElementById('leaderEditList');
+  const row = document.createElement('div');
+  row.className = 'leader-edit-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Name" class="le-name" value="${escHtml(prefill ? prefill.name : '')}">
+    <input type="text" placeholder="Role" class="le-role" value="${escHtml(prefill ? prefill.role : '')}">
+    <input type="tel" placeholder="Phone" class="le-phone" value="${escHtml(prefill ? prefill.phone : '')}">
+    <button type="button" class="leader-remove-btn" onclick="this.parentElement.remove()">&#10005;</button>
+  `;
+  list.appendChild(row);
+};
+
+window.openEditModal = function() {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  const list = document.getElementById('leaderEditList');
+  list.innerHTML = '';
+  const leaders = (CONTACT.leadership && CONTACT.leadership.length) ? CONTACT.leadership : [{ name: '', role: '', phone: '' }];
+  leaders.forEach(l => addLeaderRow(l));
+
+  document.getElementById('editWhatsapp').value = CONTACT.whatsapp || '';
+  document.getElementById('editPaybillNumber').value = CONTACT.paybillNumber || '';
+  document.getElementById('editPaybillAccount').value = CONTACT.paybillAccount || '';
+  document.getElementById('editLocationText').value = CONTACT.locationText || '';
+  document.getElementById('editMapsUrl').value = CONTACT.mapsUrl || '';
+  document.getElementById('editHours').value = CONTACT.hours || '';
+  document.getElementById('editTiktok').value = CONTACT.tiktok || '';
+  document.getElementById('editFacebook').value = CONTACT.facebook || '';
+  document.getElementById('editInstagram').value = CONTACT.instagram || '';
+  document.getElementById('editErr').classList.remove('show');
+  document.getElementById('editModal').classList.add('open');
+};
+window.closeEditModal = function() {
+  document.getElementById('editModal').classList.remove('open');
+};
+
+window.saveContactInfo = async function() {
+  const errEl = document.getElementById('editErr');
+  errEl.classList.remove('show');
+  const leaderRows = document.querySelectorAll('#leaderEditList .leader-edit-row');
+  const leadership = [];
+  leaderRows.forEach(row => {
+    const name = row.querySelector('.le-name').value.trim();
+    const role = row.querySelector('.le-role').value.trim();
+    const phone = row.querySelector('.le-phone').value.trim();
+    if (name || role || phone) leadership.push({ name, role, phone });
+  });
+
+  const payload = {
+    leadership,
+    whatsapp: document.getElementById('editWhatsapp').value.trim(),
+    paybillNumber: document.getElementById('editPaybillNumber').value.trim(),
+    paybillAccount: document.getElementById('editPaybillAccount').value.trim(),
+    locationText: document.getElementById('editLocationText').value.trim(),
+    mapsUrl: document.getElementById('editMapsUrl').value.trim(),
+    hours: document.getElementById('editHours').value.trim(),
+    tiktok: document.getElementById('editTiktok').value.trim(),
+    facebook: document.getElementById('editFacebook').value.trim(),
+    instagram: document.getElementById('editInstagram').value.trim(),
+    updatedAt: serverTimestamp(),
+    updatedBy: auth.currentUser && auth.currentUser.email ? auth.currentUser.email : 'admin'
+  };
+
+  const btn = document.getElementById('editSaveBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await setDoc(doc(db, 'tracker', 'contactInfo'), payload, { merge: true });
+    CONTACT = { ...DEFAULT_CONTACT, ...payload };
+    renderContact();
+    showToast('Contact details updated');
+    closeEditModal();
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Could not save. Check your connection and try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save Changes';
+  }
+};
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+window.showToast = showToast;
+</script>
+
+<script>
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if (el.matches && el.matches('input, textarea')) {
+    setTimeout(function(){ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300);
+  }
+});
+</script>
+</body>
+</html>

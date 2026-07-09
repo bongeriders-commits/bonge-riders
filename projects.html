@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Projects — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green: #065F46;
+  --green2: #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --gray-bg: rgba(107,114,128,0.12);
+  --gold: #B8860B;
+  --gold-bg: rgba(184,134,11,0.12);
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-dark: #A01212;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:100px;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:13px 16px;gap:10px;}
+.tb-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.back-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;text-decoration:none;flex-shrink:0;cursor:pointer;}
+.tb-title-wrap{min-width:0;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.page-sub{font-size:10.5px;color:var(--muted);font-weight:500;}
+.admin-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 12px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;flex-shrink:0;}
+.admin-pill.on{color:var(--green2);border-color:rgba(5,150,105,.35);background:var(--green-bg);}
+.admin-pill svg{width:14px;height:14px;flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{padding:20px 16px 4px;text-align:center;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber2);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:23px;line-height:1.2;margin:6px 0 6px;}
+.hero .sub{color:var(--muted);font-size:13px;line-height:1.5;max-width:420px;margin:0 auto;}
+
+/* ── FILTER PILLS ── */
+.filter-row{display:flex;gap:8px;padding:14px 16px 4px;overflow-x:auto;}
+.filter-pill{flex-shrink:0;padding:8px 15px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
+.filter-pill.active{background:var(--red-dark);color:#fff;border-color:var(--red-dark);}
+
+/* ── PROJECT LIST ── */
+.proj-wrap{padding:16px 16px 0;display:flex;flex-direction:column;gap:14px;}
+.p-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;}
+.p-photo-wrap{position:relative;width:100%;aspect-ratio:16/10;background:#111;overflow:hidden;}
+.p-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.p-photo-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#1a1a1a,#2b2b2b);}
+.p-status{position:absolute;top:10px;left:10px;padding:5px 11px;border-radius:20px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;backdrop-filter:blur(4px);}
+.p-status.ongoing{background:rgba(5,150,105,.85);color:#fff;}
+.p-status.completed{background:rgba(107,114,128,.85);color:#fff;}
+.p-status.planned{background:rgba(184,134,11,.85);color:#fff;}
+.p-admin-actions{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:2;}
+.p-admin-btn{width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.p-admin-btn svg{width:13px;height:13px;stroke:#fff;}
+.p-info{padding:13px 14px 15px;}
+.p-title{font-family:'Space Grotesk',sans-serif;font-size:15.5px;font-weight:700;line-height:1.3;}
+.p-date{font-size:10.5px;color:var(--dim);font-weight:600;margin-top:2px;}
+.p-desc{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.p-empty-desc{color:var(--dim);font-style:italic;}
+
+.empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:60px 20px;line-height:1.8;}
+.empty-msg .big{font-size:34px;display:block;margin-bottom:8px;}
+.loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:50px 0;}
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);max-width:600px;width:calc(100% - 32px);z-index:60;display:none;}
+.fab.show{display:block;}
+.fab-btn{width:100%;padding:14px;background:var(--red-dark);color:#fff;border:none;border-radius:14px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;box-shadow:0 8px 24px rgba(160,18,18,.35);}
+
+/* ── MODALS ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px 32px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;text-align:center;}
+.mfield{margin-bottom:14px;}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.mfield input, .mfield textarea{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.mfield input:focus, .mfield textarea:focus{border-color:var(--amber);}
+.mfield textarea{resize:vertical;min-height:70px;}
+.mfield .hint{font-size:10.5px;color:var(--dim);margin-top:5px;line-height:1.4;}
+.seg{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:3px;margin-bottom:16px;}
+.seg button{flex:1;padding:9px 0;border:none;background:none;border-radius:7px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;}
+.seg button.active{background:var(--red-dark);color:#fff;}
+.file-btn{width:100%;padding:12px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;}
+.file-preview{width:100%;max-height:220px;object-fit:contain;border-radius:var(--radius);margin-top:10px;display:none;background:#111;}
+.file-preview.show{display:block;}
+.merr{color:var(--red);font-size:12px;font-weight:600;display:none;margin-bottom:10px;}
+.merr.show{display:block;}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.mbtn.save{background:var(--red-dark);color:#fff;}
+
+/* ── DETAIL VIEW ── */
+.detail-backdrop{display:none;position:fixed;inset:0;background:#000;z-index:300;flex-direction:column;}
+.detail-backdrop.open{display:flex;}
+.detail-top{display:flex;justify-content:flex-end;padding:12px 14px;flex-shrink:0;}
+.detail-close{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:18px;cursor:pointer;}
+.detail-media-wrap{flex-shrink:0;width:100%;max-height:48vh;overflow:hidden;background:#111;}
+.detail-media-wrap img{width:100%;height:100%;object-fit:contain;}
+.detail-info{background:var(--bg2);padding:18px 18px 26px;flex:1;overflow-y:auto;}
+.detail-status{display:inline-block;padding:5px 12px;border-radius:20px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;}
+.detail-status.ongoing{background:var(--green-bg);color:var(--green2);}
+.detail-status.completed{background:var(--gray-bg);color:var(--muted);}
+.detail-status.planned{background:var(--gold-bg);color:var(--gold);}
+.detail-title{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.detail-date{font-size:11.5px;color:var(--dim);font-weight:600;margin-bottom:12px;}
+.detail-desc{font-size:14px;color:var(--muted);line-height:1.65;white-space:pre-wrap;}
+.detail-admin-row{display:flex;gap:10px;margin-top:20px;}
+.detail-admin-row button{flex:1;padding:11px;border-radius:var(--radius);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:1px solid var(--border);background:var(--card2);color:var(--text);}
+.detail-admin-row button.del{color:var(--red);border-color:rgba(204,24,24,.3);}
+
+/* ── LIKE / DISLIKE ── */
+.vote-row{display:flex;gap:10px;margin-top:16px;}
+.vote-btn{display:flex;align-items:center;justify-content:center;gap:7px;flex:1;padding:10px;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:1px solid var(--border);background:var(--card2);color:var(--muted);}
+.vote-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;}
+.vote-btn.like.active{background:var(--green-bg);color:var(--green2);border-color:rgba(5,150,105,.35);}
+.vote-btn.like.active svg{fill:var(--green2);}
+.vote-btn.dislike.active{background:var(--amber-bg);color:var(--amber2);border-color:rgba(204,24,24,.3);}
+.vote-btn.dislike.active svg{fill:var(--amber2);}
+
+/* ── COMMENTS ── */
+.comments-section{margin-top:26px;border-top:1px solid var(--border);padding-top:18px;}
+.comments-heading{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;margin-bottom:14px;}
+.comment-form{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.comment-form input[type="text"]{width:100%;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;}
+.comment-form textarea{width:100%;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13.5px;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:56px;}
+.comment-form input:focus, .comment-form textarea:focus{border-color:var(--amber);}
+.comment-post-btn{align-self:flex-end;padding:9px 18px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.comment-post-btn:disabled{opacity:.55;}
+.comment-list{display:flex;flex-direction:column;gap:14px;}
+.comment-item{display:flex;gap:10px;}
+.comment-avatar{width:30px;height:30px;border-radius:50%;background:var(--amber-bg);color:var(--amber2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.comment-body{flex:1;min-width:0;}
+.comment-name-row{display:flex;align-items:baseline;gap:8px;}
+.comment-name{font-size:12.5px;font-weight:700;color:var(--text);}
+.comment-time{font-size:10.5px;color:var(--dim);}
+.comment-text{font-size:13px;color:var(--muted);line-height:1.5;margin-top:2px;white-space:pre-wrap;}
+.comment-empty{font-size:12.5px;color:var(--dim);font-style:italic;text-align:center;padding:14px 0;}
+.comment-del{background:none;border:none;color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;margin-top:3px;padding:0;font-family:'Inter',sans-serif;}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:#fff;border:1px solid #333;border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <div class="tb-title-wrap">
+      <div class="page-title">Projects</div>
+      <div class="page-sub">Bonge Riders — Bogonko-Ngelani Stage</div>
+    </div>
+  </div>
+  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span id="adminPillLabel">Admin</span>
+  </button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Our Projects</div>
+  <h1>Building Together</h1>
+  <p class="sub">SACCO investments and community initiatives from Bonge Riders — Bogonko-Ngelani Stage.</p>
+</div>
+
+<div class="filter-row" id="filterRow">
+  <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
+  <button class="filter-pill" data-filter="ongoing" onclick="setFilter('ongoing')">Ongoing</button>
+  <button class="filter-pill" data-filter="completed" onclick="setFilter('completed')">Completed</button>
+  <button class="filter-pill" data-filter="planned" onclick="setFilter('planned')">Planned</button>
+</div>
+
+<div class="proj-wrap">
+  <div class="loading-msg" id="loadingMsg"><span class="brand-spinner-lg"></span>Loading projects&hellip;</div>
+  <div id="projList" style="display:none;"></div>
+  <div class="empty-msg" id="emptyMsg" style="display:none;">
+    <span class="big">&#128295;</span>
+    Nothing here yet.<br>Check back soon.
+  </div>
+</div>
+
+<div class="fab" id="fab">
+  <button class="fab-btn" onclick="openItemModal()">&#65291; Add Project</button>
+</div>
+
+<!-- ═══ ADD / EDIT PROJECT MODAL ═══ -->
+<div class="modal-backdrop" id="itemModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="itemModalTitle">Add Project</div>
+
+    <div class="mfield">
+      <label>Photo (optional)</label>
+      <input type="file" id="itemFileInput" accept="image/*" style="display:none;" onchange="handleItemFileSelect(event)">
+      <button type="button" class="file-btn" onclick="document.getElementById('itemFileInput').click()" id="fileBtnLabel">Choose a cover photo</button>
+      <img id="filePreview" class="file-preview" alt="Preview">
+    </div>
+
+    <div class="mfield">
+      <label>Status</label>
+      <div class="seg" id="statusSeg">
+        <button type="button" data-status="ongoing" onclick="setStatus('ongoing')">Ongoing</button>
+        <button type="button" data-status="completed" onclick="setStatus('completed')">Completed</button>
+        <button type="button" data-status="planned" onclick="setStatus('planned')">Planned</button>
+      </div>
+    </div>
+
+    <div class="mfield">
+      <label>Title</label>
+      <input type="text" id="itemTitle" placeholder="e.g. Stage Shelter, Road Safety Drive">
+    </div>
+    <div class="mfield">
+      <label>Date (optional)</label>
+      <input type="text" id="itemDate" placeholder="e.g. Started June 2026, or Completed May 2026">
+    </div>
+    <div class="mfield">
+      <label>Description</label>
+      <textarea id="itemDesc" placeholder="Tell members about this project&hellip;"></textarea>
+    </div>
+
+    <p class="merr" id="itemErr"></p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeItemModal()">Cancel</button>
+      <button class="mbtn save" id="itemSaveBtn" onclick="saveItem()">Add Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Admin Login</div>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
+    </div>
+    <p class="merr" id="loginErr">Incorrect email or password.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DETAIL VIEW ═══ -->
+<div class="detail-backdrop" id="detailView">
+  <div class="detail-top"><button class="detail-close" onclick="closeDetail()">&#10005;</button></div>
+  <div class="detail-media-wrap" id="detailMediaWrap" style="display:none;"></div>
+  <div class="detail-info">
+    <div class="detail-status" id="detailStatus"></div>
+    <div class="detail-title" id="detailTitle"></div>
+    <div class="detail-date" id="detailDate"></div>
+    <div class="detail-desc" id="detailDesc"></div>
+    <div class="vote-row">
+      <button class="vote-btn like" id="likeBtn" onclick="toggleVote('like')">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22V11M2 13v7a2 2 0 0 0 2 2h12.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 18 11h-5V5a2 2 0 0 0-4 0l-2 6"/></svg>
+        <span id="likeCount">0</span>
+      </button>
+      <button class="vote-btn dislike" id="dislikeBtn" onclick="toggleVote('dislike')">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2v11M22 11V4a2 2 0 0 0-2-2H7.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 6 13h5v6a2 2 0 0 0 4 0l2-6"/></svg>
+        <span id="dislikeCount">0</span>
+      </button>
+    </div>
+    <div class="detail-admin-row" id="detailAdminRow" style="display:none;">
+      <button onclick="editCurrentItem()">Edit</button>
+      <button class="del" onclick="deleteCurrentItem()">Delete</button>
+    </div>
+
+    <div class="comments-section">
+      <div class="comments-heading" id="commentsHeading">Comments</div>
+      <div class="comment-form">
+        <input type="text" id="commentName" placeholder="Your name (optional)" maxlength="40">
+        <textarea id="commentText" placeholder="Share your views on this project…" maxlength="500"></textarea>
+        <button class="comment-post-btn" id="commentPostBtn" onclick="postComment()">Post</button>
+      </div>
+      <div class="comment-list" id="commentList"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc, collection, addDoc,
+         updateDoc, deleteDoc, onSnapshot, query, where, orderBy, serverTimestamp, runTransaction, increment }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+let ITEMS = [];
+let isSuperAdmin = false;
+let _adminList = [];
+let editingId = null;
+let pendingPhotoDataUrl = null;
+let existingPhotoDataUrl = null;
+let currentStatus = 'ongoing';
+let currentFilter = 'all';
+let currentDetailId = null;
+let projUnsub = null;
+let commentsUnsub = null;
+let myVote = null; // 'like' | 'dislike' | null, for the currently-open project
+
+onAuthStateChanged(auth, async (user) => {
+  if (user && !user.isAnonymous) {
+    try {
+      const snap = await getDoc(doc(db, 'tracker', 'admins'));
+      _adminList = (snap.exists() && snap.data().list) ? snap.data().list : [];
+    } catch(e) { _adminList = []; }
+    const email = (user.email || '').toLowerCase();
+    const rec = _adminList.find(a => a.email === email);
+    isSuperAdmin = _adminList.length === 0 || (!!rec && rec.isSuperAdmin);
+    if (isSuperAdmin) {
+      setAdminUI(true);
+      showToast('Signed in as ' + user.email);
+    } else {
+      showToast('Super-admin access required for Project uploads');
+      await signOut(auth);
+    }
+  } else if (user && user.isAnonymous) {
+    setAdminUI(false);
+  } else {
+    try { await signInAnonymously(auth); } catch(e) { console.error(e); }
+  }
+});
+
+function setAdminUI(on) {
+  isSuperAdmin = on;
+  document.getElementById('adminPill').classList.toggle('on', on);
+  document.getElementById('fab').classList.toggle('show', on);
+  renderList();
+}
+
+window.handleAdminPillClick = function() {
+  if (isSuperAdmin) {
+    if (confirm('Sign out of admin mode?')) { signOut(auth); }
+  } else {
+    openLoginModal();
+  }
+};
+
+window.openLoginModal = function() {
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPw').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginModal').classList.add('open');
+  setTimeout(() => document.getElementById('loginEmail').focus(), 250);
+};
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('open');
+};
+window.confirmLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+    closeLoginModal();
+  } catch(e) {
+    errEl.textContent = 'Incorrect email or password.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+};
+
+// ── LOAD PROJECTS ──
+function startProjListener() {
+  if (projUnsub) return;
+  const q = query(collection(db, 'projectItems'), orderBy('createdAt', 'desc'));
+  projUnsub = onSnapshot(q, (snap) => {
+    ITEMS = [];
+    snap.forEach(d => ITEMS.push({ id: d.id, ...d.data() }));
+    document.getElementById('loadingMsg').style.display = 'none';
+    renderList();
+    if (currentDetailId) {
+      const openItem = ITEMS.find(i => i.id === currentDetailId);
+      if (openItem) updateVoteUI(openItem);
+    }
+  }, (err) => {
+    console.error('projects load error:', err);
+    document.getElementById('loadingMsg').textContent = 'Could not load projects. Check your connection.';
+  });
+}
+startProjListener();
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+const STATUS_LABEL = { ongoing: 'Ongoing', completed: 'Completed', planned: 'Planned' };
+
+window.setFilter = function(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderList();
+};
+
+function renderList() {
+  const list = document.getElementById('projList');
+  const empty = document.getElementById('emptyMsg');
+  const filtered = currentFilter === 'all' ? ITEMS : ITEMS.filter(i => i.status === currentFilter);
+  if (!filtered.length) {
+    list.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  list.style.display = 'flex';
+  list.style.flexDirection = 'column';
+  list.style.gap = '14px';
+  list.innerHTML = filtered.map(item => {
+    const photoMarkup = item.photo
+      ? `<img src="${item.photo}" alt="${escHtml(item.title)}" loading="lazy">`
+      : `<div class="p-photo-fallback">&#128295;</div>`;
+    const adminActions = isSuperAdmin ? `
+      <div class="p-admin-actions">
+        <button class="p-admin-btn" onclick="event.stopPropagation();quickEdit('${item.id}')" aria-label="Edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+        </button>
+        <button class="p-admin-btn" onclick="event.stopPropagation();quickDelete('${item.id}')" aria-label="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </div>` : '';
+    return `
+    <div class="p-card" onclick="openDetail('${item.id}')">
+      <div class="p-photo-wrap">
+        ${adminActions}
+        <span class="p-status ${item.status}">${STATUS_LABEL[item.status] || 'Ongoing'}</span>
+        ${photoMarkup}
+      </div>
+      <div class="p-info">
+        <div class="p-title">${escHtml(item.title) || 'Untitled Project'}</div>
+        ${item.date ? `<div class="p-date">${escHtml(item.date)}</div>` : ''}
+        <div class="p-desc ${item.description ? '' : 'p-empty-desc'}">${escHtml(item.description) || 'No description'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ADD / EDIT MODAL ──
+window.openItemModal = function(prefill) {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  editingId = prefill ? prefill.id : null;
+  pendingPhotoDataUrl = null;
+  existingPhotoDataUrl = prefill ? (prefill.photo || null) : null;
+  document.getElementById('itemModalTitle').textContent = editingId ? 'Edit Project' : 'Add Project';
+  document.getElementById('itemSaveBtn').textContent = editingId ? 'Save Changes' : 'Add Project';
+  document.getElementById('itemSaveBtn').disabled = false;
+  document.getElementById('itemErr').classList.remove('show');
+  document.getElementById('itemTitle').value = prefill ? (prefill.title || '') : '';
+  document.getElementById('itemDate').value = prefill ? (prefill.date || '') : '';
+  document.getElementById('itemDesc').value = prefill ? (prefill.description || '') : '';
+  setStatus(prefill ? (prefill.status || 'ongoing') : 'ongoing');
+
+  const preview = document.getElementById('filePreview');
+  if (existingPhotoDataUrl) {
+    preview.src = existingPhotoDataUrl;
+    preview.classList.add('show');
+    document.getElementById('fileBtnLabel').textContent = 'Change photo';
+  } else {
+    preview.src = '';
+    preview.classList.remove('show');
+    document.getElementById('fileBtnLabel').textContent = 'Choose a cover photo';
+  }
+  document.getElementById('itemModal').classList.add('open');
+};
+window.closeItemModal = function() {
+  document.getElementById('itemModal').classList.remove('open');
+};
+
+window.setStatus = function(s) {
+  currentStatus = s;
+  document.querySelectorAll('#statusSeg button').forEach(b => b.classList.toggle('active', b.dataset.status === s));
+};
+
+function resizeImageFile(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Invalid image'));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+        else if (height > maxDim) { width = Math.round(width * (maxDim / height)); height = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.handleItemFileSelect = async function(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { showToast('Please choose an image file.'); return; }
+  document.getElementById('fileBtnLabel').textContent = 'Processing photo…';
+  try {
+    let dataUrl = await resizeImageFile(file, 1000, 0.78);
+    let quality = 0.78, dim = 1000;
+    while (dataUrl.length > 680000 && (quality > 0.35 || dim > 500)) {
+      if (quality > 0.35) quality -= 0.12; else dim -= 100;
+      dataUrl = await resizeImageFile(file, dim, quality);
+    }
+    if (dataUrl.length > 720000) { showToast('That photo is too large — try a different one.'); document.getElementById('fileBtnLabel').textContent = 'Choose a cover photo'; return; }
+    pendingPhotoDataUrl = dataUrl;
+    const preview = document.getElementById('filePreview');
+    preview.src = dataUrl;
+    preview.classList.add('show');
+    document.getElementById('fileBtnLabel').textContent = 'Change photo';
+  } catch(e) {
+    showToast('Could not process that photo.');
+    document.getElementById('fileBtnLabel').textContent = 'Choose a cover photo';
+  }
+};
+
+window.saveItem = async function() {
+  const errEl = document.getElementById('itemErr');
+  errEl.classList.remove('show');
+  const title = document.getElementById('itemTitle').value.trim();
+  const date = document.getElementById('itemDate').value.trim();
+  const description = document.getElementById('itemDesc').value.trim();
+  if (!title) { errEl.textContent = 'Please give the project a title.'; errEl.classList.add('show'); return; }
+
+  const payload = {
+    title, date, description,
+    status: currentStatus,
+    photo: pendingPhotoDataUrl || existingPhotoDataUrl || null
+  };
+
+  const btn = document.getElementById('itemSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'projectItems', editingId), payload);
+      showToast('Project updated');
+    } else {
+      payload.createdAt = serverTimestamp();
+      payload.createdBy = auth.currentUser && auth.currentUser.email ? auth.currentUser.email : 'admin';
+      payload.likeCount = 0;
+      payload.dislikeCount = 0;
+      await addDoc(collection(db, 'projectItems'), payload);
+      showToast('Project added');
+    }
+    closeItemModal();
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Could not save. Check your connection and try again.';
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingId ? 'Save Changes' : 'Add Project';
+  }
+};
+
+window.quickEdit = function(id) {
+  const item = ITEMS.find(i => i.id === id);
+  if (item) openItemModal(item);
+};
+window.quickDelete = async function(id) {
+  if (!isSuperAdmin) { showToast('Super-admin access required'); return; }
+  if (!confirm('Remove this project? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db, 'projectItems', id));
+    showToast('Project removed');
+  } catch(e) {
+    showToast('Could not delete. Try again.');
+  }
+};
+
+// ── DETAIL VIEW ──
+window.openDetail = function(id) {
+  const item = ITEMS.find(i => i.id === id);
+  if (!item) return;
+  currentDetailId = id;
+  const wrap = document.getElementById('detailMediaWrap');
+  if (item.photo) {
+    wrap.innerHTML = `<img src="${item.photo}" alt="${escHtml(item.title)}">`;
+    wrap.style.display = 'block';
+  } else {
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+  }
+  const statusEl = document.getElementById('detailStatus');
+  statusEl.textContent = STATUS_LABEL[item.status] || 'Ongoing';
+  statusEl.className = 'detail-status ' + (item.status || 'ongoing');
+  document.getElementById('detailTitle').textContent = item.title || 'Untitled Project';
+  document.getElementById('detailDate').textContent = item.date || '';
+  document.getElementById('detailDate').style.display = item.date ? 'block' : 'none';
+  document.getElementById('detailDesc').textContent = item.description || 'No description yet.';
+  document.getElementById('detailAdminRow').style.display = isSuperAdmin ? 'flex' : 'none';
+  updateVoteUI(item);
+  loadMyVote(id);
+  document.getElementById('commentName').value = '';
+  document.getElementById('commentText').value = '';
+  startCommentsListener(id);
+  document.getElementById('detailView').classList.add('open');
+};
+window.closeDetail = function() {
+  document.getElementById('detailView').classList.remove('open');
+  currentDetailId = null;
+  myVote = null;
+  if (commentsUnsub) { commentsUnsub(); commentsUnsub = null; }
+};
+window.editCurrentItem = function() {
+  const id = currentDetailId;
+  closeDetail();
+  if (id) window.quickEdit(id);
+};
+window.deleteCurrentItem = function() {
+  const id = currentDetailId;
+  closeDetail();
+  if (id) window.quickDelete(id);
+};
+
+// ── LIKE / DISLIKE ──
+function updateVoteUI(item) {
+  document.getElementById('likeCount').textContent = item.likeCount || 0;
+  document.getElementById('dislikeCount').textContent = item.dislikeCount || 0;
+  document.getElementById('likeBtn').classList.toggle('active', myVote === 'like');
+  document.getElementById('dislikeBtn').classList.toggle('active', myVote === 'dislike');
+}
+
+async function loadMyVote(projectId) {
+  myVote = null;
+  const uid = auth.currentUser && auth.currentUser.uid;
+  if (!uid) return;
+  try {
+    const snap = await getDoc(doc(db, 'projectVotes', projectId + '_' + uid));
+    myVote = snap.exists() ? snap.data().type : null;
+  } catch(e) { myVote = null; }
+  const item = ITEMS.find(i => i.id === projectId);
+  if (item && currentDetailId === projectId) updateVoteUI(item);
+}
+
+window.toggleVote = async function(type) {
+  const projectId = currentDetailId;
+  if (!projectId) return;
+  const uid = auth.currentUser && auth.currentUser.uid;
+  if (!uid) { showToast('Please wait a moment and try again.'); return; }
+  const voteRef = doc(db, 'projectVotes', projectId + '_' + uid);
+  const projectRef = doc(db, 'projectItems', projectId);
+  const previousVote = myVote;
+  const newVote = previousVote === type ? null : type;
+  myVote = newVote; // optimistic
+  const item = ITEMS.find(i => i.id === projectId);
+  if (item) updateVoteUI(item);
+  try {
+    await runTransaction(db, async (tx) => {
+      let likeDelta = 0, dislikeDelta = 0;
+      if (previousVote === 'like') likeDelta -= 1;
+      if (previousVote === 'dislike') dislikeDelta -= 1;
+      if (newVote === 'like') likeDelta += 1;
+      if (newVote === 'dislike') dislikeDelta += 1;
+      const inc = {};
+      if (likeDelta !== 0) inc.likeCount = increment(likeDelta);
+      if (dislikeDelta !== 0) inc.dislikeCount = increment(dislikeDelta);
+      if (Object.keys(inc).length) tx.update(projectRef, inc);
+      tx.set(voteRef, { projectId, uid, type: newVote, updatedAt: serverTimestamp() });
+    });
+  } catch(e) {
+    console.error(e);
+    myVote = previousVote; // revert
+    if (item) updateVoteUI(item);
+    showToast('Could not save your vote. Try again.');
+  }
+};
+
+// ── COMMENTS ──
+function timeAgo(ts) {
+  if (!ts || !ts.toDate) return '';
+  const diffMs = Date.now() - ts.toDate().getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return days + 'd ago';
+  return ts.toDate().toLocaleDateString();
+}
+
+function initials(name) {
+  const parts = String(name || 'M').trim().split(/\s+/);
+  return ((parts[0][0] || 'M') + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+
+function startCommentsListener(projectId) {
+  if (commentsUnsub) { commentsUnsub(); commentsUnsub = null; }
+  const list = document.getElementById('commentList');
+  list.innerHTML = '<div class="comment-empty">Loading comments…</div>';
+  const q = query(collection(db, 'projectComments'), where('projectId', '==', projectId));
+  commentsUnsub = onSnapshot(q, (snap) => {
+    let comments = [];
+    snap.forEach(d => comments.push({ id: d.id, ...d.data() }));
+    comments.sort((a, b) => {
+      const ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+      const tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+      return ta - tb;
+    });
+    document.getElementById('commentsHeading').textContent = comments.length ? `Comments (${comments.length})` : 'Comments';
+    renderComments(comments);
+  }, (err) => {
+    console.error('comments load error:', err);
+    list.innerHTML = '<div class="comment-empty">Could not load comments.</div>';
+  });
+}
+
+function renderComments(comments) {
+  const list = document.getElementById('commentList');
+  if (!comments.length) {
+    list.innerHTML = '<div class="comment-empty">No comments yet. Be the first to share your views.</div>';
+    return;
+  }
+  const uid = auth.currentUser && auth.currentUser.uid;
+  list.innerHTML = comments.map(c => {
+    const name = c.name && c.name.trim() ? c.name.trim() : 'Member';
+    const canDelete = isSuperAdmin || (uid && c.uid === uid);
+    return `
+    <div class="comment-item">
+      <div class="comment-avatar">${escHtml(initials(name))}</div>
+      <div class="comment-body">
+        <div class="comment-name-row">
+          <span class="comment-name">${escHtml(name)}</span>
+          <span class="comment-time">${timeAgo(c.createdAt)}</span>
+        </div>
+        <div class="comment-text">${escHtml(c.text)}</div>
+        ${canDelete ? `<button class="comment-del" onclick="deleteComment('${c.id}')">Delete</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.postComment = async function() {
+  const projectId = currentDetailId;
+  if (!projectId) return;
+  const name = document.getElementById('commentName').value.trim();
+  const text = document.getElementById('commentText').value.trim();
+  if (!text) { showToast('Write something first.'); return; }
+  const btn = document.getElementById('commentPostBtn');
+  btn.disabled = true; btn.textContent = 'Posting…';
+  try {
+    await addDoc(collection(db, 'projectComments'), {
+      projectId,
+      name: name || '',
+      text,
+      uid: auth.currentUser ? auth.currentUser.uid : null,
+      createdAt: serverTimestamp()
+    });
+    document.getElementById('commentText').value = '';
+  } catch(e) {
+    console.error(e);
+    showToast('Could not post your comment. Try again.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Post';
+  }
+};
+
+window.deleteComment = async function(commentId) {
+  if (!confirm('Delete this comment?')) return;
+  try {
+    await deleteDoc(doc(db, 'projectComments', commentId));
+  } catch(e) {
+    showToast('Could not delete comment.');
+  }
+};
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+window.showToast = showToast;
+
+setStatus('ongoing');
+</script>
+
+<script>
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if (el.matches && el.matches('input, textarea')) {
+    setTimeout(function(){ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300);
+  }
+});
+</script>
+</body>
+</html>
