@@ -235,29 +235,11 @@
   .btn-tight{ flex:none; padding:9px 16px; font-size:13px; }
 
   /* ---------- Kenya Online Radio panel ---------- */
-  .kenya-tabs{
-    padding:14px 18px 0; display:flex; gap:8px;
-  }
-  .kenya-tab{
-    flex:1; text-align:center; background:var(--panel); border:1px solid var(--panel-line);
-    border-radius:8px; padding:10px 8px; cursor:pointer;
-    font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--paper-dim);
-    letter-spacing:.03em; user-select:none;
-  }
-  .kenya-tab.active{ background:var(--brass-bright); border-color:var(--brass-bright); color:#fff; }
   .kenya-frame-wrap{
     margin:14px 18px 0; border:1px solid var(--panel-line); border-radius:10px;
     overflow:hidden; background:var(--panel); height:60vh; min-height:360px; position:relative;
   }
   .kenya-frame-wrap iframe{ width:100%; height:100%; border:none; display:block; }
-  .kenya-open-link{
-    display:block; text-align:center; padding:9px 0 0;
-    font-family:var(--mono); font-size:11px; color:var(--brass-bright); text-decoration:none;
-  }
-  .kenya-empty{
-    display:flex; align-items:center; justify-content:center; height:100%;
-    color:var(--paper-dim); font-size:13px; padding:0 20px; text-align:center;
-  }
 
   /* ---------- Category chips ---------- */
   .chips{
@@ -502,15 +484,9 @@
 
 <!-- ===== Source panel: Kenya Online Radio ===== -->
 <div class="source-panel" id="panel-kenya">
-  <div class="kenya-tabs" id="kenyaTabs">
-    <div class="kenya-tab" data-url="https://radio.co.ke/">DIR 01</div>
-    <div class="kenya-tab" data-url="https://radio.or.ke/">DIR 02</div>
-    <div class="kenya-tab" data-url="https://www.radiolive.ke/">DIR 03</div>
-  </div>
   <div class="kenya-frame-wrap" id="kenyaFrameWrap">
-    <div class="kenya-empty">Pick a directory above to load it here.</div>
+    <iframe src="https://www.radiolive.ke/" loading="lazy" referrerpolicy="no-referrer" title="Kenya Online Radio"></iframe>
   </div>
-  <a class="kenya-open-link" id="kenyaOpenLink" href="#" target="_blank" rel="noopener" style="display:none;">Not loading? Open directly in a new tab &rarr;</a>
 </div>
 
 <!-- ===== Source panel: BONGE Podcast (your uploaded content) ===== -->
@@ -658,19 +634,6 @@ function refreshAdminFab() {
   document.getElementById("adminFab").classList.toggle("show", isAdmin && activeSource === "podcast");
 }
 
-// ---------------- Kenya Online Radio: tap a directory to load it below ----------------
-const kenyaFrameWrap = document.getElementById("kenyaFrameWrap");
-const kenyaOpenLink = document.getElementById("kenyaOpenLink");
-document.querySelectorAll(".kenya-tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".kenya-tab").forEach(t => t.classList.remove("active"));
-    tab.classList.add("active");
-    const url = tab.dataset.url;
-    kenyaFrameWrap.innerHTML = `<iframe src="${url}" loading="lazy" referrerpolicy="no-referrer" title="${url}"></iframe>`;
-    kenyaOpenLink.href = url;
-    kenyaOpenLink.style.display = "block";
-  });
-});
 
 // ---------------- Source tab switching ----------------
 document.querySelectorAll(".source-tab").forEach(tab => {
