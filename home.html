@@ -1551,8 +1551,60 @@ body.viewer .toast {
     var vid = document.getElementById('splashVideoBg');
     if(vid){ vid.currentTime = 0; vid.play().catch(function(){}); }
   });
+
+  // ── SAFETY NET ──────────────────────────────────────────────
+  // The splash is normally dismissed by code later in the page
+  // (after Firebase/data setup finishes). That code lives deep
+  // inside a big module script — if anything in that module
+  // throws an error or the network is slow, the splash could be
+  // left on screen forever with nothing visible underneath.
+  // This independent timer guarantees the splash always clears,
+  // no matter what happens elsewhere on the page.
+  window.__bongeSplashRemoved = false;
+  window.__removeBongeSplash = function(){
+    if (window.__bongeSplashRemoved) return;
+    window.__bongeSplashRemoved = true;
+    var splash = document.getElementById('splashScreen');
+    if (splash){
+      var v = splash.querySelector('video');
+      if (v) { try { v.pause(); } catch(e){} }
+      splash.classList.add('fade-out');
+      setTimeout(function(){
+        splash.remove();
+        if (window.__showBikeFundPoster) window.__showBikeFundPoster();
+      }, 550);
+    }
+  };
+  setTimeout(window.__removeBongeSplash, 8000);
 })();
 </script>
+<script>
+function __bongeShowErrorBanner(msg){
+  try {
+    if (document.getElementById('bongeErrBanner')) return;
+    var b = document.createElement('div');
+    b.id = 'bongeErrBanner';
+    b.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#B00020;color:#fff;font:12px/1.4 monospace;padding:10px 12px;border-radius:8px;max-height:40vh;overflow:auto;white-space:pre-wrap;box-shadow:0 4px 16px rgba(0,0,0,.4);';
+    b.textContent = 'App error (please screenshot this): ' + msg;
+    document.body.appendChild(b);
+  } catch(e){}
+}
+window.addEventListener('error', function(ev){
+  // If a script error happens anywhere on the page, don't let it leave
+  // the user stuck behind the splash screen.
+  if (window.__removeBongeSplash) setTimeout(window.__removeBongeSplash, 300);
+  var msg = (ev && (ev.message || (ev.error && ev.error.message))) || 'unknown error';
+  var loc = ev && ev.filename ? (' @' + ev.filename.split('/').pop() + ':' + ev.lineno) : '';
+  __bongeShowErrorBanner(msg + loc);
+});
+window.addEventListener('unhandledrejection', function(ev){
+  if (window.__removeBongeSplash) setTimeout(window.__removeBongeSplash, 300);
+  var reason = ev && ev.reason;
+  var msg = (reason && (reason.message || String(reason))) || 'unknown rejection';
+  __bongeShowErrorBanner('Promise rejection: ' + msg);
+});
+</script>
+
 
 <!-- Header -->
 <div class="header">
