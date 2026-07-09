@@ -235,23 +235,28 @@
   .btn-tight{ flex:none; padding:9px 16px; font-size:13px; }
 
   /* ---------- Kenya Online Radio panel ---------- */
-  .kenya-list{ padding:16px 18px 0; display:flex; flex-direction:column; gap:10px; }
-  .kenya-station{
-    display:flex; align-items:center; gap:12px;
-    background:var(--panel); border:1px solid var(--panel-line);
-    border-radius:10px; padding:13px 14px;
-    text-decoration:none; color:var(--paper);
+  .kenya-tabs{
+    padding:14px 18px 0; display:flex; gap:8px;
   }
-  .kenya-station .ch{
-    font-family:var(--mono); font-size:11px; color:var(--brass); flex-shrink:0;
+  .kenya-tab{
+    flex:1; text-align:center; background:var(--panel); border:1px solid var(--panel-line);
+    border-radius:8px; padding:10px 8px; cursor:pointer;
+    font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--paper-dim);
+    letter-spacing:.03em; user-select:none;
   }
-  .kenya-name{ flex:1; font-size:13.5px; font-weight:600; }
-  .kenya-go{
-    font-family:var(--mono); font-size:11.5px; color:var(--brass-bright); flex-shrink:0;
+  .kenya-tab.active{ background:var(--brass-bright); border-color:var(--brass-bright); color:#fff; }
+  .kenya-frame-wrap{
+    margin:14px 18px 0; border:1px solid var(--panel-line); border-radius:10px;
+    overflow:hidden; background:var(--panel); height:60vh; min-height:360px; position:relative;
   }
-  .kenya-note{
-    padding:14px 18px 40px; font-family:var(--mono); font-size:11.5px;
-    color:var(--paper-dim); line-height:1.5;
+  .kenya-frame-wrap iframe{ width:100%; height:100%; border:none; display:block; }
+  .kenya-open-link{
+    display:block; text-align:center; padding:9px 0 0;
+    font-family:var(--mono); font-size:11px; color:var(--brass-bright); text-decoration:none;
+  }
+  .kenya-empty{
+    display:flex; align-items:center; justify-content:center; height:100%;
+    color:var(--paper-dim); font-size:13px; padding:0 20px; text-align:center;
   }
 
   /* ---------- Category chips ---------- */
@@ -440,17 +445,15 @@
 
 <div class="topbar">
   <div class="tb-left">
-    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='home.html';}" aria-label="Back">&larr;</button>
     <div class="tb-title-wrap">
       <div class="page-title">Bonge Radio</div>
-      <div class="page-sub">Music, podcast &amp; live stations</div>
     </div>
   </div>
 </div>
 
 <div class="dial-header">
   <h1 class="wordmark">Bonge <span>Radio</span></h1>
-  <div class="freq-line" id="freqLine">88.5 FM &middot; the stage, on demand</div>
 </div>
 
 <div class="source-tabs">
@@ -484,7 +487,7 @@
   </div>
 
   <div class="grid" id="ytGrid">
-    <div class="empty">Search above to pull in videos.</div>
+    <div class="empty">Loading videos&hellip;</div>
   </div>
 
   <div class="admin-inline" id="ytAdminBox" style="display:none;">
@@ -499,24 +502,15 @@
 
 <!-- ===== Source panel: Kenya Online Radio ===== -->
 <div class="source-panel" id="panel-kenya">
-  <div class="kenya-list">
-    <a class="kenya-station" href="https://radio.co.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 01</span>
-      <span class="kenya-name">Radio.co.ke — full Kenyan station directory</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
-    <a class="kenya-station" href="https://radio.or.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 02</span>
-      <span class="kenya-name">Radio.or.ke — all major stations</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
-    <a class="kenya-station" href="https://www.radiolive.ke/" target="_blank" rel="noopener">
-      <span class="ch">DIR 03</span>
-      <span class="kenya-name">RadioLive.ke — Classic 105, Jambo, NRG, Kass, Citizen</span>
-      <span class="kenya-go">Open &rarr;</span>
-    </a>
+  <div class="kenya-tabs" id="kenyaTabs">
+    <div class="kenya-tab" data-url="https://radio.co.ke/">DIR 01</div>
+    <div class="kenya-tab" data-url="https://radio.or.ke/">DIR 02</div>
+    <div class="kenya-tab" data-url="https://www.radiolive.ke/">DIR 03</div>
   </div>
-  <div class="kenya-note">These open the station's own live player in a new tab — direct stream links change often, so linking straight to the source is more reliable than embedding here.</div>
+  <div class="kenya-frame-wrap" id="kenyaFrameWrap">
+    <div class="kenya-empty">Pick a directory above to load it here.</div>
+  </div>
+  <a class="kenya-open-link" id="kenyaOpenLink" href="#" target="_blank" rel="noopener" style="display:none;">Not loading? Open directly in a new tab &rarr;</a>
 </div>
 
 <!-- ===== Source panel: BONGE Podcast (your uploaded content) ===== -->
@@ -636,6 +630,16 @@ let currentIndex = -1;
 let currentFilter = "all";
 let activeSource = "youtube";
 
+// ---------------- Background-playback bridge (Bonge shell) ----------------
+// When this page is loaded inside the app shell's iframe (the normal case
+// once the app is deployed with index.html as the shell), audio/YouTube
+// playback is handed off to the shell so it survives navigating to other
+// pages. When opened standalone (e.g. directly, outside the shell) it falls
+// back to fully local playback exactly as before.
+const inShell = window.parent && window.parent !== window;
+let shellAudioActive = false;   // true once the shell confirms it's playing our track queue
+let shellYtActive = false;      // true once the shell confirms it's playing our YouTube audio
+
 // ---------------- Auth: anonymous for public listeners, admin if ----------------
 // already signed in with the same email/password admin account used
 // elsewhere in the app (Firebase keeps that session across pages).
@@ -653,6 +657,20 @@ onAuthStateChanged(auth, async (user) => {
 function refreshAdminFab() {
   document.getElementById("adminFab").classList.toggle("show", isAdmin && activeSource === "podcast");
 }
+
+// ---------------- Kenya Online Radio: tap a directory to load it below ----------------
+const kenyaFrameWrap = document.getElementById("kenyaFrameWrap");
+const kenyaOpenLink = document.getElementById("kenyaOpenLink");
+document.querySelectorAll(".kenya-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".kenya-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const url = tab.dataset.url;
+    kenyaFrameWrap.innerHTML = `<iframe src="${url}" loading="lazy" referrerpolicy="no-referrer" title="${url}"></iframe>`;
+    kenyaOpenLink.href = url;
+    kenyaOpenLink.style.display = "block";
+  });
+});
 
 // ---------------- Source tab switching ----------------
 document.querySelectorAll(".source-tab").forEach(tab => {
@@ -725,6 +743,7 @@ function onYtStateChange(e) {
 function startYtProgressPolling() {
   stopYtProgressPolling();
   ytProgressInterval = setInterval(() => {
+    if (inShell && shellYtActive) return; // shell's status broadcast drives the UI instead
     if (!ytPlayer || !ytPlayer.getDuration) return;
     const duration = ytPlayer.getDuration();
     const current = ytPlayer.getCurrentTime();
@@ -738,6 +757,17 @@ function stopYtProgressPolling() {
 }
 
 function playYouTubeVideo(videoId, title, thumbUrl) {
+  lastYtVideoId = videoId;
+  lastYtTitle = title || "Untitled";
+  lastYtThumb = thumbUrl || "";
+
+  if (inShell && audioModeOn) {
+    window.parent.postMessage({
+      type: "bonge:playYtAudio", videoId, title: lastYtTitle, thumbUrl: lastYtThumb, startSeconds: 0
+    }, "*");
+    return;
+  }
+
   if (ytPlayerReady) {
     ytPlayer.loadVideoById(videoId);
   } else {
@@ -748,16 +778,37 @@ function playYouTubeVideo(videoId, title, thumbUrl) {
 }
 
 // ---------------- Audio-mode toggle ----------------
+// Audio mode is also the trigger for background playback: turning it on
+// while inside the shell hands the current video's audio off to the shell
+// (so it survives navigating away from this page); turning it off pulls
+// playback back to the visible local player.
 const ytModeToggle = document.getElementById("ytModeToggle");
+let lastYtVideoId = null, lastYtTitle = "", lastYtThumb = "";
+
 ytModeToggle.addEventListener("click", () => {
   audioModeOn = !audioModeOn;
   ytModeToggle.classList.toggle("on", audioModeOn);
   ytModeToggle.innerHTML = audioModeOn ? "&#128250; Show video" : "&#127911; Audio mode";
   document.getElementById("ytNow").classList.toggle("audio-mode", audioModeOn);
   document.getElementById("ytAudioBar").classList.toggle("show", audioModeOn);
+
+  if (!inShell) return;
+
+  if (audioModeOn && lastYtVideoId) {
+    const startAt = (ytPlayerReady && ytPlayer.getCurrentTime) ? ytPlayer.getCurrentTime() : 0;
+    if (ytPlayerReady) ytPlayer.pauseVideo();
+    window.parent.postMessage({
+      type: "bonge:playYtAudio",
+      videoId: lastYtVideoId, title: lastYtTitle, thumbUrl: lastYtThumb, startSeconds: startAt
+    }, "*");
+  } else if (!audioModeOn && shellYtActive) {
+    window.parent.postMessage({ type: "bonge:stopYt" }, "*");
+    shellYtActive = false;
+  }
 });
 
 document.getElementById("ytAudioPlay").addEventListener("click", () => {
+  if (inShell && shellYtActive) { window.parent.postMessage({ type: "bonge:toggleYt" }, "*"); return; }
   if (!ytPlayer || !ytPlayerReady) return;
   const state = ytPlayer.getPlayerState();
   if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
@@ -765,9 +816,10 @@ document.getElementById("ytAudioPlay").addEventListener("click", () => {
 });
 
 document.getElementById("ytAudioProgressWrap").addEventListener("click", (e) => {
-  if (!ytPlayer || !ytPlayerReady) return;
   const rect = e.currentTarget.getBoundingClientRect();
   const pct = (e.clientX - rect.left) / rect.width;
+  if (inShell && shellYtActive) { window.parent.postMessage({ type: "bonge:seekYt", pct }, "*"); return; }
+  if (!ytPlayer || !ytPlayerReady) return;
   const duration = ytPlayer.getDuration();
   if (duration > 0) ytPlayer.seekTo(pct * duration, true);
 });
@@ -836,6 +888,24 @@ document.getElementById("ytDefaultSetBtn").addEventListener("click", async () =>
   }
 });
 
+// Falls back to one of these at random when no admin default is set, so the
+// tab never opens blank waiting for a manual search.
+const RANDOM_YT_QUERIES = [
+  "kenyan gospel music",
+  "matatu culture kenya",
+  "boda boda safety tips kenya",
+  "kenyan afrobeat hits",
+  "genge kenya music",
+  "bongo flava hits",
+  "kenya news today",
+  "benga music kenya",
+  "kenyan comedy skits",
+  "nairobi music mix"
+];
+function randomYtQuery() {
+  return RANDOM_YT_QUERIES[Math.floor(Math.random() * RANDOM_YT_QUERIES.length)];
+}
+
 async function loadYouTubeDefault() {
   try {
     const snap = await getDoc(doc(db, "tracker", "radioSettings"));
@@ -844,9 +914,16 @@ async function loadYouTubeDefault() {
       document.getElementById("ytSearchInput").value = defaultQuery;
       document.getElementById("ytDefaultInput").value = defaultQuery;
       searchYouTube(defaultQuery);
+    } else {
+      const q = randomYtQuery();
+      document.getElementById("ytSearchInput").value = q;
+      searchYouTube(q);
     }
   } catch (e) {
     console.warn("Couldn't load default YouTube search", e);
+    const q = randomYtQuery();
+    document.getElementById("ytSearchInput").value = q;
+    searchYouTube(q);
   }
 }
 
@@ -943,10 +1020,57 @@ const pPlay = document.getElementById("pPlay");
 const progressFill = document.getElementById("progressFill");
 const progressWrap = document.getElementById("progressWrap");
 
+if (inShell) {
+  window.addEventListener("message", (e) => {
+    const msg = e.data;
+    if (!msg || typeof msg !== "object") return;
+    if (msg.type === "bonge:audioStatus") {
+      shellAudioActive = msg.active;
+      if (msg.active) {
+        pPlay.innerHTML = msg.playing ? "&#10073;&#10073;" : "&#9654;";
+        if (msg.track) {
+          pTitle.textContent = msg.track.title || "Untitled";
+          pSub.textContent = `${(msg.track.type || 'music').toUpperCase()} · ${msg.track.category || ''}`;
+          pCover.style.backgroundImage = msg.track.coverUrl ? `url('${msg.track.coverUrl}')` : "none";
+          playerEl.classList.add("show");
+          const matchIdx = tracks.findIndex(t => t.id === msg.track.id);
+          if (matchIdx !== -1 && matchIdx !== currentIndex) {
+            currentIndex = matchIdx;
+            renderGrid();
+          }
+        }
+        if (msg.duration) progressFill.style.width = `${(msg.currentTime / msg.duration) * 100}%`;
+        if ("mediaSession" in navigator) navigator.mediaSession.playbackState = msg.playing ? "playing" : "paused";
+      }
+    } else if (msg.type === "bonge:ytStatus") {
+      shellYtActive = msg.active;
+      if (msg.active) {
+        document.getElementById("ytAudioPlay").innerHTML = msg.playing ? "&#10073;&#10073;" : "&#9654;";
+        document.getElementById("ytAudioTitle").textContent = msg.title || "Untitled";
+        document.getElementById("ytAudioThumb").style.backgroundImage = msg.thumbUrl ? `url('${msg.thumbUrl}')` : "none";
+        if (msg.duration) document.getElementById("ytAudioProgressFill").style.width = `${(msg.currentTime / msg.duration) * 100}%`;
+      }
+    }
+  });
+  window.parent.postMessage({ type: "bonge:requestStatus" }, "*");
+}
+
 function playTrack(index) {
   const t = tracks[index];
   if (!t) return;
   currentIndex = index;
+
+  updateDoc(doc(db, "radioTracks", t.id), { playCount: increment(1) }).catch(() => {});
+
+  if (inShell) {
+    // Hand off the whole filtered-aware queue to the shell so next/prev
+    // there works the same way; the shell then owns actual playback and
+    // reports status back via postMessage, which updates this page's UI.
+    window.parent.postMessage({ type: "bonge:playTrack", queue: tracks, index }, "*");
+    renderGrid();
+    return;
+  }
+
   audioEl.src = t.storageUrl;
   audioEl.play().catch(err => console.warn("Playback blocked until user gesture:", err));
 
@@ -955,8 +1079,6 @@ function playTrack(index) {
   pCover.style.backgroundImage = t.coverUrl ? `url('${t.coverUrl}')` : "none";
   playerEl.classList.add("show");
   renderGrid();
-
-  updateDoc(doc(db, "radioTracks", t.id), { playCount: increment(1) }).catch(() => {});
 
   if ("mediaSession" in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -973,12 +1095,14 @@ function playTrack(index) {
 }
 
 function playPrev() {
+  if (inShell && shellAudioActive) { window.parent.postMessage({ type: "bonge:prevTrack" }, "*"); return; }
   const filtered = tracks.filter(t => currentFilter === "all" || t.type === currentFilter);
   const currIdxInFiltered = filtered.findIndex(t => t.id === tracks[currentIndex]?.id);
   const prev = filtered[currIdxInFiltered - 1] || filtered[filtered.length - 1];
   if (prev) playTrack(tracks.indexOf(prev));
 }
 function playNext() {
+  if (inShell && shellAudioActive) { window.parent.postMessage({ type: "bonge:nextTrack" }, "*"); return; }
   const filtered = tracks.filter(t => currentFilter === "all" || t.type === currentFilter);
   const currIdxInFiltered = filtered.findIndex(t => t.id === tracks[currentIndex]?.id);
   const next = filtered[currIdxInFiltered + 1] || filtered[0];
@@ -988,6 +1112,7 @@ function playNext() {
 document.getElementById("pPrev").addEventListener("click", playPrev);
 document.getElementById("pNext").addEventListener("click", playNext);
 pPlay.addEventListener("click", () => {
+  if (inShell && shellAudioActive) { window.parent.postMessage({ type: "bonge:toggleTrack" }, "*"); return; }
   if (audioEl.paused) audioEl.play(); else audioEl.pause();
 });
 audioEl.addEventListener("play", () => { pPlay.innerHTML = "&#10073;&#10073;"; if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; });
@@ -1000,6 +1125,7 @@ audioEl.addEventListener("timeupdate", () => {
 progressWrap.addEventListener("click", (e) => {
   const rect = progressWrap.getBoundingClientRect();
   const pct = (e.clientX - rect.left) / rect.width;
+  if (inShell && shellAudioActive) { window.parent.postMessage({ type: "bonge:seekTrack", pct }, "*"); return; }
   if (audioEl.duration) audioEl.currentTime = pct * audioEl.duration;
 });
 
