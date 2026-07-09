@@ -53,6 +53,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 
 .edit-row{padding:14px 16px 0;display:none;}
 .edit-row.show{display:block;}
+.edit-row-inner{display:flex;gap:8px;}
+.edit-row-inner .edit-btn{flex:1;}
+.inbox-btn{flex:1;padding:11px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;text-align:center;display:block;}
 .edit-btn{width:100%;padding:11px;background:var(--card2);border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
 
 /* ── SECTIONS ── */
@@ -151,7 +154,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 </div>
 
 <div class="edit-row" id="editRow">
-  <button class="edit-btn" onclick="openEditModal()">&#9998; Edit Contact Details</button>
+  <div class="edit-row-inner">
+    <button class="edit-btn" onclick="openEditModal()">&#9998; Edit Contact Details</button>
+    <a class="inbox-btn" href="messages.html" target="_blank" rel="noopener">&#128233; View Messages</a>
+  </div>
 </div>
 
 <div class="loading-msg" id="loadingMsg"><span class="brand-spinner-lg"></span>Loading contact info&hellip;</div>

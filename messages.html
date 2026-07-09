@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Messages — Bonge Riders</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F2F3F6;
+  --border: #E2E5EC;
+  --text: #111827;
+  --muted: #6B7280;
+  --dim: #9CA3AF;
+  --amber: #CC1818;
+  --amber2: #E02020;
+  --amber-bg: rgba(204,24,24,0.10);
+  --green: #065F46;
+  --green2: #059669;
+  --green-bg: rgba(5,150,105,0.10);
+  --red: #CC1818;
+  --red2: #E02020;
+  --red-dark: #A01212;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:60px;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:13px 16px;gap:10px;}
+.tb-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.back-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:18px;text-decoration:none;flex-shrink:0;cursor:pointer;}
+.tb-title-wrap{min-width:0;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.page-sub{font-size:10.5px;color:var(--muted);font-weight:500;}
+.admin-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 12px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;flex-shrink:0;}
+.admin-pill.on{color:var(--green2);border-color:rgba(5,150,105,.35);background:var(--green-bg);}
+.admin-pill svg{width:14px;height:14px;flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{padding:20px 16px 4px;text-align:center;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber2);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:23px;line-height:1.2;margin:6px 0 6px;}
+.hero .sub{color:var(--muted);font-size:13px;line-height:1.5;max-width:420px;margin:0 auto;}
+
+/* ── LOCKED STATE ── */
+.locked-wrap{text-align:center;padding:70px 24px;}
+.locked-wrap .big{font-size:38px;display:block;margin-bottom:14px;}
+.locked-wrap p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:20px;}
+.locked-btn{padding:12px 26px;background:var(--red-dark);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ── MESSAGE LIST ── */
+.msg-wrap{padding:16px 16px 0;display:flex;flex-direction:column;gap:12px;}
+.m-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;}
+.m-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.m-avatar{width:36px;height:36px;border-radius:50%;background:var(--amber-bg);color:var(--amber2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.m-who{flex:1;min-width:0;}
+.m-name{font-size:14px;font-weight:700;}
+.m-time{font-size:10.5px;color:var(--dim);}
+.m-actions{display:flex;gap:8px;flex-shrink:0;}
+.m-icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;border:none;cursor:pointer;}
+.m-icon-btn.call{background:var(--green-bg);color:var(--green2);}
+.m-icon-btn.wa{background:rgba(37,211,102,.12);color:#22b356;}
+.m-icon-btn.del{background:var(--amber-bg);color:var(--amber2);}
+.m-icon-btn svg{width:15px;height:15px;}
+.m-phone{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:8px;}
+.m-text{font-size:13.5px;color:var(--text);line-height:1.55;white-space:pre-wrap;}
+
+.empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:60px 20px;line-height:1.8;}
+.empty-msg .big{font-size:34px;display:block;margin-bottom:8px;}
+.loading-msg{text-align:center;color:var(--muted);font-size:13px;padding:50px 0;}
+@keyframes brandspin{to{transform:rotate(360deg);}}
+.brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--amber2);border-radius:50%;animation:brandspin .7s linear infinite;}
+
+/* ── MODAL ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px 32px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;text-align:center;}
+.mfield{margin-bottom:14px;}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+.mfield input{width:100%;padding:11px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.mfield input:focus{border-color:var(--amber);}
+.merr{color:var(--red);font-size:12px;font-weight:600;display:none;margin-bottom:10px;}
+.merr.show{display:block;}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.mbtn{flex:1;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.mbtn.cancel{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.mbtn.save{background:var(--red-dark);color:#fff;}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1E1E1E;color:#fff;border:1px solid #333;border-radius:24px;padding:10px 20px;font-size:13px;font-weight:600;z-index:999;transition:transform .25s ease;white-space:nowrap;pointer-events:none;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="if(document.referrer){history.back();}else{location.href='index.html';}" aria-label="Back">&larr;</button>
+    <div class="tb-title-wrap">
+      <div class="page-title">Messages</div>
+      <div class="page-sub">Bonge Riders — Admin Only</div>
+    </div>
+  </div>
+  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span id="adminPillLabel">Admin</span>
+  </button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Contact Inbox</div>
+  <h1>Messages from Members</h1>
+  <p class="sub">Everything submitted through the Contact page form.</p>
+</div>
+
+<div class="locked-wrap" id="lockedWrap">
+  <span class="big">&#128274;</span>
+  <p>Sign in as super admin to view messages sent through the Contact page.</p>
+  <button class="locked-btn" onclick="openLoginModal()">Admin Sign In</button>
+</div>
+
+<div class="loading-msg" id="loadingMsg" style="display:none;"><span class="brand-spinner-lg"></span>Loading messages&hellip;</div>
+
+<div class="msg-wrap" id="msgWrap" style="display:none;"></div>
+<div class="empty-msg" id="emptyMsg" style="display:none;">
+  <span class="big">&#128233;</span>
+  No messages yet.
+</div>
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Admin Login</div>
+    <div class="mfield">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="mfield">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
+    </div>
+    <p class="merr" id="loginErr">Incorrect email or password.</p>
+    <div class="modal-btns">
+      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, doc, getDoc, collection,
+         deleteDoc, onSnapshot, query, orderBy }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAw6a_VeGF76_Flua_zhECEQGRqMdGx2xo",
+  authDomain: "bonge-96f37.firebaseapp.com",
+  projectId: "bonge-96f37",
+  storageBucket: "bonge-96f37.firebasestorage.app",
+  messagingSenderId: "641310472447",
+  appId: "1:641310472447:web:2bd335fd022c5aedb2b4ca",
+  measurementId: "G-VWL91EJW1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+const auth = getAuth(app);
+
+let isSuperAdmin = false;
+let _adminList = [];
+let MESSAGES = [];
+let msgUnsub = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (user && !user.isAnonymous) {
+    try {
+      const snap = await getDoc(doc(db, 'tracker', 'admins'));
+      _adminList = (snap.exists() && snap.data().list) ? snap.data().list : [];
+    } catch(e) { _adminList = []; }
+    const email = (user.email || '').toLowerCase();
+    const rec = _adminList.find(a => a.email === email);
+    isSuperAdmin = _adminList.length === 0 || (!!rec && rec.isSuperAdmin);
+    if (isSuperAdmin) {
+      setAdminUI(true);
+      showToast('Signed in as ' + user.email);
+    } else {
+      showToast('Super-admin access required to view messages');
+      await signOut(auth);
+    }
+  } else if (user && user.isAnonymous) {
+    setAdminUI(false);
+  } else {
+    try { await signInAnonymously(auth); } catch(e) { console.error(e); }
+  }
+});
+
+function setAdminUI(on) {
+  isSuperAdmin = on;
+  document.getElementById('adminPill').classList.toggle('on', on);
+  document.getElementById('lockedWrap').style.display = on ? 'none' : 'block';
+  if (on) {
+    startMessagesListener();
+  } else {
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('msgWrap').style.display = 'none';
+    document.getElementById('emptyMsg').style.display = 'none';
+    if (msgUnsub) { msgUnsub(); msgUnsub = null; }
+  }
+}
+
+window.handleAdminPillClick = function() {
+  if (isSuperAdmin) {
+    if (confirm('Sign out of admin mode?')) { signOut(auth); }
+  } else {
+    openLoginModal();
+  }
+};
+window.openLoginModal = function() {
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPw').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginModal').classList.add('open');
+  setTimeout(() => document.getElementById('loginEmail').focus(), 250);
+};
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('open');
+};
+window.confirmLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+    closeLoginModal();
+  } catch(e) {
+    errEl.textContent = 'Incorrect email or password.';
+    errEl.classList.add('show');
+  } finally {
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+};
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function initials(name) {
+  const parts = String(name || '?').trim().split(/\s+/);
+  return ((parts[0][0] || '?') + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+function telHref(phone) {
+  return 'tel:' + String(phone || '').replace(/[^\d+]/g, '');
+}
+function waHref(phone) {
+  let p = String(phone || '').replace(/[^\d]/g, '');
+  if (p.startsWith('0')) p = '254' + p.slice(1);
+  return 'https://wa.me/' + p;
+}
+function timeAgo(ts) {
+  if (!ts || !ts.toDate) return '';
+  const diffMs = Date.now() - ts.toDate().getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return days + 'd ago';
+  return ts.toDate().toLocaleDateString();
+}
+
+function startMessagesListener() {
+  if (msgUnsub) return;
+  document.getElementById('loadingMsg').style.display = 'block';
+  const q = query(collection(db, 'contactMessages'), orderBy('createdAt', 'desc'));
+  msgUnsub = onSnapshot(q, (snap) => {
+    MESSAGES = [];
+    snap.forEach(d => MESSAGES.push({ id: d.id, ...d.data() }));
+    document.getElementById('loadingMsg').style.display = 'none';
+    renderMessages();
+  }, (err) => {
+    console.error('messages load error:', err);
+    document.getElementById('loadingMsg').textContent = 'Could not load messages. Check your connection.';
+  });
+}
+
+function renderMessages() {
+  const wrap = document.getElementById('msgWrap');
+  const empty = document.getElementById('emptyMsg');
+  if (!MESSAGES.length) {
+    wrap.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  wrap.style.display = 'flex';
+  wrap.innerHTML = MESSAGES.map(m => {
+    const name = m.name && m.name.trim() ? m.name.trim() : 'Anonymous';
+    return `
+    <div class="m-card">
+      <div class="m-top">
+        <div class="m-avatar">${escHtml(initials(name))}</div>
+        <div class="m-who">
+          <div class="m-name">${escHtml(name)}</div>
+          <div class="m-time">${timeAgo(m.createdAt)}</div>
+        </div>
+        <div class="m-actions">
+          ${m.phone ? `<a class="m-icon-btn call" href="${telHref(m.phone)}" aria-label="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>` : ''}
+          ${m.phone ? `<a class="m-icon-btn wa" href="${waHref(m.phone)}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.78 14.02c-.24.68-1.4 1.3-1.93 1.35-.49.05-.98.24-3.32-.69-2.83-1.13-4.63-4-4.77-4.19-.14-.19-1.14-1.52-1.14-2.9s.72-2.06.98-2.34c.26-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.24.58.8 2 .87 2.14.07.14.11.3.02.48-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.35Z"/></svg></a>` : ''}
+          <button class="m-icon-btn del" onclick="deleteMessage('${m.id}')" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+        </div>
+      </div>
+      ${m.phone ? `<div class="m-phone">${escHtml(m.phone)}</div>` : ''}
+      <div class="m-text">${escHtml(m.message)}</div>
+    </div>`;
+  }).join('');
+}
+
+window.deleteMessage = async function(id) {
+  if (!confirm('Delete this message? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db, 'contactMessages', id));
+    showToast('Message deleted');
+  } catch(e) {
+    showToast('Could not delete. Try again.');
+  }
+};
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+window.showToast = showToast;
+</script>
+
+<script>
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if (el.matches && el.matches('input, textarea')) {
+    setTimeout(function(){ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300);
+  }
+});
+</script>
+</body>
+</html>
