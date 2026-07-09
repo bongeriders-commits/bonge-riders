@@ -680,7 +680,15 @@ let ytPendingVideoId = null;
 let audioModeOn = false;
 let ytProgressInterval = null;
 
-window.onYouTubeIframeAPIReady = function () {
+// The IFrame API script (loaded via a plain <script src> tag above) can
+// finish loading and call window.onYouTubeIframeAPIReady() BEFORE this
+// module script runs — module scripts are deferred until after the page
+// finishes parsing, but the classic <script src> tag isn't. If that
+// happens, defining the callback here is too late and it's never called,
+// so the player never gets created and tapping a video does nothing.
+// Handle both orders: init immediately if YT is already loaded, otherwise
+// wait for the callback.
+function initYtPlayer() {
   ytPlayer = new YT.Player("ytPlayerHost", {
     height: "100%",
     width: "100%",
@@ -696,7 +704,12 @@ window.onYouTubeIframeAPIReady = function () {
       onStateChange: onYtStateChange
     }
   });
-};
+}
+if (window.YT && window.YT.Player) {
+  initYtPlayer();
+} else {
+  window.onYouTubeIframeAPIReady = initYtPlayer;
+}
 
 function onYtStateChange(e) {
   const playBtn = document.getElementById("ytAudioPlay");
