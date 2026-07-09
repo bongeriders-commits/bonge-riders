@@ -63,14 +63,14 @@
     font-family:var(--body);
     -webkit-tap-highlight-color:transparent;
   }
-  body{ max-width:600px; margin:0 auto; }
+  body{ max-width:600px; margin:0 auto; display:flex; flex-direction:column; min-height:100%; }
 
   /* ---------- Top bar (matches rest of app) ---------- */
   .topbar{
     position:sticky; top:0; z-index:100;
     background:var(--bg2); border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
-    padding:13px 16px; gap:10px;
+    padding:13px 16px; gap:10px; flex-shrink:0;
   }
   .tb-left{ display:flex; align-items:center; gap:10px; min-width:0; }
   .back-btn{
@@ -90,7 +90,7 @@
     padding:22px 18px 16px;
     background:var(--bg2);
     border-bottom:1px solid var(--border);
-    overflow:hidden;
+    overflow:hidden; flex-shrink:0;
   }
   .dial-header::after{
     content:"";
@@ -125,7 +125,7 @@
     display:flex;
     border-bottom:1px solid var(--panel-line);
     background:var(--ink);
-    position:sticky; top:0; z-index:30;
+    position:sticky; top:0; z-index:30; flex-shrink:0;
   }
   .source-tab{
     flex:1;
@@ -148,7 +148,21 @@
   .source-panel.show{ display:block; }
 
   /* ---------- YouTube panel ---------- */
-  .yt-mode-row{ position:relative; }
+  #panel-youtube.show{
+    display:flex; flex-direction:column; flex:1; min-height:0;
+  }
+  .yt-mode-row{ position:relative; flex-shrink:0; }
+  .yt-search-row{ flex-shrink:0; }
+  .yt-top-row{ flex-shrink:0; display:flex; padding:12px 18px 0; }
+  .yt-refresh-icon-btn{
+    display:flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:8px;
+    border:1px solid var(--panel-line); background:var(--panel); color:var(--paper);
+    cursor:pointer; padding:0;
+  }
+  .yt-scroll-area{
+    flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
   .yt-now{ padding:16px 18px 0; }
   .yt-now:empty{ display:none; }
   .yt-now.audio-mode{
@@ -195,16 +209,37 @@
     background:var(--brass); border-radius:2px; width:0%;
   }
   .yt-search-row{
-    display:flex; gap:8px; padding:14px 18px 4px;
+    display:flex; align-items:center; gap:8px; padding:14px 18px 4px;
   }
-  .yt-search-row input{
-    flex:1; padding:10px 12px; border-radius:8px;
+  .yt-search-icon-btn{
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:38px; height:38px; border-radius:8px;
     border:1px solid var(--panel-line); background:var(--panel); color:var(--paper);
-    font-size:13.5px;
+    cursor:pointer; padding:0;
+  }
+  .yt-search-icon-btn.on{ border-color:var(--brass); color:var(--brass-bright); }
+  .yt-search-expand{
+    display:none; flex:1; align-items:center; gap:6px;
+    border:1px solid var(--panel-line); border-radius:8px;
+    background:var(--panel); padding:0 4px 0 12px;
+  }
+  .yt-search-expand.show{ display:flex; }
+  .yt-search-expand input{
+    flex:1; border:0; background:transparent; color:var(--paper);
+    font-size:13.5px; padding:10px 0; min-width:0;
+  }
+  .yt-search-expand input:focus{ outline:none; }
+  .yt-search-go{
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:32px; height:32px; border-radius:6px; border:none;
+    background:var(--amber2); color:#fff; cursor:pointer; padding:0;
   }
   .yt-card{
     background:var(--panel); border:1px solid var(--panel-line);
     border-radius:10px; overflow:hidden; cursor:pointer;
+  }
+  .yt-card.active{
+    border-color:var(--brass); box-shadow:0 0 0 1px var(--brass);
   }
   .yt-card .thumb{
     width:100%; aspect-ratio:16/9; background:#000 center/cover no-repeat;
@@ -235,11 +270,15 @@
   .btn-tight{ flex:none; padding:9px 16px; font-size:13px; }
 
   /* ---------- Kenya Online Radio panel ---------- */
+  #panel-kenya.show{
+    display:flex; flex-direction:column; flex:1; min-height:0;
+  }
   .kenya-embed-wrap{
-    padding:16px 18px 40px;
+    padding:16px 18px; flex:1; display:flex; min-height:0;
   }
   .kenya-embed{
-    width:100%; height:400px; border:1px solid var(--panel-line);
+    width:100%; height:auto; flex:1; min-height:300px;
+    border:1px solid var(--panel-line);
     border-radius:10px; background:#000;
   }
   .kenya-embed-fallback{
@@ -477,10 +516,6 @@
   </div>
 </div>
 
-<div class="dial-header">
-  <h1 class="wordmark">Bonge <span>Radio</span></h1>
-</div>
-
 <div class="source-tabs">
   <button class="source-tab active" data-source="youtube">YouTube</button>
   <button class="source-tab" data-source="kenya">Kenya Online Radio</button>
@@ -489,6 +524,12 @@
 
 <!-- ===== Source panel: YouTube ===== -->
 <div class="source-panel show" id="panel-youtube">
+  <div class="yt-top-row">
+    <button class="yt-refresh-icon-btn" id="ytShuffleBtn" title="Load a fresh set of videos" aria-label="Refresh">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+    </button>
+  </div>
+
   <div class="yt-mode-row">
     <div class="yt-now" id="ytNow">
       <div class="yt-frame"><div id="ytPlayerHost"></div></div>
@@ -507,21 +548,29 @@
   </div>
 
   <div class="yt-search-row">
-    <input type="text" id="ytSearchInput" placeholder="Search YouTube — e.g. boda boda safety kenya">
-    <button class="btn btn-primary btn-tight" id="ytSearchBtn">Search</button>
-    <button class="btn btn-tight" id="ytShuffleBtn" title="Load a fresh set of videos">&#8635; Refresh</button>
+    <button class="yt-search-icon-btn" id="ytSearchIconBtn" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </button>
+    <div class="yt-search-expand" id="ytSearchExpand">
+      <input type="text" id="ytSearchInput" placeholder="Search YouTube — e.g. boda boda safety kenya">
+      <button class="yt-search-go" id="ytSearchBtn" aria-label="Start search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
   </div>
 
-  <div class="grid" id="ytGrid">
-    <div class="empty">Loading videos&hellip;</div>
-  </div>
+  <div class="yt-scroll-area" id="ytScrollArea">
+    <div class="grid" id="ytGrid">
+      <div class="empty">Loading videos&hellip;</div>
+    </div>
 
-  <div class="admin-inline" id="ytAdminBox" style="display:none;">
-    <label>Default search when the tab opens</label>
-    <div class="admin-inline-row">
-      <input type="text" id="ytDefaultInput" placeholder="e.g. matatu culture kenya">
+    <div class="admin-inline" id="ytAdminBox" style="display:none;">
+      <label>Default search when the tab opens</label>
+      <div class="admin-inline-row">
+        <input type="text" id="ytDefaultInput" placeholder="e.g. matatu culture kenya">
 
-      <button class="btn btn-primary btn-tight" id="ytDefaultSetBtn">Save</button>
+        <button class="btn btn-primary btn-tight" id="ytDefaultSetBtn">Save</button>
+      </div>
     </div>
   </div>
 </div>
@@ -723,6 +772,8 @@ let ytPlayerReady = false;
 let ytPendingVideoId = null;
 let audioModeOn = false;
 let ytProgressInterval = null;
+let ytQueue = [];       // current grid's video list, so "next" knows what follows
+let ytQueueIndex = -1;  // index of the video currently loaded from the grid
 
 // The IFrame API script (loaded via a plain <script src> tag above) can
 // finish loading and call window.onYouTubeIframeAPIReady() BEFORE this
@@ -755,6 +806,29 @@ if (window.YT && window.YT.Player) {
   window.onYouTubeIframeAPIReady = initYtPlayer;
 }
 
+// When the viewer taps the native YouTube fullscreen button, the browser
+// puts the .yt-frame (which contains the player iframe) into fullscreen.
+// Force landscape while fullscreen so the video fills the screen properly,
+// even on phones that have auto-rotate turned off.
+function bindYtFullscreenOrientation() {
+  const frame = document.querySelector(".yt-frame");
+  if (!frame) return;
+  function onFsChange() {
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement ||
+                 document.mozFullScreenElement || document.msFullscreenElement;
+    if (fsEl && frame.contains(fsEl)) {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch(() => {});
+      }
+    } else if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch (e) {}
+    }
+  }
+  ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"]
+    .forEach(evt => document.addEventListener(evt, onFsChange));
+}
+bindYtFullscreenOrientation();
+
 function onYtStateChange(e) {
   const playBtn = document.getElementById("ytAudioPlay");
   if (e.data === YT.PlayerState.PLAYING) {
@@ -762,7 +836,10 @@ function onYtStateChange(e) {
     startYtProgressPolling();
   } else {
     playBtn.innerHTML = "&#9654;";
-    if (e.data === YT.PlayerState.ENDED) stopYtProgressPolling();
+    if (e.data === YT.PlayerState.ENDED) {
+      stopYtProgressPolling();
+      playYtQueueIndex(ytQueueIndex + 1);
+    }
   }
 }
 
@@ -789,6 +866,23 @@ function playYouTubeVideo(videoId, title, thumbUrl) {
   }
   document.getElementById("ytAudioTitle").textContent = title || "Untitled";
   document.getElementById("ytAudioThumb").style.backgroundImage = thumbUrl ? `url('${thumbUrl}')` : "none";
+}
+
+// Plays the video at the given position in the current grid (ytQueue),
+// wrapping back to the start once the last one finishes, and highlights
+// the matching card so it's clear what's currently playing.
+function playYtQueueIndex(index) {
+  if (!ytQueue.length) return;
+  if (index < 0) index = 0;
+  if (index >= ytQueue.length) index = 0; // loop back to the top of the grid
+  ytQueueIndex = index;
+  const item = ytQueue[index];
+  playYouTubeVideo(item.id.videoId, item.snippet.title, item.snippet.thumbnails.medium.url);
+
+  const grid = document.getElementById("ytGrid");
+  grid.querySelectorAll(".yt-card").forEach(card => {
+    card.classList.toggle("active", card.dataset.id === item.id.videoId);
+  });
 }
 
 // ---------------- Audio-mode toggle ----------------
@@ -850,21 +944,39 @@ async function searchYouTube(queryText, isRandom) {
       </div>
     `).join("");
 
-    grid.querySelectorAll(".yt-card").forEach(card => {
+    grid.querySelectorAll(".yt-card").forEach((card, idx) => {
       card.addEventListener("click", () => {
-        playYouTubeVideo(card.dataset.id, card.dataset.title, card.dataset.thumb);
+        playYtQueueIndex(idx);
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     });
+
+    // This grid becomes the playback queue — load the first video
+    // automatically so the tab never opens with an empty player, and
+    // "next" (auto-advance on end) walks through this same list.
+    ytQueue = data.items;
+    playYtQueueIndex(0);
   } catch (e) {
     console.error(e);
     grid.innerHTML = `<div class="empty">Couldn't reach YouTube — check the API key and quota.</div>`;
   }
 }
 
+const ytSearchIconBtn = document.getElementById("ytSearchIconBtn");
+const ytSearchExpand = document.getElementById("ytSearchExpand");
+ytSearchIconBtn.addEventListener("click", () => {
+  const opening = !ytSearchExpand.classList.contains("show");
+  ytSearchExpand.classList.toggle("show", opening);
+  ytSearchIconBtn.classList.toggle("on", opening);
+  if (opening) document.getElementById("ytSearchInput").focus();
+});
 document.getElementById("ytSearchBtn").addEventListener("click", () => {
   const q = document.getElementById("ytSearchInput").value.trim();
-  if (q) searchYouTube(q);
+  if (q) {
+    searchYouTube(q);
+    ytSearchExpand.classList.remove("show");
+    ytSearchIconBtn.classList.remove("on");
+  }
 });
 document.getElementById("ytSearchInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") document.getElementById("ytSearchBtn").click();
