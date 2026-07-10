@@ -177,10 +177,7 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
 </head>
 <body>
 
-<header>
-  <button class="back-btn" onclick="goBack()">‹</button>
-  <img src="icon-192.png" alt="Bonge Riders" class="topbar-logo">
-  <h1>News</h1>
+<div style="display:flex;justify-content:flex-end;padding:12px 16px 0;">
   <div class="menu-wrap">
     <button class="kebab-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="More options">⋮</button>
     <div class="menu-dropdown" id="menuDropdown">
@@ -189,7 +186,7 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
       </button>
     </div>
   </div>
-</header>
+</div>
 
 <div class="tabs" id="tabs">
   <button class="tab active" data-cat="all" onclick="setCategory('all')">All</button>
@@ -230,9 +227,6 @@ let currentCategory = 'all';
 let allArticles = []; // {title, link, date, source, cat, img}
 let sourceStatus = {}; // id -> 'ok' | 'error' | 'loading'
 
-function goBack(){
-  if (document.referrer) history.back(); else location.href = 'index.html';
-}
 
 function toggleMenu(e){
   if (e) e.stopPropagation();
