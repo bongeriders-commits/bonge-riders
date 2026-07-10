@@ -6143,5 +6143,203 @@ function renderFuelPrices(d) {
   });
 })();
 </script>
+
+<!-- ===== Bonge Riders Help Assistant (floating chat widget) ===== -->
+<style>
+  #bngHelpBubble {
+    position: fixed;
+    right: 18px;
+    bottom: 90px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff7a18, #af2d2d);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    cursor: pointer;
+    z-index: 9998;
+    border: none;
+  }
+  #bngHelpPanel {
+    position: fixed;
+    right: 18px;
+    bottom: 156px;
+    width: min(340px, calc(100vw - 32px));
+    height: min(460px, calc(100vh - 220px));
+    background: #161616;
+    border: 1px solid #333;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    font-family: inherit;
+  }
+  #bngHelpPanel.open { display: flex; }
+  #bngHelpHeader {
+    background: linear-gradient(135deg, #ff7a18, #af2d2d);
+    color: #fff;
+    padding: 12px 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #bngHelpClose {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  #bngHelpMessages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .bngMsg {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+  }
+  .bngMsg.user {
+    align-self: flex-end;
+    background: #ff7a18;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .bngMsg.bot {
+    align-self: flex-start;
+    background: #262626;
+    color: #eee;
+    border-bottom-left-radius: 4px;
+  }
+  .bngMsg.typing { opacity: 0.6; font-style: italic; }
+  #bngHelpInputRow {
+    display: flex;
+    border-top: 1px solid #333;
+    padding: 8px;
+    gap: 8px;
+  }
+  #bngHelpInput {
+    flex: 1;
+    background: #222;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 14px;
+    resize: none;
+  }
+  #bngHelpSend {
+    background: #ff7a18;
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #bngHelpSend:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<button id="bngHelpBubble" aria-label="Open help assistant" onclick="bngToggleHelp()">💬</button>
+
+<div id="bngHelpPanel">
+  <div id="bngHelpHeader">
+    <span>Bonge Riders Help</span>
+    <button id="bngHelpClose" aria-label="Close" onclick="bngToggleHelp()">×</button>
+  </div>
+  <div id="bngHelpMessages"></div>
+  <div id="bngHelpInputRow">
+    <textarea id="bngHelpInput" rows="1" placeholder="Ask a question…"></textarea>
+    <button id="bngHelpSend" onclick="bngSendHelp()">Send</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var bngHistory = [];
+  var bngOpened = false;
+
+  window.bngToggleHelp = function () {
+    var panel = document.getElementById('bngHelpPanel');
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open') && !bngOpened) {
+      bngOpened = true;
+      bngAddMessage('bot', "Hi! I'm the Bonge Riders Help Assistant. Ask me anything about registration, contributions, welfare benefits, or how the app works.");
+    }
+  };
+
+  function bngAddMessage(role, text) {
+    var wrap = document.getElementById('bngHelpMessages');
+    var div = document.createElement('div');
+    div.className = 'bngMsg ' + (role === 'user' ? 'user' : 'bot');
+    div.textContent = text;
+    wrap.appendChild(div);
+    wrap.scrollTop = wrap.scrollHeight;
+    return div;
+  }
+
+  window.bngSendHelp = async function () {
+    var input = document.getElementById('bngHelpInput');
+    var sendBtn = document.getElementById('bngHelpSend');
+    var text = input.value.trim();
+    if (!text) return;
+
+    bngAddMessage('user', text);
+    bngHistory.push({ role: 'user', content: text });
+    input.value = '';
+    sendBtn.disabled = true;
+
+    var typingEl = bngAddMessage('bot', 'Typing…');
+    typingEl.classList.add('typing');
+
+    try {
+      var res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: bngHistory })
+      });
+      var data = await res.json();
+      typingEl.remove();
+      var replyText = (data && data.reply) || (data && data.error) || "Sorry, something went wrong.";
+      bngAddMessage('bot', replyText);
+      bngHistory.push({ role: 'assistant', content: replyText });
+    } catch (e) {
+      typingEl.remove();
+      bngAddMessage('bot', 'Connection error. Please check your internet and try again.');
+    } finally {
+      sendBtn.disabled = false;
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('bngHelpInput');
+    if (input) {
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          bngSendHelp();
+        }
+      });
+    }
+  });
+})();
+</script>
+<!-- ===== End Help Assistant ===== -->
+
 </body>
 </html>
