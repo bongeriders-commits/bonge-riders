@@ -13,26 +13,34 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #F7F8FA;
+  --bg: #FAF8F6;
   --bg2: #FFFFFF;
   --card: #FFFFFF;
-  --card2: #F2F3F6;
-  --border: #E2E5EC;
-  --text: #111827;
+  --card2: #F3F1EE;
+  --border: #E6E2DC;
+  --text: #16181D;
   --muted: #6B7280;
   --dim: #9CA3AF;
-  --amber: #CC1818;
-  --amber2: #E02020;
-  --amber-bg: rgba(204,24,24,0.10);
+  --amber: #C81830;
+  --amber2: #E0431F;
+  --amber-bg: rgba(200,24,48,0.09);
   --green: #065F46;
   --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
-  --red: #CC1818;
-  --red2: #E02020;
-  --red-dark: #A01212;
-  --red-bg: rgba(204,24,24,0.10);
+  --red: #C81830;
+  --red2: #E0431F;
+  --red-dark: #8C0F22;
+  --red-bg: rgba(200,24,48,0.09);
   --radius: 10px;
   --radius-lg:14px;
+  --dusk: linear-gradient(100deg, #C81830 0%, #D8281F 42%, #E0631F 100%);
+  --shadow-sm: 0 1px 3px rgba(20,15,10,.06);
+  --shadow-md: 0 8px 24px rgba(20,15,10,.09);
+  --shadow-glow: 0 4px 16px rgba(200,24,48,.14);
+  --glass-bg: rgba(255,255,255,0.5);
+  --glass-bg-hi: rgba(255,255,255,0.68);
+  --glass-border: rgba(255,255,255,0.65);
+  --glass-sheen: rgba(255,255,255,0.85);
 }
 
 body {
@@ -64,8 +72,8 @@ body {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
   color: var(--text);
   font-size: 18px;
   text-decoration: none;
@@ -100,8 +108,8 @@ body {
 }
 
 .faq-card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
   margin-bottom: 8px;
@@ -195,6 +203,36 @@ body {
   color: var(--dim);
   padding: 8px 0 24px;
 }
+
+/* ── Shared design-system additions: dusk gradient + glass + motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+:focus-visible { outline: 2px solid var(--amber2); outline-offset: 2px; border-radius: 4px; }
+.glass-card, .glass-panel {
+  position: relative;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform .15s ease, background .15s ease;
+}
+.glass-card::before, .glass-panel::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-sheen), transparent);
+  pointer-events: none;
+}
+.glass-card:active { transform: scale(.98); }
+
+/* Smooth, consistent motion for interactive elements site-wide */
+button, a, input, select, textarea,
+.btn, [class*="btn"], [onclick] {
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform: scale(.97); }
 </style>
 </head>
 <body>

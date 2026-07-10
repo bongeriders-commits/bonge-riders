@@ -16,21 +16,29 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #F7F8FA;
+  --bg: #FAF8F6;
   --card: #FFFFFF;
-  --card2: #F2F3F6;
-  --border: #E2E5EC;
-  --text: #111827;
+  --card2: #F3F1EE;
+  --border: #E6E2DC;
+  --text: #16181D;
   --muted: #6B7280;
   --dim: #9CA3AF;
-  --amber: #CC1818;
-  --amber2: #E02020;
-  --amber-bg: rgba(204,24,24,0.10);
+  --amber: #C81830;
+  --amber2: #E0431F;
+  --amber-bg: rgba(200,24,48,0.09);
   --green: #065F46;
   --green2: #059669;
   --green-bg: rgba(5,150,105,0.10);
   --blue: #2563EB;
   --blue-bg: rgba(37,99,235,0.10);
+  --dusk: linear-gradient(100deg, #C81830 0%, #D8281F 42%, #E0631F 100%);
+  --shadow-sm: 0 1px 3px rgba(20,15,10,.06);
+  --shadow-md: 0 8px 24px rgba(20,15,10,.09);
+  --shadow-glow: 0 4px 16px rgba(200,24,48,.14);
+  --glass-bg: rgba(255,255,255,0.5);
+  --glass-bg-hi: rgba(255,255,255,0.68);
+  --glass-border: rgba(255,255,255,0.65);
+  --glass-sheen: rgba(255,255,255,0.85);
 }
 [data-theme="dark"] {
   --bg: #0F1115;
@@ -54,7 +62,7 @@ body { transition: background .3s ease, color .3s ease; }
 
 .header {
   position: sticky; top: 0; z-index: 10;
-  background: var(--card);
+  background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);
   border-bottom: 1px solid var(--border);
   padding: 14px 16px;
   display: flex; align-items: center; gap: 12px;
@@ -107,7 +115,7 @@ body { transition: background .3s ease, color .3s ease; }
 .empty-state .sub { font-size: 13px; margin-top: 4px; }
 
 .notif-card {
-  background: var(--card); border: 1px solid var(--border);
+  background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm); border: 1px solid var(--glass-border);
   border-radius: 14px; padding: 14px; display: flex; gap: 12px;
   position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 14px rgba(0,0,0,.03);
@@ -140,7 +148,7 @@ body { transition: background .3s ease, color .3s ease; }
 @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: 200px 0; } }
 
 .skeleton-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm); border: 1px solid var(--glass-border); border-radius: 14px;
   padding: 14px; display: flex; gap: 12px;
 }
 .skeleton-circle { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
@@ -150,6 +158,36 @@ body { transition: background .3s ease, color .3s ease; }
   background-size: 400px 100%;
   animation: shimmer 1.4s ease infinite;
 }
+
+/* ── Shared design-system additions: dusk gradient + glass + motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+:focus-visible { outline: 2px solid var(--amber2); outline-offset: 2px; border-radius: 4px; }
+.glass-card, .glass-panel {
+  position: relative;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform .15s ease, background .15s ease;
+}
+.glass-card::before, .glass-panel::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-sheen), transparent);
+  pointer-events: none;
+}
+.glass-card:active { transform: scale(.98); }
+
+/* Smooth, consistent motion for interactive elements site-wide */
+button, a, input, select, textarea,
+.btn, [class*="btn"], [onclick] {
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform: scale(.97); }
 </style>
 </head>
 <body>

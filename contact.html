@@ -35,6 +35,13 @@
   --amber-bg: rgba(226,75,28,0.10);
   --radius: 10px;
   --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(20,15,10,.06);
+  --shadow-md: 0 8px 24px rgba(20,15,10,.09);
+  --shadow-glow: 0 4px 16px rgba(200,24,48,.14);
+  --glass-bg: rgba(255,255,255,0.5);
+  --glass-bg-hi: rgba(255,255,255,0.68);
+  --glass-border: rgba(255,255,255,0.65);
+  --glass-sheen: rgba(255,255,255,0.85);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:60px;}
@@ -85,7 +92,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
   content:""; position:absolute; left:-20px; top:3px; width:9px; height:9px; border-radius:50%;
   background:var(--route); border:2px solid var(--bg); box-shadow:0 0 0 2px var(--route);
 }
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:4px;position:relative;z-index:1;}
+.card{background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);border: 1px solid var(--glass-border);border-radius:var(--radius-lg);padding:4px;position:relative;z-index:1;}
 
 /* leadership rows */
 .leader-row{display:flex;align-items:center;gap:12px;padding:12px 10px;border-bottom:1px solid var(--border);}
@@ -112,11 +119,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 
 /* social row */
 .social-row{display:flex;gap:12px;padding:6px 4px;}
-.social-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);text-decoration:none;color:var(--text);font-size:11.5px;font-weight:700;}
+.social-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);border: 1px solid var(--glass-border);border-radius:var(--radius-lg);text-decoration:none;color:var(--text);font-size:11.5px;font-weight:700;}
 .social-btn svg{width:22px;height:22px;}
 
 /* ── FORM ── */
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;position:relative;z-index:1;}
+.form-card{background: var(--glass-bg); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: var(--shadow-sm);border: 1px solid var(--glass-border);border-radius:var(--radius-lg);padding:16px;position:relative;z-index:1;}
 .mfield{margin-bottom:14px;}
 .mfield:last-child{margin-bottom:0;}
 .mfield label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
@@ -154,6 +161,36 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 @keyframes brandspin{to{transform:rotate(360deg);}}
 .brand-spinner-lg{display:block;width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--border);border-top-color:var(--route);border-radius:50%;animation:brandspin .7s linear infinite;}
 @media (prefers-reduced-motion: reduce){ .brand-spinner-lg{animation-duration:1.4s;} }
+
+/* ── Shared design-system additions: dusk gradient + glass + motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+:focus-visible { outline: 2px solid var(--amber2); outline-offset: 2px; border-radius: 4px; }
+.glass-card, .glass-panel {
+  position: relative;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform .15s ease, background .15s ease;
+}
+.glass-card::before, .glass-panel::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-sheen), transparent);
+  pointer-events: none;
+}
+.glass-card:active { transform: scale(.98); }
+
+/* Smooth, consistent motion for interactive elements site-wide */
+button, a, input, select, textarea,
+.btn, [class*="btn"], [onclick] {
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform: scale(.97); }
 </style>
 </head>
 <body>

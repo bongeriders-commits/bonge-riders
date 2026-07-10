@@ -139,6 +139,14 @@ body.light {
 }
 .glass-card:active { transform: scale(.98); }
 
+/* Smooth, consistent motion for interactive elements site-wide
+   (same formula applied across every page in the app) */
+button, a, input, select, textarea,
+.btn, [class*="btn"], [onclick] {
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform: scale(.97); }
+
 /* Reusable glass treatment for admin panels: Running Balance, Spending
    Catalog, Welfare Applications, Payment Confirmations. */
 .glass-panel {
