@@ -203,7 +203,7 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
       <div class="page-sub">Bonge Riders — Bogonko-Ngelani Stage</div>
     </div>
   </div>
-  <button class="admin-pill" id="adminPill" onclick="handleAdminPillClick()">
+  <button class="admin-pill" id="adminPill" style="display:none;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     <span id="adminPillLabel">Admin</span>
   </button>
@@ -292,27 +292,6 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
     </div>
   </div>
 
-</div>
-
-<!-- ═══ ADMIN LOGIN MODAL ═══ -->
-<div class="modal-backdrop" id="loginModal">
-  <div class="modal" style="max-width:380px;">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Admin Login</div>
-    <div class="mfield">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
-    </div>
-    <div class="mfield">
-      <label>Password</label>
-      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')confirmLogin()">
-    </div>
-    <p class="merr" id="loginErr">Incorrect email or password.</p>
-    <div class="modal-btns">
-      <button class="mbtn cancel" onclick="closeLoginModal()">Cancel</button>
-      <button class="mbtn save" id="loginBtn" onclick="confirmLogin()">Sign In</button>
-    </div>
-  </div>
 </div>
 
 <!-- ═══ ADMIN EDIT MODAL ═══ -->
@@ -412,44 +391,10 @@ onAuthStateChanged(auth, async (user) => {
 
 function setAdminUI(on) {
   isSuperAdmin = on;
-  document.getElementById('adminPill').classList.toggle('on', on);
+  const pill = document.getElementById('adminPill');
+  if (pill) pill.style.display = on ? 'flex' : 'none';
   document.getElementById('editRow').classList.toggle('show', on);
 }
-
-window.handleAdminPillClick = function() {
-  if (isSuperAdmin) {
-    if (confirm('Sign out of admin mode?')) { signOut(auth); }
-  } else {
-    openLoginModal();
-  }
-};
-window.openLoginModal = function() {
-  document.getElementById('loginEmail').value = '';
-  document.getElementById('loginPw').value = '';
-  document.getElementById('loginErr').classList.remove('show');
-  document.getElementById('loginModal').classList.add('open');
-  setTimeout(() => document.getElementById('loginEmail').focus(), 250);
-};
-window.closeLoginModal = function() {
-  document.getElementById('loginModal').classList.remove('open');
-};
-window.confirmLogin = async function() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw = document.getElementById('loginPw').value;
-  const errEl = document.getElementById('loginErr');
-  const btn = document.getElementById('loginBtn');
-  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; errEl.classList.add('show'); return; }
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  try {
-    await signInWithEmailAndPassword(auth, email, pw);
-    closeLoginModal();
-  } catch(e) {
-    errEl.textContent = 'Incorrect email or password.';
-    errEl.classList.add('show');
-  } finally {
-    btn.textContent = 'Sign In'; btn.disabled = false;
-  }
-};
 
 function escHtml(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

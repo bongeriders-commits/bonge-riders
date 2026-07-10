@@ -143,18 +143,8 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-icon"></div>
-    <div class="login-title">Admin Login</div>
-    <div class="login-sub">Sign in to manage spending</div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
-    </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password">
-    </div>
-    <p class="err-msg" id="loginErr">Incorrect email or password.</p>
-    <button class="login-btn" id="loginBtn">Sign In</button>
+    <div class="login-title">Admin Only</div>
+    <div class="login-sub">Sign in as admin from the members portal to manage spending.</div>
   </div>
 </div>
 
@@ -242,7 +232,7 @@ let listenersStarted = false;
 
 // ── AUTH ──
 auth.onAuthStateChanged(user => {
-  if (user) {
+  if (user && !user.isAnonymous) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     if (!listenersStarted) { listenersStarted = true; startListeners(); }
@@ -250,23 +240,6 @@ auth.onAuthStateChanged(user => {
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('mainContent').style.display = 'none';
   }
-});
-
-document.getElementById('loginBtn').onclick = async function() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw = document.getElementById('loginPw').value;
-  const errEl = document.getElementById('loginErr');
-  errEl.classList.remove('show');
-  this.textContent = 'Signing in…';
-  try {
-    await auth.signInWithEmailAndPassword(email, pw);
-  } catch(e) {
-    errEl.classList.add('show');
-    this.textContent = 'Sign In';
-  }
-};
-document.getElementById('loginPw').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('loginBtn').click();
 });
 
 // ── LISTENERS ──

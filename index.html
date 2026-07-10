@@ -1767,6 +1767,8 @@ body.viewer .toast {
          Menu <span class="adm-caret" id="admCaret">▾</span>
       </button>
       <div class="adm-dropdown" id="admDropdown">
+        <button class="adm-item" onclick="goToDashboard();closeAdmMenu()">DASHBOARD</button>
+        <div class="adm-divider"></div>
         <button class="adm-item" id="membersBtn" onclick="openMembersPanel();closeAdmMenu()">MEMBERS</button>
         <button class="adm-item" id="membersListBtn" onclick="window.open('members-list.html','_blank');closeAdmMenu()">MEMBERS LIST</button>
         <div class="adm-divider"></div>
@@ -1791,6 +1793,7 @@ body.viewer .toast {
         <button class="adm-item" onclick="window.open('chairperson.html','_blank');closeAdmMenu()">CHAIRPERSON VIEW</button>
         <button class="adm-item" onclick="window.open('secretary.html','_blank');closeAdmMenu()">SECRETARY VIEW</button>
         <div class="adm-divider"></div>
+        <button class="adm-item" onclick="viewPublicPanel();closeAdmMenu()">PUBLIC VIEW</button>
         <button class="adm-item adm-item-danger" onclick="logoutAdmin();closeAdmMenu()">LOGOUT</button>
       </div>
     </div>
@@ -1889,12 +1892,6 @@ body.viewer .toast {
       </div>
     </div>
 
-    <div class="vb-heading" style="text-align:center;margin-bottom:6px;font-size:12px;letter-spacing:1.2px;">SIGN IN REQUIRED</div>
-    <p style="color:var(--muted);font-size:13px;text-align:center;margin:6px 0 20px;line-height:1.6;">
-      This tracker contains private member information.<br>Members can view the totals dashboard with the group PIN.
-    </p>
-    <button class="admin-login-btn" onclick="openMemberLogin()">Enter Dashboard PIN</button>
-
     <!-- ── PUBLIC INFO SLIDESHOW ── -->
     <div class="pub-slideshow" id="pubSlideshow">
 
@@ -1930,6 +1927,11 @@ body.viewer .toast {
     </a>
   </div>
 
+  <!-- ── VIEW DASHBOARD / LOG OUT (plain word buttons) ── -->
+  <div style="display:flex;gap:22px;justify-content:center;align-items:center;padding:14px 14px 4px;">
+    <button id="viewDashboardBtn" onclick="handleViewDashboardClick()" style="background:none;border:none;padding:4px 2px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--amber2);text-decoration:underline;cursor:pointer;">View Dashboard</button>
+    <button id="publicLogoutBtn" onclick="logoutAdmin()" style="display:none;background:none;border:none;padding:4px 2px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--muted);text-decoration:underline;cursor:pointer;">Log Out</button>
+  </div>
 
   <div class="vb-unlocked">
 
@@ -2301,14 +2303,6 @@ body.viewer .toast {
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Manage Members</div>
-    <div class="add-form" style="margin-bottom:14px">
-      <div class="add-form-title">Member Dashboard PIN</div>
-      <input type="tel" inputmode="numeric" id="dashboardPinInput" placeholder="Set a PIN (e.g. 1234)" autocomplete="off">
-      <div class="modal-btns" style="margin-top:8px">
-        <button class="mbtn primary" onclick="saveDashboardPin()">Save PIN</button>
-      </div>
-      <p style="font-size:11.5px;color:var(--muted);margin-top:6px">Share this PIN with members so they can view the totals dashboard (counts/totals only — no names or numbers).</p>
-    </div>
     <input class="panel-search" id="panelSearch" type="text" placeholder="Search members…" oninput="renderPanelList()">
     <div class="panel-list" id="panelList"></div>
     <div class="add-form">
@@ -2859,10 +2853,60 @@ let isAdmin = false;
 
 function setAdminMode(on) {
   isAdmin = on;
-  document.body.classList.toggle('viewer', !on);
   const badge = document.getElementById('adminBadge');
   if (badge) badge.style.display = on ? 'inline-block' : 'none';
+  updatePublicLogoutBtn();
   renderAll();
+}
+
+// Switches the on-screen view into the full admin panel (member list,
+// admin toolbar, etc). Does not touch the auth session — the admin
+// stays signed in either way.
+function enterAdminPanel() {
+  document.body.classList.remove('viewer');
+  document.body.classList.remove('memberview');
+  renderAll();
+}
+
+// Switches back to the public-facing view. An already-signed-in admin
+// can use this to browse the site the way a visitor would, without
+// signing out.
+function viewPublicPanel() {
+  document.body.classList.add('viewer');
+  renderAll();
+}
+
+// Shown/hidden next to the "View Dashboard" button — only a signed-in
+// admin gets a quick Log Out here; regular visitors never see it.
+function updatePublicLogoutBtn() {
+  const btn = document.getElementById('publicLogoutBtn');
+  if (btn) btn.style.display = isAdmin ? 'inline-block' : 'none';
+}
+
+// "DASHBOARD" in the admin menu: closes any open panel/modal and resets
+// the admin view back to today's home screen — a quick way back no
+// matter how deep you are in Members, Settings, reports, etc.
+function goToDashboard() {
+  ['membersModal','editModal','detailsModal','saccoSettingsModal','deleteModal','waModal','pwModal',
+   'thanksModal','reportModal','markAllModal','adminLoginModal','memberLoginModal','incomeModal',
+   'manageAdminsModal','welfareAdminModal','payConfirmModal','serviceDetailModal','allServicesModal']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); });
+  enterAdminPanel();
+  jumpToToday();
+}
+
+// "View Dashboard" button under Support Kelvin: an admin jumps straight
+// into the admin panel; anyone else just unlocks the read-only totals
+// dashboard — no PIN required.
+async function handleViewDashboardClick() {
+  if (isAdmin) { enterAdminPanel(); return; }
+  try {
+    if (!auth.currentUser) await signInAnonymously(auth);
+    setMemberMode(true);
+    showToast('Dashboard unlocked');
+  } catch (e) {
+    showToast('Could not load dashboard. Try again.');
+  }
 }
 
 // ════════════════════════════════════════════════
@@ -2930,11 +2974,15 @@ loadDashboard();
 
 onAuthStateChanged(auth, (user) => {
   if (user && !user.isAnonymous) {
-    // Admin (email/password) session.
+    // Admin (email/password) session. Default to the public view on
+    // every sign-in / page load — the admin taps "View Dashboard" to
+    // enter the admin panel, and can tap "Public View" in the menu to
+    // come back here without signing out.
     isMemberMode = false;
     document.body.classList.remove('memberview');
     _currentAdminEmail = user.email ? user.email.toLowerCase() : '';
     setAdminMode(true);
+    viewPublicPanel();
     showToast('Signed in as ' + user.email);
     loadMembers();
     loadPayments();
@@ -2944,13 +2992,14 @@ onAuthStateChanged(auth, (user) => {
     loadAllWelfareApps();
     loadPayConfirmRequests();
   } else if (user && user.isAnonymous && isMemberMode) {
-    // Anonymous session that already passed PIN verification this
-    // session — keep dashboard listener alive across reloads of auth
-    // state, but member sessions never load member/payment data.
+    // Anonymous session that already passed the "View Dashboard" tap
+    // this session — keep dashboard listener alive across reloads of
+    // auth state, but member sessions never load member/payment data.
     setAdminMode(false);
   } else {
     setAdminMode(false);
     setMemberMode(false);
+    viewPublicPanel();
     // Tear down listeners and wipe any previously loaded data from
     // memory/DOM so a signed-out viewer (or the next person on a
     // shared device) cannot see member names, phone numbers, or
@@ -5779,6 +5828,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 Object.assign(window,{
   openAdminLogin, closeAdminLogin, confirmAdminLogin, logoutAdmin,
   openMemberLogin, closeMemberLogin, confirmMemberLogin, logoutMember,
+  handleViewDashboardClick, enterAdminPanel, viewPublicPanel, goToDashboard,
   openManageAdmins, closeManageAdmins, saveNewAdmin, removeAdmin, saveAdminRow, toggleAdminRole,
   saveDashboardPin, sendPinViaWhatsApp,
   openSetMemberPinModal, closeSetMemberPinModal, confirmSetMemberPin, sendMemberPinWA,
