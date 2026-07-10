@@ -3170,18 +3170,33 @@ async function savePayments() {
 
 // Fire-and-forget push notification whenever a payment is marked PAID.
 // Never blocks or throws into the calling UI flow.
+//
+// /api/notify-payment now requires an admin ID token (it used to be open
+// to anyone, which meant anyone could push arbitrary notifications to
+// every device — see sendPushNotification below).
+async function sendPushNotification(payload) {
+  try {
+    if (!auth.currentUser) return;
+    const idToken = await auth.currentUser.getIdToken();
+    await fetch('/api/notify-payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + idToken
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) { /* best-effort; ignore failures */ }
+}
+
 function notifyPaymentMade(memberName, dateStr) {
   const member = MEMBERS.find(m => m.name === memberName) || {};
   const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
-  fetch('/api/notify-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      title: 'Payment Received',
-      body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`,
-      url: '/'
-    })
-  }).catch(() => {}); // best-effort; ignore failures
+  sendPushNotification({
+    title: 'Payment Received',
+    body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`,
+    url: '/'
+  });
 }
 async function saveIncome() {
   try { await setDoc(doc(db,"tracker","income"),{list:otherIncome}); setSyncStatus(true,'Synced'); }
@@ -3278,15 +3293,11 @@ function markAll(dateStr, state) {
     let changed=0, blocked=0;
     MEMBERS.forEach(m=>{ const r=togglePaidIfUnset(m.phone,dateStr); if(r.ok) changed++; else blocked++; });
     if (changed > 0) {
-      fetch('/api/notify-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'Payments Received',
-          body: `${changed} member${changed>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
-          url: '/'
-        })
-      }).catch(()=>{});
+      sendPushNotification({
+        title: 'Payments Received',
+        body: `${changed} member${changed>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
+        url: '/'
+      });
     }
     logAdminAction('Mark-all paid (locked date)', `${dateStr} — ${changed} marked, ${blocked} blocked`);
     return {ok:true, changed, blocked};
@@ -3297,15 +3308,11 @@ function markAll(dateStr, state) {
   savePayments();
   logAdminAction(state ? 'Mark-all paid' : 'Mark-all cleared', `${dateStr} — ${MEMBERS.length} members`);
   if (state && newlyPaid > 0) {
-    fetch('/api/notify-payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: 'Payments Received',
-        body: `${newlyPaid} member${newlyPaid>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
-        url: '/'
-      })
-    }).catch(()=>{});
+    sendPushNotification({
+      title: 'Payments Received',
+      body: `${newlyPaid} member${newlyPaid>1?'s':''} marked paid — ${new Date(dateStr+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})}`,
+      url: '/'
+    });
   }
   return {ok:true, changed:MEMBERS.length, blocked:0};
 }

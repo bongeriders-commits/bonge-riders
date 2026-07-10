@@ -1265,7 +1265,7 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { initializeFirestore, persistentLocalCache, doc, getDoc, onSnapshot, setDoc, collection, addDoc, query, where, getDocs, orderBy }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInAnonymously, onAuthStateChanged }
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getMessaging, getToken, isSupported as messagingIsSupported }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
@@ -1411,66 +1411,31 @@ async function doLogin() {
   errEl.classList.remove('show');
 
   try {
-    if (!auth.currentUser) await signInAnonymously(auth);
+    // PIN check now happens server-side (/api/verify-pin) instead of the
+    // client reading the whole tracker/memberPins document — that endpoint
+    // is rate-limited and never exposes other members' PINs. On success it
+    // returns a custom auth token carrying the member's phone as a claim,
+    // which firestore.rules uses to scope things like welfare applications
+    // to their rightful owner.
+    const resp = await fetch('/api/verify-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: rawPhone, pin })
+    });
+    const result = await resp.json().catch(() => ({}));
 
-    // Normalise the phone for lookup
-    const normInput = normalisePhone(rawPhone);
-
-    // Read memberPins — anonymous sessions ARE allowed to read this
-    const pinsSnap = await getDoc(doc(db, "tracker", "memberPins"));
-    const pinsData = pinsSnap.exists() ? (pinsSnap.data() || {}) : {};
-
-    // Find a matching phone key (normalise stored keys too — handles 07XX and 254XX formats)
-    let matchedPhone = Object.keys(pinsData).find(k => normalisePhone(k) === normInput);
-
-    // If not found, also try matching the raw input directly (catches format mismatches in Firestore)
-    if (!matchedPhone) {
-      const rawTrimmed = rawPhone.replace(/[\s\-().]/g,'');
-      matchedPhone = Object.keys(pinsData).find(k =>
-        k === rawTrimmed ||
-        k === rawTrimmed.replace(/^0/,'254') ||
-        k === '0' + rawTrimmed.replace(/^254/,'')
-      );
-    }
-
-    if (!matchedPhone) {
-      errEl.textContent = 'Phone number not found. Check the number or ask an admin.';
+    if (!resp.ok) {
+      errEl.textContent = result.error || 'Could not verify. Try again.';
       errEl.classList.add('show');
+      if (resp.status === 401) {
+        document.getElementById('loginPin').value = '';
+        document.getElementById('loginPin').focus();
+      }
       return;
     }
 
-    const storedPin = String(pinsData[matchedPhone] || '');
-    if (!storedPin) {
-      errEl.textContent = 'No PIN set for your account yet. Ask an admin.';
-      errEl.classList.add('show');
-      return;
-    }
-    if (pin !== storedPin) {
-      errEl.textContent = 'Incorrect PIN.';
-      errEl.classList.add('show');
-      document.getElementById('loginPin').value = '';
-      document.getElementById('loginPin').focus();
-      return;
-    }
-
-    // 1. Try _meta_ entry written by admin when setting PIN
-    const memberMeta = pinsData['_meta_' + matchedPhone];
-    let memberName = (memberMeta && memberMeta.name) ? memberMeta.name : '';
-
-    // 2. If no meta name, look up from tracker/members list
-    if (!memberName) {
-      try {
-        const membersSnap = await getDoc(doc(db, 'tracker', 'members'));
-        if (membersSnap.exists()) {
-          const list = membersSnap.data().list || [];
-          const found = list.find(m => normalisePhone(m.phone) === normalisePhone(matchedPhone));
-          if (found && found.name) memberName = found.name;
-        }
-      } catch(e) {}
-    }
-
-    // 3. Final fallback to phone number
-    if (!memberName) memberName = matchedPhone;
+    const { token, name: memberName, phone: matchedPhone } = result;
+    await signInWithCustomToken(auth, token);
 
     // Success
     currentMember = { name: memberName, phone: matchedPhone };
@@ -1478,10 +1443,13 @@ async function doLogin() {
     sessionStorage.setItem('memberName', memberName);
     await loadProfile();
 
-    // If PIN was set by admin (adminSet flag), force member to change it now
-    const meta = pinsData['_meta_' + matchedPhone];
-    if (meta && meta.adminSet === true) {
-      setTimeout(() => openChangePinModal(true), 800);
+    // Server flags this when an admin set the PIN (adminSet === true),
+    // so the member is forced to pick their own PIN now.
+    if (auth.currentUser) {
+      const idTokenResult = await auth.currentUser.getIdTokenResult().catch(() => null);
+      if (idTokenResult && idTokenResult.claims.forcePinChange) {
+        setTimeout(() => openChangePinModal(true), 800);
+      }
     }
 
   } catch(e) {
@@ -2670,23 +2638,21 @@ async function doChangePin() {
 
   saveBtn.textContent = 'Saving…'; saveBtn.disabled = true;
   try {
-    const ref = doc(db, 'tracker', 'memberPins');
-    const snap = await getDoc(ref);
-    const pins = snap.exists() ? (snap.data() || {}) : {};
-    pins[currentMember.phone] = newPin;
-    if (pins['_meta_' + currentMember.phone]) {
-      pins['_meta_' + currentMember.phone].adminSet = false;
-    }
-    await setDoc(ref, pins);
+    if (!auth.currentUser) throw new Error('no-session');
+    const idToken = await auth.currentUser.getIdToken();
+    const resp = await fetch('/api/change-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, newPin })
+    });
+    const result = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(result.error || 'failed');
+
     document.getElementById('changePinModal').classList.remove('open');
     _changePinForced = false;
     showToast('PIN changed successfully!');
   } catch(e) {
-    if (e && e.code === 'permission-denied') {
-      errEl.textContent = 'Permission denied. Ask your admin to update Firestore rules to allow member PIN changes.';
-    } else {
-      errEl.textContent = 'Could not save. Check connection and try again.';
-    }
+    errEl.textContent = (e && e.message && e.message !== 'failed') ? e.message : 'Could not save. Check connection and try again.';
     errEl.classList.add('show');
   } finally {
     saveBtn.textContent = 'Save New PIN'; saveBtn.disabled = false;

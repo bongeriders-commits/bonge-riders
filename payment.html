@@ -271,22 +271,30 @@ async function savePayments() {
   catch(e) { showToast('Save failed'); }
 }
 
+// /api/notify-payment now requires an admin ID token (previously open to
+// anyone — see api/notify-payment.js for why that was a problem).
+async function sendPushNotification(payload) {
+  try {
+    if (!auth.currentUser) return;
+    const idToken = await auth.currentUser.getIdToken();
+    await fetch('/api/notify-payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + idToken
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {}
+}
 function notifyPaymentMade(memberName, dateStr) {
   const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
-  fetch('/api/notify-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: 'Payment Received', body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`, url: '/' })
-  }).catch(() => {});
+  sendPushNotification({ title: 'Payment Received', body: `${memberName || 'A member'} paid KSh 50 — ${niceDate}`, url: '/' });
 }
 function notifyBulkPaid(count, dateStr) {
   if (count <= 0) return;
   const niceDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' });
-  fetch('/api/notify-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: 'Payments Received', body: `${count} member${count>1?'s':''} marked paid — ${niceDate}`, url: '/' })
-  }).catch(() => {});
+  sendPushNotification({ title: 'Payments Received', body: `${count} member${count>1?'s':''} marked paid — ${niceDate}`, url: '/' });
 }
 
 // ── auth ─────────────────────────────────────────
