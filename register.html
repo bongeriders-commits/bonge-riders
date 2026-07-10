@@ -520,13 +520,6 @@ button:active, [onclick]:active, .btn:active, [class*="btn"]:active { transform:
 
 </div>
 
-<!-- HERO -->
-<div class="hero">
-  <img src="icon-192.png" alt="Bonge Riders" class="hero-logo">
-  <h1>Join Bogonko-Ngelani Stage</h1>
-  <p>Fill in your details below — the Chairperson will review and approve your membership.</p>
-</div>
-
 <!-- STEPS INDICATOR -->
 <div class="steps-bar">
   <div class="step-dot active" id="dot1">1</div>
@@ -968,7 +961,6 @@ async function submitRegistration() {
       document.querySelector('.form-wrap').style.display = 'none';
       document.querySelector('.steps-bar').style.display = 'none';
       document.querySelector('.steps-labels').style.display = 'none';
-      document.querySelector('.hero').style.display = 'none';
       document.getElementById('refNumber').textContent = ref;
       document.getElementById('successScreen').classList.add('show');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1000,7 +992,6 @@ function resetForm() {
   document.querySelector('.form-wrap').style.display = '';
   document.querySelector('.steps-bar').style.display = '';
   document.querySelector('.steps-labels').style.display = '';
-  document.querySelector('.hero').style.display = '';
   currentStep = 1;
   feePaid = null;
   document.getElementById('feeYesBtn').classList.remove('selected');
