@@ -533,6 +533,18 @@ html, body {
   text-align: center; font-size: 13px; color: var(--muted);
 }
 
+/* ── COMMUNITY SUPPORT (given to fellow riders) ── */
+.support-card {
+  background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--green2);
+  border-radius: var(--radius-lg); padding: 14px; margin-bottom: 8px;
+}
+.support-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.support-incident { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.support-date { font-size: 10.5px; color: var(--dim); white-space: nowrap; }
+.support-amount { font-size: 12.5px; font-weight: 700; color: var(--green2); margin-top: 4px; }
+.support-note { font-size: 11.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.support-locked { font-size: 10px; color: var(--dim); margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+
 /* ── ID CARD ── */
 .id-card-section { margin: 16px 14px 0; }
 .id-card-wrap {
@@ -1070,6 +1082,19 @@ body.light .ws-name { color: #141414; }
     </div>
   </div>
 
+  <!-- Community Support Given -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-title">My Support to Fellow Riders</div>
+      <div class="section-pill" id="supportCount">0</div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin:-4px 0 10px;line-height:1.5;">A record of support you've given fellow riders during incidents, logged by the Secretary. Kept as a permanent record.</p>
+    <div id="supportList">
+      <div class="welfare-empty">No support logged yet.</div>
+    </div>
+  </div>
+
+
   <!-- Virtual ID Card -->
   <div class="id-card-section">
     <div class="section-header">
@@ -1468,6 +1493,7 @@ async function loadProfile() {
   // Start live listeners
   startPaymentsListener();
   startWelfareListener();
+  startSupportListener();
   startMemberDetailsListener();
   startPaymentRequestsListener();
 }
@@ -1691,6 +1717,42 @@ function startWelfareListener() {
     },
     () => {}
   );
+}
+
+// ── COMMUNITY SUPPORT (support this member has given fellow riders) ──
+// Read-only on this page — entries are logged by the Secretary panel and
+// are permanent (see firestore.rules: supportRecords allows create only).
+let supportRecords = [];
+let _supportUnsub = null;
+function startSupportListener() {
+  if (_supportUnsub) { _supportUnsub(); _supportUnsub = null; }
+  const phoneDigits = currentMember.phone.replace(/\D/g,'');
+  const q = query(collection(db, 'supportRecords'), where('memberPhone', '==', phoneDigits));
+  _supportUnsub = onSnapshot(q, (snap) => {
+    supportRecords = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderSupport();
+  }, () => {});
+}
+function renderSupport() {
+  const countEl = document.getElementById('supportCount');
+  const listEl = document.getElementById('supportList');
+  if (!countEl || !listEl) return;
+  countEl.textContent = supportRecords.length;
+  if (!supportRecords.length) {
+    listEl.innerHTML = '<div class="welfare-empty">No support logged yet.</div>';
+    return;
+  }
+  const sorted = [...supportRecords].sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  listEl.innerHTML = sorted.map(s => `
+    <div class="support-card">
+      <div class="support-card-top">
+        <div class="support-incident">${escHtml(s.incident || 'Support logged')}</div>
+        <div class="support-date">${s.date ? new Date(s.date + 'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'}) : '—'}</div>
+      </div>
+      ${s.amount ? `<div class="support-amount">KSh ${Number(s.amount).toLocaleString()}</div>` : ''}
+      ${s.note ? `<div class="support-note">${escHtml(s.note)}</div>` : ''}
+      <div class="support-locked">🔒 Permanent record</div>
+    </div>`).join('');
 }
 
 // ── STATS ──
@@ -2390,10 +2452,12 @@ function doLogout() {
   sessionStorage.removeItem('memberName');
   if (_paymentsUnsub) { _paymentsUnsub(); _paymentsUnsub = null; }
   if (_welfareUnsub) { _welfareUnsub(); _welfareUnsub = null; }
+  if (_supportUnsub) { _supportUnsub(); _supportUnsub = null; }
   if (_memberDetailsUnsub) { _memberDetailsUnsub(); _memberDetailsUnsub = null; }
   currentMember = null;
   payments = {};
   welfareApps = [];
+  supportRecords = [];
   _detailsLoaded = false;
   _memberDetailsCache = null;
   // Reset ID card area
