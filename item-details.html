@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Item Details — Cabro City</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f5590a">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --panel:#f6f6f8;
+    --panel-alt:#eeeef1;
+    --line:#e2e2e6;
+    --line-soft:#ececf0;
+    --text:#151517;
+    --text-dim:#68686f;
+    --text-faint:#9a9aa2;
+    --oxide:#f5590a;
+    --oxide-dim:#b8420a;
+    --green:#16a34a;
+    --red:#e13a3a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  html,body{background:#f4f4f6;color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  button,input,select{font-family:inherit;}
+
+  .app-shell{max-width:1040px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:96px;border-left:1px solid var(--line);border-right:1px solid var(--line);}
+  @media(max-width:1060px){ .app-shell{border-left:none;border-right:none;} }
+
+  /* ===== Header ===== */
+  .mobile-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#ffffff;z-index:30;}
+  .mh-left{display:flex;align-items:center;gap:16px;}
+  .back-btn{background:none;border:none;color:var(--text);cursor:pointer;padding:4px;display:flex;}
+  .back-btn svg{width:22px;height:22px;}
+  .mh-logo{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:none;padding:0;}
+  .brand-logo-img{height:36px;width:auto;display:block;}
+  .mh-right{display:flex;align-items:center;gap:16px;position:relative;}
+  .bell{position:relative;width:23px;height:23px;color:#68686f;background:none;border:none;padding:0;cursor:pointer;}
+  .bell svg{width:100%;height:100%;}
+  .bell .badge-dot{position:absolute;top:-6px;right:-8px;background:#ff7a1f;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 3px;font-family:'IBM Plex Mono',monospace;box-shadow:0 0 0 2px #ffffff;}
+  .avatar-wrap{display:flex;align-items:center;gap:4px;cursor:pointer;background:none;border:none;padding:0;}
+  .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3a3a40,#1c1c1f);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;position:relative;font-family:'Oswald',sans-serif;flex-shrink:0;border:1.5px solid #3a3a40;}
+  .avatar .dot{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:#ff7a1f;border:2px solid #ffffff;}
+  .avatar-chev{width:13px;height:13px;color:var(--text-faint);}
+  .avatar-menu{position:absolute;top:52px;right:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 34px -10px rgba(0,0,0,0.28);min-width:140px;padding:6px;display:none;z-index:40;}
+  .avatar-menu.open{display:block;}
+  .avatar-menu button{width:100%;text-align:left;background:none;border:none;padding:9px 10px;font-size:12.5px;color:var(--text);border-radius:7px;cursor:pointer;}
+  .avatar-menu button:hover{background:var(--panel-alt);}
+
+  /* ===== Page head ===== */
+  .page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:22px 20px 6px;}
+  .page-head h1{margin:0;font-size:25px;font-weight:800;letter-spacing:-0.01em;}
+  .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-dim);margin-top:6px;flex-wrap:wrap;}
+  .breadcrumb .cur{color:var(--oxide);font-weight:700;}
+  .breadcrumb svg{width:12px;height:12px;color:var(--text-faint);}
+  .btn-outline{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--oxide);color:var(--oxide);padding:11px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .btn-outline:hover{background:#fff4ee;}
+  .btn-outline svg{width:15px;height:15px;}
+
+  /* ===== Overview card ===== */
+  .overview-card{margin:16px 20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;grid-template-columns:1fr 220px;gap:18px;}
+  @media(max-width:600px){.overview-card{grid-template-columns:1fr;}}
+  .ov-id{color:var(--oxide);font-size:12px;font-weight:700;letter-spacing:0.04em;margin-bottom:6px;}
+  .ov-name{font-size:22px;font-weight:800;margin-bottom:10px;}
+  .pill{display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:18px;}
+  .pill.active{background:#dcfce7;color:var(--green);}
+  .pill.low{background:#ffe6d3;color:var(--oxide-dim);}
+  .pill.out{background:#fde2e2;color:var(--red);}
+  .ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 20px;}
+  .ov-item .k{font-size:11.5px;color:var(--text-dim);margin-bottom:4px;}
+  .ov-item .v{font-size:14px;font-weight:700;}
+  .balance-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;justify-content:center;}
+  .balance-box .k{font-size:11px;letter-spacing:0.06em;color:var(--text-dim);font-weight:700;margin-bottom:6px;}
+  .balance-box .v{font-size:27px;font-weight:800;color:var(--oxide);line-height:1.1;}
+  .balance-box .sv-k{font-size:11.5px;color:var(--text-dim);margin-top:16px;margin-bottom:4px;}
+  .balance-box .sv-v{font-size:15px;font-weight:700;}
+
+  /* ===== Stat strip ===== */
+  .stat-strip{margin:16px 20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  @media(max-width:760px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
+  .ss-item .k{font-size:11.5px;color:var(--text-dim);margin-bottom:5px;}
+  .ss-item .v{font-size:15.5px;font-weight:800;}
+  .ss-item .v.green{color:var(--green);}
+  .ss-item .v.red{color:var(--red);}
+  .ss-item .sub{font-size:10.5px;color:var(--text-faint);margin-top:3px;}
+
+  /* ===== Tabs ===== */
+  .tabs{margin:18px 20px 0;display:flex;gap:6px;border-bottom:1px solid var(--line);overflow-x:auto;}
+  .tab-btn{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:12px 16px 10px;color:var(--text-dim);font-size:11.5px;font-weight:600;white-space:nowrap;border-bottom:2.5px solid transparent;margin-bottom:-1px;}
+  .tab-btn svg{width:19px;height:19px;}
+  .tab-btn.active{color:var(--oxide);border-color:var(--oxide);}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .placeholder-view{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 30px;color:var(--text-dim);margin:16px 20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;}
+  .placeholder-view .p-icon{width:52px;height:52px;border-radius:14px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--oxide);}
+  .placeholder-view .p-icon svg{width:24px;height:24px;}
+  .placeholder-view h3{font-size:14px;color:var(--text);margin:0 0 6px;}
+  .placeholder-view p{font-size:12px;color:var(--text-faint);max-width:280px;line-height:1.5;margin:0;}
+
+  /* ===== Stock summary ===== */
+  .summary-card{margin:16px 20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .summary-card h3{margin:0 0 16px;font-size:16px;font-weight:800;}
+  .summary-body{display:grid;grid-template-columns:150px 1fr 1fr;gap:22px;align-items:center;}
+  @media(max-width:700px){.summary-body{grid-template-columns:1fr;}}
+  .donut-wrap{position:relative;width:150px;height:150px;}
+  .donut-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .donut-center .n{font-size:17px;font-weight:800;}
+  .donut-center .l{font-size:10.5px;color:var(--text-dim);margin-top:2px;}
+  .legend{display:flex;flex-direction:column;gap:14px;}
+  .legend-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+  .legend-row .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .legend-row .lbl{color:var(--text-dim);flex:1;}
+  .legend-row .val{font-weight:700;}
+  .kv-list{display:flex;flex-direction:column;gap:12px;}
+  .kv-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;}
+  .kv-row .k{color:var(--text-dim);}
+  .kv-row .v{font-weight:700;}
+
+  /* ===== Transactions table ===== */
+  .tx-card{margin:16px 20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .tx-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .tx-head h3{margin:0;font-size:16px;font-weight:800;}
+  .tx-tools{display:flex;gap:8px;}
+  .tx-search{position:relative;}
+  .tx-search input{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 34px 9px 12px;font-size:12.5px;width:190px;}
+  .tx-search svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text-faint);}
+  .tx-filter{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer;color:var(--text-dim);}
+  .tx-filter svg{width:15px;height:15px;display:block;}
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:640px;}
+  thead th{text-align:left;font-size:11px;letter-spacing:0.03em;color:var(--text-dim);padding:10px 12px;border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap;}
+  tbody td{padding:12px;font-size:13px;border-bottom:1px solid var(--line-soft);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  .tx-date .d{font-weight:700;}
+  .tx-date .t{font-size:11px;color:var(--text-faint);margin-top:1px;}
+  .tx-type{display:inline-flex;padding:3px 9px;border-radius:100px;font-size:10.5px;font-weight:700;margin-bottom:3px;}
+  .tx-type.in{background:#dcfce7;color:var(--green);}
+  .tx-type.out{background:#fde2e2;color:var(--red);}
+  .tx-type-label{font-size:11px;color:var(--text-dim);display:block;}
+  .tx-ref .r{font-weight:700;}
+  .tx-ref .s{font-size:11px;color:var(--text-faint);margin-top:1px;}
+  .qty.in{color:var(--green);font-weight:700;}
+  .qty.out{color:var(--red);font-weight:700;}
+  .view-all-wrap{text-align:center;margin-top:16px;}
+  .btn-view-all{background:#fff;border:1.5px solid var(--oxide);color:var(--oxide);padding:11px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;}
+  .btn-view-all:hover{background:#fff4ee;}
+
+  /* ===== Bottom nav ===== */
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:1040px;background:var(--panel);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding:11px 4px 16px;z-index:40;}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--text-faint);font-size:9.5px;cursor:pointer;flex:1;padding:2px 0;max-width:120px;}
+  .nav-item svg{width:19px;height:19px;}
+  .nav-item.active{color:var(--oxide);}
+
+  button:focus-visible,input:focus-visible{outline:2px solid var(--oxide);outline-offset:2px;}
+
+  .app-shell{display:none;}
+  .app-shell.ready{display:block;}
+
+  /* ---------- Access gate (whole app is locked behind sign-in) ---------- */
+  #accessGate{
+    position:fixed;inset:0;z-index:9999;background:#fff;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .gate-card{width:100%;max-width:340px;text-align:center;}
+  .gate-card img{height:34px;width:auto;margin:0 auto 22px;display:block;}
+  .gate-card h2{font-family:'Inter',sans-serif;text-transform:none;font-size:17px;font-weight:700;margin-bottom:6px;}
+  .gate-card p{font-size:12.5px;color:var(--text-dim);line-height:1.5;margin-bottom:22px;}
+  .gate-card .field{margin-bottom:12px;text-align:left;}
+  .gate-card .field label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:5px;}
+  .gate-card .field input{
+    width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--line);
+    font-size:13.5px;font-family:'Inter',sans-serif;box-sizing:border-box;
+  }
+  .gate-card .btn-submit{
+    width:100%;padding:12px;border-radius:9px;border:1px solid var(--oxide);
+    background:var(--oxide);color:#fff;font-weight:700;font-size:13px;
+    cursor:pointer;margin-top:6px;font-family:'Inter',sans-serif;
+  }
+  .gate-error{color:var(--red);font-size:12px;margin:-4px 0 12px;text-align:left;}
+</style>
+</head>
+<body>
+
+<div id="accessGate" style="display:none;">
+  <div class="gate-card">
+    <img src="/cabro-city-logo.png" alt="Cabro City">
+    <h2>Sign in required</h2>
+    <p>Cabro City is restricted to approved staff. If you don't have an account yet, ask your admin to add one for you.</p>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="gateEmail" placeholder="you@cabrocity.co.ke">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="gatePassword" placeholder="••••••••">
+    </div>
+    <div id="gateError" class="gate-error" style="display:none;"></div>
+    <button class="btn-submit" onclick="submitGateLogin()">Sign In</button>
+  </div>
+</div>
+
+<div class="app-shell">
+
+  <!-- HEADER -->
+  <div class="mobile-header">
+    <div class="mh-left">
+      <button class="back-btn" onclick="location.href='stock-list.html'" aria-label="Back to stock list">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="mh-logo" onclick="location.href='index.html'" aria-label="Cabro City home">
+        <img src="/cabro-city-logo.png" alt="Cabro City — Paving the Future" class="brand-logo-img">
+      </button>
+    </div>
+    <div class="mh-right">
+      <button class="bell" onclick="location.href='index.html'" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="badge-dot">5</span>
+      </button>
+      <button class="avatar-wrap" onclick="toggleAvatarMenu(event)" aria-label="Account menu">
+        <div class="avatar"><span id="avatarInitials">--</span><span class="dot"></span></div>
+        <svg class="avatar-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="avatar-menu" id="avatarMenu">
+        <button onclick="location.href='index.html'">Dashboard</button>
+        <button onclick="alert('Profile settings coming soon.')">Profile</button>
+        <button onclick="signOutNow()">Sign out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE HEAD -->
+  <div class="page-head">
+    <div>
+      <h1>Item Details</h1>
+      <div class="breadcrumb">
+        <a href="stock-list.html" style="color:inherit;text-decoration:none;">Inventory</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="stock-list.html" style="color:inherit;text-decoration:none;">Items</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        <span class="cur" id="bcName">Diesel 50ppm</span>
+      </div>
+    </div>
+    <button class="btn-outline" onclick="openEditModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>
+      Edit Item
+    </button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="overview-card">
+    <div>
+      <div class="ov-id" id="ovId">ITEM-ID:003</div>
+      <div class="ov-name" id="ovName">Diesel 50ppm</div>
+      <span class="pill active" id="ovStatus">Active</span>
+      <div class="ov-grid">
+        <div class="ov-item"><div class="k">Category</div><div class="v" id="ovCategory">Fuel</div></div>
+        <div class="ov-item"><div class="k">Unit of Measure</div><div class="v" id="ovUom">Litre (LTR)</div></div>
+        <div class="ov-item"><div class="k">Reorder Level</div><div class="v" id="ovReorder">2,000 L</div></div>
+        <div class="ov-item"><div class="k">Minimum Stock</div><div class="v" id="ovMin">1,000 L</div></div>
+      </div>
+    </div>
+    <div class="balance-box">
+      <div class="k">CURRENT BALANCE</div>
+      <div class="v" id="ovBalance">7,840 L</div>
+      <div class="sv-k">Stock Value</div>
+      <div class="sv-v" id="ovValue">KSh 1,293,600</div>
+    </div>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="ss-item"><div class="k">Opening Balance</div><div class="v" id="ssOpening">5,000 L</div><div class="sub" id="ssOpeningDate">—</div></div>
+    <div class="ss-item"><div class="k">Total Received</div><div class="v green" id="ssReceived">12,000 L</div></div>
+    <div class="ss-item"><div class="k">Total Issued</div><div class="v red" id="ssIssued">9,160 L</div></div>
+    <div class="ss-item"><div class="k">Average Cost</div><div class="v" id="ssAvgCost">KSh 165.00</div><div class="sub" id="ssAvgUnit">per Litre</div></div>
+    <div class="ss-item"><div class="k">Last Updated</div><div class="v" id="ssUpdated">14 May 2024</div><div class="sub">08:32 AM</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="ledger" onclick="switchDetailTab('ledger')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Stock Ledger
+    </button>
+    <button class="tab-btn" data-tab="transactions" onclick="switchDetailTab('transactions')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Transactions
+    </button>
+    <button class="tab-btn" data-tab="purchase" onclick="switchDetailTab('purchase')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M6 4L3 7l3 3M18 20l3-3-3-3"/></svg>
+      Purchase History
+    </button>
+    <button class="tab-btn" data-tab="attachments" onclick="switchDetailTab('attachments')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      Attachments
+    </button>
+    <button class="tab-btn" data-tab="info" onclick="switchDetailTab('info')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Information
+    </button>
+  </div>
+
+  <!-- TAB: STOCK LEDGER -->
+  <div class="tab-panel active" id="tab-ledger">
+
+    <div class="summary-card">
+      <h3>Stock Summary</h3>
+      <div class="summary-body">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="60" fill="none" stroke="#fde2e2" stroke-width="18"/>
+            <circle cx="75" cy="75" r="60" fill="none" stroke="var(--green)" stroke-width="18" id="donutArc" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <div class="n" id="donutBalance">7,840 L</div>
+            <div class="l">Current Balance</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-row"><span class="dot" style="background:var(--green);"></span><span class="lbl">Total Received</span><span class="val" id="legReceived">12,000 L</span></div>
+          <div class="legend-row"><span class="dot" style="background:var(--red);"></span><span class="lbl">Total Issued</span><span class="val" id="legIssued">9,160 L</span></div>
+          <div class="legend-row"><span class="dot" style="background:var(--text-faint);"></span><span class="lbl">Opening Balance</span><span class="val" id="legOpening">5,000 L</span></div>
+        </div>
+        <div class="kv-list">
+          <div class="kv-row"><span class="k">Reorder Level</span><span class="v" id="kvReorder">2,000 L</span></div>
+          <div class="kv-row"><span class="k">Minimum Stock</span><span class="v" id="kvMin">1,000 L</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tx-card">
+      <div class="tx-head">
+        <h3>Stock Transactions</h3>
+        <div class="tx-tools">
+          <div class="tx-search">
+            <input type="text" id="txSearch" placeholder="Search transactions..." oninput="renderTransactionsSearch()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </div>
+          <button class="tx-filter" aria-label="Filter transactions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Type</th><th>Reference</th><th>Quantity</th><th>Balance</th><th>Unit Cost</th><th>Total (KSh)</th>
+            </tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+      <div class="view-all-wrap">
+        <button class="btn-view-all" onclick="switchDetailTab('transactions')">View All Transactions</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OTHER TABS (placeholders) -->
+  <div class="tab-panel" id="tab-transactions">
+    <div class="tx-card" style="margin:16px 20px 0;">
+      <div class="tx-head">
+        <h3>Full Transaction History</h3>
+        <div class="tx-tools">
+          <div class="tx-search">
+            <input type="text" id="txSearchFull" placeholder="Search transactions..." oninput="paintFullTransactions()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </div>
+          <select id="txTypeFilterFull" onchange="paintFullTransactions()" style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:12.5px;color:var(--text-dim);cursor:pointer;">
+            <option value="">All types</option>
+            <option value="in">Received (GRN)</option>
+            <option value="out">Issued</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Type</th><th>Reference</th><th>Quantity</th><th>Balance</th><th>Unit Cost</th><th>Total (KSh)</th>
+            </tr>
+          </thead>
+          <tbody id="txBodyFull"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-purchase">
+    <div class="placeholder-view">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M6 4L3 7l3 3M18 20l3-3-3-3"/></svg></div>
+      <h3>Purchase history</h3>
+      <p>Purchase orders and supplier pricing history for this item will appear here.</p>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-attachments">
+    <div class="placeholder-view">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></div>
+      <h3>Attachments</h3>
+      <p>Spec sheets, certificates, and photos attached to this item will appear here.</p>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-info">
+    <div class="placeholder-view">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+      <h3>Additional information</h3>
+      <p>Notes, custom fields, and audit history for this item will appear here.</p>
+    </div>
+  </div>
+
+  <!-- BOTTOM ACTIONS -->
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item active" onclick="location.href='stock-list.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+      Inventory
+    </button>
+    <button class="nav-item" onclick="location.href='index.html#transactions'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      Transactions
+    </button>
+    <button class="nav-item" onclick="location.href='index.html#reports'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Reports
+    </button>
+  </div>
+
+</div>
+
+<!-- EDIT ITEM MODAL -->
+<div class="overlay" id="editOverlay" style="position:fixed;inset:0;background:rgba(10,10,11,0.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;">
+  <div class="modal" style="background:#fff;border:1px solid #e2e2e6;border-radius:14px;width:100%;max-width:440px;padding:22px 22px 20px;max-height:88vh;overflow-y:auto;">
+    <h3 style="font-size:16px;margin:0 0 16px;font-weight:800;">Edit Item</h3>
+    <div class="field" style="margin-bottom:13px;">
+      <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Item name</label>
+      <input type="text" id="editName" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+    </div>
+    <div class="field" style="margin-bottom:13px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Category</label>
+        <select id="editCategory" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+          <option>Fuel</option><option>Cement</option><option>Steel</option>
+          <option>PPE</option><option>Lubricants</option><option>Filters</option>
+          <option>Hardware</option><option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">UOM</label>
+        <select id="editUom" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+          <option>Litre (LTR)</option><option>Bag</option><option>Piece</option>
+          <option>Pair</option><option>Kg</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:13px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Min. stock</label>
+        <input type="number" id="editMin" min="0" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+      </div>
+      <div>
+        <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Balance (qty on hand)</label>
+        <input type="number" id="editBalance" min="0" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:13px;">
+      <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Unit price (KSh per unit)</label>
+      <input type="number" id="editPrice" min="0" step="0.01" placeholder="e.g. 165.00" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+    </div>
+    <div id="editError" style="display:none;color:#e13a3a;font-size:12.5px;margin:-4px 0 10px;"></div>
+    <div class="modal-actions" style="display:flex;gap:10px;margin-top:18px;">
+      <button onclick="closeEditModal()" style="flex:1;padding:11px;border-radius:9px;border:1px solid #e2e2e6;background:transparent;color:#68686f;font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitEditItem()" style="flex:2;padding:11px;border-radius:9px;border:none;background:#f5590a;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="overlay" id="adminOverlay" style="position:fixed;inset:0;background:rgba(10,10,11,0.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;">
+  <div class="modal" style="background:#fff;border:1px solid #e2e2e6;border-radius:14px;width:100%;max-width:440px;padding:22px 22px 20px;">
+    <h3 style="font-size:16px;margin:0 0 16px;font-weight:800;">Admin Login</h3>
+    <div class="field" style="margin-bottom:13px;">
+      <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Email</label>
+      <input type="email" id="adminEmail" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+    </div>
+    <div class="field" style="margin-bottom:13px;">
+      <label style="display:block;font-size:11.5px;color:#68686f;font-weight:600;margin-bottom:6px;">Password</label>
+      <input type="password" id="adminPassword" style="width:100%;background:#f6f6f8;border:1px solid #e2e2e6;padding:10px 12px;border-radius:8px;font-size:13.5px;">
+    </div>
+    <div id="adminError" style="display:none;color:#e13a3a;font-size:12.5px;margin:-4px 0 10px;"></div>
+    <div class="modal-actions" style="display:flex;gap:10px;margin-top:18px;">
+      <button onclick="closeAdminModal()" style="flex:1;padding:11px;border-radius:9px;border:1px solid #e2e2e6;background:transparent;color:#68686f;font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitAdminLogin()" style="flex:2;padding:11px;border-radius:9px;border:none;background:#f5590a;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Log In</button>
+    </div>
+  </div>
+</div>
+<style>.overlay.open{display:flex !important;}</style>
+
+<script type="module">
+/* ---------- Firebase ---------- */
+import {
+  db, loginAdmin, logoutAdmin, watchAdmin, statusOf, initialsFromEmail,
+  doc, updateDoc, onSnapshot, serverTimestamp,
+  collection, query, where
+} from "./firebase-config.js";
+
+/* ---------- Category unit-cost fallback ----------
+   Used only until items carry a real "price" field (see Edit Item's Unit
+   Price). Once set, an item's own price always wins over this estimate. ---------- */
+const CATEGORY_META = {
+  "Fuel":       { unitCost:165 },
+  "Cement":     { unitCost:750 },
+  "Steel":      { unitCost:180 },
+  "PPE":        { unitCost:850 },
+  "Lubricants": { unitCost:900 },
+  "Filters":    { unitCost:650 },
+  "Hardware":   { unitCost:150 }
+};
+const DEFAULT_META = { unitCost:200 };
+
+/* ---------- Read item id from query string ---------- */
+const params = new URLSearchParams(location.search);
+const itemId = params.get("id");
+if(!itemId){
+  alert("No item selected — returning to the stock list.");
+  location.href = "stock-list.html";
+}
+
+/* ---------- Admin auth ---------- */
+let isAdmin = false, currentAdminEmail = "";
+let appRevealed = false;
+watchAdmin((user)=>{
+  isAdmin = !!user;
+  currentAdminEmail = user ? user.email : "";
+  document.getElementById("avatarInitials").textContent = isAdmin ? initialsFromEmail(currentAdminEmail) : "--";
+
+  // Whole app is locked behind sign-in — only "added" (Firebase Auth) users get in.
+  const gate = document.getElementById("accessGate");
+  if(isAdmin){
+    gate.style.display = "none";
+    if(!appRevealed){ appRevealed = true; document.querySelector(".app-shell").classList.add("ready"); }
+  } else {
+    gate.style.display = "flex";
+    document.querySelector(".app-shell").classList.remove("ready");
+    appRevealed = false;
+  }
+});
+function onAdminBtnClick(){
+  if(isAdmin){ if(confirm("Log out?")) logoutAdmin(); }
+}
+function signOutNow(){
+  if(confirm("Sign out?")) logoutAdmin();
+}
+function submitGateLogin(){
+  const email = document.getElementById("gateEmail").value.trim();
+  const password = document.getElementById("gatePassword").value;
+  const errBox = document.getElementById("gateError");
+  errBox.style.display = "none";
+  loginAdmin(email, password).catch(()=>{
+    errBox.textContent = "Sign-in failed — check your email and password, or ask your admin for access.";
+    errBox.style.display = "block";
+  });
+}
+function openAdminModal(){
+  document.getElementById("adminError").style.display = "none";
+  document.getElementById("adminOverlay").classList.add("open");
+}
+function closeAdminModal(){ document.getElementById("adminOverlay").classList.remove("open"); }
+function submitAdminLogin(){
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  loginAdmin(email, password).then(closeAdminModal).catch(()=>{
+    const e = document.getElementById("adminError");
+    e.textContent = "Login failed — check email and password.";
+    e.style.display = "block";
+  });
+}
+function requireAdmin(){
+  if(isAdmin) return true;
+  openAdminModal();
+  return false;
+}
+
+/* ---------- Formatting helpers ---------- */
+function fmtNum(n){ return Math.round(n).toLocaleString(); }
+function fmtKsh(n){ return "KSh " + fmtNum(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+function pillClass(status){
+  if(status==="Active") return "active";
+  if(status==="Low Stock") return "low";
+  return "out";
+}
+
+/* ---------- Live item state ---------- */
+let liveData = null;   // raw Firestore doc data for this item
+let curUnitAbbr = "pc";
+
+function unitAbbrOf(uom){
+  if(!uom) return "pc";
+  if(uom.startsWith("Litre")) return "L";
+  if(uom === "Bag") return "Bag";
+  if(uom === "Pair") return "pr";
+  if(uom === "Kg") return "kg";
+  return "pc";
+}
+
+function renderItem(data){
+  liveData = data;
+  const meta = CATEGORY_META[data.category] || DEFAULT_META;
+  curUnitAbbr = unitAbbrOf(data.uom);
+  const unitLabel = (data.uom||"").startsWith("Litre") ? "Litre" : data.uom;
+  const fmtQty = (n) => fmtNum(n) + " " + curUnitAbbr;
+
+  const min = data.min || 0;
+  const balance = data.balance || 0;
+  const status = statusOf(balance, min);
+  const reorderLevel = Math.round(min * 2);
+  // Real unit cost isn't captured per-item yet (no "price" field is ever set
+  // when items are created), so we fall back to a category estimate. Once
+  // item creation starts saving a real price, swap this for data.price.
+  const unitCost = (data.price && data.price > 0) ? data.price : meta.unitCost;
+  const stockValue = balance * unitCost;
+
+  document.getElementById("bcName").textContent = data.name;
+  document.getElementById("ovId").textContent = data.code;
+  document.getElementById("ovName").textContent = data.name;
+  const stEl = document.getElementById("ovStatus");
+  stEl.textContent = status;
+  stEl.className = "pill " + pillClass(status);
+  document.getElementById("ovCategory").textContent = data.category;
+  document.getElementById("ovUom").textContent = data.uom;
+  document.getElementById("ovReorder").textContent = fmtQty(reorderLevel);
+  document.getElementById("ovMin").textContent = fmtQty(min);
+  document.getElementById("ovBalance").textContent = fmtQty(balance);
+  document.getElementById("ovValue").textContent = fmtKsh(stockValue);
+
+  document.getElementById("ssAvgCost").textContent = "KSh " + unitCost.toFixed(2);
+  document.getElementById("ssAvgUnit").textContent = "per " + unitLabel;
+  document.getElementById("ssUpdated").textContent = (data.updatedAt && data.updatedAt.toDate)
+    ? data.updatedAt.toDate().toLocaleString("en-GB", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})
+    : "—";
+
+  document.getElementById("donutBalance").textContent = fmtQty(balance);
+  document.getElementById("kvReorder").textContent = fmtQty(reorderLevel);
+  document.getElementById("kvMin").textContent = fmtQty(min);
+
+  renderTransactionsAndStats();
+}
+
+/* ---------- Real stock-transaction ledger for this item ---------- */
+// Live-synced from Firestore's "stockTransactions" collection (the same
+// collection index.html writes to). We filter by itemId client-side after
+// a plain "where" query so no composite index is required.
+let rawTransactions = [];
+onSnapshot(
+  query(collection(db, "stockTransactions"), where("itemId", "==", itemId)),
+  (snap)=>{
+    rawTransactions = snap.docs.map(d=>{
+      const t = d.data();
+      const ts = t.createdAt && t.createdAt.toDate ? t.createdAt.toDate() : new Date(0);
+      return { id: d.id, ...t, ts };
+    });
+    rawTransactions.sort((a,b)=> b.ts - a.ts); // newest first
+    renderTransactionsAndStats();
+  },
+  (err)=>{ console.error("stockTransactions listener error:", err); }
+);
+
+function renderTransactionsAndStats(){
+  if(!liveData) return;
+  const balance = liveData.balance || 0;
+  const meta = CATEGORY_META[liveData.category] || DEFAULT_META;
+  const unitCost = (liveData.price && liveData.price > 0) ? liveData.price : meta.unitCost;
+
+  // Totals from the real ledger (all-time, across every logged movement).
+  let received = 0, issued = 0;
+  rawTransactions.forEach(t=>{
+    if(t.type === "in") received += (t.qty || 0);
+    else issued += (t.qty || 0);
+  });
+  const opening = Math.max(0, balance - received + issued);
+
+  document.getElementById("ssOpening").textContent = fmtQty(opening);
+  const oldestTx = rawTransactions.length ? rawTransactions[rawTransactions.length - 1] : null;
+  document.getElementById("ssOpeningDate").textContent = (oldestTx && oldestTx.ts && oldestTx.ts.getTime())
+    ? "as of " + oldestTx.ts.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})
+    : "No movements recorded yet";
+  document.getElementById("ssReceived").textContent = fmtQty(received);
+  document.getElementById("ssIssued").textContent = fmtQty(issued);
+  document.getElementById("legReceived").textContent = fmtQty(received);
+  document.getElementById("legIssued").textContent = fmtQty(issued);
+  document.getElementById("legOpening").textContent = fmtQty(opening);
+
+  const r = 60, c = 2*Math.PI*r;
+  const pct = (received + issued) > 0 ? received / (received + issued) : 0;
+  document.getElementById("donutArc").setAttribute("stroke-dasharray", `${pct*c} ${c}`);
+
+  // Running balance per row, computed backward from the current live balance
+  // (newest row = current balance; each older row adds back what the more
+  // recent transaction changed).
+  let runningBalance = balance;
+  const rows = rawTransactions.map(t=>{
+    const isIn = t.type === "in";
+    const qty = t.qty || 0;
+    const rowBalance = runningBalance;
+    runningBalance = isIn ? runningBalance - qty : runningBalance + qty;
+    return {
+      date: t.ts && t.ts.getTime() ? t.ts.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}) : "—",
+      time: t.ts && t.ts.getTime() ? t.ts.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}) : "",
+      type: isIn ? "in" : "out",
+      typeLabel: isIn ? "GRN" : "Issue",
+      typeSub: isIn ? "Received" : "Issued",
+      ref: t.id.slice(0,8).toUpperCase(),
+      who: t.who || t.machine || (isIn ? "Supplier" : "Unspecified"),
+      note: t.note || "",
+      qty, balance: rowBalance, unitCost, total: Math.abs(qty)*unitCost
+    };
+  });
+
+  window.__currentTransactions = rows;
+  paintTransactions();
+  paintFullTransactions();
+}
+
+function fmtQty(n){ return fmtNum(n) + " " + curUnitAbbr; }
+
+function renderTxRowsHtml(rows){
+  if(rows.length === 0){
+    return `<tr><td colspan="7" style="text-align:center;color:var(--text-faint);padding:24px 12px;">No stock movements match.</td></tr>`;
+  }
+  return rows.map(t => `
+    <tr>
+      <td class="tx-date"><div class="d">${t.date}</div><div class="t">${t.time}</div></td>
+      <td>
+        <span class="tx-type ${t.type}">${t.typeLabel}</span>
+        <span class="tx-type-label">${t.typeSub}</span>
+      </td>
+      <td class="tx-ref"><div class="r">${t.ref}</div><div class="s">${t.who}</div></td>
+      <td class="qty ${t.type}">${t.type==='in'?'+':'-'}${fmtNum(Math.abs(t.qty))} ${curUnitAbbr}</td>
+      <td>${fmtNum(t.balance)} ${curUnitAbbr}</td>
+      <td>${t.unitCost.toFixed(2)}</td>
+      <td>${fmtNum(t.total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}.00</td>
+    </tr>
+  `).join("");
+}
+
+function paintTransactions(){
+  const transactions = window.__currentTransactions || [];
+  const q = (document.getElementById("txSearch").value || "").trim().toLowerCase();
+  const rows = transactions.filter(t =>
+    !q || t.ref.toLowerCase().includes(q) || t.who.toLowerCase().includes(q) || t.typeLabel.toLowerCase().includes(q)
+  );
+  if(rows.length === 0){
+    document.getElementById("txBody").innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-faint);padding:24px 12px;">No stock movements recorded for this item yet.</td></tr>`;
+    return;
+  }
+  document.getElementById("txBody").innerHTML = renderTxRowsHtml(rows);
+}
+function renderTransactionsSearch(){ paintTransactions(); }
+
+/* ---------- Full transaction history tab (all movements, filterable) ---------- */
+function paintFullTransactions(){
+  const transactions = window.__currentTransactions || [];
+  const q = (document.getElementById("txSearchFull").value || "").trim().toLowerCase();
+  const typeFilter = document.getElementById("txTypeFilterFull").value;
+  const rows = transactions.filter(t =>
+    (!typeFilter || t.type === typeFilter) &&
+    (!q || t.ref.toLowerCase().includes(q) || t.who.toLowerCase().includes(q) || t.typeLabel.toLowerCase().includes(q) || (t.note && t.note.toLowerCase().includes(q)))
+  );
+  document.getElementById("txBodyFull").innerHTML = renderTxRowsHtml(rows);
+}
+
+
+/* ---------- Live sync — this is the core cross-page connection ---------- */
+onSnapshot(doc(db, "stockItems", itemId), (snap)=>{
+  if(!snap.exists()){
+    alert("This item no longer exists — it may have been deleted.");
+    location.href = "stock-list.html";
+    return;
+  }
+  renderItem(snap.data());
+}, (err)=>{
+  console.error("item listener error:", err);
+});
+
+/* ---------- Tabs ---------- */
+function switchDetailTab(name){
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("tab-"+name).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
+}
+
+/* ---------- Avatar menu ---------- */
+function toggleAvatarMenu(e){
+  e.stopPropagation();
+  document.getElementById("avatarMenu").classList.toggle("open");
+}
+document.addEventListener("click", (e)=>{
+  const menu = document.getElementById("avatarMenu");
+  if(menu.classList.contains("open") && !menu.contains(e.target) && !e.target.closest(".avatar-wrap")){
+    menu.classList.remove("open");
+  }
+});
+
+/* ---------- Note ----------
+   Receiving stock will be handled by a dedicated Receive Stock (GRN) page
+   (coming later), which will write directly to "stockTransactions". Manual
+   balance corrections are done via the Edit Item button at the top. */
+
+/* ---------- Edit Item modal ---------- */
+function openEditModal(){
+  if(!requireAdmin()) return;
+  document.getElementById("editName").value = liveData.name || "";
+  document.getElementById("editCategory").value = liveData.category || "Fuel";
+  document.getElementById("editUom").value = liveData.uom || "Litre (LTR)";
+  document.getElementById("editMin").value = liveData.min || 0;
+  document.getElementById("editBalance").value = liveData.balance || 0;
+  document.getElementById("editPrice").value = liveData.price || "";
+  document.getElementById("editError").style.display = "none";
+  document.getElementById("editOverlay").classList.add("open");
+}
+function closeEditModal(){ document.getElementById("editOverlay").classList.remove("open"); }
+function submitEditItem(){
+  if(!requireAdmin()) return;
+  const name = document.getElementById("editName").value.trim();
+  const category = document.getElementById("editCategory").value;
+  const uom = document.getElementById("editUom").value;
+  const min = parseFloat(document.getElementById("editMin").value) || 0;
+  const balance = parseFloat(document.getElementById("editBalance").value) || 0;
+  const price = parseFloat(document.getElementById("editPrice").value) || 0;
+  const errBox = document.getElementById("editError");
+  if(!name){ errBox.textContent = "Item name is required."; errBox.style.display = "block"; return; }
+  updateDoc(doc(db, "stockItems", itemId), {
+    name, category, uom, min, balance, price,
+    updatedAt: serverTimestamp(),
+    updatedBy: currentAdminEmail
+  }).then(()=>{
+    closeEditModal();
+  }).catch(err=>{
+    errBox.textContent = "Save failed: " + err.message;
+    errBox.style.display = "block";
+  });
+}
+
+/* ---------- Expose functions used by inline onclick handlers ---------- */
+Object.assign(window, {
+  onAdminBtnClick, openAdminModal, closeAdminModal, submitAdminLogin, submitGateLogin, signOutNow,
+  switchDetailTab, toggleAvatarMenu,
+  openEditModal, closeEditModal, submitEditItem, renderTransactionsSearch, paintFullTransactions
+});
+</script>
+
+</body>
+</html>
