@@ -1,114 +1,25 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.firebase.sign_in_provider == 'password';
-    }
-    function isAnyAuth() {
-      return request.auth != null;
-    }
-    // A caller is a super admin if their email is listed in tracker/superAdmins,
-    // OR if no admins have been configured yet at all (first-time setup bootstrap,
-    // matching the client-side isSuperAdminUser() fallback in index.html).
-    function isSuperAdmin() {
-      let adminsDoc = /databases/$(database)/documents/tracker/admins;
-      let noAdminsYet = !exists(adminsDoc)
-        || !('list' in get(adminsDoc).data)
-        || get(adminsDoc).data.list.size() == 0;
-      let superAdminsDoc = /databases/$(database)/documents/tracker/superAdmins;
-      return isAdmin() && (
-        noAdminsYet ||
-        (exists(superAdminsDoc) && request.auth.token.email in get(superAdminsDoc).data.emails)
-      );
+    // Stock items — everyone using the app can read live stock,
+    // but only a signed-in admin (created by you in Firebase Auth)
+    // can add, edit, or delete an item.
+    match /stockItems/{itemId} {
+      allow read: if true;
+      allow create, update, delete: if request.auth != null;
     }
 
-    match /tracker/superAdmins {
-      allow read: if isAnyAuth();
-      allow write: if isAdmin();
-    }
-
-    // Administrator activity log — append-only, undeletable audit trail.
-    // Any signed-in admin can CREATE an entry (to log their own action),
-    // but only a super admin can READ the log, and nobody — not even a
-    // super admin — can UPDATE or DELETE an entry once it's written.
-    match /activityLog/{entryId} {
-      allow create: if isAdmin();
-      allow read: if isSuperAdmin();
+    // Stock in/out transaction log — read for the activity feed,
+    // create only by signed-in admins, never edited or deleted
+    // (keeps an honest audit trail).
+    match /stockTransactions/{txId} {
+      allow read: if true;
+      allow create: if request.auth != null;
       allow update, delete: if false;
     }
 
-    match /tracker/members {
-      allow read, write: if isAdmin();
-    }
-    match /tracker/payments {
-      allow read: if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/income {
-      allow read, write: if isAdmin();
-    }
-    match /tracker/spending {
-      allow read: if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/dashboard {
-      allow read: if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/settings {
-      allow read: if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/admins {
-      allow read, write: if isAdmin();
-    }
-    match /tracker/memberPins {
-      // Members can read their own PIN (checked client-side by phone key).
-      // Only admins can write PINs — prevents members from changing each other's PINs.
-      allow read:  if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/memberDetails {
-      allow read:  if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/memberPhotos {
-      // Members upload their own profile photo for the personal portal & virtual ID card.
-      allow read, write: if isAnyAuth();
-    }
-    match /tracker/saccoSettings {
-      allow read:  if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/publicInfo {
-      allow read:  if isAnyAuth();
-      allow write: if isAdmin();
-    }
-    match /tracker/payment_confirmations {
-      // Any authenticated user can submit a confirmation,
-      // but only admins can read or delete them.
-      allow read:   if isAdmin();
-      allow create: if isAnyAuth();
-      allow update, delete: if isAdmin();
-    }
-    match /tracker/{docId} {
-      allow read, write: if isAnyAuth() && docId.matches('welfare_[0-9]+');
-    }
-
-    // Push notification device tokens.
-    // Any signed-in device (including anonymous) can register its OWN
-    // token. Nobody can read the list from the client — only the server
-    // (Firebase Admin SDK, via the service account) reads these to send
-    // notifications, which bypasses these rules entirely.
-    match /pushTokens/{token} {
-      allow read: if false;
-      allow write: if isAnyAuth() && token == request.resource.data.token;
-      allow delete: if isAnyAuth();
-    }
-
+    // Everything else stays locked down by default.
     match /{document=**} {
       allow read, write: if false;
     }
