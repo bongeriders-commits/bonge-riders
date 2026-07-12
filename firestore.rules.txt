@@ -1,162 +1,176 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /* ---------- Role helpers ---------- */
-    // Five roles: owner, admin, staff, storeman (issue-only), receiver
-    // (receive+issue only). Storeman/receiver page access is enforced
-    // client-side (see issue.html / index.html / grn.html). Balance
-    // visibility for storeman is enforced two ways: (1) the picker reads
-    // stockItemsPublic (no balance field, ever), and (2) the one real
-    // stockItems read that remains — the specific item they select, at the
-    // moment they submit — is unavoidable without a server-side function,
-    // since Firestore rules can't validate "not more than what's in stock"
-    // without the write itself referencing the current balance.
-    function myRole() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password';
     }
-    function isSignedIn() {
+    function isAnyAuth() {
       return request.auth != null;
     }
-    function isActiveUser() {
-      return isSignedIn()
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && myRole().active == true;
-    }
-    function isOwner() {
-      return isActiveUser() && myRole().role == "owner";
-    }
-    function canManage() {
-      return isActiveUser() && myRole().role in ["owner", "admin"];
-    }
-    function affectedKeys() {
-      return request.resource.data.diff(resource.data).affectedKeys();
-    }
-
-    // ---------- Team / role documents ----------
-    match /users/{uid} {
-      allow get: if isSignedIn() && (request.auth.uid == uid || isOwner());
-      allow list: if isOwner();
-      allow create: if isOwner()
-                    || (isSignedIn() && request.auth.uid == uid
-                        && request.resource.data.role == "owner"
-                        && !exists(/databases/$(database)/documents/meta/teamBootstrap));
-      allow update: if isOwner();
-      allow delete: if false;
-    }
-
-    match /meta/teamBootstrap {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && !exists(/databases/$(database)/documents/meta/teamBootstrap);
-      allow update, delete: if false;
-    }
-
-    // ---------------------------------------------------------------------
-    // Stock items — the real record, incl. `balance`. Any active team
-    // member can still read/get a single item by id (needed to validate
-    // and write a receive/issue transaction), but nothing in the app lists
-    // this whole collection anymore for storeman/receiver — the picker in
-    // issue.html now reads from stockItemsPublic below instead, which
-    // never carries a balance field. Staff/storeman/receiver can move
-    // balance via receive/issue (only those 3 fields), everything else
-    // (create, delete, full edit) is owner/admin.
-    // ---------------------------------------------------------------------
-    match /stockItems/{itemId} {
-      allow read: if isActiveUser();
-      allow create, delete: if canManage();
-      allow update: if canManage() || (
-        isActiveUser() &&
-        affectedKeys().hasOnly(['balance', 'updatedAt', 'updatedBy'])
+    // A caller is a super admin if their email is listed in tracker/superAdmins,
+    // OR if no admins have been configured yet at all (first-time setup bootstrap,
+    // matching the client-side isSuperAdminUser() fallback in index.html).
+    function isSuperAdmin() {
+      let adminsDoc = /databases/$(database)/documents/tracker/admins;
+      let noAdminsYet = !exists(adminsDoc)
+        || !('list' in get(adminsDoc).data)
+        || get(adminsDoc).data.list.size() == 0;
+      let superAdminsDoc = /databases/$(database)/documents/tracker/superAdmins;
+      return isAdmin() && (
+        noAdminsYet ||
+        (exists(superAdminsDoc) && request.auth.token.email in get(superAdminsDoc).data.emails)
       );
     }
 
-    // ---------------------------------------------------------------------
-    // Stock items (public mirror) — same items, minus `balance`/`min`.
-    // This is what issue.html's item picker reads for search/select, so a
-    // storeman browsing for an item to issue never receives any quantity
-    // data at all, even in a background listener. Kept in sync by the app:
-    // owner/admin write the full doc on create/edit; any active user (incl.
-    // storeman/receiver) may patch only `status` after a receive/issue, so
-    // the Active/Low/Out pill stays current without ever exposing a number.
-    // ---------------------------------------------------------------------
-    match /stockItemsPublic/{itemId} {
-      allow read: if isActiveUser();
-      allow create, delete: if canManage();
-      allow update: if canManage() || (
-        isActiveUser() &&
-        affectedKeys().hasOnly(['status', 'updatedAt'])
+    match /tracker/superAdmins {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+
+    // Administrator activity log — append-only, undeletable audit trail.
+    match /activityLog/{entryId} {
+      allow create: if isAdmin();
+      allow read: if isSuperAdmin();
+      allow update, delete: if false;
+    }
+
+    match /tracker/members {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/payments {
+      // TODO(phase 2): this single doc holds every member's payment history.
+      // Anonymous sessions can currently read all of it. Kept as isAnyAuth()
+      // for now because member.html needs it for the portal, but this should
+      // move to per-member subcollections (tracker/payments/{phone}) once the
+      // phone-claim login (see memberPins below) ships, so this can become
+      // owner-scoped instead of all-or-nothing.
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/income {
+      allow read, write: if isAdmin();
+    }
+    match /tracker/spending {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/dashboard {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/settings {
+      allow read: if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/admins {
+      allow read, write: if isAdmin();
+    }
+
+    // ── PINs ──
+    // SECURITY: previously readable by any anonymous session, which let
+    // anyone dump every member's PIN in one query. Client-side PIN checks
+    // must be replaced by the server-side /api/verify-pin endpoint (mints a
+    // custom token). Once that ships, no client ever needs to read this
+    // document directly, so lock it to admins only.
+    match /tracker/memberPins {
+      allow read, write: if isAdmin();
+    }
+
+    match /tracker/memberDetails {
+      // TODO(phase 2): same shape problem as payments — one doc, all
+      // members. Move to tracker/memberDetails/{phone} subcollection and
+      // gate read on request.auth.token.phone == phone once phone-claim
+      // login ships. Until then this stays isAnyAuth() so the member
+      // portal keeps working.
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/memberPhotos {
+      allow read, write: if isAnyAuth();
+    }
+    match /tracker/saccoSettings {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/publicInfo {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/contactInfo {
+      allow read:  if isAnyAuth();
+      allow write: if isAdmin();
+    }
+    match /tracker/payment_confirmations {
+      allow read:   if isAdmin();
+      allow create: if isAnyAuth();
+      allow update, delete: if isAdmin();
+    }
+
+    // ── Welfare applications ──
+    // SECURITY FIX: previously ANY authenticated (incl. anonymous) user
+    // could read or write ANY welfare_<phone> doc, and doc IDs are just
+    // the member's phone digits — trivially guessable. Now scoped to the
+    // owning member (via the `phone` custom claim minted by
+    // /api/verify-pin.js on login) or an admin. Members who haven't logged
+    // in through the new PIN endpoint yet (still on a bare anonymous
+    // session with no phone claim) fall through to "no access" rather than
+    // "everyone's welfare data," which is the safe direction to fail in.
+    match /tracker/{docId} {
+      allow read, write: if docId.matches('welfare_[0-9]+') && (
+        isAdmin() ||
+        (isAnyAuth() && 'phone' in request.auth.token
+          && docId == 'welfare_' + request.auth.token.phone)
       );
     }
 
-    match /stockTransactions/{txId} {
-      allow read: if isActiveUser();
-      allow create: if isActiveUser();
-      allow update, delete: if false;
+    // ── Projects ──
+    match /projectItems/{itemId} {
+      allow read: if isAnyAuth();
+      allow create, update, delete: if isAdmin();
+    }
+    match /projectVotes/{voteId} {
+      // voteId is "<projectId>_<uid>" — a member can only write their own
+      // vote doc, never anyone else's.
+      allow read: if isAnyAuth();
+      allow create, update: if isAnyAuth()
+        && voteId == request.resource.data.projectId + '_' + request.auth.uid;
+      allow delete: if isAnyAuth()
+        && voteId.split('_')[voteId.split('_').size() - 1] == request.auth.uid;
+    }
+    match /projectComments/{commentId} {
+      allow read: if isAnyAuth();
+      allow create: if isAnyAuth()
+        && request.resource.data.uid == request.auth.uid;
+      // Owner can delete their own comment; admins can delete any.
+      allow delete: if isAdmin()
+        || (isAnyAuth() && resource.data.uid == request.auth.uid);
+      allow update: if false;
     }
 
-    match /approvals/{approvalId} {
-      allow read: if isActiveUser();
-      allow create: if isActiveUser()
-                    && request.resource.data.status == "pending"
-                    && request.resource.data.type in ["discrepancy", "new-item", "threshold"];
-      allow update: if canManage()
-                    && request.resource.data.status in ["approved", "rejected"];
-      allow delete: if false;
+    // ── Gallery ──
+    match /galleryItems/{itemId} {
+      allow read: if isAnyAuth();
+      allow create, update, delete: if isAdmin();
     }
 
-    // ---------------------------------------------------------------------
-    // Suppliers — staff can only touch the auto lastSupplyAt stamp (set
-    // when they submit a GRN); everything else is owner/admin. Storeman
-    // and receiver never reach suppliers.html client-side, but since reads
-    // are allow-by-active-user, they could still read this collection
-    // directly if they wanted — nothing sensitive lives here though.
-    // ---------------------------------------------------------------------
-    match /suppliers/{supplierId} {
-      allow read: if isActiveUser();
-      allow create, delete: if canManage();
-      allow update: if canManage() || (
-        isActiveUser() &&
-        affectedKeys().hasOnly(['lastSupplyAt'])
-      );
+    // ── Contact / Messages ──
+    match /contactMessages/{msgId} {
+      // Anyone can submit a message; only admins can read the inbox or
+      // manage/delete messages (previously messages.html deleted with no
+      // rule backing it at all — it was silently falling through to the
+      // deny-all catch-all).
+      allow create: if isAnyAuth();
+      allow read, update, delete: if isAdmin();
     }
 
-    match /grns/{grnId} {
-      allow read: if isActiveUser();
-      allow create: if isActiveUser();
-      allow update, delete: if false;
-    }
-
-    match /counters/{counterId} {
-      allow read, write: if isActiveUser();
-    }
-
-    // ---------------------------------------------------------------------
-    // Audit trail — write-once record of every meaningful action (item
-    // create/edit/delete, receive/issue, approvals, team changes, supplier
-    // changes, PIN changes). Any active user can create an entry (so their
-    // own actions get logged), but only owner/admin can read the trail, and
-    // nothing can ever be edited or deleted once written.
-    // ---------------------------------------------------------------------
-    match /auditLogs/{logId} {
-      allow read: if canManage();
-      allow create: if isActiveUser();
-      allow update, delete: if false;
-    }
-
-    // ---------------------------------------------------------------------
-    // App settings — single document holding business profile, stock
-    // thresholds, notification prefs, and team/access policy defaults.
-    // Any active team member can read it (pages may want to show the
-    // business name, currency, etc.), but only owner/admin can write it.
-    // settings.html additionally disables the owner-only fields client-side
-    // for admins, but the write rule itself only checks canManage() since
-    // Firestore rules can't easily diff "which fields changed" against a
-    // role that isn't stored on the request — settings.html is trusted to
-    // omit those fields when the signed-in user isn't the owner.
-    // ---------------------------------------------------------------------
-    match /settings/app {
-      allow read: if isActiveUser();
-      allow write: if canManage();
+    // Push notification device tokens.
+    match /pushTokens/{token} {
+      allow read: if false;
+      allow write: if isAnyAuth() && token == request.resource.data.token;
+      allow delete: if isAnyAuth();
     }
 
     match /{document=**} {
